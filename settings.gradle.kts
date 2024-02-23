@@ -15,7 +15,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    kotlin("multiplatform") version "1.9.20" apply false
+    kotlin("multiplatform") version "1.9.22" apply false
     id("io.gitlab.arturbosch.detekt") version "1.23.4" apply false
     id("org.jetbrains.dokka") version "1.9.10" apply false
     id("org.jetbrains.kotlinx.kover") version "0.7.5" apply false

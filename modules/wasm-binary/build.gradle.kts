@@ -94,7 +94,11 @@ kotlin {
             }
         }
 
-        val commonMain by getting
+        val commonMain by getting {
+            dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.3.1")
+            }
+        }
 
         val commonTest by getting {
             dependencies {
