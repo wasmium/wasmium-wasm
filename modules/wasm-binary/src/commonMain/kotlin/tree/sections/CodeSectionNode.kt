@@ -18,7 +18,7 @@ public class CodeSectionNode : SectionNode(SectionKind.CODE), CodeSectionVisitor
     }
 
     override fun visitFunctionBody(functionIndex: UInt): FunctionBodyVisitor {
-        val functionBody: FunctionBodyNode = FunctionBodyNode()
+        val functionBody = FunctionBodyNode()
         functionBody.functionIndex = functionIndex
         functionBodies.add(functionBody)
 

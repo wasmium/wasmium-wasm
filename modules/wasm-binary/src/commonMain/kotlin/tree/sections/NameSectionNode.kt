@@ -4,15 +4,15 @@ import org.wasmium.wasm.binary.visitors.NameSectionVisitor
 
 public class NameSectionNode : CustomSectionNode(), NameSectionVisitor {
     public var module: ModuleNameNode? = null
-    public val functions: MutableList<FunctionNameNode> = mutableListOf<FunctionNameNode>()
-    public val globals: MutableList<FunctionNameNode> = mutableListOf<FunctionNameNode>()
-    public val locals: MutableList<LocalNameNode> = mutableListOf<LocalNameNode>()
-    public val labels: MutableList<LocalNameNode> = mutableListOf<LocalNameNode>()
-    public val tables: MutableList<FunctionNameNode> = mutableListOf<FunctionNameNode>()
-    public val tags: MutableList<FunctionNameNode> = mutableListOf<FunctionNameNode>()
-    public val memories: MutableList<FunctionNameNode> = mutableListOf<FunctionNameNode>()
-    public val elements: MutableList<FunctionNameNode> = mutableListOf<FunctionNameNode>()
-    public val datas: MutableList<FunctionNameNode> = mutableListOf<FunctionNameNode>()
+    public val functions: MutableList<FunctionNameNode> = mutableListOf()
+    public val globals: MutableList<FunctionNameNode> = mutableListOf()
+    public val locals: MutableList<LocalNameNode> = mutableListOf()
+    public val labels: MutableList<LocalNameNode> = mutableListOf()
+    public val tables: MutableList<FunctionNameNode> = mutableListOf()
+    public val tags: MutableList<FunctionNameNode> = mutableListOf()
+    public val memories: MutableList<FunctionNameNode> = mutableListOf()
+    public val elements: MutableList<FunctionNameNode> = mutableListOf()
+    public val datas: MutableList<FunctionNameNode> = mutableListOf()
 
     public fun accept(nameSectionVisitor: NameSectionVisitor) {
         if (module != null) {

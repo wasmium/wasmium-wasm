@@ -1,11 +1,11 @@
 package org.wasmium.wasm.binary.tree.sections
 
-import org.wasmium.wasm.binary.visitors.LinkingSectionVisitor
 import org.wasmium.wasm.binary.tree.LinkingSymbolType
+import org.wasmium.wasm.binary.visitors.LinkingSectionVisitor
 
 public class LinkingSectionNode : CustomSectionNode(), LinkingSectionVisitor {
-    public val symbolInfos: List<SymbolTableLinkingNode> = mutableListOf<SymbolTableLinkingNode>()
-    public val segments: List<SegmentInfoLinkingNode> = mutableListOf<SegmentInfoLinkingNode>()
+    public val symbolInfos: List<SymbolTableLinkingNode> = mutableListOf()
+    public val segments: List<SegmentInfoLinkingNode> = mutableListOf()
 
     public fun accept(linkingSectionVisitor: LinkingSectionVisitor) {
         // TODO

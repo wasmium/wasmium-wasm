@@ -7,7 +7,7 @@ public class ElementSegmentNode : ElementSegmentVisitor {
     public var tableIndex: UInt? = null
     public var elementIndex: UInt? = null
     public var initializer: InitializerExpressionNode? = null
-    public var functionIndexes: MutableList<FunctionIndexNode> = mutableListOf<FunctionIndexNode>()
+    public var functionIndexes: MutableList<FunctionIndexNode> = mutableListOf()
 
     public fun accept(elementSegmentVisitor: ElementSegmentVisitor) {
         elementSegmentVisitor.visitTableIndex(tableIndex!!)
@@ -30,7 +30,7 @@ public class ElementSegmentNode : ElementSegmentVisitor {
     }
 
     override fun visitFunctionIndex(index: UInt, functionIndex: UInt) {
-        val functionIndexNode: FunctionIndexNode = FunctionIndexNode()
+        val functionIndexNode = FunctionIndexNode()
         functionIndexNode.index = index
         functionIndexNode.functionIndex = functionIndex
         functionIndexes.add(functionIndexNode)

@@ -1,4 +1,7 @@
 package org.wasmium.wasm.binary.tree.instructions
 
-interface TypeInstruction {
+import org.wasmium.wasm.binary.tree.WasmType
+
+public interface TypeInstruction : Instruction {
+    public val blockType: Array<WasmType>
 }

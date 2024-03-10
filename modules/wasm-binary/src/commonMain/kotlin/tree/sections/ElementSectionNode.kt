@@ -5,7 +5,7 @@ import org.wasmium.wasm.binary.visitors.ElementSectionVisitor
 import org.wasmium.wasm.binary.visitors.ElementSegmentVisitor
 
 public class ElementSectionNode : SectionNode(SectionKind.ELEMENT), ElementSectionVisitor {
-    public val segments: MutableList<ElementSegmentNode> = mutableListOf<ElementSegmentNode>()
+    public val segments: MutableList<ElementSegmentNode> = mutableListOf()
 
     public fun accept(elementSectionVisitor: ElementSectionVisitor) {
         for (elementSegment in segments) {
@@ -16,7 +16,7 @@ public class ElementSectionNode : SectionNode(SectionKind.ELEMENT), ElementSecti
     }
 
     override fun visitElementSegment(elementIndex: UInt): ElementSegmentVisitor {
-        val elementSegment: ElementSegmentNode = ElementSegmentNode()
+        val elementSegment = ElementSegmentNode()
         elementSegment.elementIndex = elementIndex
         segments.add(elementSegment)
         return elementSegment

@@ -5,6 +5,7 @@ public enum class NameNodeKind(public val nameNodeKindId: Int) {
     FUNCTION(1),
     LOCAL(2),
     EXCEPTION(3),
+
     /** No NameNodeKind. */
     NONE(-1),
     ;

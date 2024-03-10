@@ -5,7 +5,7 @@ import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
 import org.wasmium.wasm.binary.visitors.GlobalVariableVisitor
 
 public class GlobalSectionNode : SectionNode(SectionKind.GLOBAL), GlobalSectionVisitor {
-    public val globals: MutableList<GlobalVariableNode> = mutableListOf<GlobalVariableNode>()
+    public val globals: MutableList<GlobalVariableNode> = mutableListOf()
 
     public fun accept(globalSectionVisitor: GlobalSectionVisitor) {
         for (globalVariable in globals) {
@@ -18,7 +18,7 @@ public class GlobalSectionNode : SectionNode(SectionKind.GLOBAL), GlobalSectionV
     }
 
     override fun visitGlobalVariable(globalIndex: UInt): GlobalVariableVisitor {
-        val globalVariable: GlobalVariableNode = GlobalVariableNode()
+        val globalVariable = GlobalVariableNode()
         globalVariable.globalIndex = globalIndex
 
         globals.add(globalVariable)

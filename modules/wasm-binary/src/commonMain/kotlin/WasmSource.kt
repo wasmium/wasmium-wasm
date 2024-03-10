@@ -2,8 +2,19 @@
 
 package org.wasmium.wasm.binary
 
-import kotlinx.io.*
-import org.wasmium.wasm.binary.tree.*
+import kotlinx.io.EOFException
+import kotlinx.io.Source
+import kotlinx.io.readTo
+import org.wasmium.wasm.binary.tree.ExternalKind
+import org.wasmium.wasm.binary.tree.LimitFlags
+import org.wasmium.wasm.binary.tree.LinkingKind
+import org.wasmium.wasm.binary.tree.NameKind
+import org.wasmium.wasm.binary.tree.Opcode
+import org.wasmium.wasm.binary.tree.RelocationKind
+import org.wasmium.wasm.binary.tree.ResizableLimits
+import org.wasmium.wasm.binary.tree.SectionKind
+import org.wasmium.wasm.binary.tree.V128Value
+import org.wasmium.wasm.binary.tree.WasmType
 import kotlin.experimental.and
 
 public class WasmSource(

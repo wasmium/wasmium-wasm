@@ -1,5 +1,3 @@
-@file:Suppress("PackageDirectoryMismatch")
-
 package build.gradle.api
 
 import org.gradle.api.initialization.Settings

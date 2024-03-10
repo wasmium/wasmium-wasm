@@ -1,12 +1,25 @@
 package org.wasmium.wasm.binary.tree.sections
 
+import org.wasmium.wasm.binary.tree.Opcode.END
+import org.wasmium.wasm.binary.tree.Opcode.F32_CONST
+import org.wasmium.wasm.binary.tree.Opcode.F64_CONST
+import org.wasmium.wasm.binary.tree.Opcode.GET_GLOBAL
+import org.wasmium.wasm.binary.tree.Opcode.I32_CONST
+import org.wasmium.wasm.binary.tree.Opcode.I64_CONST
+import org.wasmium.wasm.binary.tree.Opcode.V128_CONST
 import org.wasmium.wasm.binary.tree.V128Value
-import org.wasmium.wasm.binary.tree.instructions.*
+import org.wasmium.wasm.binary.tree.instructions.ConstFloat32Instruction
+import org.wasmium.wasm.binary.tree.instructions.ConstFloat64Instruction
+import org.wasmium.wasm.binary.tree.instructions.ConstInt32Instruction
+import org.wasmium.wasm.binary.tree.instructions.ConstInt64Instruction
+import org.wasmium.wasm.binary.tree.instructions.EndInstruction
+import org.wasmium.wasm.binary.tree.instructions.GetGlobalInstruction
+import org.wasmium.wasm.binary.tree.instructions.Instruction
+import org.wasmium.wasm.binary.tree.instructions.SimdConstInstruction
 import org.wasmium.wasm.binary.visitors.InitializerExpressionVisitor
-import org.wasmium.wasm.binary.tree.Opcode.*
 
 public class InitializerExpressionNode : InitializerExpressionVisitor {
-    public val instructions: MutableList<Instruction> = mutableListOf<Instruction>()
+    public val instructions: MutableList<Instruction> = mutableListOf()
 
     public fun accept(initializerExpressionVisitor: InitializerExpressionVisitor) {
         for (instruction in instructions) {

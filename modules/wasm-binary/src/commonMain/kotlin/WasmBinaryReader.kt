@@ -2,11 +2,49 @@
 
 package org.wasmium.wasm.binary
 
-import org.wasmium.wasm.binary.tree.*
+import org.wasmium.wasm.binary.tree.ExternalKind
+import org.wasmium.wasm.binary.tree.LinkingKind
+import org.wasmium.wasm.binary.tree.LinkingSymbolType
+import org.wasmium.wasm.binary.tree.NameKind
+import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.Opcode.*
-import org.wasmium.wasm.binary.tree.SectionKind.*
-import org.wasmium.wasm.binary.visitors.*
-import kotlin.text.Typography.section
+import org.wasmium.wasm.binary.tree.RelocationKind
+import org.wasmium.wasm.binary.tree.ResizableLimits
+import org.wasmium.wasm.binary.tree.SectionKind
+import org.wasmium.wasm.binary.tree.SectionKind.CODE
+import org.wasmium.wasm.binary.tree.SectionKind.CUSTOM
+import org.wasmium.wasm.binary.tree.SectionKind.DATA
+import org.wasmium.wasm.binary.tree.SectionKind.ELEMENT
+import org.wasmium.wasm.binary.tree.SectionKind.EXPORT
+import org.wasmium.wasm.binary.tree.SectionKind.FUNCTION
+import org.wasmium.wasm.binary.tree.SectionKind.GLOBAL
+import org.wasmium.wasm.binary.tree.SectionKind.IMPORT
+import org.wasmium.wasm.binary.tree.SectionKind.MEMORY
+import org.wasmium.wasm.binary.tree.SectionKind.NONE
+import org.wasmium.wasm.binary.tree.SectionKind.START
+import org.wasmium.wasm.binary.tree.SectionKind.TABLE
+import org.wasmium.wasm.binary.tree.SectionKind.TYPE
+import org.wasmium.wasm.binary.tree.V128Value
+import org.wasmium.wasm.binary.tree.WasmType
+import org.wasmium.wasm.binary.tree.WasmVersion
+import org.wasmium.wasm.binary.visitors.CodeSectionVisitor
+import org.wasmium.wasm.binary.visitors.CustomSectionVisitor
+import org.wasmium.wasm.binary.visitors.ElementSectionVisitor
+import org.wasmium.wasm.binary.visitors.ExceptionSectionVisitor
+import org.wasmium.wasm.binary.visitors.ExportSectionVisitor
+import org.wasmium.wasm.binary.visitors.FunctionBodyVisitor
+import org.wasmium.wasm.binary.visitors.FunctionSectionVisitor
+import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
+import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
+import org.wasmium.wasm.binary.visitors.InitializerExpressionVisitor
+import org.wasmium.wasm.binary.visitors.LinkingSectionVisitor
+import org.wasmium.wasm.binary.visitors.MemorySectionVisitor
+import org.wasmium.wasm.binary.visitors.ModuleVisitor
+import org.wasmium.wasm.binary.visitors.NameSectionVisitor
+import org.wasmium.wasm.binary.visitors.RelocationSectionVisitor
+import org.wasmium.wasm.binary.visitors.StartSectionVisitor
+import org.wasmium.wasm.binary.visitors.TableSectionVisitor
+import org.wasmium.wasm.binary.visitors.TypeSectionVisitor
 
 public class WasmBinaryReader(
     protected val options: ReaderOptions,
@@ -140,6 +178,7 @@ public class WasmBinaryReader(
                         readCodeSection(visitor)
                     }
                 }
+
                 DATA -> readDataSection(visitor)
                 else -> throw ParserException("Invalid section id: $section")
             }
@@ -409,6 +448,7 @@ public class WasmBinaryReader(
 
     protected fun readSourceMapSection(visitor: ModuleVisitor) {
         val sourceMapURL = source.readString()
+        // TODO
     }
 
     protected fun readUnknownSection(visitor: ModuleVisitor, sectionName: String, startIndex: UInt, sectionPayloadSize: UInt) {
@@ -545,7 +585,7 @@ public class WasmBinaryReader(
                     source.readTo(data, 0u, dataSize)
 
                     if (dataSize != source.position - startIndex) {
-                        throw ParserException("Invalid size of section id: $section")
+                        throw ParserException("Invalid size of section id: ${SectionKind.DATA}")
                     }
 
                     dataSegmentVisitor.visitData(data)
@@ -573,7 +613,7 @@ public class WasmBinaryReader(
                     source.readTo(data, 0u, dataSize)
 
                     if (dataSize != source.position - startIndex) {
-                        throw ParserException("Invalid size of section id: $section")
+                        throw ParserException("Invalid size of section id: ${SectionKind.DATA}")
                     }
 
                     dataSegmentVisitor.visitData(data)

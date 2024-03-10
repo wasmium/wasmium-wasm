@@ -5,7 +5,7 @@ import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.visitors.ExportSectionVisitor
 
 public class ExportSectionNode : SectionNode(SectionKind.EXPORT), ExportSectionVisitor {
-    public val exports: MutableList<ExportTypeNode> = mutableListOf<ExportTypeNode>()
+    public val exports: MutableList<ExportTypeNode> = mutableListOf()
 
     public fun accept(exportSectionVisitor: ExportSectionVisitor) {
         for (exportType in exports) {
@@ -14,7 +14,7 @@ public class ExportSectionNode : SectionNode(SectionKind.EXPORT), ExportSectionV
     }
 
     public override fun visitExport(exportIndex: UInt, externalKind: ExternalKind, itemIndex: UInt, name: String) {
-        val exportType: ExportTypeNode = ExportTypeNode()
+        val exportType = ExportTypeNode()
         exportType.exportIndex = exportIndex
         exportType.kind = externalKind
         exportType.index = itemIndex

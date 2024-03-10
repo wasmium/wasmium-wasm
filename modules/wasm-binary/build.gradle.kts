@@ -95,6 +95,9 @@ kotlin {
         }
 
         val commonMain by getting {
+            kotlin {
+                srcDirs("src/commonMain/kotlinX")
+            }
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.3.1")
             }

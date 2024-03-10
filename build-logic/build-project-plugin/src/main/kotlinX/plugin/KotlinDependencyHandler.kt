@@ -1,5 +1,3 @@
-@file:Suppress("PackageDirectoryMismatch")
-
 package build.gradle.plugin
 
 import org.gradle.api.artifacts.Dependency

@@ -1,12 +1,12 @@
 package org.wasmium.wasm.binary.tree.sections
 
+import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.WasmType
-import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.visitors.TableSectionVisitor
 
 public class TableSectionNode : SectionNode(SectionKind.TABLE), TableSectionVisitor {
-    public val tables: MutableList<TableTypeNode> = mutableListOf<TableTypeNode>()
+    public val tables: MutableList<TableTypeNode> = mutableListOf()
 
     public fun accept(tableSectionVisitor: TableSectionVisitor) {
         for (tableType in tables) {
@@ -15,7 +15,7 @@ public class TableSectionNode : SectionNode(SectionKind.TABLE), TableSectionVisi
     }
 
     public override fun visitTable(tableIndex: UInt, elementType: WasmType, limits: ResizableLimits) {
-        val tableType: TableTypeNode = TableTypeNode()
+        val tableType = TableTypeNode()
         tableType.tableIndex = tableIndex
         tableType.elementType = elementType
         tableType.limits = limits

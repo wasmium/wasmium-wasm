@@ -1,13 +1,13 @@
 package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.ExternalKind
+import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
-import org.wasmium.wasm.binary.tree.ResizableLimits
 
 public class ImportSectionNode : SectionNode(SectionKind.IMPORT), ImportSectionVisitor {
-    public val imports: MutableList<ImportNode> = mutableListOf<ImportNode>()
+    public val imports: MutableList<ImportNode> = mutableListOf()
 
     public fun accept(importSectionVisitor: ImportSectionVisitor) {
         for (importNode in imports) {
@@ -104,11 +104,11 @@ public class ImportSectionNode : SectionNode(SectionKind.IMPORT), ImportSectionV
     }
 
     public override fun visitTable(importIndex: UInt, moduleName: String, fieldName: String, tableIndex: UInt, elementType: WasmType, limits: ResizableLimits) {
-        val tableType: TableTypeNode = TableTypeNode()
+        val tableType = TableTypeNode()
         tableType.elementType = elementType
         tableType.limits = limits
 
-        val tableImport: TableImportNode = TableImportNode()
+        val tableImport = TableImportNode()
         tableImport.importIndex = importIndex
         tableImport.module = moduleName
         tableImport.field = fieldName
@@ -119,10 +119,10 @@ public class ImportSectionNode : SectionNode(SectionKind.IMPORT), ImportSectionV
     }
 
     public override fun visitMemory(importIndex: UInt, moduleName: String, fieldName: String, memoryIndex: UInt, limits: ResizableLimits) {
-        val memoryType: MemoryTypeNode = MemoryTypeNode()
+        val memoryType = MemoryTypeNode()
         memoryType.limits = limits
 
-        val memoryImport: MemoryImportNode = MemoryImportNode()
+        val memoryImport = MemoryImportNode()
         memoryImport.importIndex = importIndex
         memoryImport.module = moduleName
         memoryImport.field = fieldName

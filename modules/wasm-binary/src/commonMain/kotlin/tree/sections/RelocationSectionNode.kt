@@ -7,7 +7,7 @@ import org.wasmium.wasm.binary.visitors.RelocationSectionVisitor
 public class RelocationSectionNode : CustomSectionNode(), RelocationSectionVisitor {
     public var kind: SectionKind? = null
     public var sectionName: String? = null
-    public val relocations: MutableList<RelocationNode> = mutableListOf<RelocationNode>()
+    public val relocations: MutableList<RelocationNode> = mutableListOf()
 
     public fun accept(relocationSectionVisitor: RelocationSectionVisitor) {
         for (relocation in relocations) {

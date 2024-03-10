@@ -1,5 +1,3 @@
-@file:Suppress("PackageDirectoryMismatch")
-
 package build.gradle.plugins.wrapper
 
 import org.gradle.api.Plugin

@@ -1,4 +1,5 @@
 package org.wasmium.wasm.binary.tree.instructions
 
-interface ReservedInstruction {
+public interface ReservedInstruction {
+    public val reserved: Boolean
 }

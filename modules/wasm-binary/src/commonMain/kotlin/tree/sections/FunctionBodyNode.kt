@@ -1,15 +1,15 @@
 package org.wasmium.wasm.binary.tree.sections
 
+import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.instructions.*
 import org.wasmium.wasm.binary.visitors.FunctionBodyVisitor
-import org.wasmium.wasm.binary.tree.Opcode
 
 public class FunctionBodyNode : FunctionBodyVisitor {
     public var functionIndex: UInt? = null
-    public val locals: MutableList<LocalNode> = mutableListOf<LocalNode>()
-    public val instructions: MutableList<Instruction> = mutableListOf<Instruction>()
+    public val locals: MutableList<LocalNode> = mutableListOf()
+    public val instructions: MutableList<Instruction> = mutableListOf()
 
     public fun accept(functionBodyVisitor: FunctionBodyVisitor) {
         for (local in locals) {
@@ -22,7 +22,7 @@ public class FunctionBodyNode : FunctionBodyVisitor {
     }
 
     public override fun visitLocalVariable(localIndex: UInt, count: UInt, localType: WasmType) {
-        val localNode: LocalNode = LocalNode()
+        val localNode = LocalNode()
         localNode.count = count
         localNode.type = localType
 

@@ -1,11 +1,11 @@
 package org.wasmium.wasm.binary.tree.sections
 
+import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.visitors.MemorySectionVisitor
-import org.wasmium.wasm.binary.tree.ResizableLimits
 
 public class MemorySectionNode : SectionNode(SectionKind.MEMORY), MemorySectionVisitor {
-    public val memories: MutableList<MemoryTypeNode> = mutableListOf<MemoryTypeNode>()
+    public val memories: MutableList<MemoryTypeNode> = mutableListOf()
 
     public fun accept(memorySectionVisitor: MemorySectionVisitor) {
         for (memoryType in memories) {
@@ -14,7 +14,7 @@ public class MemorySectionNode : SectionNode(SectionKind.MEMORY), MemorySectionV
     }
 
     public override fun visitMemory(memoryIndex: UInt, limits: ResizableLimits) {
-        val memoryType: MemoryTypeNode = MemoryTypeNode()
+        val memoryType = MemoryTypeNode()
         memoryType.memoryIndex = memoryIndex
         memoryType.limits = limits
 

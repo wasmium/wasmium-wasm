@@ -4,7 +4,7 @@ import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.visitors.FunctionSectionVisitor
 
 public class FunctionSectionNode : SectionNode(SectionKind.FUNCTION), FunctionSectionVisitor {
-    public val types: MutableList<FunctionIndexTypeNode> = mutableListOf<FunctionIndexTypeNode>()
+    public val types: MutableList<FunctionIndexTypeNode> = mutableListOf()
 
     public fun accept(functionSectionVisitor: FunctionSectionVisitor) {
         for (functionIndex in types) {
