@@ -1,4 +1,6 @@
-package org.wasmium.wasm.binary
+package org.wasmium.wasm.binary.reader
+
+import org.wasmium.wasm.binary.Features
 
 public class ReaderOptions(
     public val isDebugNamesEnabled: Boolean,
