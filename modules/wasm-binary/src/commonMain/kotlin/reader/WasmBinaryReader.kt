@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalUnsignedTypes::class)
+
 package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.ParserException
