@@ -1,6 +1,6 @@
 package org.wasmium.wasm.binary.visitors
 
-public class ElementSegmentAdapter(protected val delegate: ElementSegmentVisitor? = null) : ElementSegmentVisitor {
+public open class ElementSegmentAdapter(protected val delegate: ElementSegmentVisitor? = null) : ElementSegmentVisitor {
     public override fun visitTableIndex(tableIndex: UInt) {
         delegate?.visitTableIndex(tableIndex)
     }

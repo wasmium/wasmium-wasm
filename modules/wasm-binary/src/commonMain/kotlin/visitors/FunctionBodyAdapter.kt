@@ -4,7 +4,7 @@ import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 
-public class FunctionBodyAdapter(protected val delegate: FunctionBodyVisitor? = null) : FunctionBodyVisitor {
+public open class FunctionBodyAdapter(protected val delegate: FunctionBodyVisitor? = null) : FunctionBodyVisitor {
     public override fun visitLocalVariable(localIndex: UInt, count: UInt, localType: WasmType) {
         delegate?.visitLocalVariable(localIndex, count, localType)
     }

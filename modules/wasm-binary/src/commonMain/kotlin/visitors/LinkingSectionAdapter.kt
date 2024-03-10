@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.visitors
 
 import org.wasmium.wasm.binary.tree.LinkingSymbolType
 
-public class LinkingSectionAdapter(protected val delegate: LinkingSectionVisitor? = null) : LinkingSectionVisitor {
+public open class LinkingSectionAdapter(protected val delegate: LinkingSectionVisitor? = null) : LinkingSectionVisitor {
     public override fun visitSegment(name: String, alignment: UInt, flags: UInt) {
         delegate?.visitSegment(name, alignment, flags)
     }

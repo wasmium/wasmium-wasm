@@ -1,6 +1,6 @@
 package org.wasmium.wasm.binary.visitors
 
-public class ModuleAdapter(protected val delegate: ModuleVisitor? = null) : ModuleVisitor {
+public open class ModuleAdapter(protected val delegate: ModuleVisitor? = null) : ModuleVisitor {
     override fun visit(version: UInt) {
         delegate?.visit(version)
     }

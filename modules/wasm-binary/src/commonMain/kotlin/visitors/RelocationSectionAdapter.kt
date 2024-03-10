@@ -3,7 +3,7 @@ package org.wasmium.wasm.binary.visitors
 import org.wasmium.wasm.binary.tree.RelocationKind
 import org.wasmium.wasm.binary.tree.SectionKind
 
-public class RelocationSectionAdapter (protected val delegate: RelocationSectionVisitor? = null) : RelocationSectionVisitor {
+public open class RelocationSectionAdapter (protected val delegate: RelocationSectionVisitor? = null) : RelocationSectionVisitor {
     public override fun visitSection(sectionKind: SectionKind, sectionName: String) {
         delegate?.visitSection(sectionKind, sectionName)
     }

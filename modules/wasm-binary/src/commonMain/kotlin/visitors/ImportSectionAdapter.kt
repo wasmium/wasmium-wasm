@@ -3,7 +3,7 @@ package org.wasmium.wasm.binary.visitors
 import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.tree.WasmType
 
-public class ImportSectionAdapter(protected val delegate: ImportSectionVisitor? = null) : ImportSectionVisitor {
+public open class ImportSectionAdapter(protected val delegate: ImportSectionVisitor? = null) : ImportSectionVisitor {
     public override fun visitFunction(importIndex: UInt, moduleName: String, fieldName: String, functionIndex: UInt, typeIndex: UInt) {
         delegate?.visitFunction(importIndex, moduleName, fieldName, functionIndex, typeIndex)
     }

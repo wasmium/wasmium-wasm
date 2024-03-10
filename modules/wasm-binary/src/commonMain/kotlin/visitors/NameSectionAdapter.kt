@@ -1,6 +1,6 @@
 package org.wasmium.wasm.binary.visitors
 
-public class NameSectionAdapter (protected val delegate: NameSectionVisitor? = null) : NameSectionVisitor {
+public open class NameSectionAdapter (protected val delegate: NameSectionVisitor? = null) : NameSectionVisitor {
     public override fun visitModuleName(name: String) {
         delegate?.visitModuleName(name)
     }

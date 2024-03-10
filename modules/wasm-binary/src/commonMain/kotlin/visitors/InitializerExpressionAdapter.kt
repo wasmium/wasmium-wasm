@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.visitors
 
 import org.wasmium.wasm.binary.tree.V128Value
 
-public class InitializerExpressionAdapter(protected val delegate: InitializerExpressionVisitor? = null) : InitializerExpressionVisitor {
+public open class InitializerExpressionAdapter(protected val delegate: InitializerExpressionVisitor? = null) : InitializerExpressionVisitor {
     public override fun visitInitExprI32ConstExpr(value: Int) {
         delegate?.visitInitExprI32ConstExpr(value)
     }

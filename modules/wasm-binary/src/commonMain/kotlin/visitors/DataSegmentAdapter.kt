@@ -1,6 +1,6 @@
 package org.wasmium.wasm.binary.visitors
 
-public class DataSegmentAdapter(protected val delegate: DataSegmentVisitor? = null) : DataSegmentVisitor {
+public open class DataSegmentAdapter(protected val delegate: DataSegmentVisitor? = null) : DataSegmentVisitor {
     public override fun visitMemoryIndex(memoryIndex: UInt) {
         delegate?.visitMemoryIndex(memoryIndex)
     }
