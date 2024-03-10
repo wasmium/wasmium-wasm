@@ -1,0 +1,2424 @@
+public final class MainKt {
+	public static final fun main ()V
+	public static synthetic fun main ([Ljava/lang/String;)V
+}
+
+public final class org/wasmium/wasm/binary/Features {
+	public fun <init> ()V
+	public final fun isExceptionsEnabled ()Z
+	public final fun isMultiValueEnabled ()Z
+	public final fun isMutableGlobals ()Z
+	public final fun isSaturatingFloatToIntEnabled ()Z
+	public final fun isSignExtension ()Z
+	public final fun isSimdEnabled ()Z
+	public final fun isThreadsEnabled ()Z
+	public final fun setExceptionsEnabled (Z)V
+	public final fun setMultiValueEnabled (Z)V
+	public final fun setMutableGlobals (Z)V
+	public final fun setSaturatingFloatToIntEnabled (Z)V
+	public final fun setSignExtension (Z)V
+	public final fun setSimdEnabled (Z)V
+	public final fun setThreadsEnabled (Z)V
+}
+
+public final class org/wasmium/wasm/binary/ParserException : org/wasmium/wasm/binary/WasmBinaryException {
+	public fun <init> (Ljava/lang/String;)V
+	public fun getMessage ()Ljava/lang/String;
+}
+
+public final class org/wasmium/wasm/binary/ReaderOptions {
+	public fun <init> (ZZLorg/wasmium/wasm/binary/Features;)V
+	public final fun getFeatures ()Lorg/wasmium/wasm/binary/Features;
+	public final fun isDebugNamesEnabled ()Z
+	public final fun isSkipCodeSection ()Z
+}
+
+public final class org/wasmium/wasm/binary/ReaderOptionsBuilder {
+	public fun <init> ()V
+	public fun <init> (Lorg/wasmium/wasm/binary/ReaderOptions;)V
+	public final fun build ()Lorg/wasmium/wasm/binary/ReaderOptions;
+	public final fun debugNames (Z)Lorg/wasmium/wasm/binary/ReaderOptionsBuilder;
+	public final fun features (Lkotlin/jvm/functions/Function1;)Lorg/wasmium/wasm/binary/ReaderOptionsBuilder;
+	public final fun skipCodeSection (Z)Lorg/wasmium/wasm/binary/ReaderOptionsBuilder;
+}
+
+public final class org/wasmium/wasm/binary/ReaderOptionsBuilderKt {
+	public static final fun ReaderOptions (Lkotlin/jvm/functions/Function1;)Lorg/wasmium/wasm/binary/ReaderOptions;
+	public static final fun ReaderOptions (Lorg/wasmium/wasm/binary/ReaderOptions;Lkotlin/jvm/functions/Function1;)Lorg/wasmium/wasm/binary/ReaderOptions;
+}
+
+public final class org/wasmium/wasm/binary/WasmBinary {
+	public static final field INSTANCE Lorg/wasmium/wasm/binary/WasmBinary;
+	public static final field LINKING_SYMBOL_FLAG_UNDEFINED I
+	public static final field LINKING_SYMBOL_MASK_BINDING I
+	public static final field LINKING_SYMBOL_MASK_VISIBILITY I
+	public static final field MAGIC_NUMBER I
+	public static final field MAX_DATA_SEGMENTS I
+	public static final field MAX_DATA_SEGMENT_LENGTH I
+	public static final field MAX_ELEMENT_SEGMENTS I
+	public static final field MAX_ELEMENT_SEGMENT_LENGTH I
+	public static final field MAX_EXCEPTIONS I
+	public static final field MAX_EXCEPTION_TYPES I
+	public static final field MAX_EXPORTS I
+	public static final field MAX_FUNCTIONS I
+	public static final field MAX_FUNCTION_INSTRUCTIONS I
+	public static final field MAX_FUNCTION_LOCALS I
+	public static final field MAX_FUNCTION_LOCALS_TOTAL I
+	public static final field MAX_FUNCTION_PARAMS I
+	public static final field MAX_FUNCTION_RESULTS I
+	public static final field MAX_FUNCTION_SIZE I
+	public static final field MAX_GLOBALS I
+	public static final field MAX_IMPORTS I
+	public static final field MAX_MEMORIES I
+	public static final field MAX_MEMORY_PAGES I
+	public static final field MAX_MODULE_SIZE I
+	public static final field MAX_SECTIONS I
+	public static final field MAX_SECTION_LENGTH I
+	public static final field MAX_STRING_SIZE I
+	public static final field MAX_TABLES I
+	public static final field MAX_TABLE_PAGES I
+	public static final field MAX_TYPES I
+	public static final field PAGE_SIZE_BYTES I
+	public static final field SECTION_NAME_EXCEPTION Ljava/lang/String;
+	public static final field SECTION_NAME_LINKING Ljava/lang/String;
+	public static final field SECTION_NAME_NAME Ljava/lang/String;
+	public static final field SECTION_NAME_RELOCATION Ljava/lang/String;
+}
+
+public class org/wasmium/wasm/binary/WasmBinaryException : java/lang/RuntimeException {
+	public fun <init> ()V
+}
+
+public final class org/wasmium/wasm/binary/WasmBinaryReader {
+	public fun <init> (Lorg/wasmium/wasm/binary/ReaderOptions;Lorg/wasmium/wasm/binary/WasmSource;Lorg/wasmium/wasm/binary/visitors/ModuleVisitor;)V
+	public final fun read ()V
+	public final fun readV128 ()Lorg/wasmium/wasm/binary/tree/V128Value;
+}
+
+public final class org/wasmium/wasm/binary/WasmSink {
+	public fun <init> (Lkotlinx/io/Sink;)V
+	public final fun writeSignedLeb128 (J)I
+	public final fun writeUInt (J)V
+	public final fun writeUInt64 (J)V
+	public final fun writeUInt8 (I)V
+	public final fun writeUnsignedLeb128 (J)I
+}
+
+public final class org/wasmium/wasm/binary/WasmSource : kotlinx/io/RawSource {
+	public fun <init> (Lkotlinx/io/Source;)V
+	public fun close ()V
+	public final fun exhausted ()Z
+	public final fun read ()I
+	public final fun read-BltQuoY ([BII)I
+	public fun readAtMostTo (Lkotlinx/io/Buffer;J)J
+	public final fun readExternalKind ()Lorg/wasmium/wasm/binary/tree/ExternalKind;
+	public final fun readFloat32 ()F
+	public final fun readFloat64 ()D
+	public final fun readIndex-pVg5ArA ()I
+	public final fun readLinkingKind ()Lorg/wasmium/wasm/binary/tree/LinkingKind;
+	public final fun readNameKind ()Lorg/wasmium/wasm/binary/tree/NameKind;
+	public final fun readOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+	public final fun readRealocationKind ()Lorg/wasmium/wasm/binary/tree/RelocationKind;
+	public final fun readResizableLimits ()Lorg/wasmium/wasm/binary/tree/ResizableLimits;
+	public final fun readSectionKind ()Lorg/wasmium/wasm/binary/tree/SectionKind;
+	public static synthetic fun readSignedLeb128$default (Lorg/wasmium/wasm/binary/WasmSource;IILjava/lang/Object;)J
+	public final fun readString ()Ljava/lang/String;
+	public final fun readType ()Lorg/wasmium/wasm/binary/tree/WasmType;
+	public final fun readUInt32-pVg5ArA ()I
+	public final fun readUInt64-s-VKNKU ()J
+	public final fun readUInt8-pVg5ArA ()I
+	public static synthetic fun readUnsignedLeb128$default (Lorg/wasmium/wasm/binary/WasmSource;IILjava/lang/Object;)J
+	public final fun readV128 ()Lorg/wasmium/wasm/binary/tree/V128Value;
+	public final fun readVarInt32 ()I
+	public final fun readVarInt64 ()J
+	public final fun readVarInt7 ()I
+	public final fun readVarUInt1-pVg5ArA ()I
+	public final fun readVarUInt32-pVg5ArA ()I
+	public final fun readVarUInt7-pVg5ArA ()I
+	public final fun remaining-pVg5ArA ()I
+	public final fun skip-WZ4Q5Ns (I)V
+}
+
+public final class org/wasmium/wasm/binary/WriterOptions {
+	public fun <init> (Z)V
+	public final fun isDebugNamesEnabled ()Z
+}
+
+public final class org/wasmium/wasm/binary/WriterOptionsBuilder {
+	public fun <init> ()V
+	public fun <init> (Lorg/wasmium/wasm/binary/WriterOptions;)V
+	public final fun build ()Lorg/wasmium/wasm/binary/WriterOptions;
+	public final fun debugNames (Z)Lorg/wasmium/wasm/binary/WriterOptionsBuilder;
+}
+
+public final class org/wasmium/wasm/binary/WriterOptionsBuilderKt {
+	public static final fun WriterOptions (Lkotlin/jvm/functions/Function1;)Lorg/wasmium/wasm/binary/WriterOptions;
+	public static final fun WriterOptions (Lorg/wasmium/wasm/binary/WriterOptions;Lkotlin/jvm/functions/Function1;)Lorg/wasmium/wasm/binary/WriterOptions;
+}
+
+public final class org/wasmium/wasm/binary/tree/ExternalKind : java/lang/Enum {
+	public static final field Companion Lorg/wasmium/wasm/binary/tree/ExternalKind$Companion;
+	public static final field EXCEPTION Lorg/wasmium/wasm/binary/tree/ExternalKind;
+	public static final field FUNCTION Lorg/wasmium/wasm/binary/tree/ExternalKind;
+	public static final field GLOBAL Lorg/wasmium/wasm/binary/tree/ExternalKind;
+	public static final field MEMORY Lorg/wasmium/wasm/binary/tree/ExternalKind;
+	public static final field NONE Lorg/wasmium/wasm/binary/tree/ExternalKind;
+	public static final field TABLE Lorg/wasmium/wasm/binary/tree/ExternalKind;
+	public final fun getExternalKindId ()I
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/ExternalKind;
+	public static fun values ()[Lorg/wasmium/wasm/binary/tree/ExternalKind;
+}
+
+public final class org/wasmium/wasm/binary/tree/ExternalKind$Companion {
+	public final fun fromExternalKindId-WZ4Q5Ns (I)Lorg/wasmium/wasm/binary/tree/ExternalKind;
+}
+
+public final class org/wasmium/wasm/binary/tree/LimitFlags : java/lang/Enum {
+	public static final field Companion Lorg/wasmium/wasm/binary/tree/LimitFlags$Companion;
+	public static final field HAS_MAX Lorg/wasmium/wasm/binary/tree/LimitFlags;
+	public static final field IS_SHARED Lorg/wasmium/wasm/binary/tree/LimitFlags;
+	public static final field NONE Lorg/wasmium/wasm/binary/tree/LimitFlags;
+	public final fun getFlags-pVg5ArA ()I
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/LimitFlags;
+	public static fun values ()[Lorg/wasmium/wasm/binary/tree/LimitFlags;
+}
+
+public final class org/wasmium/wasm/binary/tree/LimitFlags$Companion {
+	public final fun fromLimitFlags-WZ4Q5Ns (I)Lorg/wasmium/wasm/binary/tree/LimitFlags;
+}
+
+public final class org/wasmium/wasm/binary/tree/LinkingKind : java/lang/Enum {
+	public static final field COMDAT_INFO Lorg/wasmium/wasm/binary/tree/LinkingKind;
+	public static final field Companion Lorg/wasmium/wasm/binary/tree/LinkingKind$Companion;
+	public static final field INIT_FUNCS Lorg/wasmium/wasm/binary/tree/LinkingKind;
+	public static final field NONE Lorg/wasmium/wasm/binary/tree/LinkingKind;
+	public static final field SEGMENT_INFO Lorg/wasmium/wasm/binary/tree/LinkingKind;
+	public static final field SYMBOL_TABLE Lorg/wasmium/wasm/binary/tree/LinkingKind;
+	public final fun getLinkingKindId ()I
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/LinkingKind;
+	public static fun values ()[Lorg/wasmium/wasm/binary/tree/LinkingKind;
+}
+
+public final class org/wasmium/wasm/binary/tree/LinkingKind$Companion {
+	public final fun fromLinkingKindId-WZ4Q5Ns (I)Lorg/wasmium/wasm/binary/tree/LinkingKind;
+}
+
+public final class org/wasmium/wasm/binary/tree/LinkingSymbolType : java/lang/Enum {
+	public static final field Companion Lorg/wasmium/wasm/binary/tree/LinkingSymbolType$Companion;
+	public static final field DATA Lorg/wasmium/wasm/binary/tree/LinkingSymbolType;
+	public static final field FUNCTION Lorg/wasmium/wasm/binary/tree/LinkingSymbolType;
+	public static final field GLOBAL Lorg/wasmium/wasm/binary/tree/LinkingSymbolType;
+	public static final field NONE Lorg/wasmium/wasm/binary/tree/LinkingSymbolType;
+	public static final field SECTION Lorg/wasmium/wasm/binary/tree/LinkingSymbolType;
+	public final fun getLinkingSymbolTypeId ()I
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/LinkingSymbolType;
+	public static fun values ()[Lorg/wasmium/wasm/binary/tree/LinkingSymbolType;
+}
+
+public final class org/wasmium/wasm/binary/tree/LinkingSymbolType$Companion {
+	public final fun fromLinkingSymbolTypeId (I)Lorg/wasmium/wasm/binary/tree/LinkingSymbolType;
+}
+
+public final class org/wasmium/wasm/binary/tree/NameKind : java/lang/Enum {
+	public static final field Companion Lorg/wasmium/wasm/binary/tree/NameKind$Companion;
+	public static final field FUNCTION Lorg/wasmium/wasm/binary/tree/NameKind;
+	public static final field LOCAL Lorg/wasmium/wasm/binary/tree/NameKind;
+	public static final field MODULE Lorg/wasmium/wasm/binary/tree/NameKind;
+	public static final field NONE Lorg/wasmium/wasm/binary/tree/NameKind;
+	public final fun getNameKindId ()I
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/NameKind;
+	public static fun values ()[Lorg/wasmium/wasm/binary/tree/NameKind;
+}
+
+public final class org/wasmium/wasm/binary/tree/NameKind$Companion {
+	public final fun fromNameKindId-WZ4Q5Ns (I)Lorg/wasmium/wasm/binary/tree/NameKind;
+}
+
+public final class org/wasmium/wasm/binary/tree/Opcode : java/lang/Enum {
+	public static final field ATOMIC_WAKE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field BLOCK Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field BR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field BR_IF Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field BR_TABLE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field CALL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field CALL_INDIRECT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field CATCH Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field Companion Lorg/wasmium/wasm/binary/tree/Opcode$Companion;
+	public static final field DROP Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field ELSE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field END Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_ABS Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_CONVERT_S_I32X4 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_CONVERT_U_I32X4 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_DIV Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_EQ Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_EXTRACT_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_GE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_GT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_LE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_LT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_MAX Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_MIN Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_MUL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_NE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_NEG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_REPLACE_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_SPLAT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_SQRT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_ABS Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_CEIL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_CONST Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_CONVERT_SI32 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_CONVERT_SI64 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_CONVERT_UI32 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_CONVERT_UI64 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_COPYSIGN Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_DEMOTE_F64 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_DIV Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_EQ Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_FLOOR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_GE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_GT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_LE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_LOAD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_LT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_MAX Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_MIN Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_MUL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_NE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_NEAREST Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_NEG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_REINTERPRET_I32 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_SQRT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_STORE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32_TRUNC Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_ABS Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_CONVERT_S_I64X2 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_CONVERT_U_I64X2 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_DIV Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_EQ Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_EXTRACT_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_GE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_GT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_LE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_LT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_MAX Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_MIN Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_MUL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_NE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_NEG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_REPLACE_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_SPLAT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_SQRT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_ABS Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_CEIL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_CONST Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_CONVERT_SI32 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_CONVERT_SI64 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_CONVERT_UI32 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_CONVERT_UI64 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_COPYSIGN Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_DIV Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_EQ Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_FLOOR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_GE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_GT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_LE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_LOAD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_LT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_MAX Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_MIN Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_MUL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_NE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_NEAREST Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_NEG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_PROMOTE_F32 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_REINTERPRET_I64 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_SQRT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_STORE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64_TRUNC Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field GET_GLOBAL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field GET_LOCAL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_ADD_SATURATE_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_ADD_SATURATE_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_ALL_TRUE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_ANY_TRUE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_EQ Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_EXTRACT_LANE_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_EXTRACT_LANE_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_GE_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_GE_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_GT_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_GT_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_LE_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_LE_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_LT_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_LT_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_MUL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_NE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_NEG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_REPLACE_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_SHL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_SHL_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_SHL_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_SPLAT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_SUB_SATURATE_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_SUB_SATURATE_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_ALL_TRUE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_ANY_TRUE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_EQ Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_EXTRACT_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_GE_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_GE_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_GT_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_GT_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_LE_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_LE_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_LT_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_LT_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_MUL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_NE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_NEG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_REPLACE_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_SHL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_SHL_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_SHL_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_SPLAT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_TRUNC_S_F32X4_SAT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_TRUNC_U_F32X4_SAT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_AND Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_LOAD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_LOAD16_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_LOAD8_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_RMW16_U_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_RMW16_U_AND Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_RMW16_U_CMPXCHG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_RMW16_U_OR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_RMW16_U_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_RMW16_U_XCHG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_RMW16_U_XOR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_RMW8_U_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_RMW8_U_AND Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_RMW8_U_CMPXCHG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_RMW8_U_OR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_RMW8_U_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_RMW8_U_XCHG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_RMW8_U_XOR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_RMW_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_RMW_AND Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_RMW_CMPXCHG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_RMW_OR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_RMW_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_RMW_XCHG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_RMW_XOR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_STORE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_STORE16 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_STORE8 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ATOMIC_WAIT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_CLZ Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_CONST Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_CTZ Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_DIV_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_DIV_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_EQ Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_EQZ Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_EXTEND16_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_EXTEND8_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_GE_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_GE_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_GT_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_GT_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_LE_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_LE_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_LOAD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_LOAD16_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_LOAD16_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_LOAD8_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_LOAD8_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_LT_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_LT_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_MUL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_NE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_OR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_POPCNT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_REINTERPRET_F32 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_REM_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_REM_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ROTL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_ROTR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_SHL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_SHR_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_SHR_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_STORE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_STORE16 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_STORE8 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_TRUNC_SF32 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_TRUNC_SF64 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_TRUNC_S_SAT_F32 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_TRUNC_S_SAT_F64 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_TRUNC_UF32 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_TRUNC_UF64 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_TRUNC_U_SAT_F32 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_TRUNC_U_SAT_F64 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_WRAP_I64 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32_XOR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_ALL_TRUE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_ANY_TRUE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_EXTRACT_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_NEG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_REPLACE_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_SHL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_SHL_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_SHL_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_SPLAT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_TRUNC_S_F64X2_SAT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_TRUNC_U_F64X2_SAT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_AND Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_LOAD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_LOAD16_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_LOAD32_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_LOAD8_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW16_U_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW16_U_AND Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW16_U_CMPXCHG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW16_U_OR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW16_U_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW16_U_XCHG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW16_U_XOR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW32_U_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW32_U_AND Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW32_U_CMPXCHG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW32_U_OR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW32_U_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW32_U_XCHG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW32_U_XOR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW8_U_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW8_U_AND Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW8_U_CMPXCHG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW8_U_OR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW8_U_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW8_U_XCHG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW8_U_XOR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW_AND Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW_CMPXCHG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW_OR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW_XCHG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_RMW_XOR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_STORE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_STORE16 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_STORE32 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_STORE8 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ATOMIC_WAIT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_CLZ Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_CONST Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_CTZ Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_DIV_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_DIV_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_EQ Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_EQZ Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_EXTEND16_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_EXTEND32_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_EXTEND8_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_EXTEND_SI32 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_EXTEND_UI32 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_GE_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_GE_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_GT_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_GT_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_LE_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_LE_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_LOAD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_LOAD16_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_LOAD16_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_LOAD32_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_LOAD32_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_LOAD8_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_LOAD8_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_LT_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_LT_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_MUL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_NE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_OR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_POPCNT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_REINTERPRET_F64 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_REM_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_REM_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ROTL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_ROTR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_SHL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_SHR_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_SHR_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_STORE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_STORE16 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_STORE32 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_STORE8 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_TRUNC_SF32 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_TRUNC_SF64 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_TRUNC_S_SAT_F32 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_TRUNC_S_SAT_F64 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_TRUNC_UF32 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_TRUNC_UF64 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_TRUNC_U_SAT_F32 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_TRUNC_U_SAT_F64 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64_XOR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_ADD_SATURATE_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_ADD_SATURATE_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_ALL_TRUE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_ANY_TRUE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_EQ Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_EXTRACT_LANE_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_EXTRACT_LANE_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_GE_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_GE_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_GT_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_GT_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_LE_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_LE_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_LT_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_LT_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_MUL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_NE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_NEG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_REPLACE_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_SHL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_SHL_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_SHL_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_SPLAT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_SUB_SATURATE_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_SUB_SATURATE_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field IF Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field IF_EXCEPT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field LOOP Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field MEMORY_GROW Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field MEMORY_SIZE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field NOP Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field PREFIX_NUMERIC I
+	public static final field PREFIX_SIMD I
+	public static final field PREFIX_THREADS I
+	public static final field RETHROW Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field RETURN Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field SELECT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field SET_GLOBAL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field SET_LOCAL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field TEE_LOCAL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field THROW Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field TRY Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field UNREACHABLE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_AND Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_BITSELECT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_CONST Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_LOAD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_NOT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_OR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_STORE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_XOR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V8X16_SHUFFLE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public final fun getCode ()I
+	public final fun getLength ()I
+	public final fun getOpcode ()I
+	public final fun getOpcodeName ()Ljava/lang/String;
+	public final fun getParam1 ()Lorg/wasmium/wasm/binary/tree/WasmType;
+	public final fun getParam2 ()Lorg/wasmium/wasm/binary/tree/WasmType;
+	public final fun getParam3 ()Lorg/wasmium/wasm/binary/tree/WasmType;
+	public final fun getPrefix ()I
+	public final fun getResult ()Lorg/wasmium/wasm/binary/tree/WasmType;
+	public final fun hasPrefix ()Z
+	public final fun isEnabled (Lorg/wasmium/wasm/binary/Features;)Z
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static fun values ()[Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/Opcode$Companion {
+	public final fun fromCode-WZ4Q5Ns (I)Lorg/wasmium/wasm/binary/tree/Opcode;
+	public final fun fromPrefix-feOb9K0 (II)Lorg/wasmium/wasm/binary/tree/Opcode;
+	public final fun isPrefix-WZ4Q5Ns (I)Z
+}
+
+public final class org/wasmium/wasm/binary/tree/RelocationKind : java/lang/Enum {
+	public static final field Companion Lorg/wasmium/wasm/binary/tree/RelocationKind$Companion;
+	public static final field FUNCTION_OFFSET_I32 Lorg/wasmium/wasm/binary/tree/RelocationKind;
+	public static final field FUNC_INDEX_LEB Lorg/wasmium/wasm/binary/tree/RelocationKind;
+	public static final field GLOBAL_INDEX_LEB Lorg/wasmium/wasm/binary/tree/RelocationKind;
+	public static final field MEMORY_ADDRESS_I32 Lorg/wasmium/wasm/binary/tree/RelocationKind;
+	public static final field MEMORY_ADDRESS_LEB Lorg/wasmium/wasm/binary/tree/RelocationKind;
+	public static final field MEMORY_ADDRESS_SLEB Lorg/wasmium/wasm/binary/tree/RelocationKind;
+	public static final field NONE Lorg/wasmium/wasm/binary/tree/RelocationKind;
+	public static final field SECTION_OFFSET_I32 Lorg/wasmium/wasm/binary/tree/RelocationKind;
+	public static final field TABLE_INDEX_I32 Lorg/wasmium/wasm/binary/tree/RelocationKind;
+	public static final field TABLE_INDEX_SLEB Lorg/wasmium/wasm/binary/tree/RelocationKind;
+	public static final field TYPE_INDEX_LEB Lorg/wasmium/wasm/binary/tree/RelocationKind;
+	public final fun getRelocationKindId ()I
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/RelocationKind;
+	public static fun values ()[Lorg/wasmium/wasm/binary/tree/RelocationKind;
+}
+
+public final class org/wasmium/wasm/binary/tree/RelocationKind$Companion {
+	public final fun fromRelocationKind-WZ4Q5Ns (I)Lorg/wasmium/wasm/binary/tree/RelocationKind;
+}
+
+public final class org/wasmium/wasm/binary/tree/ResizableLimits {
+	public synthetic fun <init> (ILkotlin/UInt;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (ILkotlin/UInt;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getFlags-pVg5ArA ()I
+	public final fun getInitial-pVg5ArA ()I
+	public final fun getMaximum-0hXNFcg ()Lkotlin/UInt;
+	public final fun isShared ()Z
+}
+
+public final class org/wasmium/wasm/binary/tree/SectionKind : java/lang/Enum {
+	public static final field CODE Lorg/wasmium/wasm/binary/tree/SectionKind;
+	public static final field CUSTOM Lorg/wasmium/wasm/binary/tree/SectionKind;
+	public static final field Companion Lorg/wasmium/wasm/binary/tree/SectionKind$Companion;
+	public static final field DATA Lorg/wasmium/wasm/binary/tree/SectionKind;
+	public static final field ELEMENT Lorg/wasmium/wasm/binary/tree/SectionKind;
+	public static final field EXPORT Lorg/wasmium/wasm/binary/tree/SectionKind;
+	public static final field FUNCTION Lorg/wasmium/wasm/binary/tree/SectionKind;
+	public static final field GLOBAL Lorg/wasmium/wasm/binary/tree/SectionKind;
+	public static final field IMPORT Lorg/wasmium/wasm/binary/tree/SectionKind;
+	public static final field MEMORY Lorg/wasmium/wasm/binary/tree/SectionKind;
+	public static final field NONE Lorg/wasmium/wasm/binary/tree/SectionKind;
+	public static final field START Lorg/wasmium/wasm/binary/tree/SectionKind;
+	public static final field TABLE Lorg/wasmium/wasm/binary/tree/SectionKind;
+	public static final field TYPE Lorg/wasmium/wasm/binary/tree/SectionKind;
+	public final fun getSectionKindId ()I
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/SectionKind;
+	public static fun values ()[Lorg/wasmium/wasm/binary/tree/SectionKind;
+}
+
+public final class org/wasmium/wasm/binary/tree/SectionKind$Companion {
+	public final fun fromSectionKindId-WZ4Q5Ns (I)Lorg/wasmium/wasm/binary/tree/SectionKind;
+}
+
+public final class org/wasmium/wasm/binary/tree/V128Value {
+	public synthetic fun <init> ([ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getValue--hP7Qyg ()[I
+}
+
+public final class org/wasmium/wasm/binary/tree/WasmType : java/lang/Enum {
+	public static final field ANYFUNC Lorg/wasmium/wasm/binary/tree/WasmType;
+	public static final field Companion Lorg/wasmium/wasm/binary/tree/WasmType$Companion;
+	public static final field F32 Lorg/wasmium/wasm/binary/tree/WasmType;
+	public static final field F64 Lorg/wasmium/wasm/binary/tree/WasmType;
+	public static final field FUNCTION Lorg/wasmium/wasm/binary/tree/WasmType;
+	public static final field I32 Lorg/wasmium/wasm/binary/tree/WasmType;
+	public static final field I64 Lorg/wasmium/wasm/binary/tree/WasmType;
+	public static final field NONE Lorg/wasmium/wasm/binary/tree/WasmType;
+	public static final field V128 Lorg/wasmium/wasm/binary/tree/WasmType;
+	public final fun getWasmTypeId ()I
+	public final fun isElementType ()Z
+	public final fun isInlineType ()Z
+	public final fun isValueType ()Z
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/WasmType;
+	public static fun values ()[Lorg/wasmium/wasm/binary/tree/WasmType;
+}
+
+public final class org/wasmium/wasm/binary/tree/WasmType$Companion {
+	public final fun fromWasmTypeId-WZ4Q5Ns (I)Lorg/wasmium/wasm/binary/tree/WasmType;
+}
+
+public final class org/wasmium/wasm/binary/tree/WasmVersion : java/lang/Enum {
+	public static final field V1 Lorg/wasmium/wasm/binary/tree/WasmVersion;
+	public static final field V2 Lorg/wasmium/wasm/binary/tree/WasmVersion;
+	public final fun getVersion-pVg5ArA ()I
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/WasmVersion;
+	public static fun values ()[Lorg/wasmium/wasm/binary/tree/WasmVersion;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/AbsoluteInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/AddInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public abstract interface class org/wasmium/wasm/binary/tree/instructions/AlignOffsetInstruction : org/wasmium/wasm/binary/tree/instructions/Instruction {
+	public abstract fun getAlignment-pVg5ArA ()I
+	public abstract fun getOffset-pVg5ArA ()I
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/AndInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/AtomicLoadInstruction : org/wasmium/wasm/binary/tree/instructions/AlignOffsetInstruction {
+	public synthetic fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getAlignment-pVg5ArA ()I
+	public fun getOffset-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/AtomicRmwAddInstruction : org/wasmium/wasm/binary/tree/instructions/AlignOffsetInstruction {
+	public synthetic fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getAlignment-pVg5ArA ()I
+	public fun getOffset-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/AtomicRmwAndInstruction : org/wasmium/wasm/binary/tree/instructions/AlignOffsetInstruction {
+	public synthetic fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getAlignment-pVg5ArA ()I
+	public fun getOffset-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/AtomicRmwCompareExchangeInstruction : org/wasmium/wasm/binary/tree/instructions/AlignOffsetInstruction {
+	public synthetic fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getAlignment-pVg5ArA ()I
+	public fun getOffset-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/AtomicRmwExchangeInstruction : org/wasmium/wasm/binary/tree/instructions/AlignOffsetInstruction {
+	public synthetic fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getAlignment-pVg5ArA ()I
+	public fun getOffset-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/AtomicRmwInstruction : org/wasmium/wasm/binary/tree/instructions/AlignOffsetInstruction {
+	public synthetic fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getAlignment-pVg5ArA ()I
+	public fun getOffset-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/AtomicRmwOrInstruction : org/wasmium/wasm/binary/tree/instructions/AlignOffsetInstruction {
+	public synthetic fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getAlignment-pVg5ArA ()I
+	public fun getOffset-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/AtomicRmwSubtractInstruction : org/wasmium/wasm/binary/tree/instructions/AlignOffsetInstruction {
+	public synthetic fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getAlignment-pVg5ArA ()I
+	public fun getOffset-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/AtomicRmwXorInstruction : org/wasmium/wasm/binary/tree/instructions/AlignOffsetInstruction {
+	public synthetic fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getAlignment-pVg5ArA ()I
+	public fun getOffset-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/AtomicStoreInstruction : org/wasmium/wasm/binary/tree/instructions/AlignOffsetInstruction {
+	public synthetic fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getAlignment-pVg5ArA ()I
+	public fun getOffset-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/AtomicWaitInstruction : org/wasmium/wasm/binary/tree/instructions/AlignOffsetInstruction {
+	public synthetic fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getAlignment-pVg5ArA ()I
+	public fun getOffset-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/AtomicWakeInstruction : org/wasmium/wasm/binary/tree/instructions/AlignOffsetInstruction {
+	public synthetic fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getAlignment-pVg5ArA ()I
+	public fun getOffset-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/BlockInstruction : org/wasmium/wasm/binary/tree/instructions/TypeInstruction {
+	public fun <init> ([Lorg/wasmium/wasm/binary/tree/WasmType;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getBlockType ()[Lorg/wasmium/wasm/binary/tree/WasmType;
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/BrIfInstruction : org/wasmium/wasm/binary/tree/instructions/RelativeDepthInstruction {
+	public synthetic fun <init> (ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+	public fun getRelativeDepth-pVg5ArA ()I
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/BrInstruction : org/wasmium/wasm/binary/tree/instructions/RelativeDepthInstruction {
+	public synthetic fun <init> (ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+	public fun getRelativeDepth-pVg5ArA ()I
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/BrTableInstruction : org/wasmium/wasm/binary/tree/instructions/TableInstruction {
+	public synthetic fun <init> ([Lkotlin/UInt;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getDefaultTarget-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+	public fun getTargets ()[Lkotlin/UInt;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/CallIndirectInstruction : org/wasmium/wasm/binary/tree/instructions/IndexInstruction, org/wasmium/wasm/binary/tree/instructions/ReservedInstruction {
+	public synthetic fun <init> (ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getIndex-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+	public fun getReserved ()Z
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/CallInstruction : org/wasmium/wasm/binary/tree/instructions/IndexInstruction {
+	public synthetic fun <init> (ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getIndex-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/CatchInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> ()V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/CeilingInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/CompareInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/ConstFloat32Instruction : org/wasmium/wasm/binary/tree/instructions/ConstantInstruction {
+	public fun <init> (F)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+	public fun getValue ()Ljava/lang/Float;
+	public synthetic fun getValue ()Ljava/lang/Object;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/ConstFloat64Instruction : org/wasmium/wasm/binary/tree/instructions/ConstantInstruction {
+	public fun <init> (D)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+	public fun getValue ()Ljava/lang/Double;
+	public synthetic fun getValue ()Ljava/lang/Object;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/ConstInt32Instruction : org/wasmium/wasm/binary/tree/instructions/ConstantInstruction {
+	public fun <init> (I)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+	public fun getValue ()Ljava/lang/Integer;
+	public synthetic fun getValue ()Ljava/lang/Object;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/ConstInt64Instruction : org/wasmium/wasm/binary/tree/instructions/ConstantInstruction {
+	public fun <init> (J)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+	public fun getValue ()Ljava/lang/Long;
+	public synthetic fun getValue ()Ljava/lang/Object;
+}
+
+public abstract interface class org/wasmium/wasm/binary/tree/instructions/ConstantInstruction : org/wasmium/wasm/binary/tree/instructions/Instruction {
+	public abstract fun getValue ()Ljava/lang/Object;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/ConvertInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/CopySignInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/CountLeadingZerosInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/CountTrailingZerosInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/CurrentMemoryInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction, org/wasmium/wasm/binary/tree/instructions/ReservedInstruction {
+	public fun <init> (Z)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+	public fun getReserved ()Z
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/DemoteInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/DivideInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/DropInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> ()V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/ElseInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> ()V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/EndInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> ()V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/EqualInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/EqualZeroInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/ExtendInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/FloorInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/GetGlobalInstruction : org/wasmium/wasm/binary/tree/instructions/IndexInstruction {
+	public synthetic fun <init> (ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getIndex-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/GetLocalInstruction : org/wasmium/wasm/binary/tree/instructions/IndexInstruction {
+	public synthetic fun <init> (ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getIndex-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/GreaterEqualInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/GreaterThanInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/GrowMemoryInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction, org/wasmium/wasm/binary/tree/instructions/ReservedInstruction {
+	public fun <init> (Z)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+	public fun getReserved ()Z
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/IfExceptionInstruction : org/wasmium/wasm/binary/tree/instructions/IndexInstruction, org/wasmium/wasm/binary/tree/instructions/TypeInstruction {
+	public synthetic fun <init> ([Lorg/wasmium/wasm/binary/tree/WasmType;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getBlockType ()[Lorg/wasmium/wasm/binary/tree/WasmType;
+	public fun getIndex-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/IfInstruction : org/wasmium/wasm/binary/tree/instructions/TypeInstruction {
+	public fun <init> ([Lorg/wasmium/wasm/binary/tree/WasmType;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getBlockType ()[Lorg/wasmium/wasm/binary/tree/WasmType;
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public abstract interface class org/wasmium/wasm/binary/tree/instructions/IndexInstruction : org/wasmium/wasm/binary/tree/instructions/Instruction {
+	public abstract fun getIndex-pVg5ArA ()I
+}
+
+public abstract interface class org/wasmium/wasm/binary/tree/instructions/Instruction {
+	public abstract fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public abstract fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/LessEqualInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/LessThanInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/LoadInstruction : org/wasmium/wasm/binary/tree/instructions/AlignOffsetInstruction {
+	public synthetic fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getAlignment-pVg5ArA ()I
+	public fun getOffset-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/LoopInstruction : org/wasmium/wasm/binary/tree/instructions/TypeInstruction {
+	public fun <init> ([Lorg/wasmium/wasm/binary/tree/WasmType;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getBlockType ()[Lorg/wasmium/wasm/binary/tree/WasmType;
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/MaxInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/MinInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/MultiplyInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/NearestInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/NegativeInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public abstract interface class org/wasmium/wasm/binary/tree/instructions/NoneInstruction : org/wasmium/wasm/binary/tree/instructions/Instruction {
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/NopInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> ()V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/NotEqualInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/OrInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/PopulationCountInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/PromoteInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/ReinterpretInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public abstract interface class org/wasmium/wasm/binary/tree/instructions/RelativeDepthInstruction : org/wasmium/wasm/binary/tree/instructions/Instruction {
+	public abstract fun getRelativeDepth-pVg5ArA ()I
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/RemainderInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public abstract interface class org/wasmium/wasm/binary/tree/instructions/ReservedInstruction {
+	public abstract fun getReserved ()Z
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/RethrowInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> ()V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/ReturnInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> ()V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/RotateLeftInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/RotateRightInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SelectInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> ()V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SetGlobalInstruction : org/wasmium/wasm/binary/tree/instructions/IndexInstruction {
+	public synthetic fun <init> (ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getIndex-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SetLocalInstruction : org/wasmium/wasm/binary/tree/instructions/IndexInstruction {
+	public synthetic fun <init> (ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getIndex-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/ShiftLeftInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdAbsInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdAddInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdAddSaturateInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdAllTrueInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdAndInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdBitSelectInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdConstInstruction : org/wasmium/wasm/binary/tree/instructions/ConstantInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/V128Value;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+	public synthetic fun getValue ()Ljava/lang/Object;
+	public fun getValue ()Lorg/wasmium/wasm/binary/tree/V128Value;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdConvertInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdDivideInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdEqualInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdExtractLaneInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public synthetic fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public final fun getIndex-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdGreaterEqualInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdGreaterThanInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdLessEqualInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdLessThanInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdLoadInstruction : org/wasmium/wasm/binary/tree/instructions/AlignOffsetInstruction {
+	public synthetic fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getAlignment-pVg5ArA ()I
+	public fun getOffset-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdMaxInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdMinInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdMultiplyInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdNegativeInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdNotEqualInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdNotInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdOrInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdReplaceLaneInstruction : org/wasmium/wasm/binary/tree/instructions/IndexInstruction {
+	public synthetic fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getIndex-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdShiftLeftInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdShuffleInstruction : org/wasmium/wasm/binary/tree/instructions/ConstantInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;Lorg/wasmium/wasm/binary/tree/V128Value;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+	public synthetic fun getValue ()Ljava/lang/Object;
+	public fun getValue ()Lorg/wasmium/wasm/binary/tree/V128Value;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdSplatInstruction : org/wasmium/wasm/binary/tree/instructions/ConstantInstruction {
+	public synthetic fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+	public synthetic fun getValue ()Ljava/lang/Object;
+	public fun getValue-pVg5ArA ()I
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdSqrtInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdStoreInstruction : org/wasmium/wasm/binary/tree/instructions/AlignOffsetInstruction {
+	public synthetic fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getAlignment-pVg5ArA ()I
+	public fun getOffset-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdSubtractInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdSubtractSaturateInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdTruncateInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SimdXorInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SqrtInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/StoreInstruction : org/wasmium/wasm/binary/tree/instructions/AlignOffsetInstruction {
+	public synthetic fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getAlignment-pVg5ArA ()I
+	public fun getOffset-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/SubtractInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public abstract interface class org/wasmium/wasm/binary/tree/instructions/TableInstruction : org/wasmium/wasm/binary/tree/instructions/Instruction {
+	public abstract fun getDefaultTarget-pVg5ArA ()I
+	public abstract fun getTargets ()[Lkotlin/UInt;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/TeeLocalInstruction : org/wasmium/wasm/binary/tree/instructions/IndexInstruction {
+	public synthetic fun <init> (ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getIndex-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/ThrowInstruction : org/wasmium/wasm/binary/tree/instructions/IndexInstruction {
+	public synthetic fun <init> (ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getIndex-pVg5ArA ()I
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/TruncateInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/TryInstruction : org/wasmium/wasm/binary/tree/instructions/TypeInstruction {
+	public fun <init> ([Lorg/wasmium/wasm/binary/tree/WasmType;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getBlockType ()[Lorg/wasmium/wasm/binary/tree/WasmType;
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public abstract interface class org/wasmium/wasm/binary/tree/instructions/TypeInstruction : org/wasmium/wasm/binary/tree/instructions/Instruction {
+	public abstract fun getBlockType ()[Lorg/wasmium/wasm/binary/tree/WasmType;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/UnreachableInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> ()V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/WrapInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/instructions/XorInstruction : org/wasmium/wasm/binary/tree/instructions/NoneInstruction {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public fun getOpcode ()Lorg/wasmium/wasm/binary/tree/Opcode;
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/CodeSectionNode : org/wasmium/wasm/binary/tree/sections/SectionNode, org/wasmium/wasm/binary/visitors/CodeSectionVisitor {
+	public fun <init> ()V
+	public final fun accept (Lorg/wasmium/wasm/binary/visitors/CodeSectionVisitor;)V
+	public final fun getFunctionBodies ()Ljava/util/List;
+	public fun visitEnd ()V
+	public fun visitFunctionBody-WZ4Q5Ns (I)Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;
+}
+
+public class org/wasmium/wasm/binary/tree/sections/CustomSectionNode : org/wasmium/wasm/binary/tree/sections/SectionNode, org/wasmium/wasm/binary/visitors/CustomSectionVisitor {
+	public fun <init> ()V
+	public final fun accept (Lorg/wasmium/wasm/binary/visitors/CustomSectionVisitor;)V
+	public final fun getContent ()[B
+	public final fun getName ()Ljava/lang/String;
+	public final fun setContent ([B)V
+	public final fun setName (Ljava/lang/String;)V
+	public fun visitEnd ()V
+	public fun visitSection (Ljava/lang/String;[B)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/DataSectionNode : org/wasmium/wasm/binary/tree/sections/SectionNode, org/wasmium/wasm/binary/visitors/DataSectionVisitor {
+	public fun <init> ()V
+	public final fun accept (Lorg/wasmium/wasm/binary/visitors/DataSectionVisitor;)V
+	public final fun getSegments ()Ljava/util/List;
+	public fun visitDataSegment-WZ4Q5Ns (I)Lorg/wasmium/wasm/binary/visitors/DataSegmentVisitor;
+	public fun visitEnd ()V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/DataSegmentNode : org/wasmium/wasm/binary/visitors/DataSegmentVisitor {
+	public fun <init> ()V
+	public final fun accept (Lorg/wasmium/wasm/binary/visitors/DataSegmentVisitor;)V
+	public final fun getData ()[B
+	public final fun getInitializer ()Lorg/wasmium/wasm/binary/tree/sections/InitializerExpressionNode;
+	public final fun getMemoryIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun getSegmentIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun setData ([B)V
+	public final fun setInitializer (Lorg/wasmium/wasm/binary/tree/sections/InitializerExpressionNode;)V
+	public final fun setMemoryIndex-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setSegmentIndex-ExVfyTY (Lkotlin/UInt;)V
+	public fun visitData ([B)V
+	public fun visitEnd ()V
+	public fun visitInitializerExpression ()Lorg/wasmium/wasm/binary/visitors/InitializerExpressionVisitor;
+	public fun visitMemoryIndex-WZ4Q5Ns (I)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/ElementSectionNode : org/wasmium/wasm/binary/tree/sections/SectionNode, org/wasmium/wasm/binary/visitors/ElementSectionVisitor {
+	public fun <init> ()V
+	public final fun accept (Lorg/wasmium/wasm/binary/visitors/ElementSectionVisitor;)V
+	public final fun getSegments ()Ljava/util/List;
+	public fun visitElementSegment-WZ4Q5Ns (I)Lorg/wasmium/wasm/binary/visitors/ElementSegmentVisitor;
+	public fun visitEnd ()V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/ElementSegmentNode : org/wasmium/wasm/binary/visitors/ElementSegmentVisitor {
+	public fun <init> ()V
+	public final fun accept (Lorg/wasmium/wasm/binary/visitors/ElementSegmentVisitor;)V
+	public final fun getElementIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun getFunctionIndexes ()Ljava/util/List;
+	public final fun getInitializer ()Lorg/wasmium/wasm/binary/tree/sections/InitializerExpressionNode;
+	public final fun getTableIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun setElementIndex-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setFunctionIndexes (Ljava/util/List;)V
+	public final fun setInitializer (Lorg/wasmium/wasm/binary/tree/sections/InitializerExpressionNode;)V
+	public final fun setTableIndex-ExVfyTY (Lkotlin/UInt;)V
+	public fun visitEnd ()V
+	public fun visitFunctionIndex-feOb9K0 (II)V
+	public fun visitInitializerExpression ()Lorg/wasmium/wasm/binary/visitors/InitializerExpressionVisitor;
+	public fun visitTableIndex-WZ4Q5Ns (I)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/ExceptionImportNode : org/wasmium/wasm/binary/tree/sections/ImportNode {
+	public fun <init> ()V
+	public final fun getExceptionIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun getExceptionType ()Lorg/wasmium/wasm/binary/tree/sections/ExceptionTypeNode;
+	public fun getExternalKind ()Lorg/wasmium/wasm/binary/tree/ExternalKind;
+	public final fun setExceptionIndex-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setExceptionType (Lorg/wasmium/wasm/binary/tree/sections/ExceptionTypeNode;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/ExceptionSectionNode : org/wasmium/wasm/binary/tree/sections/CustomSectionNode, org/wasmium/wasm/binary/visitors/ExceptionSectionVisitor {
+	public fun <init> ()V
+	public final fun accept (Lorg/wasmium/wasm/binary/visitors/ExceptionSectionVisitor;)V
+	public final fun getExceptionTypes ()Ljava/util/List;
+	public fun visitEnd ()V
+	public fun visitExceptionType-qim9Vi0 (I[Lorg/wasmium/wasm/binary/tree/WasmType;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/ExceptionTypeNode {
+	public fun <init> ()V
+	public final fun getExceptionIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun getTypes ()[Lorg/wasmium/wasm/binary/tree/WasmType;
+	public final fun setExceptionIndex-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setTypes ([Lorg/wasmium/wasm/binary/tree/WasmType;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/ExportSectionNode : org/wasmium/wasm/binary/tree/sections/SectionNode, org/wasmium/wasm/binary/visitors/ExportSectionVisitor {
+	public fun <init> ()V
+	public final fun accept (Lorg/wasmium/wasm/binary/visitors/ExportSectionVisitor;)V
+	public final fun getExports ()Ljava/util/List;
+	public fun visitEnd ()V
+	public fun visitExport-b1QGwmY (ILorg/wasmium/wasm/binary/tree/ExternalKind;ILjava/lang/String;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/ExportTypeNode {
+	public fun <init> ()V
+	public final fun getExportIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun getIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun getKind ()Lorg/wasmium/wasm/binary/tree/ExternalKind;
+	public final fun getName ()Ljava/lang/String;
+	public final fun setExportIndex-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setIndex-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setKind (Lorg/wasmium/wasm/binary/tree/ExternalKind;)V
+	public final fun setName (Ljava/lang/String;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/FunctionBodyNode : org/wasmium/wasm/binary/visitors/FunctionBodyVisitor {
+	public fun <init> ()V
+	public final fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;)V
+	public final fun getFunctionIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun getInstructions ()Ljava/util/List;
+	public final fun getLocals ()Ljava/util/List;
+	public final fun setFunctionIndex-ExVfyTY (Lkotlin/UInt;)V
+	public fun visitAbsoluteInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitAddInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitAndInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitAtomicLoadInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public fun visitAtomicRmwAddInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public fun visitAtomicRmwAndInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public fun visitAtomicRmwCompareExchangeInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public fun visitAtomicRmwExchangeInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public fun visitAtomicRmwInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public fun visitAtomicRmwOrInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public fun visitAtomicRmwSubtractInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public fun visitAtomicRmwXorInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public fun visitAtomicStoreInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public fun visitAtomicWaitInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public fun visitAtomicWakeInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public fun visitBlockInstruction ([Lorg/wasmium/wasm/binary/tree/WasmType;)V
+	public fun visitBrIfInstruction-WZ4Q5Ns (I)V
+	public fun visitBrInstruction-WZ4Q5Ns (I)V
+	public fun visitBrTableInstruction-Qn1smSk ([Lkotlin/UInt;I)V
+	public fun visitCallIndirectInstruction-qim9Vi0 (IZ)V
+	public fun visitCallInstruction-WZ4Q5Ns (I)V
+	public fun visitCatchInstruction ()V
+	public fun visitCeilingInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitCode ()V
+	public fun visitCompareInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitConstFloat32Instruction (F)V
+	public fun visitConstFloat64Instruction (D)V
+	public fun visitConstInt32Instruction (I)V
+	public fun visitConstInt64Instruction (J)V
+	public fun visitConvertInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitCopySignInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitCountLeadingZerosInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitCountTrailingZerosInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitDemoteInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitDivideInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitDropInstruction ()V
+	public fun visitElseInstruction ()V
+	public fun visitEnd ()V
+	public fun visitEndFunctionInstruction ()V
+	public fun visitEndInstruction ()V
+	public fun visitEqualInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitEqualZeroInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitExtendInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitFloorInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitGetGlobalInstruction-WZ4Q5Ns (I)V
+	public fun visitGetLocalInstruction-WZ4Q5Ns (I)V
+	public fun visitGreaterEqualInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitGreaterThanInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitIfExceptionInstruction-Qn1smSk ([Lorg/wasmium/wasm/binary/tree/WasmType;I)V
+	public fun visitIfInstruction ([Lorg/wasmium/wasm/binary/tree/WasmType;)V
+	public fun visitLessEqualInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitLessThanInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitLoadInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public fun visitLocalVariable-t3GQkyU (IILorg/wasmium/wasm/binary/tree/WasmType;)V
+	public fun visitLoopInstruction ([Lorg/wasmium/wasm/binary/tree/WasmType;)V
+	public fun visitMaxInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitMemoryGrowInstruction (Z)V
+	public fun visitMemorySizeInstruction (Z)V
+	public fun visitMinInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitMultiplyInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitNearestInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitNegativeInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitNopInstruction ()V
+	public fun visitNotEqualInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitOrInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitPopulationCountInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitPromoteInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitReinterpretInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitRemainderInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitRethrowInstruction ()V
+	public fun visitReturnInstruction ()V
+	public fun visitRotateLeftInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitRotateRightInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSelectInstruction ()V
+	public fun visitSetGlobalInstruction-WZ4Q5Ns (I)V
+	public fun visitSetLocalInstruction-WZ4Q5Ns (I)V
+	public fun visitShiftLeftInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdAbsInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdAddInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdAddSaturateInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdAllTrueInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdAndInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdBitSelectInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdConstInstruction (Lorg/wasmium/wasm/binary/tree/V128Value;)V
+	public fun visitSimdConvertInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdDivideInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdEqualInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdExtractLaneInstruction-Qn1smSk (Lorg/wasmium/wasm/binary/tree/Opcode;I)V
+	public fun visitSimdGreaterEqualInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdGreaterThanInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdLessEqualInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdLessThanInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdLoadInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public fun visitSimdMaxInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdMinInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdMultiplyInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdNegativeInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdNotEqualInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdNotInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdOrInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdReplaceLaneInstruction-Qn1smSk (Lorg/wasmium/wasm/binary/tree/Opcode;I)V
+	public fun visitSimdShiftLeftInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdShuffleInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;Lorg/wasmium/wasm/binary/tree/V128Value;)V
+	public fun visitSimdSplatInstruction-Qn1smSk (Lorg/wasmium/wasm/binary/tree/Opcode;I)V
+	public fun visitSimdSqrtInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdStoreInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public fun visitSimdSubtractInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdSubtractSaturateInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdTruncateInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSimdXorInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitSqrtInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitStoreInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public fun visitSubtractInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitTeeLocalInstruction-WZ4Q5Ns (I)V
+	public fun visitThrowInstruction-WZ4Q5Ns (I)V
+	public fun visitTruncateInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitTryInstruction ([Lorg/wasmium/wasm/binary/tree/WasmType;)V
+	public fun visitUnreachableInstruction ()V
+	public fun visitWrapInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public fun visitXorInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/FunctionImportNode : org/wasmium/wasm/binary/tree/sections/ImportNode {
+	public fun <init> ()V
+	public fun getExternalKind ()Lorg/wasmium/wasm/binary/tree/ExternalKind;
+	public final fun getFunctionIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun getTypeIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun setFunctionIndex-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setTypeIndex-ExVfyTY (Lkotlin/UInt;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/FunctionIndexNode {
+	public fun <init> ()V
+	public final fun getFunctionIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun getIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun setFunctionIndex-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setIndex-ExVfyTY (Lkotlin/UInt;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/FunctionIndexTypeNode {
+	public fun <init> ()V
+	public final fun getFunctionIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun getTypeIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun setFunctionIndex-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setTypeIndex-ExVfyTY (Lkotlin/UInt;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/FunctionNameNode : org/wasmium/wasm/binary/tree/sections/NameNode, org/wasmium/wasm/binary/visitors/FunctionNameVisitor {
+	public fun <init> ()V
+	public final fun getFunctionIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun getFunctionName ()Ljava/lang/String;
+	public fun getNameKind ()Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind;
+	public final fun setFunctionIndex-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setFunctionName (Ljava/lang/String;)V
+	public fun visitEnd ()V
+	public fun visitFunctionName (Ljava/lang/String;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/FunctionSectionNode : org/wasmium/wasm/binary/tree/sections/SectionNode, org/wasmium/wasm/binary/visitors/FunctionSectionVisitor {
+	public fun <init> ()V
+	public final fun accept (Lorg/wasmium/wasm/binary/visitors/FunctionSectionVisitor;)V
+	public final fun getTypes ()Ljava/util/List;
+	public fun visitEnd ()V
+	public fun visitFunction-feOb9K0 (II)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/FunctionTypeNode {
+	public fun <init> ()V
+	public final fun getParameters ()[Lorg/wasmium/wasm/binary/tree/WasmType;
+	public final fun getResult ()[Lorg/wasmium/wasm/binary/tree/WasmType;
+	public final fun getTypeIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun setParameters ([Lorg/wasmium/wasm/binary/tree/WasmType;)V
+	public final fun setResult ([Lorg/wasmium/wasm/binary/tree/WasmType;)V
+	public final fun setTypeIndex-ExVfyTY (Lkotlin/UInt;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/GlobalImportNode : org/wasmium/wasm/binary/tree/sections/ImportNode {
+	public fun <init> ()V
+	public fun getExternalKind ()Lorg/wasmium/wasm/binary/tree/ExternalKind;
+	public final fun getGlobalIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun getGlobalType ()Lorg/wasmium/wasm/binary/tree/sections/GlobalTypeNode;
+	public final fun setGlobalIndex-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setGlobalType (Lorg/wasmium/wasm/binary/tree/sections/GlobalTypeNode;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/GlobalSectionNode : org/wasmium/wasm/binary/tree/sections/SectionNode, org/wasmium/wasm/binary/visitors/GlobalSectionVisitor {
+	public fun <init> ()V
+	public final fun accept (Lorg/wasmium/wasm/binary/visitors/GlobalSectionVisitor;)V
+	public final fun getGlobals ()Ljava/util/List;
+	public fun visitEnd ()V
+	public fun visitGlobalVariable-WZ4Q5Ns (I)Lorg/wasmium/wasm/binary/visitors/GlobalVariableVisitor;
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/GlobalTypeNode {
+	public fun <init> ()V
+	public final fun getContentType ()Lorg/wasmium/wasm/binary/tree/WasmType;
+	public final fun isMutable ()Z
+	public final fun setContentType (Lorg/wasmium/wasm/binary/tree/WasmType;)V
+	public final fun setMutable (Z)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/GlobalVariableNode : org/wasmium/wasm/binary/visitors/GlobalVariableVisitor {
+	public fun <init> ()V
+	public final fun accept (Lorg/wasmium/wasm/binary/visitors/GlobalVariableVisitor;)V
+	public final fun getGlobalIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun getGlobalType ()Lorg/wasmium/wasm/binary/tree/sections/GlobalTypeNode;
+	public final fun getInitializer ()Lorg/wasmium/wasm/binary/tree/sections/InitializerExpressionNode;
+	public final fun setGlobalIndex-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setGlobalType (Lorg/wasmium/wasm/binary/tree/sections/GlobalTypeNode;)V
+	public final fun setInitializer (Lorg/wasmium/wasm/binary/tree/sections/InitializerExpressionNode;)V
+	public fun visitEnd ()V
+	public fun visitGlobalVariable (Lorg/wasmium/wasm/binary/tree/WasmType;Z)V
+	public fun visitInitializerExpression ()Lorg/wasmium/wasm/binary/visitors/InitializerExpressionVisitor;
+}
+
+public abstract class org/wasmium/wasm/binary/tree/sections/ImportNode {
+	public fun <init> ()V
+	public abstract fun getExternalKind ()Lorg/wasmium/wasm/binary/tree/ExternalKind;
+	public final fun getField ()Ljava/lang/String;
+	public final fun getImportIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun getModule ()Ljava/lang/String;
+	public final fun setField (Ljava/lang/String;)V
+	public final fun setImportIndex-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setModule (Ljava/lang/String;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/ImportSectionNode : org/wasmium/wasm/binary/tree/sections/SectionNode, org/wasmium/wasm/binary/visitors/ImportSectionVisitor {
+	public fun <init> ()V
+	public final fun accept (Lorg/wasmium/wasm/binary/visitors/ImportSectionVisitor;)V
+	public final fun getImports ()Ljava/util/List;
+	public fun visitEnd ()V
+	public fun visitException-bfO7Crs (ILjava/lang/String;Ljava/lang/String;I[Lorg/wasmium/wasm/binary/tree/WasmType;)V
+	public fun visitFunction-tTtLeB8 (ILjava/lang/String;Ljava/lang/String;II)V
+	public fun visitGlobal-Ky1d8_o (ILjava/lang/String;Ljava/lang/String;ILorg/wasmium/wasm/binary/tree/WasmType;Z)V
+	public fun visitMemory-bfO7Crs (ILjava/lang/String;Ljava/lang/String;ILorg/wasmium/wasm/binary/tree/ResizableLimits;)V
+	public fun visitTable-Ky1d8_o (ILjava/lang/String;Ljava/lang/String;ILorg/wasmium/wasm/binary/tree/WasmType;Lorg/wasmium/wasm/binary/tree/ResizableLimits;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/InitializerExpressionNode : org/wasmium/wasm/binary/visitors/InitializerExpressionVisitor {
+	public fun <init> ()V
+	public final fun accept (Lorg/wasmium/wasm/binary/visitors/InitializerExpressionVisitor;)V
+	public final fun getInstructions ()Ljava/util/List;
+	public fun visitEnd ()V
+	public fun visitInitExprEnd ()V
+	public fun visitInitExprF32ConstExpr (F)V
+	public fun visitInitExprF64ConstExpr (D)V
+	public fun visitInitExprGetGlobalExpr-WZ4Q5Ns (I)V
+	public fun visitInitExprI32ConstExpr (I)V
+	public fun visitInitExprI64ConstExpr (J)V
+	public fun visitInitExprV128ConstExpr (Lorg/wasmium/wasm/binary/tree/V128Value;)V
+}
+
+public class org/wasmium/wasm/binary/tree/sections/LinkingNode {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/LinkingKind;)V
+	public final fun getKind ()Lorg/wasmium/wasm/binary/tree/LinkingKind;
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/LinkingSectionNode : org/wasmium/wasm/binary/tree/sections/CustomSectionNode, org/wasmium/wasm/binary/visitors/LinkingSectionVisitor {
+	public fun <init> ()V
+	public final fun accept (Lorg/wasmium/wasm/binary/visitors/LinkingSectionVisitor;)V
+	public final fun getSegments ()Ljava/util/List;
+	public final fun getSymbolInfos ()Ljava/util/List;
+	public fun visitDataAlignment (J)V
+	public fun visitDataSymbol-DBD8cGk (IILjava/lang/String;III)V
+	public fun visitEnd ()V
+	public fun visitFunctionSymbol-cKWFsRg (IILjava/lang/String;I)V
+	public fun visitGlobalSymbol-cKWFsRg (IILjava/lang/String;I)V
+	public fun visitSectionSymbol-zly0blg (III)V
+	public fun visitSegment-BltQuoY (Ljava/lang/String;II)V
+	public fun visitSymbol-Mv_zs3U (ILorg/wasmium/wasm/binary/tree/LinkingSymbolType;I)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/LocalNameNode : org/wasmium/wasm/binary/tree/sections/NameNode {
+	public fun <init> ()V
+	public final fun getFunctionIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun getLocalIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun getName ()Ljava/lang/String;
+	public fun getNameKind ()Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind;
+	public final fun setFunctionIndex-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setLocalIndex-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setName (Ljava/lang/String;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/LocalNode {
+	public fun <init> ()V
+	public final fun getCount-0hXNFcg ()Lkotlin/UInt;
+	public final fun getLocalIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun getType ()Lorg/wasmium/wasm/binary/tree/WasmType;
+	public final fun setCount-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setLocalIndex-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setType (Lorg/wasmium/wasm/binary/tree/WasmType;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/MemoryImportNode : org/wasmium/wasm/binary/tree/sections/ImportNode {
+	public fun <init> ()V
+	public fun getExternalKind ()Lorg/wasmium/wasm/binary/tree/ExternalKind;
+	public final fun getMemoryIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun getMemoryType ()Lorg/wasmium/wasm/binary/tree/sections/MemoryTypeNode;
+	public final fun setMemoryIndex-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setMemoryType (Lorg/wasmium/wasm/binary/tree/sections/MemoryTypeNode;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/MemorySectionNode : org/wasmium/wasm/binary/tree/sections/SectionNode, org/wasmium/wasm/binary/visitors/MemorySectionVisitor {
+	public fun <init> ()V
+	public final fun accept (Lorg/wasmium/wasm/binary/visitors/MemorySectionVisitor;)V
+	public final fun getMemories ()Ljava/util/List;
+	public fun visitEnd ()V
+	public fun visitMemory-qim9Vi0 (ILorg/wasmium/wasm/binary/tree/ResizableLimits;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/MemoryTypeNode {
+	public fun <init> ()V
+	public final fun getLimits ()Lorg/wasmium/wasm/binary/tree/ResizableLimits;
+	public final fun getMemoryIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun setLimits (Lorg/wasmium/wasm/binary/tree/ResizableLimits;)V
+	public final fun setMemoryIndex-ExVfyTY (Lkotlin/UInt;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/ModuleNameNode : org/wasmium/wasm/binary/tree/sections/NameNode {
+	public fun <init> ()V
+	public final fun getName ()Ljava/lang/String;
+	public fun getNameKind ()Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind;
+	public final fun setName (Ljava/lang/String;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/ModuleNode : org/wasmium/wasm/binary/visitors/ModuleVisitor {
+	public fun <init> ()V
+	public final fun accept (Lorg/wasmium/wasm/binary/visitors/ModuleVisitor;)V
+	public fun visit-WZ4Q5Ns (I)V
+	public fun visitCodeSection ()Lorg/wasmium/wasm/binary/visitors/CodeSectionVisitor;
+	public fun visitCustomSection ()Lorg/wasmium/wasm/binary/visitors/CustomSectionVisitor;
+	public fun visitDataSection ()Lorg/wasmium/wasm/binary/visitors/DataSectionVisitor;
+	public fun visitElementSection ()Lorg/wasmium/wasm/binary/visitors/ElementSectionVisitor;
+	public fun visitEnd ()V
+	public fun visitExceptionSection ()Lorg/wasmium/wasm/binary/visitors/ExceptionSectionVisitor;
+	public fun visitExportSection ()Lorg/wasmium/wasm/binary/visitors/ExportSectionVisitor;
+	public fun visitFunctionSection ()Lorg/wasmium/wasm/binary/visitors/FunctionSectionVisitor;
+	public fun visitGlobalSection ()Lorg/wasmium/wasm/binary/visitors/GlobalSectionVisitor;
+	public fun visitImportSection ()Lorg/wasmium/wasm/binary/visitors/ImportSectionVisitor;
+	public fun visitLinkingSection ()Lorg/wasmium/wasm/binary/visitors/LinkingSectionVisitor;
+	public fun visitMemorySection ()Lorg/wasmium/wasm/binary/visitors/MemorySectionVisitor;
+	public fun visitNameSection ()Lorg/wasmium/wasm/binary/visitors/NameSectionVisitor;
+	public fun visitRelocationSection ()Lorg/wasmium/wasm/binary/visitors/RelocationSectionVisitor;
+	public fun visitStartSection ()Lorg/wasmium/wasm/binary/visitors/StartSectionVisitor;
+	public fun visitTableSection ()Lorg/wasmium/wasm/binary/visitors/TableSectionVisitor;
+	public fun visitTypeSection ()Lorg/wasmium/wasm/binary/visitors/TypeSectionVisitor;
+}
+
+public abstract interface class org/wasmium/wasm/binary/tree/sections/NameNode {
+	public abstract fun getNameKind ()Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind;
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/NameNodeKind : java/lang/Enum {
+	public static final field Companion Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind$Companion;
+	public static final field EXCEPTION Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind;
+	public static final field FUNCTION Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind;
+	public static final field LOCAL Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind;
+	public static final field MODULE Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind;
+	public static final field NONE Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind;
+	public final fun getNameNodeKindId ()I
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind;
+	public static fun values ()[Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind;
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/NameNodeKind$Companion {
+	public final fun fromNameNodeKind (I)Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind;
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/NameSectionNode : org/wasmium/wasm/binary/tree/sections/CustomSectionNode, org/wasmium/wasm/binary/visitors/NameSectionVisitor {
+	public fun <init> ()V
+	public final fun accept (Lorg/wasmium/wasm/binary/visitors/NameSectionVisitor;)V
+	public final fun getFunctions ()Ljava/util/List;
+	public final fun getLocals ()Ljava/util/List;
+	public final fun getModule ()Lorg/wasmium/wasm/binary/tree/sections/ModuleNameNode;
+	public final fun setModule (Lorg/wasmium/wasm/binary/tree/sections/ModuleNameNode;)V
+	public fun visitEnd ()V
+	public fun visitFunctionName-qim9Vi0 (ILjava/lang/String;)V
+	public fun visitLocalName-t3GQkyU (IILjava/lang/String;)V
+	public fun visitModuleName (Ljava/lang/String;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/RelocationNode {
+	public fun <init> ()V
+	public final fun getAddend ()Ljava/lang/Integer;
+	public final fun getIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun getOffset-0hXNFcg ()Lkotlin/UInt;
+	public final fun getRelocationKind ()Lorg/wasmium/wasm/binary/tree/RelocationKind;
+	public final fun setAddend (Ljava/lang/Integer;)V
+	public final fun setIndex-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setOffset-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setRelocationKind (Lorg/wasmium/wasm/binary/tree/RelocationKind;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/RelocationSectionNode : org/wasmium/wasm/binary/tree/sections/CustomSectionNode, org/wasmium/wasm/binary/visitors/RelocationSectionVisitor {
+	public fun <init> ()V
+	public final fun accept (Lorg/wasmium/wasm/binary/visitors/RelocationSectionVisitor;)V
+	public final fun getKind ()Lorg/wasmium/wasm/binary/tree/SectionKind;
+	public final fun getRelocations ()Ljava/util/List;
+	public final fun getSectionName ()Ljava/lang/String;
+	public final fun setKind (Lorg/wasmium/wasm/binary/tree/SectionKind;)V
+	public final fun setSectionName (Ljava/lang/String;)V
+	public fun visitEnd ()V
+	public fun visitRelocation-BltQuoY (Lorg/wasmium/wasm/binary/tree/RelocationKind;II)V
+	public fun visitRelocation-gd2BlFg (Lorg/wasmium/wasm/binary/tree/RelocationKind;III)V
+	public fun visitSection (Lorg/wasmium/wasm/binary/tree/SectionKind;Ljava/lang/String;)V
+}
+
+public class org/wasmium/wasm/binary/tree/sections/SectionNode {
+	public fun <init> (Lorg/wasmium/wasm/binary/tree/SectionKind;)V
+	public final fun getSectionKind ()Lorg/wasmium/wasm/binary/tree/SectionKind;
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/SegmentInfoLinkingNode : org/wasmium/wasm/binary/tree/sections/LinkingNode {
+	public fun <init> ()V
+	public final fun getAlignment-0hXNFcg ()Lkotlin/UInt;
+	public final fun getFlags-0hXNFcg ()Lkotlin/UInt;
+	public final fun getName ()Ljava/lang/String;
+	public final fun setAlignment-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setFlags-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setName (Ljava/lang/String;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/StartSectionNode : org/wasmium/wasm/binary/tree/sections/SectionNode, org/wasmium/wasm/binary/visitors/StartSectionVisitor {
+	public fun <init> ()V
+	public final fun accept (Lorg/wasmium/wasm/binary/visitors/StartSectionVisitor;)V
+	public final fun getFunctionIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun setFunctionIndex-ExVfyTY (Lkotlin/UInt;)V
+	public fun visitEnd ()V
+	public fun visitStartFunctionIndex-WZ4Q5Ns (I)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/SymbolTableLinkingNode : org/wasmium/wasm/binary/tree/sections/LinkingNode {
+	public fun <init> ()V
+	public final fun getFlags-0hXNFcg ()Lkotlin/UInt;
+	public final fun getIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getSymbolType ()Lorg/wasmium/wasm/binary/tree/LinkingSymbolType;
+	public final fun setFlags-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setIndex-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setName (Ljava/lang/String;)V
+	public final fun setSymbolType (Lorg/wasmium/wasm/binary/tree/LinkingSymbolType;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/TableImportNode : org/wasmium/wasm/binary/tree/sections/ImportNode {
+	public fun <init> ()V
+	public fun getExternalKind ()Lorg/wasmium/wasm/binary/tree/ExternalKind;
+	public final fun getTableIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun getTableType ()Lorg/wasmium/wasm/binary/tree/sections/TableTypeNode;
+	public final fun setTableIndex-ExVfyTY (Lkotlin/UInt;)V
+	public final fun setTableType (Lorg/wasmium/wasm/binary/tree/sections/TableTypeNode;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/TableSectionNode : org/wasmium/wasm/binary/tree/sections/SectionNode, org/wasmium/wasm/binary/visitors/TableSectionVisitor {
+	public fun <init> ()V
+	public final fun accept (Lorg/wasmium/wasm/binary/visitors/TableSectionVisitor;)V
+	public final fun getTables ()Ljava/util/List;
+	public fun visitEnd ()V
+	public fun visitTable-OzbTU-A (ILorg/wasmium/wasm/binary/tree/WasmType;Lorg/wasmium/wasm/binary/tree/ResizableLimits;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/TableTypeNode {
+	public fun <init> ()V
+	public final fun getElementType ()Lorg/wasmium/wasm/binary/tree/WasmType;
+	public final fun getLimits ()Lorg/wasmium/wasm/binary/tree/ResizableLimits;
+	public final fun getTableIndex-0hXNFcg ()Lkotlin/UInt;
+	public final fun setElementType (Lorg/wasmium/wasm/binary/tree/WasmType;)V
+	public final fun setLimits (Lorg/wasmium/wasm/binary/tree/ResizableLimits;)V
+	public final fun setTableIndex-ExVfyTY (Lkotlin/UInt;)V
+}
+
+public final class org/wasmium/wasm/binary/tree/sections/TypeSectionNode : org/wasmium/wasm/binary/tree/sections/SectionNode, org/wasmium/wasm/binary/visitors/TypeSectionVisitor {
+	public fun <init> ()V
+	public final fun accept (Lorg/wasmium/wasm/binary/visitors/TypeSectionVisitor;)V
+	public final fun getTypes ()Ljava/util/List;
+	public fun visitEnd ()V
+	public fun visitType-OzbTU-A (I[Lorg/wasmium/wasm/binary/tree/WasmType;[Lorg/wasmium/wasm/binary/tree/WasmType;)V
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/CodeSectionVisitor {
+	public abstract fun visitEnd ()V
+	public abstract fun visitFunctionBody-WZ4Q5Ns (I)Lorg/wasmium/wasm/binary/visitors/FunctionBodyVisitor;
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/CustomSectionVisitor {
+	public abstract fun visitEnd ()V
+	public abstract fun visitSection (Ljava/lang/String;[B)V
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/DataSectionVisitor {
+	public abstract fun visitDataSegment-WZ4Q5Ns (I)Lorg/wasmium/wasm/binary/visitors/DataSegmentVisitor;
+	public abstract fun visitEnd ()V
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/DataSegmentVisitor {
+	public abstract fun visitData ([B)V
+	public abstract fun visitEnd ()V
+	public abstract fun visitInitializerExpression ()Lorg/wasmium/wasm/binary/visitors/InitializerExpressionVisitor;
+	public abstract fun visitMemoryIndex-WZ4Q5Ns (I)V
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/ElementSectionVisitor {
+	public abstract fun visitElementSegment-WZ4Q5Ns (I)Lorg/wasmium/wasm/binary/visitors/ElementSegmentVisitor;
+	public abstract fun visitEnd ()V
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/ElementSegmentVisitor {
+	public abstract fun visitEnd ()V
+	public abstract fun visitFunctionIndex-feOb9K0 (II)V
+	public abstract fun visitInitializerExpression ()Lorg/wasmium/wasm/binary/visitors/InitializerExpressionVisitor;
+	public abstract fun visitTableIndex-WZ4Q5Ns (I)V
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/ExceptionSectionVisitor {
+	public abstract fun visitEnd ()V
+	public abstract fun visitExceptionType-qim9Vi0 (I[Lorg/wasmium/wasm/binary/tree/WasmType;)V
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/ExportSectionVisitor {
+	public abstract fun visitEnd ()V
+	public abstract fun visitExport-b1QGwmY (ILorg/wasmium/wasm/binary/tree/ExternalKind;ILjava/lang/String;)V
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/FunctionBodyVisitor {
+	public abstract fun visitAbsoluteInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitAddInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitAndInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitAtomicLoadInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public abstract fun visitAtomicRmwAddInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public abstract fun visitAtomicRmwAndInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public abstract fun visitAtomicRmwCompareExchangeInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public abstract fun visitAtomicRmwExchangeInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public abstract fun visitAtomicRmwInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public abstract fun visitAtomicRmwOrInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public abstract fun visitAtomicRmwSubtractInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public abstract fun visitAtomicRmwXorInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public abstract fun visitAtomicStoreInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public abstract fun visitAtomicWaitInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public abstract fun visitAtomicWakeInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public abstract fun visitBlockInstruction ([Lorg/wasmium/wasm/binary/tree/WasmType;)V
+	public abstract fun visitBrIfInstruction-WZ4Q5Ns (I)V
+	public abstract fun visitBrInstruction-WZ4Q5Ns (I)V
+	public abstract fun visitBrTableInstruction-Qn1smSk ([Lkotlin/UInt;I)V
+	public abstract fun visitCallIndirectInstruction-qim9Vi0 (IZ)V
+	public abstract fun visitCallInstruction-WZ4Q5Ns (I)V
+	public abstract fun visitCatchInstruction ()V
+	public abstract fun visitCeilingInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitCode ()V
+	public abstract fun visitCompareInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitConstFloat32Instruction (F)V
+	public abstract fun visitConstFloat64Instruction (D)V
+	public abstract fun visitConstInt32Instruction (I)V
+	public abstract fun visitConstInt64Instruction (J)V
+	public abstract fun visitConvertInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitCopySignInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitCountLeadingZerosInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitCountTrailingZerosInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitDemoteInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitDivideInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitDropInstruction ()V
+	public abstract fun visitElseInstruction ()V
+	public abstract fun visitEnd ()V
+	public abstract fun visitEndFunctionInstruction ()V
+	public abstract fun visitEndInstruction ()V
+	public abstract fun visitEqualInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitEqualZeroInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitExtendInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitFloorInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitGetGlobalInstruction-WZ4Q5Ns (I)V
+	public abstract fun visitGetLocalInstruction-WZ4Q5Ns (I)V
+	public abstract fun visitGreaterEqualInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitGreaterThanInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitIfExceptionInstruction-Qn1smSk ([Lorg/wasmium/wasm/binary/tree/WasmType;I)V
+	public abstract fun visitIfInstruction ([Lorg/wasmium/wasm/binary/tree/WasmType;)V
+	public abstract fun visitLessEqualInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitLessThanInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitLoadInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public abstract fun visitLocalVariable-t3GQkyU (IILorg/wasmium/wasm/binary/tree/WasmType;)V
+	public abstract fun visitLoopInstruction ([Lorg/wasmium/wasm/binary/tree/WasmType;)V
+	public abstract fun visitMaxInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitMemoryGrowInstruction (Z)V
+	public abstract fun visitMemorySizeInstruction (Z)V
+	public abstract fun visitMinInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitMultiplyInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitNearestInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitNegativeInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitNopInstruction ()V
+	public abstract fun visitNotEqualInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitOrInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitPopulationCountInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitPromoteInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitReinterpretInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitRemainderInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitRethrowInstruction ()V
+	public abstract fun visitReturnInstruction ()V
+	public abstract fun visitRotateLeftInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitRotateRightInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSelectInstruction ()V
+	public abstract fun visitSetGlobalInstruction-WZ4Q5Ns (I)V
+	public abstract fun visitSetLocalInstruction-WZ4Q5Ns (I)V
+	public abstract fun visitShiftLeftInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdAbsInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdAddInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdAddSaturateInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdAllTrueInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdAndInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdBitSelectInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdConstInstruction (Lorg/wasmium/wasm/binary/tree/V128Value;)V
+	public abstract fun visitSimdConvertInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdDivideInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdEqualInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdExtractLaneInstruction-Qn1smSk (Lorg/wasmium/wasm/binary/tree/Opcode;I)V
+	public abstract fun visitSimdGreaterEqualInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdGreaterThanInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdLessEqualInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdLessThanInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdLoadInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public abstract fun visitSimdMaxInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdMinInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdMultiplyInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdNegativeInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdNotEqualInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdNotInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdOrInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdReplaceLaneInstruction-Qn1smSk (Lorg/wasmium/wasm/binary/tree/Opcode;I)V
+	public abstract fun visitSimdShiftLeftInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdShuffleInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;Lorg/wasmium/wasm/binary/tree/V128Value;)V
+	public abstract fun visitSimdSplatInstruction-Qn1smSk (Lorg/wasmium/wasm/binary/tree/Opcode;I)V
+	public abstract fun visitSimdSqrtInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdStoreInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public abstract fun visitSimdSubtractInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdSubtractSaturateInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdTruncateInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSimdXorInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitSqrtInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitStoreInstruction-BltQuoY (Lorg/wasmium/wasm/binary/tree/Opcode;II)V
+	public abstract fun visitSubtractInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitTeeLocalInstruction-WZ4Q5Ns (I)V
+	public abstract fun visitThrowInstruction-WZ4Q5Ns (I)V
+	public abstract fun visitTruncateInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitTryInstruction ([Lorg/wasmium/wasm/binary/tree/WasmType;)V
+	public abstract fun visitUnreachableInstruction ()V
+	public abstract fun visitWrapInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+	public abstract fun visitXorInstruction (Lorg/wasmium/wasm/binary/tree/Opcode;)V
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/FunctionNameVisitor {
+	public abstract fun visitEnd ()V
+	public abstract fun visitFunctionName (Ljava/lang/String;)V
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/FunctionSectionVisitor {
+	public abstract fun visitEnd ()V
+	public abstract fun visitFunction-feOb9K0 (II)V
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/GlobalSectionVisitor {
+	public abstract fun visitEnd ()V
+	public abstract fun visitGlobalVariable-WZ4Q5Ns (I)Lorg/wasmium/wasm/binary/visitors/GlobalVariableVisitor;
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/GlobalVariableVisitor {
+	public abstract fun visitEnd ()V
+	public abstract fun visitGlobalVariable (Lorg/wasmium/wasm/binary/tree/WasmType;Z)V
+	public abstract fun visitInitializerExpression ()Lorg/wasmium/wasm/binary/visitors/InitializerExpressionVisitor;
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/ImportSectionVisitor {
+	public abstract fun visitEnd ()V
+	public abstract fun visitException-bfO7Crs (ILjava/lang/String;Ljava/lang/String;I[Lorg/wasmium/wasm/binary/tree/WasmType;)V
+	public abstract fun visitFunction-tTtLeB8 (ILjava/lang/String;Ljava/lang/String;II)V
+	public abstract fun visitGlobal-Ky1d8_o (ILjava/lang/String;Ljava/lang/String;ILorg/wasmium/wasm/binary/tree/WasmType;Z)V
+	public abstract fun visitMemory-bfO7Crs (ILjava/lang/String;Ljava/lang/String;ILorg/wasmium/wasm/binary/tree/ResizableLimits;)V
+	public abstract fun visitTable-Ky1d8_o (ILjava/lang/String;Ljava/lang/String;ILorg/wasmium/wasm/binary/tree/WasmType;Lorg/wasmium/wasm/binary/tree/ResizableLimits;)V
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/InitializerExpressionVisitor {
+	public abstract fun visitEnd ()V
+	public abstract fun visitInitExprEnd ()V
+	public abstract fun visitInitExprF32ConstExpr (F)V
+	public abstract fun visitInitExprF64ConstExpr (D)V
+	public abstract fun visitInitExprGetGlobalExpr-WZ4Q5Ns (I)V
+	public abstract fun visitInitExprI32ConstExpr (I)V
+	public abstract fun visitInitExprI64ConstExpr (J)V
+	public abstract fun visitInitExprV128ConstExpr (Lorg/wasmium/wasm/binary/tree/V128Value;)V
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/LinkingSectionVisitor {
+	public abstract fun visitDataAlignment (J)V
+	public abstract fun visitDataSymbol-DBD8cGk (IILjava/lang/String;III)V
+	public abstract fun visitEnd ()V
+	public abstract fun visitFunctionSymbol-cKWFsRg (IILjava/lang/String;I)V
+	public abstract fun visitGlobalSymbol-cKWFsRg (IILjava/lang/String;I)V
+	public abstract fun visitSectionSymbol-zly0blg (III)V
+	public abstract fun visitSegment-BltQuoY (Ljava/lang/String;II)V
+	public abstract fun visitSymbol-Mv_zs3U (ILorg/wasmium/wasm/binary/tree/LinkingSymbolType;I)V
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/MemorySectionVisitor {
+	public abstract fun visitEnd ()V
+	public abstract fun visitMemory-qim9Vi0 (ILorg/wasmium/wasm/binary/tree/ResizableLimits;)V
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/ModuleVisitor {
+	public abstract fun visit-WZ4Q5Ns (I)V
+	public abstract fun visitCodeSection ()Lorg/wasmium/wasm/binary/visitors/CodeSectionVisitor;
+	public abstract fun visitCustomSection ()Lorg/wasmium/wasm/binary/visitors/CustomSectionVisitor;
+	public abstract fun visitDataSection ()Lorg/wasmium/wasm/binary/visitors/DataSectionVisitor;
+	public abstract fun visitElementSection ()Lorg/wasmium/wasm/binary/visitors/ElementSectionVisitor;
+	public abstract fun visitEnd ()V
+	public abstract fun visitExceptionSection ()Lorg/wasmium/wasm/binary/visitors/ExceptionSectionVisitor;
+	public abstract fun visitExportSection ()Lorg/wasmium/wasm/binary/visitors/ExportSectionVisitor;
+	public abstract fun visitFunctionSection ()Lorg/wasmium/wasm/binary/visitors/FunctionSectionVisitor;
+	public abstract fun visitGlobalSection ()Lorg/wasmium/wasm/binary/visitors/GlobalSectionVisitor;
+	public abstract fun visitImportSection ()Lorg/wasmium/wasm/binary/visitors/ImportSectionVisitor;
+	public abstract fun visitLinkingSection ()Lorg/wasmium/wasm/binary/visitors/LinkingSectionVisitor;
+	public abstract fun visitMemorySection ()Lorg/wasmium/wasm/binary/visitors/MemorySectionVisitor;
+	public abstract fun visitNameSection ()Lorg/wasmium/wasm/binary/visitors/NameSectionVisitor;
+	public abstract fun visitRelocationSection ()Lorg/wasmium/wasm/binary/visitors/RelocationSectionVisitor;
+	public abstract fun visitStartSection ()Lorg/wasmium/wasm/binary/visitors/StartSectionVisitor;
+	public abstract fun visitTableSection ()Lorg/wasmium/wasm/binary/visitors/TableSectionVisitor;
+	public abstract fun visitTypeSection ()Lorg/wasmium/wasm/binary/visitors/TypeSectionVisitor;
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/NameSectionVisitor {
+	public abstract fun visitEnd ()V
+	public abstract fun visitFunctionName-qim9Vi0 (ILjava/lang/String;)V
+	public abstract fun visitLocalName-t3GQkyU (IILjava/lang/String;)V
+	public abstract fun visitModuleName (Ljava/lang/String;)V
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/RelocationSectionVisitor {
+	public abstract fun visitEnd ()V
+	public abstract fun visitRelocation-BltQuoY (Lorg/wasmium/wasm/binary/tree/RelocationKind;II)V
+	public abstract fun visitRelocation-gd2BlFg (Lorg/wasmium/wasm/binary/tree/RelocationKind;III)V
+	public abstract fun visitSection (Lorg/wasmium/wasm/binary/tree/SectionKind;Ljava/lang/String;)V
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/StartSectionVisitor {
+	public abstract fun visitEnd ()V
+	public abstract fun visitStartFunctionIndex-WZ4Q5Ns (I)V
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/TableSectionVisitor {
+	public abstract fun visitEnd ()V
+	public abstract fun visitTable-OzbTU-A (ILorg/wasmium/wasm/binary/tree/WasmType;Lorg/wasmium/wasm/binary/tree/ResizableLimits;)V
+}
+
+public abstract interface class org/wasmium/wasm/binary/visitors/TypeSectionVisitor {
+	public abstract fun visitEnd ()V
+	public abstract fun visitType-OzbTU-A (I[Lorg/wasmium/wasm/binary/tree/WasmType;[Lorg/wasmium/wasm/binary/tree/WasmType;)V
+}
+
