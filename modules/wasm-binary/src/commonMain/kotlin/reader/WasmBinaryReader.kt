@@ -85,8 +85,6 @@ public class WasmBinaryReader(
 
     protected var seenNameSection: Boolean = false
 
-    protected var previousSection: SectionKind = SectionKind.NONE
-
     public fun read() {
         // minimum allowed module size
         val minSize = 8u
@@ -121,6 +119,9 @@ public class WasmBinaryReader(
         var section: SectionKind
         // total read sections
         var numberOfSections = 0u
+
+        var previousSection: SectionKind? = null
+
         while (!source.exhausted()) {
             numberOfSections++
 
@@ -132,8 +133,10 @@ public class WasmBinaryReader(
 
             if (section != SectionKind.CUSTOM) {
                 // not consider CUSTOM section for ordering
-                if (section.sectionKindId < previousSection.sectionKindId) {
-                    throw ParserException("Invalid section order of ${previousSection.name} followed by ${section.name}")
+                if (previousSection != null) {
+                    if (section.sectionKindId < previousSection.sectionKindId) {
+                        throw ParserException("Invalid section order of ${previousSection.name} followed by ${section.name}")
+                    }
                 }
 
                 previousSection = section
@@ -229,13 +232,15 @@ public class WasmBinaryReader(
     protected fun readNamesSection(visitor: ModuleVisitor, startIndex: UInt, sectionPayloadSize: UInt) {
         val nameSectionVisitor: NameSectionVisitor = visitor.visitNameSection()
 
-        var previousNameKind = NameKind.NONE
+        var previousNameKind: NameKind? = null
 
         while (source.position < startIndex + sectionPayloadSize) {
             val nameKind: NameKind = source.readNameKind()
 
-            if (nameKind.nameKindId < previousNameKind.nameKindId) {
-                throw ParserException("Name kind sub subsection out of order")
+            if (previousNameKind != null) {
+                if (nameKind.nameKindId < previousNameKind.nameKindId) {
+                    throw ParserException("Name kind sub subsection out of order")
+                }
             }
 
             val subsectionSize: UInt = source.readVarUInt32()
@@ -337,8 +342,6 @@ public class WasmBinaryReader(
                         previousFunctionIndex = functionIndex
                     }
                 }
-
-                else -> throw ParserException("Unsupported name section: $nameKind")
             }
 
             if (subsectionSize != source.position - startIndex) {
@@ -367,8 +370,7 @@ public class WasmBinaryReader(
                     val symbolCount: UInt = source.readVarUInt32()
 
                     for (symbolIndex in 0u until symbolCount) {
-                        val symbolType: LinkingSymbolType =
-                            LinkingSymbolType.fromLinkingSymbolTypeId(source.readVarInt7())
+                        val symbolType = source.readLinkingSymbolType()
                         val flags: UInt = source.readUInt32()
 
                         linkingSectionVisitor.visitSymbol(symbolIndex, symbolType, flags)
@@ -2353,8 +2355,6 @@ public class WasmBinaryReader(
 
                     numberExceptionImports++
                 }
-
-                else -> throw ParserException("Not supported external kind:$externalKind")
             }
         }
 

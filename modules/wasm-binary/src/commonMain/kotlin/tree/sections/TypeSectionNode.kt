@@ -9,7 +9,7 @@ public class TypeSectionNode : SectionNode(SectionKind.TYPE), TypeSectionVisitor
 
     public fun accept(typeSectionVisitor: TypeSectionVisitor) {
         for (functionType in types) {
-            typeSectionVisitor.visitType(functionType.typeIndex!!, functionType.parameters!!, functionType.result!!)
+            typeSectionVisitor.visitType(functionType.typeIndex!!, functionType.parameters!!, functionType.results!!)
         }
     }
 
@@ -17,7 +17,7 @@ public class TypeSectionNode : SectionNode(SectionKind.TYPE), TypeSectionVisitor
         val functionType = FunctionTypeNode()
         functionType.typeIndex = typeIndex
         functionType.parameters = parameters
-        functionType.result = results
+        functionType.results = results
 
         types.add(functionType)
     }

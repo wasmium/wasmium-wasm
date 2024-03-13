@@ -8,6 +8,7 @@ import kotlinx.io.readTo
 import org.wasmium.wasm.binary.tree.ExternalKind
 import org.wasmium.wasm.binary.tree.LimitFlags
 import org.wasmium.wasm.binary.tree.LinkingKind
+import org.wasmium.wasm.binary.tree.LinkingSymbolType
 import org.wasmium.wasm.binary.tree.NameKind
 import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.RelocationKind
@@ -24,22 +25,18 @@ public class WasmSource(
     public var position: UInt = 0u
         private set
 
-    public fun skip(byteCount: UInt): Unit {
+    private fun consume(byteCount: UInt): Unit {
         position += byteCount
-
-        source.skip(byteCount.toLong())
     }
+
+    public fun skip(byteCount: UInt): Unit = source.skip(byteCount.toLong()).also { consume(byteCount) }
 
     public fun close(): Unit = source.close()
 
     public fun readTo(bytes: ByteArray, startIndex: UInt, endIndex: UInt): UInt {
         source.readTo(bytes, startIndex.toInt(), endIndex.toInt())
 
-        val readBytes = endIndex - startIndex
-
-        position += readBytes
-
-        return readBytes
+        return (endIndex - startIndex).also { consume(it) }
     }
 
     public fun require(byteCount: UInt): Boolean = try {
@@ -54,89 +51,54 @@ public class WasmSource(
 
     public fun exhausted(): Boolean = source.exhausted()
 
-    /**
-     * Fast read of fixed size unsigned byte.
-     */
-    public fun readUInt8(): UInt {
-        position += 1u
+    public fun readUInt8(): UInt = (source.readByte().toInt() and 0xFF).toUInt().also { consume(1u) }
 
-        return (source.readByte().toInt() and 0xFF).toUInt()
-    }
-
-    /**
-     * Fast read of fixed size unsigned int of 4 bytes.
-     */
     public fun readUInt32(): UInt {
         var result = 0.toUInt()
         for (i in 0..3) {
             result = result or ((source.readByte().toInt() and 0xFF) shl (8 * i)).toUInt()
         }
 
-        position += 4u
-
-        return result
+        return result.also { consume(4u) }
     }
 
-    /**
-     * Fast read of fixed size unsigned long of 8 bytes.
-     */
     public fun readUInt64(): ULong {
         var result = 0.toULong()
         for (i in 0..7) {
             result = result or ((source.readByte().toInt() and 0xFF) shl (8 * i)).toULong()
         }
 
-        position += 8u
-
-        return result
+        return result.also { consume(8u) }
     }
 
-    public fun readVarUInt1(): UInt {
-        position += 1u
+    public fun readVarUInt1(): UInt = (source.readByte() and 0b1).toUInt().also { consume(1u) }
 
-        return (source.readByte() and 0b1).toUInt()
-    }
-
-    public fun readVarUInt7(): UInt {
-        position += 1u
-
-        return (source.readByte() and 0x7F).toUInt()
-    }
-
-    public fun readVarUInt32(): UInt = readUnsignedLeb128().toUInt()
+    public fun readVarUInt7(): UInt = (source.readByte() and 0x7F).toUInt().also { consume(1u) }
 
     public fun readVarInt7(): Int = readVarInt32()
 
-    public fun readVarInt32(): Int = readSignedLeb128().toInt()
-
-    public fun readVarInt64(): Long = readSignedLeb128()
-
-    protected fun readUnsignedLeb128(maxCount: Int = 5): Long {
-        var result = 0L
+    public fun readVarUInt32(maxCount: Int = 5): UInt {
+        var result = 0u
         var current: Int
         var count = 0
         do {
             current = source.readByte().toInt() and 0xff
-            result = result or ((current and 0x7f).toLong() shl (count * 7))
+            result = result or ((current and 0x7f).toLong() shl (count * 7)).toUInt()
             count++
         } while (current and 0x80 == 0x80 && count <= maxCount)
 
-        // overflow
         if (current and 0x80 == 0x80) {
-            throw Exception("Overflow: Number too large")
+            throw ParserException("Overflow: Number too large")
         }
 
-        // underflow
         if (current != 0 && count > (count * 8) / 7) {
-            throw Exception("Underflow: Too many bytes for value")
+            throw ParserException("Underflow: Too many bytes for value")
         }
 
-        position += count.toUInt()
-
-        return result
+        return result.also { consume(count.toUInt()) }
     }
 
-    protected fun readSignedLeb128(maxCount: Int = 10): Long {
+    public fun readVarInt32(maxCount: Int = 10): Int {
         var result = 0L
         var current: Int
         var count = 0
@@ -146,12 +108,10 @@ public class WasmSource(
             count++
         } while (current and 0x80 == 0x80 && count <= maxCount)
 
-        // overflow
         if (current and 0x80 == 0x80) {
             throw Exception("Overflow: Number too large")
         }
 
-        // underflow
         if (current != 0 && count > (count * 8) / 7) {
             throw Exception("Underflow: Too many bytes for value")
         }
@@ -161,33 +121,63 @@ public class WasmSource(
             result = result or (-(1 shl (count * 7))).toUnsignedLong()
         }
 
-        position += count.toUInt()
+        return result.toInt().also { consume(count.toUInt()) }
+    }
 
-        return result
+    public fun readVarInt64(maxCount: Int = 10): Long {
+        var result = 0L
+        var current: Int
+        var count = 0
+
+        do {
+            current = source.readByte().toInt() and 0xff
+            result = result or ((current and 0x7f).toLong() shl (count * 7))
+            count++
+        } while (current and 0x80 == 0x80 && count <= maxCount)
+
+        if (current and 0x80 == 0x80) {
+            throw Exception("Overflow: Number too large")
+        }
+
+        if (current != 0 && count > (count * 8) / 7) {
+            throw Exception("Underflow: Too many bytes for value")
+        }
+
+        // sign extend if appropriate
+        val size = 64
+        if (count * 7 < size && (current and 0x40) != 0) {
+            result = result or (-(1 shl (count * 7))).toUnsignedLong()
+        }
+
+        return result.also { consume(count.toUInt()) }
     }
 
     public fun readSectionKind(): SectionKind {
-        val sectionKind = readVarUInt7()
+        val sectionKindId = readVarUInt7()
 
-        return SectionKind.fromSectionKindId(sectionKind)
+        val sectionKind = SectionKind.fromSectionKindId(sectionKindId)
+        return sectionKind ?: throw ParserException("Invalid section kind $sectionKindId")
     }
 
     public fun readExternalKind(): ExternalKind {
-        val externalKind = readVarUInt7()
+        val externalKindId = readVarUInt7()
 
-        return ExternalKind.fromExternalKindId(externalKind)
+        val externalKind = ExternalKind.fromExternalKindId(externalKindId)
+        return externalKind ?: throw ParserException("Invalid external kind $externalKindId")
     }
 
     public fun readRelocationKind(): RelocationKind {
-        val relocationKind = readVarUInt7()
+        val relocationKindId = readVarUInt7()
 
-        return RelocationKind.fromRelocationKind(relocationKind)
+        val relocationKind = RelocationKind.fromRelocationKind(relocationKindId)
+        return relocationKind ?: throw ParserException("Invalid relocation kind $relocationKindId")
     }
 
     public fun readType(): WasmType {
-        val type = readVarUInt7()
+        val wasmTypeId = readVarUInt7()
 
-        return WasmType.fromWasmTypeId(type)
+        val wasmType = WasmType.fromWasmTypeId(wasmTypeId)
+        return wasmType ?: throw ParserException("Invalid wasm type $wasmTypeId")
     }
 
     public fun readIndex(): UInt = readVarUInt32()
@@ -209,12 +199,14 @@ public class WasmSource(
     public fun readOpcode(): Opcode {
         val value = readUInt8()
 
-        if (Opcode.isPrefix(value)) {
+        return if (Opcode.isPrefix(value)) {
             val code = readVarUInt32()
 
-            return Opcode.fromPrefix(value, code)
+            val opcode = Opcode.fromPrefix(value, code)
+            opcode ?: throw ParserException("Invalid opcode prefix $value")
         } else {
-            return Opcode.fromCode(value)
+            val opcode = Opcode.fromCode(value)
+            opcode ?: throw ParserException("Invalid opcode $value")
         }
     }
 
@@ -225,36 +217,44 @@ public class WasmSource(
             throw ParserException("Size of string $length exceed the maximum of ${WasmBinary.MAX_STRING_SIZE}")
         }
 
-        val b = ByteArray(length.toInt())
-        source.readTo(b, 0, length.toInt())
+        val buffer = ByteArray(length.toInt())
+        source.readTo(buffer, 0, length.toInt())
 
-        position += length
-
-        return b.decodeToString()
+        val result = buffer.decodeToString()
+        return result.also { consume(length) }
     }
 
     public fun readNameKind(): NameKind {
         val nameKindId = readVarUInt7()
 
-        return NameKind.fromNameKindId(nameKindId)
+        val nameKind = NameKind.fromNameKindId(nameKindId)
+        return nameKind ?: throw ParserException("Invalid name kind $nameKindId")
     }
 
     public fun readLinkingKind(): LinkingKind {
         val linkingKindId = readVarUInt7()
 
-        return LinkingKind.fromLinkingKindId(linkingKindId)
+        val linkingKind = LinkingKind.fromLinkingKindId(linkingKindId)
+        return linkingKind ?: throw ParserException("Invalid linking kind $linkingKindId")
+    }
+
+    public fun readLinkingSymbolType(): LinkingSymbolType {
+        val linkingSymbolTypeId = readVarUInt7()
+
+        val linkingSymbolType = LinkingSymbolType.fromLinkingSymbolTypeId(linkingSymbolTypeId)
+        return linkingSymbolType ?: throw ParserException("Invalid linking symbol type $linkingSymbolTypeId")
     }
 
     public fun readFloat32(): Float {
-        val bits: Long = readUInt32().toLong()
+        val bits = readUInt32().toInt()
 
-        return Float.fromBits(bits.toInt())
+        return Float.fromBits(bits)
     }
 
     public fun readFloat64(): Double {
-        val bits: Int = readUInt64().toInt()
+        val bits = readUInt64().toLong()
 
-        return Double.fromBits(bits.toLong())
+        return Double.fromBits(bits)
     }
 
     public fun readV128(): V128Value {

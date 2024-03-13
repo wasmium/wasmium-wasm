@@ -1,27 +1,20 @@
 package org.wasmium.wasm.binary.tree
 
-public enum class ExternalKind(public val externalKindId: Int) {
+public enum class ExternalKind(public val externalKindId: UInt) {
     /** External function. */
-    FUNCTION(0),
-
+    FUNCTION(0u),
     /** External table. */
-    TABLE(1),
-
+    TABLE(1u),
     /** External memory. */
-    MEMORY(2),
-
+    MEMORY(2u),
     /** External global. */
-    GLOBAL(3),
-
+    GLOBAL(3u),
     /** External exception. */
-    EXCEPTION(4),
-
-    /** No ExternalKind */
-    NONE(-1),
+    EXCEPTION(4u),
     // end
     ;
 
     public companion object {
-        public fun fromExternalKindId(externalKindId: UInt): ExternalKind = values().find { it.externalKindId == externalKindId.toInt() } ?: NONE
+        public fun fromExternalKindId(externalKindId: UInt): ExternalKind? = values().firstOrNull { it.externalKindId == externalKindId }
     }
 }

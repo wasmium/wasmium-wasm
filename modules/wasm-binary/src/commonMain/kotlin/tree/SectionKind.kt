@@ -1,47 +1,34 @@
 package org.wasmium.wasm.binary.tree
 
-public enum class SectionKind(public val sectionKindId: Int) {
+public enum class SectionKind(public val sectionKindId: UInt) {
     /** Custom section. */
-    CUSTOM(0),
-
+    CUSTOM(0u),
     /** Type section. */
-    TYPE(1),
-
+    TYPE(1u),
     /** Import section. */
-    IMPORT(2),
-
+    IMPORT(2u),
     /** Function section. */
-    FUNCTION(3),
-
+    FUNCTION(3u),
     /** Table section. */
-    TABLE(4),
-
+    TABLE(4u),
     /** Memory section. */
-    MEMORY(5),
-
+    MEMORY(5u),
     /** Global section. */
-    GLOBAL(6),
-
+    GLOBAL(6u),
     /** Exports section. */
-    EXPORT(7),
-
-    /** Start function section . */
-    START(8),
-
+    EXPORT(7u),
+    /** Start function section. */
+    START(8u),
     /** Elements segment section. */
-    ELEMENT(9),
-
+    ELEMENT(9u),
     /** Code section. */
-    CODE(10),
-
+    CODE(10u),
     /** Data segment section. */
-    DATA(11),
-
-    /** No Section. */
-    NONE(-1),
+    DATA(11u),
+    // end
     ;
 
     public companion object {
-        public fun fromSectionKindId(sectionKindId: UInt): SectionKind = values().find { it.sectionKindId == sectionKindId.toInt() } ?: NONE
+        public fun fromSectionKindId(sectionKindId: UInt): SectionKind? = values().firstOrNull { it.sectionKindId == sectionKindId }
     }
 }

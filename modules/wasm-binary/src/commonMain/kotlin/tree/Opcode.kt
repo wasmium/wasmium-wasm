@@ -1,7 +1,6 @@
 package org.wasmium.wasm.binary.tree
 
 import org.wasmium.wasm.binary.Features
-import org.wasmium.wasm.binary.toHexString
 
 /**
  * List of WebAssembly opcodes.
@@ -459,17 +458,11 @@ public enum class Opcode(
      */
     public val opcode: Int = createOpcode(prefix, code)
 
-    protected fun createOpcode(prefix: Int, code: Int): Int {
-        return prefix shl 8 or code
-    }
+    protected fun createOpcode(prefix: Int, code: Int): Int = prefix shl 8 or code
 
-    public fun hasPrefix(): Boolean {
-        return prefix != 0
-    }
+    public fun hasPrefix(): Boolean = prefix != 0
 
-    public fun getLength(): Int {
-        return if (hasPrefix()) 2 else 1
-    }
+    public fun getLength(): Int = if (hasPrefix()) 2 else 1
 
     public fun isEnabled(features: Features): Boolean {
         return when (prefix.toUInt()) {
@@ -487,25 +480,12 @@ public enum class Opcode(
         public const val PREFIX_SIMD: UInt = 0xFDu
         public const val PREFIX_THREADS: UInt = 0xFEu
 
-        public fun isPrefix(value: UInt): Boolean {
-            return (value == PREFIX_GC)
-                || (value == PREFIX_FC)
-                || (value == PREFIX_THREADS)
-                || (value == PREFIX_SIMD)
-        }
+        public fun isPrefix(value: UInt): Boolean = (value == PREFIX_GC) || (value == PREFIX_FC) || (value == PREFIX_THREADS) || (value == PREFIX_SIMD)
 
-        public fun fromCode(code: UInt): Opcode {
-            return fromPrefix(0u, code)
-        }
+        public fun fromCode(code: UInt): Opcode? = fromPrefix(0u, code)
 
-        public fun fromPrefix(prefix: UInt, code: UInt): Opcode {
-            for (opcode in values()) {
-                if (opcode.prefix == prefix.toInt() && opcode.code == code.toInt()) {
-                    return opcode
-                }
-            }
-
-            throw IllegalArgumentException("Invalid Opcode with prefix: $prefix and code: 0x${code.toHexString()}")
+        public fun fromPrefix(prefix: UInt, code: UInt): Opcode? = values().firstOrNull {
+            it.prefix == prefix.toInt() && it.code == code.toInt()
         }
     }
 }

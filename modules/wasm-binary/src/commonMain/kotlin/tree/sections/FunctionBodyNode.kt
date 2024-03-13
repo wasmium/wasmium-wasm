@@ -202,7 +202,7 @@ public class FunctionBodyNode : FunctionBodyVisitor {
     }
 
     override fun visitCallIndirectInstruction(signatureIndex: UInt, reserved: Boolean) {
-        instructions.add(CallIndirectInstruction(signatureIndex))
+        instructions.add(CallIndirectInstruction(signatureIndex, reserved))
     }
 
     public override fun visitDropInstruction() {
