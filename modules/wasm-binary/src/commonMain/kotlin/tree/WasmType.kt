@@ -1,22 +1,55 @@
 package org.wasmium.wasm.binary.tree
 
 public enum class WasmType(public val wasmTypeId: UInt) {
-    /** No type or empty block. */
-    NONE(0x40u),
-    /** Value type Int 32. */
+    // value types
     I32(0x7Fu),
-    /** Value type Int 64. */
     I64(0x7Eu),
-    /** Value type Float 32. */
     F32(0x7Du),
-    /** Value type Float 64. */
     F64(0x7Cu),
-    /** SIMD Vector type. */
     V128(0x7Bu),
-    /** Function with any signature type. */
-    ANYFUNC(0x70u),
-    /** Function type. */
-    FUNCTION(0x60u),
+
+    // packed types
+    I8(0x78u),
+    I16(0x77u),
+
+    // reference types
+    NULL_FUNC_REF(0x73u),
+    NULL_EXTERN_REF(0x72u),
+    NULL_REF(0x71u),
+    I31_REF(0x6cu),
+    STRUCT_REF(0x6bu),
+    ARRAY_REF(0x6au),
+    FUNC_REF(0x70u),
+    EXTERN_REF(0x6fu),
+    ANY_REF(0x6eu),
+    EQ_REF(0x6du),
+    NON_NULLABLE(0x64u),
+    NULLABLE(0x63u),
+
+    // exception handling
+    EXN_REF(0x69u),
+    NULL_EXN_REF(0x74u),
+
+    // string reference types
+    STRING_REF(0x67u),
+    STRING_VIEW_WTF8(0x66u),
+    STRING_VIEW_WTF16(0x62u),
+    STRING_VIEW_ITER(0x61u),
+
+    // type forms
+    FUNC(0x60u),
+    CONT(0x5du),
+    STRUCT(0x5fu),
+    ARRAY(0x5eu),
+    SUB(0x50u),
+    SUB_FINAL(0x4fu),
+
+    // iso recursive recursion groups
+    REC(0x4eu),
+
+    // block_type
+    NONE(0x40u),
+
     // end
     ;
 
@@ -31,7 +64,7 @@ public enum class WasmType(public val wasmTypeId: UInt) {
     }
 
     public fun isElementType(): Boolean = when (this) {
-        ANYFUNC -> true
+        FUNC_REF -> true
         else -> false
     }
 
