@@ -133,6 +133,14 @@ public open class ModuleAdapter(protected val delegate: ModuleVisitor? = null) :
         return NameSectionAdapter()
     }
 
+    public override fun visitDataCountSection(): DataCountSectionVisitor {
+        if (delegate != null) {
+            return DataCountSectionAdapter(delegate.visitDataCountSection())
+        }
+
+        return DataCountSectionAdapter()
+    }
+
     public override fun visitEnd() {
         delegate?.visitEnd()
     }

@@ -17,6 +17,7 @@ import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.WasmVersion
+import org.wasmium.wasm.binary.tree.sections.DataCountSectionNode
 import org.wasmium.wasm.binary.visitors.CodeSectionVisitor
 import org.wasmium.wasm.binary.visitors.CustomSectionVisitor
 import org.wasmium.wasm.binary.visitors.ElementSectionVisitor
@@ -130,11 +131,10 @@ public class WasmBinaryReader(
             }
 
             section = source.readSectionKind()
-
             if (section != SectionKind.CUSTOM) {
                 // not consider CUSTOM section for ordering
                 if (previousSection != null) {
-                    if (section.sectionKindId < previousSection.sectionKindId) {
+                    if (section.ordinal < previousSection.ordinal) {
                         throw ParserException("Invalid section order of ${previousSection.name} followed by ${section.name}")
                     }
                 }
@@ -171,6 +171,7 @@ public class WasmBinaryReader(
                         readCodeSection(visitor)
                     }
                 }
+                SectionKind.DATA_COUNT -> readDataCountSection(visitor)
 
                 SectionKind.DATA -> readDataSection(visitor)
                 else -> throw ParserException("Invalid section id: $section")
@@ -793,6 +794,7 @@ public class WasmBinaryReader(
                     }
 
                     val blockType = if (type != WasmType.NONE) arrayOf(type) else arrayOf()
+
                     functionBodyVisitor.visitTryInstruction(blockType)
                 }
 
@@ -1891,7 +1893,98 @@ public class WasmBinaryReader(
                     functionBodyVisitor.visitSimdTruncateInstruction(opcode)
                 }
 
-                else -> throw ParserException("Unexpected opcode: %$opcode(0x${opcode.opcode.toHexString()})")
+                Opcode.MEMORY_FILL -> {
+                    if (!options.features.isBulkMemoryEnabled) {
+                        throw ParserException("Invalid memory.fill code: bulk memory not enabled.")
+                    }
+
+                    val address = source.readVarUInt32()
+                    val value = source.readVarUInt32()
+                    val size = source.readVarUInt32()
+
+                    functionBodyVisitor.visitMemoryFillInstruction(opcode, address, value, size)
+                }
+
+                Opcode.MEMORY_COPY -> {
+                    if (!options.features.isBulkMemoryEnabled) {
+                        throw ParserException("Invalid memory.copy code: bulk memory not enabled.")
+                    }
+
+                    val target = source.readVarUInt32()
+                    val address = source.readVarUInt32()
+                    val size = source.readVarUInt32()
+
+                    functionBodyVisitor.visitMemoryFillInstruction(opcode, target, address, size)
+                }
+
+                Opcode.MEMORY_INIT -> {
+                    if (!options.features.isBulkMemoryEnabled) {
+                        throw ParserException("Invalid memory.copy code: bulk memory not enabled.")
+                    }
+
+                    val target = source.readVarUInt32()
+                    val address = source.readVarUInt32()
+                    val size = source.readVarUInt32()
+
+                    val zero = source.readVarUInt32()
+
+                    functionBodyVisitor.visitMemoryInitInstruction(opcode, target, address, size)
+                }
+
+                Opcode.DATA_DROP -> {
+                    if (!options.features.isBulkMemoryEnabled) {
+                        throw ParserException("Invalid data.drop code: bulk memory not enabled.")
+                    }
+
+                    // TODO
+                    source.readVarUInt32()
+                }
+
+                Opcode.CALL_REF -> {
+                    if (!options.features.isReferenceTypesEnabled) {
+                        throw ParserException("Invalid call_ref code: reference types not enabled.")
+                    }
+
+                    // TODO
+                    source.readVarUInt32()
+                }
+
+                Opcode.RETURN_CALL_REF -> {
+                    if (!options.features.isReferenceTypesEnabled) {
+                        throw ParserException("Invalid return_call_ref code: reference types not enabled.")
+                    }
+
+                    // TODO
+                    source.readVarUInt32()
+                }
+
+                Opcode.REF_AS_NON_NULL -> {
+                    if (!options.features.isReferenceTypesEnabled) {
+                        throw ParserException("Invalid ref_as_non_null code: reference types not enabled.")
+                    }
+
+                    // TODO
+                }
+
+                Opcode.BR_ON_NULL -> {
+                    if (!options.features.isReferenceTypesEnabled) {
+                        throw ParserException("Invalid br_on_null code: reference types not enabled.")
+                    }
+
+                    // TODO
+                    source.readVarUInt32()
+                }
+
+                Opcode.BR_ON_NON_NULL -> {
+                    if (!options.features.isReferenceTypesEnabled) {
+                        throw ParserException("Invalid br_on_non_null code: reference types not enabled.")
+                    }
+
+                    // TODO
+                    source.readVarUInt32()
+                }
+
+                else -> throw ParserException("Unexpected opcode: %$opcode(0x${opcode.opcode?.toHexString()})")
             }
         }
 
@@ -2035,7 +2128,7 @@ public class WasmBinaryReader(
                 return
             }
 
-            else -> throw ParserException("Unexpected opcode in initializer expression: %$opcode(0x${opcode.opcode.toHexString()})")
+            else -> throw ParserException("Unexpected opcode in initializer expression: %$opcode(0x${opcode.opcode?.toHexString()})")
         }
         if (requireUInt && (opcode != Opcode.I32_CONST) && (opcode != Opcode.GET_GLOBAL)) {
             throw ParserException("Expected i32 init_expr")
@@ -2061,7 +2154,7 @@ public class WasmBinaryReader(
             val tableIndex = numberTableImports + index
 
             val elementType: WasmType = source.readType()
-            if (elementType != WasmType.ANYFUNC) {
+            if (elementType != WasmType.FUNC_REF) {
                 throw ParserException("Table type is not AnyFunc.")
             }
 
@@ -2222,7 +2315,7 @@ public class WasmBinaryReader(
         for (typeIndex in 0u until numberSignatures) {
             val form: WasmType = source.readType()
 
-            if (form != WasmType.FUNCTION) {
+            if (form != WasmType.FUNC) {
                 throw ParserException("Invalid signature form with type: $form")
             }
 
@@ -2359,6 +2452,14 @@ public class WasmBinaryReader(
         }
 
         importVisitor.visitEnd()
+    }
+
+    private fun readDataCountSection(visitor: ModuleVisitor) {
+        val dataCount = source.readVarUInt32()
+
+        val dataCountSectionVisitor = visitor.visitDataCountSection()
+        dataCountSectionVisitor.visitDataCount(dataCount)
+        dataCountSectionVisitor.visitEnd()
     }
 
     protected fun getNumberTotalFunctions(): UInt {

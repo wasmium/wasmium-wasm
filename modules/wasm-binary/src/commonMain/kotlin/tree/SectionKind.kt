@@ -21,6 +21,8 @@ public enum class SectionKind(public val sectionKindId: UInt) {
     START(8u),
     /** Elements segment section. */
     ELEMENT(9u),
+    /** Data count section. */
+    DATA_COUNT(12u),
     /** Code section. */
     CODE(10u),
     /** Data segment section. */

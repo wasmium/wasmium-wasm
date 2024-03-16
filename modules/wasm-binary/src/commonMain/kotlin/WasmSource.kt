@@ -177,7 +177,7 @@ public class WasmSource(
         val wasmTypeId = readVarUInt7()
 
         val wasmType = WasmType.fromWasmTypeId(wasmTypeId)
-        return wasmType ?: throw ParserException("Invalid wasm type $wasmTypeId")
+        return wasmType ?: throw ParserException("Invalid wasm type 0x${wasmTypeId.toHexString()}")
     }
 
     public fun readIndex(): UInt = readVarUInt32()
@@ -206,7 +206,7 @@ public class WasmSource(
             opcode ?: throw ParserException("Invalid opcode prefix $value")
         } else {
             val opcode = Opcode.fromCode(value)
-            opcode ?: throw ParserException("Invalid opcode $value")
+            opcode ?: throw ParserException("Invalid opcode 0x${value.toHexString()}")
         }
     }
 

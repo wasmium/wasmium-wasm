@@ -35,5 +35,7 @@ public interface ModuleVisitor {
 
     public fun visitNameSection(): NameSectionVisitor
 
+    public fun visitDataCountSection(): DataCountSectionVisitor
+
     public fun visitEnd()
 }

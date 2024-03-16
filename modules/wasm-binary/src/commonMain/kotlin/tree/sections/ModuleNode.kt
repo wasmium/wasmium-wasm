@@ -2,8 +2,10 @@ package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.tree.SectionKind
+import org.wasmium.wasm.binary.tree.SectionKind.*
 import org.wasmium.wasm.binary.visitors.CodeSectionVisitor
 import org.wasmium.wasm.binary.visitors.CustomSectionVisitor
+import org.wasmium.wasm.binary.visitors.DataCountSectionVisitor
 import org.wasmium.wasm.binary.visitors.DataSectionVisitor
 import org.wasmium.wasm.binary.visitors.ElementSectionVisitor
 import org.wasmium.wasm.binary.visitors.ExceptionSectionVisitor
@@ -30,7 +32,7 @@ public class ModuleNode : ModuleVisitor {
 
         for (section in sections) {
             when (section.sectionKind) {
-                SectionKind.CUSTOM -> {
+                CUSTOM -> {
                     val customSection: CustomSectionNode = section as CustomSectionNode
 
                     when (customSection.name) {
@@ -74,7 +76,7 @@ public class ModuleNode : ModuleVisitor {
                     }
                 }
 
-                SectionKind.TYPE -> {
+                TYPE -> {
                     val typeSection: TypeSectionNode = section as TypeSectionNode
 
                     val typeSectionVisitor = visitor.visitTypeSection()
@@ -82,7 +84,7 @@ public class ModuleNode : ModuleVisitor {
                     typeSectionVisitor.visitEnd()
                 }
 
-                SectionKind.IMPORT -> {
+                IMPORT -> {
                     val importSection: ImportSectionNode = section as ImportSectionNode
 
                     val importSectionVisitor = visitor.visitImportSection()
@@ -90,7 +92,7 @@ public class ModuleNode : ModuleVisitor {
                     importSectionVisitor.visitEnd()
                 }
 
-                SectionKind.FUNCTION -> {
+                FUNCTION -> {
                     val functionSection: FunctionSectionNode = section as FunctionSectionNode
 
                     val functionSectionVisitor = visitor.visitFunctionSection()
@@ -98,7 +100,7 @@ public class ModuleNode : ModuleVisitor {
                     functionSectionVisitor.visitEnd()
                 }
 
-                SectionKind.TABLE -> {
+                TABLE -> {
                     val tableSection: TableSectionNode = section as TableSectionNode
 
                     val tableSectionVisitor = visitor.visitTableSection()
@@ -106,7 +108,7 @@ public class ModuleNode : ModuleVisitor {
                     tableSectionVisitor.visitEnd()
                 }
 
-                SectionKind.MEMORY -> {
+                MEMORY -> {
                     val memorySection: MemorySectionNode = section as MemorySectionNode
 
                     val memorySectionVisitor = visitor.visitMemorySection()
@@ -114,7 +116,7 @@ public class ModuleNode : ModuleVisitor {
                     memorySectionVisitor.visitEnd()
                 }
 
-                SectionKind.GLOBAL -> {
+                GLOBAL -> {
                     val globalSection: GlobalSectionNode = section as GlobalSectionNode
 
                     val globalSectionVisitor = visitor.visitGlobalSection()
@@ -122,7 +124,7 @@ public class ModuleNode : ModuleVisitor {
                     globalSectionVisitor.visitEnd()
                 }
 
-                SectionKind.EXPORT -> {
+                EXPORT -> {
                     val exportSection: ExportSectionNode = section as ExportSectionNode
 
                     val exportSectionVisitor = visitor.visitExportSection()
@@ -130,7 +132,7 @@ public class ModuleNode : ModuleVisitor {
                     exportSectionVisitor.visitEnd()
                 }
 
-                SectionKind.START -> {
+                START -> {
                     val startSection: StartSectionNode = section as StartSectionNode
 
                     val startSectionVisitor = visitor.visitStartSection()
@@ -138,7 +140,7 @@ public class ModuleNode : ModuleVisitor {
                     startSectionVisitor.visitEnd()
                 }
 
-                SectionKind.ELEMENT -> {
+                ELEMENT -> {
                     val elementSection: ElementSectionNode = section as ElementSectionNode
 
                     val elementSectionVisitor = visitor.visitElementSection()
@@ -146,7 +148,7 @@ public class ModuleNode : ModuleVisitor {
                     elementSectionVisitor.visitEnd()
                 }
 
-                SectionKind.CODE -> {
+                CODE -> {
                     val codeSection: CodeSectionNode = section as CodeSectionNode
 
                     val codeSectionVisitor = visitor.visitCodeSection()
@@ -154,7 +156,7 @@ public class ModuleNode : ModuleVisitor {
                     codeSectionVisitor.visitEnd()
                 }
 
-                SectionKind.DATA -> {
+                DATA -> {
                     val dataSection: DataSectionNode = section as DataSectionNode
 
                     val dataSectionVisitor = visitor.visitDataSection()
@@ -162,7 +164,13 @@ public class ModuleNode : ModuleVisitor {
                     dataSectionVisitor.visitEnd()
                 }
 
-                else -> throw IllegalArgumentException()
+                DATA_COUNT -> {
+                    val dataCountSection = section as DataCountSectionNode
+
+                    val dataCountSectionVisitor = visitor.visitDataCountSection()
+                    dataCountSection.accept(dataCountSectionVisitor)
+                    dataCountSectionVisitor.visitEnd()
+                }
             }
         }
 
@@ -283,6 +291,13 @@ public class ModuleNode : ModuleVisitor {
         sections.add(nameSection)
 
         return nameSection
+    }
+
+    public override fun visitDataCountSection(): DataCountSectionVisitor {
+        val dataCountSection = DataCountSectionNode()
+        sections.add(dataCountSection)
+
+        return dataCountSection
     }
 
     override fun visitEnd() {
