@@ -17,7 +17,6 @@ import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.WasmVersion
-import org.wasmium.wasm.binary.tree.sections.DataCountSectionNode
 import org.wasmium.wasm.binary.visitors.CodeSectionVisitor
 import org.wasmium.wasm.binary.visitors.CustomSectionVisitor
 import org.wasmium.wasm.binary.visitors.ElementSectionVisitor
@@ -174,7 +173,6 @@ public class WasmBinaryReader(
                 SectionKind.DATA_COUNT -> readDataCountSection(visitor)
 
                 SectionKind.DATA -> readDataSection(visitor)
-                else -> throw ParserException("Invalid section id: $section")
             }
 
             if (payloadSize != source.position - startPosition) {
@@ -249,7 +247,7 @@ public class WasmBinaryReader(
                 throw ParserException("Name subsection greater then input")
             }
 
-            val startIndex: UInt = source.position
+            val startIndex = source.position
 
             when (nameKind) {
                 NameKind.MODULE -> {
@@ -316,9 +314,9 @@ public class WasmBinaryReader(
                             }
                         }
 
-                        val numberLocals: UInt = source.readVarUInt32()
+                        val numberLocals = source.readVarUInt32()
                         var previousLocalIndex: UInt? = null
-                        var local: UInt = 0u
+                        var local = 0u
                         while (local < numberLocals) {
                             val nameLocalIndex: UInt = source.readVarUInt32()
 
@@ -348,6 +346,8 @@ public class WasmBinaryReader(
             if (subsectionSize != source.position - startIndex) {
                 throw ParserException("Invalid size of subsection id: $nameKind")
             }
+
+            previousNameKind = nameKind
         }
 
         nameSectionVisitor.visitEnd()
@@ -393,9 +393,9 @@ public class WasmBinaryReader(
                             }
 
                             LinkingSymbolType.DATA -> {
-                                var segment: UInt = 0u
-                                var offset: UInt = 0u
-                                var size: UInt = 0u
+                                var segment = 0u
+                                var offset = 0u
+                                var size = 0u
 
                                 val name: String = source.readString()
 
@@ -412,8 +412,6 @@ public class WasmBinaryReader(
 
                                 linkingSectionVisitor.visitSectionSymbol(symbolIndex, flags, index)
                             }
-
-                            else -> throw IllegalArgumentException()
                         }
                     }
                 }
@@ -485,8 +483,6 @@ public class WasmBinaryReader(
 
                     relocationVisitor.visitRelocation(relocationKind, offset, index, addend)
                 }
-
-                else -> throw ParserException("Unsupported relocation section: $relocationKind")
             }
         }
 
@@ -687,8 +683,8 @@ public class WasmBinaryReader(
 
             val startAvailable: UInt = source.position
 
-            var totalLocals: UInt = 0u
-            val localsSize: UInt = source.readVarUInt32()
+            var totalLocals = 0u
+            val localsSize = source.readVarUInt32()
 
             if (localsSize > WasmBinary.MAX_FUNCTION_LOCALS) {
                 throw ParserException("Number of function locals $localsSize exceed the maximum of ${WasmBinary.MAX_FUNCTION_LOCALS}")
@@ -1644,7 +1640,7 @@ public class WasmBinaryReader(
                         throw ParserException("Invalid V128Value code: SIMD support not enabled.")
                     }
 
-                    val lanesIndex: UIntArray = UIntArray(16) { 0u }
+                    val lanesIndex = UIntArray(16) { 0u }
 
                     for (i in 0u until 16u) {
                         lanesIndex[i.toInt()] = source.readVarUInt32()
@@ -1984,7 +1980,7 @@ public class WasmBinaryReader(
                     source.readVarUInt32()
                 }
 
-                else -> throw ParserException("Unexpected opcode: %$opcode(0x${opcode.opcode?.toHexString()})")
+                else -> throw ParserException("Unexpected opcode: %$opcode(0x${opcode.opcode.toHexString()})")
             }
         }
 
@@ -2128,7 +2124,7 @@ public class WasmBinaryReader(
                 return
             }
 
-            else -> throw ParserException("Unexpected opcode in initializer expression: %$opcode(0x${opcode.opcode?.toHexString()})")
+            else -> throw ParserException("Unexpected opcode in initializer expression: %$opcode(0x${opcode.opcode.toHexString()})")
         }
         if (requireUInt && (opcode != Opcode.I32_CONST) && (opcode != Opcode.GET_GLOBAL)) {
             throw ParserException("Expected i32 init_expr")
@@ -2251,8 +2247,6 @@ public class WasmBinaryReader(
                     }
                     throw IllegalArgumentException()
                 }
-
-                else -> throw IllegalArgumentException()
             }
             exportVisitor.visitExport(exportIndex, externalKind, itemIndex, name)
         }
@@ -2261,7 +2255,7 @@ public class WasmBinaryReader(
     }
 
     public fun readV128(): V128Value {
-        val value: UIntArray = uintArrayOf()
+        val value = uintArrayOf()
 
         for (i in 0..3) {
             value[i] = source.readUInt32()

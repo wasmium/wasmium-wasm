@@ -25,7 +25,7 @@ public class WasmSource(
     public var position: UInt = 0u
         private set
 
-    private fun consume(byteCount: UInt): Unit {
+    private fun consume(byteCount: UInt) {
         position += byteCount
     }
 
@@ -218,6 +218,7 @@ public class WasmSource(
         }
 
         val buffer = ByteArray(length.toInt())
+        // TODO Change the exception to be raised here
         source.readTo(buffer, 0, length.toInt())
 
         val result = buffer.decodeToString()
@@ -258,7 +259,7 @@ public class WasmSource(
     }
 
     public fun readV128(): V128Value {
-        val value: UIntArray = uintArrayOf(0u, 0u, 0u, 0u)
+        val value = uintArrayOf(0u, 0u, 0u, 0u)
 
         for (i in 0..3) {
             value[i] = readUInt32()
