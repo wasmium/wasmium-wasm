@@ -1439,7 +1439,7 @@ public class WasmBinaryReader(
 
                 Opcode.I32_EXTEND8_S, Opcode.I32_EXTEND16_S, Opcode.I64_EXTEND8_S, Opcode.I64_EXTEND16_S, Opcode.I64_EXTEND32_S -> {
                     if (!opcode.isEnabled(options.features)) {
-                        throw ParserException("Invalid opcode: ${opcode.opcodeName} not enabled.")
+                        throw ParserException("Invalid opcode: ${opcode.code} not enabled.")
                     }
 
                     functionBodyVisitor.visitExtendInstruction(opcode)

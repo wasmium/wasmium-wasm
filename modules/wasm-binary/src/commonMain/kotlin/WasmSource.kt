@@ -199,7 +199,7 @@ public class WasmSource(
     public fun readOpcode(): Opcode {
         val value = readUInt8()
 
-        return if (Opcode.isPrefix(value)) {
+        return if (Opcode.isPrefix(value.toInt())) {
             val code = readVarUInt32()
 
             val opcode = Opcode.fromPrefix(value, code)
