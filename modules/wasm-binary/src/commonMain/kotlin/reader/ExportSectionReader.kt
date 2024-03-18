@@ -3,8 +3,11 @@ package org.wasmium.wasm.binary.reader
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.WasmSource
-import org.wasmium.wasm.binary.tree.ExternalKind
-import org.wasmium.wasm.binary.visitors.ExportSectionVisitor
+import org.wasmium.wasm.binary.tree.ExternalKind.EXCEPTION
+import org.wasmium.wasm.binary.tree.ExternalKind.FUNCTION
+import org.wasmium.wasm.binary.tree.ExternalKind.GLOBAL
+import org.wasmium.wasm.binary.tree.ExternalKind.MEMORY
+import org.wasmium.wasm.binary.tree.ExternalKind.TABLE
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 public class ExportSectionReader(
@@ -17,26 +20,26 @@ public class ExportSectionReader(
             throw ParserException("Number of exports ${context.numberExports} exceed the maximum of ${WasmBinary.MAX_EXPORTS}")
         }
 
-        val exportVisitor: ExportSectionVisitor = visitor.visitExportSection()
+        val exportVisitor = visitor.visitExportSection()
         val names = mutableSetOf<String>()
         for (exportIndex in 0u until context.numberExports) {
-            val name: String = source.readInlineString()
+            val name = source.readInlineString()
 
             if (!names.add(name)) {
                 throw ParserException("Duplicate export name $name")
             }
 
-            val externalKind: ExternalKind = source.readExternalKind()
-            val itemIndex: UInt = source.readIndex()
+            val externalKind = source.readExternalKind()
+            val itemIndex = source.readIndex()
 
             when (externalKind) {
-                ExternalKind.FUNCTION -> {
+                FUNCTION -> {
                     if (itemIndex >= context.numberTotalFunctions) {
                         throw ParserException("Invalid export function index: %$itemIndex")
                     }
                 }
 
-                ExternalKind.TABLE -> {
+                TABLE -> {
                     if (context.numberTotalTables == 0u) {
                         throw ParserException("Cannot index non existing table")
                     }
@@ -50,7 +53,7 @@ public class ExportSectionReader(
                     }
                 }
 
-                ExternalKind.MEMORY -> {
+                MEMORY -> {
                     if (context.numberTotalMemories == 0u) {
                         throw ParserException("Cannot index non existing memory")
                     }
@@ -64,13 +67,13 @@ public class ExportSectionReader(
                     }
                 }
 
-                ExternalKind.GLOBAL -> {
+                GLOBAL -> {
                     if (itemIndex >= context.numberTotalGlobals) {
                         throw ParserException("Invalid export global index: %$itemIndex")
                     }
                 }
 
-                ExternalKind.EXCEPTION -> {
+                EXCEPTION -> {
                     run {
                         if (!context.options.features.isExceptionHandlingEnabled) {
                             throw ParserException("Invalid export exception kind: exceptions not enabled.")

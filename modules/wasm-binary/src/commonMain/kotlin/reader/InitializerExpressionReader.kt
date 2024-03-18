@@ -48,7 +48,7 @@ public class InitializerExpressionReader(
             }
 
             Opcode.GET_GLOBAL -> {
-                val globaIndex: UInt = source.readIndex()
+                val globaIndex = source.readIndex()
 
                 if (globaIndex > context.numberTotalGlobals) {
                     throw ParserException("get_global index of $globaIndex exceed the maximum of ${context.numberTotalGlobals}")

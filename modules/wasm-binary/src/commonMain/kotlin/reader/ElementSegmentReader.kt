@@ -13,7 +13,7 @@ public class ElementSegmentReader(
         val startIndex: UInt = source.position
         val elementSegmentVisitor = elementVisitor.visitElementSegment(index)
 
-        val tableIndex: UInt = source.readIndex()
+        val tableIndex = source.readIndex()
         if (tableIndex != 0u) {
             throw ParserException("Table elements must refer to table 0.")
         }
@@ -23,14 +23,14 @@ public class ElementSegmentReader(
         initializerExpressionReader.readInitExpression(source, initializerExpressionVisitor, true)
         initializerExpressionVisitor.visitEnd()
 
-        val numberFunctionIndexes: UInt = source.readVarUInt32()
+        val numberFunctionIndexes = source.readVarUInt32()
 
         if (numberFunctionIndexes + (source.position - startIndex) > WasmBinary.MAX_ELEMENT_SEGMENT_LENGTH) {
             throw ParserException(("Element segment size of ${numberFunctionIndexes + (source.position - startIndex)}") + " exceed the maximum of " + WasmBinary.MAX_ELEMENT_SEGMENT_LENGTH)
         }
 
         for (segmentFunctionIndex in 0u until numberFunctionIndexes) {
-            val functionIndex: UInt = source.readIndex()
+            val functionIndex = source.readIndex()
 
             elementSegmentVisitor.visitFunctionIndex(segmentFunctionIndex, functionIndex)
         }

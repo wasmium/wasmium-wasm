@@ -44,13 +44,13 @@ public class ModuleReader(
         }
 
         // read magic
-        val magic: UInt = source.readUInt32()
+        val magic = source.readUInt32()
         if (magic != WasmBinary.MAGIC_NUMBER) {
             throw ParserException("Module does not start with: $magic")
         }
 
         // read version
-        val version: UInt = source.readUInt32()
+        val version = source.readUInt32()
         if ((version <= 0u) || (version > WasmVersion.V1.version)) {
             throw ParserException("Unsupported version number: $version")
         }

@@ -20,7 +20,7 @@ public class FunctionSectionReader(
         for (index in 0u until context.numberFunctions) {
             val functionIndex = context.numberFunctionImports + index
 
-            val signatureIndex: UInt = source.readIndex()
+            val signatureIndex = source.readIndex()
             if (signatureIndex >= context.numberSignatures) {
                 throw ParserException("Invalid function signature index: %$signatureIndex")
             }

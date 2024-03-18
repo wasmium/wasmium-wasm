@@ -2,7 +2,6 @@ package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmSource
-import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
 
 public class GlobalVariableReader(
@@ -12,7 +11,7 @@ public class GlobalVariableReader(
     public fun readGlobalVariable(source: WasmSource, index: UInt, globalVisitor: GlobalSectionVisitor) {
         val globalIndex = context.numberGlobalImports + index
 
-        val contentType: WasmType = source.readType()
+        val contentType = source.readType()
         if (!contentType.isValueType()) {
             throw ParserException("Invalid global type: %#$contentType")
         }

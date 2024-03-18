@@ -21,13 +21,13 @@ public class ImportSectionReader(
 
         val importVisitor: ImportSectionVisitor = visitor.visitImportSection()
         for (importIndex in 0u until context.numberImports) {
-            val moduleName: String = source.readInlineString()
-            val fieldName: String = source.readInlineString()
+            val moduleName = source.readInlineString()
+            val fieldName = source.readInlineString()
 
             val externalKind: ExternalKind = source.readExternalKind()
             when (externalKind) {
                 ExternalKind.FUNCTION -> {
-                    val typeIndex: UInt = source.readIndex()
+                    val typeIndex = source.readIndex()
 
                     if (typeIndex >= context.numberSignatures) {
                         throw ParserException("Invalid import function index $typeIndex")
@@ -39,7 +39,7 @@ public class ImportSectionReader(
                 }
 
                 ExternalKind.TABLE -> {
-                    val elementType: WasmType = source.readType()
+                    val elementType = source.readType()
 
                     if (!elementType.isElementType()) {
                         throw ParserException("Imported table type is not AnyFunc.")
@@ -63,7 +63,7 @@ public class ImportSectionReader(
                 }
 
                 ExternalKind.GLOBAL -> {
-                    val globalType: WasmType = source.readType()
+                    val globalType = source.readType()
 
                     if (!globalType.isValueType()) {
                         throw ParserException("Invalid global type: %#$globalType")
@@ -96,7 +96,7 @@ public class ImportSectionReader(
     }
 
     private fun readExceptionType(source: WasmSource): Array<WasmType> {
-        val numberExceptionTypes: UInt = source.readVarUInt32()
+        val numberExceptionTypes = source.readVarUInt32()
 
         if (numberExceptionTypes > WasmBinary.MAX_EXCEPTION_TYPES) {
             throw ParserException("Number of exceptions types $numberExceptionTypes exceed the maximum of ${WasmBinary.MAX_EXCEPTIONS}")
@@ -104,7 +104,7 @@ public class ImportSectionReader(
 
         val exceptionTypes = Array(numberExceptionTypes.toInt()) { WasmType.NONE }
         for (exceptionIndex in 0u until numberExceptionTypes) {
-            val exceptionType: WasmType = source.readType()
+            val exceptionType = source.readType()
 
             if (!exceptionType.isValueType()) {
                 throw ParserException("Invalid exception type: %#$exceptionType")

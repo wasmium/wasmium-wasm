@@ -61,7 +61,7 @@ public class TypeSectionReader(
 
                 resultType = Array(resultCount.toInt()) { WasmType.NONE }
                 for (rtype in 0 until resultCount.toInt()) {
-                    val type: WasmType = source.readType()
+                    val type = source.readType()
 
                     if (!type.isValueType()) {
                         throw ParserException("Expected valid param value type but got: ${type.name}")

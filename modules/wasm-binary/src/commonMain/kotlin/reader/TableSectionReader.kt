@@ -22,7 +22,7 @@ public class TableSectionReader(
         for (index in 0u until context.numberTables) {
             val tableIndex = context.numberTableImports + index
 
-            val elementType: WasmType = source.readType()
+            val elementType = source.readType()
             if (elementType != WasmType.FUNC_REF) {
                 throw ParserException("Table type is not AnyFunc.")
             }

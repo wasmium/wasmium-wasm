@@ -1,22 +1,17 @@
 package org.wasmium.wasm.binary.writer
 
-import org.wasmium.wasm.binary.tree.WasmType
-import org.wasmium.wasm.binary.tree.sections.FunctionTypeNode
-import org.wasmium.wasm.binary.tree.sections.TypeSectionNode
-import org.wasmium.wasm.binary.visitors.TypeSectionAdapter
+import org.wasmium.wasm.binary.tree.sections.DataCountSectionNode
+import org.wasmium.wasm.binary.visitors.DataCountSectionAdapter
 
-public class TypeSectionWriter(private val context: WriterContext) : TypeSectionAdapter() {
+public class DataCountSectionWriter(private val context: WriterContext) : DataCountSectionAdapter() {
     init {
-        this.context.typeSection = TypeSectionNode()
+        this.context.dataCountSection = DataCountSectionNode()
     }
 
-    public override fun visitType(typeIndex: UInt, parameters: Array<WasmType>, results: Array<WasmType>) {
-        val functionType = FunctionTypeNode()
-        functionType.typeIndex = typeIndex
-        functionType.parameters = parameters
-        functionType.results = results
-
-        context.typeSection?.types?.add(functionType)
+    public override fun visitDataCount(count: UInt) {
+        val dataCountSection = DataCountSectionNode()
+        dataCountSection.dataCount = count
+        context.dataCountSection = dataCountSection
     }
 
     public override fun visitEnd() {

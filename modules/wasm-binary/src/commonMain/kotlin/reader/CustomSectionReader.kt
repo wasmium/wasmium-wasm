@@ -163,7 +163,7 @@ public class CustomSectionReader(
                                 context.messages.add("warning: Local function index out of order in name section, local subsection at index %$nameLocalIndex")
                             }
 
-                            val localName: String = source.readInlineString()
+                            val localName = source.readInlineString()
                             if (localName.isEmpty()) {
                                 context.messages.add("warning: Empty local name at index %$nameLocalIndex in function %$functionIndex")
                             }
@@ -225,7 +225,7 @@ public class CustomSectionReader(
         while (!source.exhausted()) {
             val linkingKind: LinkingKind = source.readLinkingKind()
 
-            val subsectionSize: UInt = source.readVarUInt32()
+            val subsectionSize = source.readVarUInt32()
             if (!source.require(subsectionSize)) {
                 throw ParserException("Linking subsection greater then input")
             }
@@ -234,17 +234,17 @@ public class CustomSectionReader(
 
             when (linkingKind) {
                 LinkingKind.SYMBOL_TABLE -> {
-                    val symbolCount: UInt = source.readVarUInt32()
+                    val symbolCount = source.readVarUInt32()
 
                     for (symbolIndex in 0u until symbolCount) {
                         val symbolType = source.readLinkingSymbolType()
-                        val flags: UInt = source.readUInt32()
+                        val flags = source.readUInt32()
 
                         linkingSectionVisitor.visitSymbol(symbolIndex, symbolType, flags)
 
                         when (symbolType) {
                             LinkingSymbolType.FUNCTION, LinkingSymbolType.GLOBAL -> {
-                                val index: UInt = source.readIndex()
+                                val index = source.readIndex()
                                 var name: String? = null
 
                                 if ((flags and WasmBinary.LINKING_SYMBOL_FLAG_UNDEFINED) == 0u) {
@@ -263,7 +263,7 @@ public class CustomSectionReader(
                                 var offset = 0u
                                 var size = 0u
 
-                                val name: String = source.readInlineString()
+                                val name = source.readInlineString()
 
                                 if ((flags and WasmBinary.LINKING_SYMBOL_FLAG_UNDEFINED) == 0u) {
                                     segment = source.readVarUInt32()
@@ -274,7 +274,7 @@ public class CustomSectionReader(
                             }
 
                             LinkingSymbolType.SECTION -> {
-                                val index: UInt = source.readIndex()
+                                val index = source.readIndex()
 
                                 linkingSectionVisitor.visitSectionSymbol(symbolIndex, flags, index)
                             }
@@ -283,12 +283,12 @@ public class CustomSectionReader(
                 }
 
                 LinkingKind.SEGMENT_INFO -> {
-                    val segmentCount: UInt = source.readVarUInt32()
+                    val segmentCount = source.readVarUInt32()
 
                     for (index in 0u until segmentCount) {
-                        val name: String = source.readInlineString()
-                        val alignment: UInt = source.readVarUInt32()
-                        val flags: UInt = source.readUInt32()
+                        val name = source.readInlineString()
+                        val alignment = source.readVarUInt32()
+                        val flags = source.readUInt32()
 
                         linkingSectionVisitor.visitSegment(name, alignment, flags)
                     }
@@ -322,15 +322,15 @@ public class CustomSectionReader(
 
             when (relocationKind) {
                 RelocationKind.FUNC_INDEX_LEB, RelocationKind.TABLE_INDEX_SLEB, RelocationKind.TABLE_INDEX_I32, RelocationKind.TYPE_INDEX_LEB, RelocationKind.GLOBAL_INDEX_LEB -> {
-                    val offset: UInt = source.readIndex()
-                    val index: UInt = source.readIndex()
+                    val offset = source.readIndex()
+                    val index = source.readIndex()
 
                     relocationVisitor.visitRelocation(relocationKind, offset, index)
                 }
 
                 RelocationKind.MEMORY_ADDRESS_LEB, RelocationKind.MEMORY_ADDRESS_SLEB, RelocationKind.MEMORY_ADDRESS_I32, RelocationKind.FUNCTION_OFFSET_I32, RelocationKind.SECTION_OFFSET_I32 -> {
-                    val offset: UInt = source.readIndex()
-                    val index: UInt = source.readIndex()
+                    val offset = source.readIndex()
+                    val index = source.readIndex()
                     val addend: Int = source.readVarInt32()
 
                     relocationVisitor.visitRelocation(relocationKind, offset, index, addend)
@@ -369,7 +369,7 @@ public class CustomSectionReader(
 
         val exceptionTypes = Array(numberExceptionTypes.toInt()) { WasmType.NONE }
         for (exceptionIndex in 0u until numberExceptionTypes) {
-            val exceptionType: WasmType = source.readType()
+            val exceptionType = source.readType()
 
             if (!exceptionType.isValueType()) {
                 throw ParserException("Invalid exception type: %#$exceptionType")
