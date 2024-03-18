@@ -244,4 +244,10 @@ public interface FunctionBodyVisitor {
     public fun visitXorInstruction(opcode: Opcode)
 
     public fun visitSimdAbsInstruction(opcode: Opcode)
+
+    public fun visitMemoryFillInstruction(opcode: Opcode, address: UInt, value: UInt, size: UInt)
+
+    public fun visitMemoryCopyInstruction(opcode: Opcode, target: UInt, offset: UInt, size: UInt)
+
+    public fun visitMemoryInitInstruction(opcode: Opcode, target: UInt, offset: UInt, size: UInt)
 }

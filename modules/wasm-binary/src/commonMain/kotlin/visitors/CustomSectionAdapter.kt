@@ -1,6 +1,6 @@
 package org.wasmium.wasm.binary.visitors
 
-public open class CustomSectionAdapter (private val delegate: CustomSectionVisitor? = null) : CustomSectionVisitor {
+public open class CustomSectionAdapter(private val delegate: CustomSectionVisitor? = null) : CustomSectionVisitor {
     public override fun visitSection(name: String, content: ByteArray) {
         delegate?.visitSection(name, content)
     }

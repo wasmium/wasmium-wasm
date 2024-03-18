@@ -505,4 +505,21 @@ public class FunctionBodyNode : FunctionBodyVisitor {
         instructions.add(SimdAbsInstruction(opcode))
     }
 
+    override fun visitMemoryFillInstruction(opcode: Opcode, address: UInt, value: UInt, size: UInt) {
+        // TODO("Not yet implemented")
+        instructions.add(NopInstruction())
+    }
+
+    override fun visitMemoryCopyInstruction(opcode: Opcode, target: UInt, offset: UInt, size: UInt) {
+        // TODO: Implement MemoryCopyInstruction
+        // instructions.add(MemoryCopyInstruction(opcode, address, value, size))
+        instructions.add(NopInstruction())
+    }
+
+    override fun visitMemoryInitInstruction(opcode: Opcode, target: UInt, offset: UInt, size: UInt) {
+        // TODO: Implement MemoryInitInstruction
+        // instructions.add(MemoryInitInstruction(opcode, address, value, size))
+        instructions.add(NopInstruction())
+    }
+
 }

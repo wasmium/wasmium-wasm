@@ -210,7 +210,7 @@ public class WasmSource(
         }
     }
 
-    public fun readString(): String {
+    public fun readInlineString(): String {
         val length = readVarUInt32()
 
         if (length > WasmBinary.MAX_STRING_SIZE) {

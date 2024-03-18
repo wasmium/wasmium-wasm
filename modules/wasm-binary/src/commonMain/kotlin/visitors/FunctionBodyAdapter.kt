@@ -221,6 +221,18 @@ public open class FunctionBodyAdapter(protected val delegate: FunctionBodyVisito
         delegate?.visitMemoryGrowInstruction(reserved)
     }
 
+    public override fun visitMemoryFillInstruction(opcode: Opcode, address: UInt, value: UInt, size: UInt) {
+        delegate?.visitMemoryFillInstruction(opcode, address, value, size)
+    }
+
+    override fun visitMemoryCopyInstruction(opcode: Opcode, target: UInt, offset: UInt, size: UInt) {
+        delegate?.visitMemoryCopyInstruction(opcode, target, offset, size)
+    }
+
+    override fun visitMemoryInitInstruction(opcode: Opcode, target: UInt, offset: UInt, size: UInt) {
+        delegate?.visitMemoryInitInstruction(opcode, target, offset, size)
+    }
+
     public override fun visitEqualZeroInstruction(opcode: Opcode) {
         delegate?.visitEqualZeroInstruction(opcode)
     }
