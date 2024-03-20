@@ -7,7 +7,7 @@ import org.wasmium.wasm.binary.visitors.FunctionSectionVisitor
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 public class FunctionSectionReader(
-    private val context: WasmBinaryContext,
+    private val context: ReaderContext,
 ) {
     public fun readFunctionSection(source: WasmSource, visitor: ModuleVisitor) {
         context.numberFunctions = source.readVarUInt32()

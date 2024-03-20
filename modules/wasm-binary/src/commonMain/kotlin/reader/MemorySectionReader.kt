@@ -8,7 +8,7 @@ import org.wasmium.wasm.binary.visitors.MemorySectionVisitor
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 public class MemorySectionReader(
-    private val context: WasmBinaryContext,
+    private val context: ReaderContext,
 ) {
     public fun readMemorySection(source: WasmSource, visitor: ModuleVisitor) {
         context.numberMemories = source.readVarUInt32()

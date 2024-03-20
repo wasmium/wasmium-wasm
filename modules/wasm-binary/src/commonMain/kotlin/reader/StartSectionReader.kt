@@ -6,7 +6,7 @@ import org.wasmium.wasm.binary.visitors.ModuleVisitor
 import org.wasmium.wasm.binary.visitors.StartSectionVisitor
 
 public class StartSectionReader(
-    private val context: WasmBinaryContext,
+    private val context: ReaderContext,
 ) {
     public fun readStartSection(source: WasmSource, visitor: ModuleVisitor) {
         val functionIndex = source.readIndex()

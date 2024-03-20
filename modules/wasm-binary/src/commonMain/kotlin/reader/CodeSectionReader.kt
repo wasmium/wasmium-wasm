@@ -6,7 +6,7 @@ import org.wasmium.wasm.binary.WasmSource
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 public class CodeSectionReader(
-    private val context: WasmBinaryContext,
+    private val context: ReaderContext,
     private val functionBodyReader: FunctionBodyReader = FunctionBodyReader(context)
 ) {
     public fun readCodeSection(source: WasmSource, payloadSize: UInt, visitor: ModuleVisitor) {

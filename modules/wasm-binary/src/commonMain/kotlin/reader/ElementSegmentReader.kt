@@ -6,7 +6,7 @@ import org.wasmium.wasm.binary.WasmSource
 import org.wasmium.wasm.binary.visitors.ElementSectionVisitor
 
 public class ElementSegmentReader(
-    private val context: WasmBinaryContext,
+    private val context: ReaderContext,
     private val initializerExpressionReader: InitializerExpressionReader = InitializerExpressionReader(context),
 ) {
     public fun readElementSegment(source: WasmSource, index: UInt, elementVisitor: ElementSectionVisitor) {

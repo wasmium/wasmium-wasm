@@ -8,7 +8,7 @@ import org.wasmium.wasm.binary.visitors.ModuleVisitor
 import org.wasmium.wasm.binary.visitors.TypeSectionVisitor
 
 public class TypeSectionReader(
-    private val context: WasmBinaryContext,
+    private val context: ReaderContext,
 ) {
     public fun readTypeSection(source: WasmSource, visitor: ModuleVisitor) {
         context.numberSignatures = source.readVarUInt32()

@@ -1,8 +1,25 @@
-package org.wasmium.wasm.binary.tree.sections
+package org.wasmium.wasm.binary.tree
 
 import org.wasmium.wasm.binary.WasmBinary
-import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.SectionKind.*
+import org.wasmium.wasm.binary.tree.sections.CodeSectionNode
+import org.wasmium.wasm.binary.tree.sections.CustomSectionNode
+import org.wasmium.wasm.binary.tree.sections.DataCountSectionNode
+import org.wasmium.wasm.binary.tree.sections.DataSectionNode
+import org.wasmium.wasm.binary.tree.sections.ElementSectionNode
+import org.wasmium.wasm.binary.tree.sections.ExceptionSectionNode
+import org.wasmium.wasm.binary.tree.sections.ExportSectionNode
+import org.wasmium.wasm.binary.tree.sections.FunctionSectionNode
+import org.wasmium.wasm.binary.tree.sections.GlobalSectionNode
+import org.wasmium.wasm.binary.tree.sections.ImportSectionNode
+import org.wasmium.wasm.binary.tree.sections.LinkingSectionNode
+import org.wasmium.wasm.binary.tree.sections.MemorySectionNode
+import org.wasmium.wasm.binary.tree.sections.NameSectionNode
+import org.wasmium.wasm.binary.tree.sections.RelocationSectionNode
+import org.wasmium.wasm.binary.tree.sections.SectionNode
+import org.wasmium.wasm.binary.tree.sections.StartSectionNode
+import org.wasmium.wasm.binary.tree.sections.TableSectionNode
+import org.wasmium.wasm.binary.tree.sections.TypeSectionNode
 import org.wasmium.wasm.binary.visitors.CodeSectionVisitor
 import org.wasmium.wasm.binary.visitors.CustomSectionVisitor
 import org.wasmium.wasm.binary.visitors.DataCountSectionVisitor

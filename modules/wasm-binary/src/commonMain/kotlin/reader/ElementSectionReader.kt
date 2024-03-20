@@ -7,7 +7,7 @@ import org.wasmium.wasm.binary.visitors.ElementSectionVisitor
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 public class ElementSectionReader(
-    private val context: WasmBinaryContext,
+    private val context: ReaderContext,
     private val elementSegmentReader: ElementSegmentReader = ElementSegmentReader(context),
 ) {
     public fun readElementSection(source: WasmSource, visitor: ModuleVisitor) {

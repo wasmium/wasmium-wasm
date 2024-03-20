@@ -11,7 +11,7 @@ import org.wasmium.wasm.binary.tree.ExternalKind.TABLE
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 public class ExportSectionReader(
-    private val context: WasmBinaryContext,
+    private val context: ReaderContext,
 ) {
     public fun readExportSection(source: WasmSource, visitor: ModuleVisitor) {
         context.numberExports = source.readVarUInt32()

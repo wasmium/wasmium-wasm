@@ -8,7 +8,7 @@ import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.visitors.InitializerExpressionVisitor
 
 public class InitializerExpressionReader(
-    private val context: WasmBinaryContext,
+    private val context: ReaderContext,
 ) {
     public fun readInitExpression(source: WasmSource, visitor: InitializerExpressionVisitor, requireUInt: Boolean) {
         var opcode = source.readOpcode()

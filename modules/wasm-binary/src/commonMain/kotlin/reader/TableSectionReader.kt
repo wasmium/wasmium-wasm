@@ -9,7 +9,7 @@ import org.wasmium.wasm.binary.visitors.ModuleVisitor
 import org.wasmium.wasm.binary.visitors.TableSectionVisitor
 
 public class TableSectionReader(
-    private val context: WasmBinaryContext,
+    private val context: ReaderContext,
 ) {
     public fun readTableSection(source: WasmSource, visitor: ModuleVisitor) {
         context.numberTables = source.readVarUInt32()

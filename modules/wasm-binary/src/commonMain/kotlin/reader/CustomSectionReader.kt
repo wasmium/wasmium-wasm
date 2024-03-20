@@ -16,7 +16,7 @@ import org.wasmium.wasm.binary.visitors.NameSectionVisitor
 import org.wasmium.wasm.binary.visitors.RelocationSectionVisitor
 
 public class CustomSectionReader(
-    private val context: WasmBinaryContext,
+    private val context: ReaderContext,
 ) {
     public fun readCustomSection(source: WasmSource, payloadSize: UInt, visitor: ModuleVisitor) {
         val startPosition = source.position

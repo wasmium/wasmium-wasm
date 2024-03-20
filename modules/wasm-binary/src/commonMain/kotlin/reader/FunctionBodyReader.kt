@@ -12,7 +12,7 @@ import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.FunctionBodyVisitor
 
 public class FunctionBodyReader(
-    private val context: WasmBinaryContext,
+    private val context: ReaderContext,
 ) {
     public fun readFunctionBody(source: WasmSource, bodySize: UInt, functionBodyVisitor: FunctionBodyVisitor) {
         val endBodyPosition = source.position + bodySize

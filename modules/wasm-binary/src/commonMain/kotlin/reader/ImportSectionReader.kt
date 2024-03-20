@@ -10,7 +10,7 @@ import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 public class ImportSectionReader(
-    private val context: WasmBinaryContext,
+    private val context: ReaderContext,
 ) {
     public fun readImportSection(source: WasmSource, visitor: ModuleVisitor) {
         context.numberImports = source.readVarUInt32()

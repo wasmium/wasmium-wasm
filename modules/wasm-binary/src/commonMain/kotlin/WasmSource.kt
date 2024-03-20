@@ -109,11 +109,11 @@ public class WasmSource(
         } while (current and 0x80 == 0x80 && count <= maxCount)
 
         if (current and 0x80 == 0x80) {
-            throw Exception("Overflow: Number too large")
+            throw ParserException("Overflow: Number too large")
         }
 
         if (current != 0 && count > (count * 8) / 7) {
-            throw Exception("Underflow: Too many bytes for value")
+            throw ParserException("Underflow: Too many bytes for value")
         }
 
         // sign extend if appropriate
@@ -136,11 +136,11 @@ public class WasmSource(
         } while (current and 0x80 == 0x80 && count <= maxCount)
 
         if (current and 0x80 == 0x80) {
-            throw Exception("Overflow: Number too large")
+            throw ParserException("Overflow: Number too large")
         }
 
         if (current != 0 && count > (count * 8) / 7) {
-            throw Exception("Underflow: Too many bytes for value")
+            throw ParserException("Underflow: Too many bytes for value")
         }
 
         // sign extend if appropriate

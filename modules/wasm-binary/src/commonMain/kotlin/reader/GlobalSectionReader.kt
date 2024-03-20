@@ -7,7 +7,7 @@ import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 public class GlobalSectionReader(
-    private val context: WasmBinaryContext,
+    private val context: ReaderContext,
     private val globalVariableReader: GlobalVariableReader = GlobalVariableReader(context),
 ) {
     public fun readGlobalSection(source: WasmSource, visitor: ModuleVisitor) {

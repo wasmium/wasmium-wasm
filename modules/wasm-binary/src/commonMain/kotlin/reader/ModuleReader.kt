@@ -21,7 +21,7 @@ import org.wasmium.wasm.binary.tree.WasmVersion
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 public class ModuleReader(
-    private val context: WasmBinaryContext,
+    private val context: ReaderContext,
     private val codeSectionReader: CodeSectionReader = CodeSectionReader(context),
     private val dataSectionReader: DataSectionReader = DataSectionReader(context),
     private val dataCountSectionReader: DataCountSectionReader = DataCountSectionReader(context),

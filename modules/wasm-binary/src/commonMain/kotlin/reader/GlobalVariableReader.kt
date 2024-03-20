@@ -5,7 +5,7 @@ import org.wasmium.wasm.binary.WasmSource
 import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
 
 public class GlobalVariableReader(
-    private val context: WasmBinaryContext,
+    private val context: ReaderContext,
     private val initializerExpressionReader: InitializerExpressionReader = InitializerExpressionReader(context),
 ) {
     public fun readGlobalVariable(source: WasmSource, index: UInt, globalVisitor: GlobalSectionVisitor) {

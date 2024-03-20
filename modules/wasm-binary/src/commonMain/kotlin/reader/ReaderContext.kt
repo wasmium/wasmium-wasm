@@ -1,6 +1,6 @@
 package org.wasmium.wasm.binary.reader
 
-public class WasmBinaryContext(
+public class ReaderContext(
     public val options: ReaderOptions,
 ) {
     /** Total number of imported functions. */
