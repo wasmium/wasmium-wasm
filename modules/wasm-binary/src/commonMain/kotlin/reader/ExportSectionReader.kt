@@ -82,9 +82,9 @@ public class ExportSectionReader(
                     throw IllegalArgumentException()
                 }
             }
-            exportVisitor.visitExport(exportIndex, externalKind, itemIndex, name)
+            exportVisitor?.visitExport(exportIndex, externalKind, itemIndex, name)
         }
 
-        exportVisitor.visitEnd()
+        exportVisitor?.visitEnd()
     }
 }

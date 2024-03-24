@@ -3,7 +3,6 @@ package org.wasmium.wasm.binary.visitors
 import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.tree.WasmType
 
-
 public interface ImportSectionVisitor {
     public fun visitFunction(importIndex: UInt, moduleName: String, fieldName: String, functionIndex: UInt, typeIndex: UInt)
 

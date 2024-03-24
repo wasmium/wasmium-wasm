@@ -14,11 +14,11 @@ import org.wasmium.wasm.binary.visitors.FunctionBodyVisitor
 public class FunctionBodyReader(
     private val context: ReaderContext,
 ) {
-    public fun readFunctionBody(source: WasmSource, bodySize: UInt, functionBodyVisitor: FunctionBodyVisitor) {
+    public fun readFunctionBody(source: WasmSource, bodySize: UInt, functionBodyVisitor: FunctionBodyVisitor?) {
         val endBodyPosition = source.position + bodySize
 
         var seenEndOpcode = false
-        functionBodyVisitor.visitCode()
+        functionBodyVisitor?.visitCode()
 
         var numberOfInstructions = 0u
         while (endBodyPosition - source.position > 0u) {
@@ -29,11 +29,11 @@ public class FunctionBodyReader(
 
             when (opcode) {
                 UNREACHABLE -> {
-                    functionBodyVisitor.visitUnreachableInstruction()
+                    functionBodyVisitor?.visitUnreachableInstruction()
                 }
 
                 NOP -> {
-                    functionBodyVisitor.visitNopInstruction()
+                    functionBodyVisitor?.visitNopInstruction()
                 }
 
                 BLOCK -> {
@@ -44,7 +44,7 @@ public class FunctionBodyReader(
                     }
 
                     val blockType = if (type != WasmType.NONE) arrayOf(type) else arrayOf()
-                    functionBodyVisitor.visitBlockInstruction(blockType)
+                    functionBodyVisitor?.visitBlockInstruction(blockType)
                 }
 
                 LOOP -> {
@@ -55,7 +55,7 @@ public class FunctionBodyReader(
                     }
 
                     val blockType = if (type != WasmType.NONE) arrayOf(type) else arrayOf()
-                    functionBodyVisitor.visitLoopInstruction(blockType)
+                    functionBodyVisitor?.visitLoopInstruction(blockType)
                 }
 
                 IF -> {
@@ -66,11 +66,11 @@ public class FunctionBodyReader(
                     }
 
                     val blockType = if (type != WasmType.NONE) arrayOf(type) else arrayOf()
-                    functionBodyVisitor.visitIfInstruction(blockType)
+                    functionBodyVisitor?.visitIfInstruction(blockType)
                 }
 
                 ELSE -> {
-                    functionBodyVisitor.visitElseInstruction()
+                    functionBodyVisitor?.visitElseInstruction()
                 }
 
                 TRY -> {
@@ -85,7 +85,7 @@ public class FunctionBodyReader(
 
                     val blockType = if (type != WasmType.NONE) arrayOf(type) else arrayOf()
 
-                    functionBodyVisitor.visitTryInstruction(blockType)
+                    functionBodyVisitor?.visitTryInstruction(blockType)
                 }
 
                 CATCH -> {
@@ -93,7 +93,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid catch code: exceptions not enabled.")
                     }
 
-                    functionBodyVisitor.visitCatchInstruction()
+                    functionBodyVisitor?.visitCatchInstruction()
                 }
 
                 THROW -> {
@@ -106,7 +106,7 @@ public class FunctionBodyReader(
                         throw ParserException("invalid call exception index: %$exceptionIndex")
                     }
 
-                    functionBodyVisitor.visitThrowInstruction(exceptionIndex)
+                    functionBodyVisitor?.visitThrowInstruction(exceptionIndex)
                 }
 
                 RETHROW -> {
@@ -114,7 +114,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid rethrow code: exceptions not enabled.")
                     }
 
-                    functionBodyVisitor.visitRethrowInstruction()
+                    functionBodyVisitor?.visitRethrowInstruction()
                 }
 
                 THROW_REF -> {
@@ -122,28 +122,28 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid catch code: exceptions not enabled.")
                     }
 
-                    functionBodyVisitor.visitThrowRefInstruction()
+                    functionBodyVisitor?.visitThrowRefInstruction()
                 }
 
                 END -> {
                     if (endBodyPosition == source.position) {
                         seenEndOpcode = true
-                        functionBodyVisitor.visitEndFunctionInstruction()
+                        functionBodyVisitor?.visitEndFunctionInstruction()
                     } else {
-                        functionBodyVisitor.visitEndInstruction()
+                        functionBodyVisitor?.visitEndInstruction()
                     }
                 }
 
                 BR -> {
                     val depth = source.readIndex()
 
-                    functionBodyVisitor.visitBrInstruction(depth)
+                    functionBodyVisitor?.visitBrInstruction(depth)
                 }
 
                 BR_IF -> {
                     val depth = source.readIndex()
 
-                    functionBodyVisitor.visitBrIfInstruction(depth)
+                    functionBodyVisitor?.visitBrIfInstruction(depth)
                 }
 
                 BR_TABLE -> {
@@ -158,11 +158,11 @@ public class FunctionBodyReader(
 
                     val defaultTarget = source.readIndex()
 
-                    functionBodyVisitor.visitBrTableInstruction(targets, defaultTarget)
+                    functionBodyVisitor?.visitBrTableInstruction(targets, defaultTarget)
                 }
 
                 RETURN -> {
-                    functionBodyVisitor.visitReturnInstruction()
+                    functionBodyVisitor?.visitReturnInstruction()
                 }
 
                 CALL -> {
@@ -172,7 +172,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid call function index: %$funcIndex")
                     }
 
-                    functionBodyVisitor.visitCallInstruction(funcIndex)
+                    functionBodyVisitor?.visitCallInstruction(funcIndex)
                 }
 
                 CALL_INDIRECT -> {
@@ -186,45 +186,45 @@ public class FunctionBodyReader(
                         throw ParserException("Call_indirect reserved value must be 0")
                     }
 
-                    functionBodyVisitor.visitCallIndirectInstruction(signatureIndex, reserved = false)
+                    functionBodyVisitor?.visitCallIndirectInstruction(signatureIndex, reserved = false)
                 }
 
                 DROP -> {
-                    functionBodyVisitor.visitDropInstruction()
+                    functionBodyVisitor?.visitDropInstruction()
                 }
 
                 SELECT -> {
-                    functionBodyVisitor.visitSelectInstruction()
+                    functionBodyVisitor?.visitSelectInstruction()
                 }
 
                 GET_GLOBAL -> {
                     val globalIndex = source.readIndex()
 
-                    functionBodyVisitor.visitGetGlobalInstruction(globalIndex)
+                    functionBodyVisitor?.visitGetGlobalInstruction(globalIndex)
                 }
 
                 SET_LOCAL -> {
                     val localIndex = source.readIndex()
 
-                    functionBodyVisitor.visitSetLocalInstruction(localIndex)
+                    functionBodyVisitor?.visitSetLocalInstruction(localIndex)
                 }
 
                 TEE_LOCAL -> {
                     val localIndex = source.readIndex()
 
-                    functionBodyVisitor.visitTeeLocalInstruction(localIndex)
+                    functionBodyVisitor?.visitTeeLocalInstruction(localIndex)
                 }
 
                 GET_LOCAL -> {
                     val localIndex = source.readIndex()
 
-                    functionBodyVisitor.visitGetLocalInstruction(localIndex)
+                    functionBodyVisitor?.visitGetLocalInstruction(localIndex)
                 }
 
                 SET_GLOBAL -> {
                     val globalIndex = source.readIndex()
 
-                    functionBodyVisitor.visitSetGlobalInstruction(globalIndex)
+                    functionBodyVisitor?.visitSetGlobalInstruction(globalIndex)
                 }
 
                 I32_LOAD,
@@ -244,7 +244,7 @@ public class FunctionBodyReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    functionBodyVisitor.visitLoadInstruction(opcode, alignment, offset)
+                    functionBodyVisitor?.visitLoadInstruction(opcode, alignment, offset)
                 }
 
                 I32_STORE8,
@@ -259,7 +259,7 @@ public class FunctionBodyReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    functionBodyVisitor.visitStoreInstruction(opcode, alignment, offset)
+                    functionBodyVisitor?.visitStoreInstruction(opcode, alignment, offset)
                 }
 
                 MEMORY_SIZE -> {
@@ -267,7 +267,7 @@ public class FunctionBodyReader(
                     if (reserved != 0u) {
                         throw ParserException("MemorySize reserved value must be 0.")
                     }
-                    functionBodyVisitor.visitMemorySizeInstruction(reserved = false)
+                    functionBodyVisitor?.visitMemorySizeInstruction(reserved = false)
                 }
 
                 MEMORY_GROW -> {
@@ -276,475 +276,475 @@ public class FunctionBodyReader(
                         throw ParserException("MemoryGrow reserved value must be 0")
                     }
 
-                    functionBodyVisitor.visitMemoryGrowInstruction(reserved = false)
+                    functionBodyVisitor?.visitMemoryGrowInstruction(reserved = false)
                 }
 
                 I32_CONST -> {
                     val value = source.readVarInt32()
 
-                    functionBodyVisitor.visitConstInt32Instruction(value)
+                    functionBodyVisitor?.visitConstInt32Instruction(value)
                 }
 
                 I64_CONST -> {
                     val value = source.readVarInt64()
 
-                    functionBodyVisitor.visitConstInt64Instruction(value)
+                    functionBodyVisitor?.visitConstInt64Instruction(value)
                 }
 
                 F32_CONST -> {
                     val value = source.readFloat32()
 
-                    functionBodyVisitor.visitConstFloat32Instruction(value)
+                    functionBodyVisitor?.visitConstFloat32Instruction(value)
                 }
 
                 F64_CONST -> {
                     val value = source.readFloat64()
 
-                    functionBodyVisitor.visitConstFloat64Instruction(value)
+                    functionBodyVisitor?.visitConstFloat64Instruction(value)
                 }
 
                 I32_EQZ -> {
-                    functionBodyVisitor.visitEqualZeroInstruction(opcode)
+                    functionBodyVisitor?.visitEqualZeroInstruction(opcode)
                 }
 
                 I32_EQ -> {
-                    functionBodyVisitor.visitEqualInstruction(opcode)
+                    functionBodyVisitor?.visitEqualInstruction(opcode)
                 }
 
                 I32_NE -> {
-                    functionBodyVisitor.visitNotEqualInstruction(opcode)
+                    functionBodyVisitor?.visitNotEqualInstruction(opcode)
                 }
 
                 I32_LT_S -> {
-                    functionBodyVisitor.visitLessThanInstruction(opcode)
+                    functionBodyVisitor?.visitLessThanInstruction(opcode)
                 }
 
                 I32_LE_S -> {
-                    functionBodyVisitor.visitLessEqualInstruction(opcode)
+                    functionBodyVisitor?.visitLessEqualInstruction(opcode)
                 }
 
                 I32_LT_U -> {
-                    functionBodyVisitor.visitLessThanInstruction(opcode)
+                    functionBodyVisitor?.visitLessThanInstruction(opcode)
                 }
 
                 I32_LE_U -> {
-                    functionBodyVisitor.visitLessEqualInstruction(opcode)
+                    functionBodyVisitor?.visitLessEqualInstruction(opcode)
                 }
 
                 I32_GT_S -> {
-                    functionBodyVisitor.visitGreaterThanInstruction(opcode)
+                    functionBodyVisitor?.visitGreaterThanInstruction(opcode)
                 }
 
                 I32_GE_S -> {
-                    functionBodyVisitor.visitGreaterEqualInstruction(opcode)
+                    functionBodyVisitor?.visitGreaterEqualInstruction(opcode)
                 }
 
                 I32_GT_U -> {
-                    functionBodyVisitor.visitGreaterThanInstruction(opcode)
+                    functionBodyVisitor?.visitGreaterThanInstruction(opcode)
                 }
 
                 I32_GE_U -> {
-                    functionBodyVisitor.visitGreaterEqualInstruction(opcode)
+                    functionBodyVisitor?.visitGreaterEqualInstruction(opcode)
                 }
 
                 I64_EQZ -> {
-                    functionBodyVisitor.visitEqualZeroInstruction(opcode)
+                    functionBodyVisitor?.visitEqualZeroInstruction(opcode)
                 }
 
                 I64_EQ -> {
-                    functionBodyVisitor.visitEqualInstruction(opcode)
+                    functionBodyVisitor?.visitEqualInstruction(opcode)
                 }
 
                 I64_NE -> {
-                    functionBodyVisitor.visitNotEqualInstruction(opcode)
+                    functionBodyVisitor?.visitNotEqualInstruction(opcode)
                 }
 
                 I64_LT_S -> {
-                    functionBodyVisitor.visitLessThanInstruction(opcode)
+                    functionBodyVisitor?.visitLessThanInstruction(opcode)
                 }
 
                 I64_LE_S -> {
-                    functionBodyVisitor.visitLessEqualInstruction(opcode)
+                    functionBodyVisitor?.visitLessEqualInstruction(opcode)
                 }
 
                 I64_LT_U -> {
-                    functionBodyVisitor.visitLessThanInstruction(opcode)
+                    functionBodyVisitor?.visitLessThanInstruction(opcode)
                 }
 
                 I64_LE_U -> {
-                    functionBodyVisitor.visitLessEqualInstruction(opcode)
+                    functionBodyVisitor?.visitLessEqualInstruction(opcode)
                 }
 
                 I64_GT_S -> {
-                    functionBodyVisitor.visitGreaterThanInstruction(opcode)
+                    functionBodyVisitor?.visitGreaterThanInstruction(opcode)
                 }
 
                 I64_GE_S -> {
-                    functionBodyVisitor.visitGreaterEqualInstruction(opcode)
+                    functionBodyVisitor?.visitGreaterEqualInstruction(opcode)
                 }
 
                 I64_GT_U -> {
-                    functionBodyVisitor.visitGreaterThanInstruction(opcode)
+                    functionBodyVisitor?.visitGreaterThanInstruction(opcode)
                 }
 
                 I64_GE_U -> {
-                    functionBodyVisitor.visitGreaterEqualInstruction(opcode)
+                    functionBodyVisitor?.visitGreaterEqualInstruction(opcode)
                 }
 
                 F32_EQ -> {
-                    functionBodyVisitor.visitEqualInstruction(opcode)
+                    functionBodyVisitor?.visitEqualInstruction(opcode)
                 }
 
                 F32_NE -> {
-                    functionBodyVisitor.visitNotEqualInstruction(opcode)
+                    functionBodyVisitor?.visitNotEqualInstruction(opcode)
                 }
 
                 F32_LT -> {
-                    functionBodyVisitor.visitLessThanInstruction(opcode)
+                    functionBodyVisitor?.visitLessThanInstruction(opcode)
                 }
 
                 F32_LE -> {
-                    functionBodyVisitor.visitLessEqualInstruction(opcode)
+                    functionBodyVisitor?.visitLessEqualInstruction(opcode)
                 }
 
                 F32_GT -> {
-                    functionBodyVisitor.visitGreaterThanInstruction(opcode)
+                    functionBodyVisitor?.visitGreaterThanInstruction(opcode)
                 }
 
                 F32_GE -> {
-                    functionBodyVisitor.visitGreaterEqualInstruction(opcode)
+                    functionBodyVisitor?.visitGreaterEqualInstruction(opcode)
                 }
 
                 F64_EQ -> {
-                    functionBodyVisitor.visitEqualInstruction(opcode)
+                    functionBodyVisitor?.visitEqualInstruction(opcode)
                 }
 
                 F64_NE -> {
-                    functionBodyVisitor.visitNotEqualInstruction(opcode)
+                    functionBodyVisitor?.visitNotEqualInstruction(opcode)
                 }
 
                 F64_LT -> {
-                    functionBodyVisitor.visitLessThanInstruction(opcode)
+                    functionBodyVisitor?.visitLessThanInstruction(opcode)
                 }
 
                 F64_LE -> {
-                    functionBodyVisitor.visitLessEqualInstruction(opcode)
+                    functionBodyVisitor?.visitLessEqualInstruction(opcode)
                 }
 
                 F64_GT -> {
-                    functionBodyVisitor.visitGreaterThanInstruction(opcode)
+                    functionBodyVisitor?.visitGreaterThanInstruction(opcode)
                 }
 
                 F64_GE -> {
-                    functionBodyVisitor.visitCompareInstruction(opcode)
+                    functionBodyVisitor?.visitCompareInstruction(opcode)
                 }
 
                 I32_CLZ -> {
-                    functionBodyVisitor.visitCountLeadingZerosInstruction(opcode)
+                    functionBodyVisitor?.visitCountLeadingZerosInstruction(opcode)
                 }
 
                 I32_CTZ -> {
-                    functionBodyVisitor.visitCountTrailingZerosInstruction(opcode)
+                    functionBodyVisitor?.visitCountTrailingZerosInstruction(opcode)
                 }
 
                 I32_POPCNT -> {
-                    functionBodyVisitor.visitPopulationCountInstruction(opcode)
+                    functionBodyVisitor?.visitPopulationCountInstruction(opcode)
                 }
 
                 I32_ADD -> {
-                    functionBodyVisitor.visitAddInstruction(opcode)
+                    functionBodyVisitor?.visitAddInstruction(opcode)
                 }
 
                 I32_SUB -> {
-                    functionBodyVisitor.visitSubtractInstruction(opcode)
+                    functionBodyVisitor?.visitSubtractInstruction(opcode)
                 }
 
                 I32_MUL -> {
-                    functionBodyVisitor.visitMultiplyInstruction(opcode)
+                    functionBodyVisitor?.visitMultiplyInstruction(opcode)
                 }
 
                 I32_DIV_S -> {
-                    functionBodyVisitor.visitDivideInstruction(opcode)
+                    functionBodyVisitor?.visitDivideInstruction(opcode)
                 }
 
                 I32_DIV_U -> {
-                    functionBodyVisitor.visitDivideInstruction(opcode)
+                    functionBodyVisitor?.visitDivideInstruction(opcode)
                 }
 
                 I32_REM_S -> {
-                    functionBodyVisitor.visitRemainderInstruction(opcode)
+                    functionBodyVisitor?.visitRemainderInstruction(opcode)
                 }
 
                 I32_REM_U -> {
-                    functionBodyVisitor.visitRemainderInstruction(opcode)
+                    functionBodyVisitor?.visitRemainderInstruction(opcode)
                 }
 
                 I32_AND -> {
-                    functionBodyVisitor.visitAndInstruction(opcode)
+                    functionBodyVisitor?.visitAndInstruction(opcode)
                 }
 
                 I32_OR -> {
-                    functionBodyVisitor.visitOrInstruction(opcode)
+                    functionBodyVisitor?.visitOrInstruction(opcode)
                 }
 
                 I32_XOR -> {
-                    functionBodyVisitor.visitXorInstruction(opcode)
+                    functionBodyVisitor?.visitXorInstruction(opcode)
                 }
 
                 I32_SHL -> {
-                    functionBodyVisitor.visitShiftLeftInstruction(opcode)
+                    functionBodyVisitor?.visitShiftLeftInstruction(opcode)
                 }
 
                 I32_SHR_U -> {
-                    functionBodyVisitor.visitShiftLeftInstruction(opcode)
+                    functionBodyVisitor?.visitShiftLeftInstruction(opcode)
                 }
 
                 I32_SHR_S -> {
-                    functionBodyVisitor.visitShiftLeftInstruction(opcode)
+                    functionBodyVisitor?.visitShiftLeftInstruction(opcode)
                 }
 
                 I32_ROTL -> {
-                    functionBodyVisitor.visitRotateLeftInstruction(opcode)
+                    functionBodyVisitor?.visitRotateLeftInstruction(opcode)
                 }
 
                 I32_ROTR -> {
-                    functionBodyVisitor.visitRotateRightInstruction(opcode)
+                    functionBodyVisitor?.visitRotateRightInstruction(opcode)
                 }
 
                 I64_CLZ -> {
-                    functionBodyVisitor.visitCountLeadingZerosInstruction(opcode)
+                    functionBodyVisitor?.visitCountLeadingZerosInstruction(opcode)
                 }
 
                 I64_CTZ -> {
-                    functionBodyVisitor.visitCountTrailingZerosInstruction(opcode)
+                    functionBodyVisitor?.visitCountTrailingZerosInstruction(opcode)
                 }
 
                 I64_POPCNT -> {
-                    functionBodyVisitor.visitPopulationCountInstruction(opcode)
+                    functionBodyVisitor?.visitPopulationCountInstruction(opcode)
                 }
 
                 I64_ADD -> {
-                    functionBodyVisitor.visitAddInstruction(opcode)
+                    functionBodyVisitor?.visitAddInstruction(opcode)
                 }
 
                 I64_SUB -> {
-                    functionBodyVisitor.visitSubtractInstruction(opcode)
+                    functionBodyVisitor?.visitSubtractInstruction(opcode)
                 }
 
                 I64_MUL -> {
-                    functionBodyVisitor.visitMultiplyInstruction(opcode)
+                    functionBodyVisitor?.visitMultiplyInstruction(opcode)
                 }
 
                 I64_DIV_S -> {
-                    functionBodyVisitor.visitDivideInstruction(opcode)
+                    functionBodyVisitor?.visitDivideInstruction(opcode)
                 }
 
                 I64_DIV_U -> {
-                    functionBodyVisitor.visitDivideInstruction(opcode)
+                    functionBodyVisitor?.visitDivideInstruction(opcode)
                 }
 
                 I64_REM_S -> {
-                    functionBodyVisitor.visitRemainderInstruction(opcode)
+                    functionBodyVisitor?.visitRemainderInstruction(opcode)
                 }
 
                 I64_REM_U -> {
-                    functionBodyVisitor.visitRemainderInstruction(opcode)
+                    functionBodyVisitor?.visitRemainderInstruction(opcode)
                 }
 
                 I64_AND -> {
-                    functionBodyVisitor.visitAndInstruction(opcode)
+                    functionBodyVisitor?.visitAndInstruction(opcode)
                 }
 
                 I64_OR -> {
-                    functionBodyVisitor.visitOrInstruction(opcode)
+                    functionBodyVisitor?.visitOrInstruction(opcode)
                 }
 
                 I64_XOR -> {
-                    functionBodyVisitor.visitXorInstruction(opcode)
+                    functionBodyVisitor?.visitXorInstruction(opcode)
                 }
 
                 I64_SHL -> {
-                    functionBodyVisitor.visitShiftLeftInstruction(opcode)
+                    functionBodyVisitor?.visitShiftLeftInstruction(opcode)
                 }
 
                 I64_SHR_U -> {
-                    functionBodyVisitor.visitShiftLeftInstruction(opcode)
+                    functionBodyVisitor?.visitShiftLeftInstruction(opcode)
                 }
 
                 I64_SHR_S -> {
-                    functionBodyVisitor.visitShiftLeftInstruction(opcode)
+                    functionBodyVisitor?.visitShiftLeftInstruction(opcode)
                 }
 
                 I64_ROTL -> {
-                    functionBodyVisitor.visitRotateLeftInstruction(opcode)
+                    functionBodyVisitor?.visitRotateLeftInstruction(opcode)
                 }
 
                 I64_ROTR -> {
-                    functionBodyVisitor.visitRotateRightInstruction(opcode)
+                    functionBodyVisitor?.visitRotateRightInstruction(opcode)
                 }
 
                 F32_ABS -> {
-                    functionBodyVisitor.visitAbsoluteInstruction(opcode)
+                    functionBodyVisitor?.visitAbsoluteInstruction(opcode)
                 }
 
                 F32_NEG -> {
-                    functionBodyVisitor.visitNegativeInstruction(opcode)
+                    functionBodyVisitor?.visitNegativeInstruction(opcode)
                 }
 
                 F32_CEIL -> {
-                    functionBodyVisitor.visitCeilingInstruction(opcode)
+                    functionBodyVisitor?.visitCeilingInstruction(opcode)
                 }
 
                 F32_FLOOR -> {
-                    functionBodyVisitor.visitFloorInstruction(opcode)
+                    functionBodyVisitor?.visitFloorInstruction(opcode)
                 }
 
                 F32_TRUNC -> {
-                    functionBodyVisitor.visitTruncateInstruction(opcode)
+                    functionBodyVisitor?.visitTruncateInstruction(opcode)
                 }
 
                 F32_NEAREST -> {
-                    functionBodyVisitor.visitNearestInstruction(opcode)
+                    functionBodyVisitor?.visitNearestInstruction(opcode)
                 }
 
                 F32_SQRT -> {
-                    functionBodyVisitor.visitSqrtInstruction(opcode)
+                    functionBodyVisitor?.visitSqrtInstruction(opcode)
                 }
 
                 F32_ADD -> {
-                    functionBodyVisitor.visitAddInstruction(opcode)
+                    functionBodyVisitor?.visitAddInstruction(opcode)
                 }
 
                 F32_SUB -> {
-                    functionBodyVisitor.visitSubtractInstruction(opcode)
+                    functionBodyVisitor?.visitSubtractInstruction(opcode)
                 }
 
                 F32_MUL -> {
-                    functionBodyVisitor.visitMultiplyInstruction(opcode)
+                    functionBodyVisitor?.visitMultiplyInstruction(opcode)
                 }
 
                 F32_DIV -> {
-                    functionBodyVisitor.visitDivideInstruction(opcode)
+                    functionBodyVisitor?.visitDivideInstruction(opcode)
                 }
 
                 F32_MIN -> {
-                    functionBodyVisitor.visitMinInstruction(opcode)
+                    functionBodyVisitor?.visitMinInstruction(opcode)
                 }
 
                 F32_MAX -> {
-                    functionBodyVisitor.visitMaxInstruction(opcode)
+                    functionBodyVisitor?.visitMaxInstruction(opcode)
                 }
 
                 F32_COPYSIGN -> {
-                    functionBodyVisitor.visitCopySignInstruction(opcode)
+                    functionBodyVisitor?.visitCopySignInstruction(opcode)
                 }
 
                 F64_ABS -> {
-                    functionBodyVisitor.visitAbsoluteInstruction(opcode)
+                    functionBodyVisitor?.visitAbsoluteInstruction(opcode)
                 }
 
                 F64_NEG -> {
-                    functionBodyVisitor.visitNegativeInstruction(opcode)
+                    functionBodyVisitor?.visitNegativeInstruction(opcode)
                 }
 
                 F64_CEIL -> {
-                    functionBodyVisitor.visitCeilingInstruction(opcode)
+                    functionBodyVisitor?.visitCeilingInstruction(opcode)
                 }
 
                 F64_FLOOR -> {
-                    functionBodyVisitor.visitFloorInstruction(opcode)
+                    functionBodyVisitor?.visitFloorInstruction(opcode)
                 }
 
                 F64_TRUNC -> {
-                    functionBodyVisitor.visitTruncateInstruction(opcode)
+                    functionBodyVisitor?.visitTruncateInstruction(opcode)
                 }
 
                 F64_NEAREST -> {
-                    functionBodyVisitor.visitNearestInstruction(opcode)
+                    functionBodyVisitor?.visitNearestInstruction(opcode)
                 }
 
                 F64_SQRT -> {
-                    functionBodyVisitor.visitSqrtInstruction(opcode)
+                    functionBodyVisitor?.visitSqrtInstruction(opcode)
                 }
 
                 F64_ADD -> {
-                    functionBodyVisitor.visitAddInstruction(opcode)
+                    functionBodyVisitor?.visitAddInstruction(opcode)
                 }
 
                 F64_SUB -> {
-                    functionBodyVisitor.visitSubtractInstruction(opcode)
+                    functionBodyVisitor?.visitSubtractInstruction(opcode)
                 }
 
                 F64_MUL -> {
-                    functionBodyVisitor.visitMultiplyInstruction(opcode)
+                    functionBodyVisitor?.visitMultiplyInstruction(opcode)
                 }
 
                 F64_DIV -> {
-                    functionBodyVisitor.visitDivideInstruction(opcode)
+                    functionBodyVisitor?.visitDivideInstruction(opcode)
                 }
 
                 F64_MIN -> {
-                    functionBodyVisitor.visitMinInstruction(opcode)
+                    functionBodyVisitor?.visitMinInstruction(opcode)
                 }
 
                 F64_MAX -> {
-                    functionBodyVisitor.visitMaxInstruction(opcode)
+                    functionBodyVisitor?.visitMaxInstruction(opcode)
                 }
 
                 F64_COPYSIGN -> {
-                    functionBodyVisitor.visitCopySignInstruction(opcode)
+                    functionBodyVisitor?.visitCopySignInstruction(opcode)
                 }
 
                 I32_WRAP_I64 -> {
-                    functionBodyVisitor.visitWrapInstruction(opcode)
+                    functionBodyVisitor?.visitWrapInstruction(opcode)
                 }
 
                 I32_TRUNC_SF32,
                 I32_TRUNC_UF32,
                 I32_TRUNC_SF64,
                 I32_TRUNC_UF64 -> {
-                    functionBodyVisitor.visitTruncateInstruction(opcode)
+                    functionBodyVisitor?.visitTruncateInstruction(opcode)
                 }
 
                 I64_EXTEND_SI32,
                 I64_EXTEND_UI32 -> {
-                    functionBodyVisitor.visitExtendInstruction(opcode)
+                    functionBodyVisitor?.visitExtendInstruction(opcode)
                 }
 
                 I64_TRUNC_SF32,
                 I64_TRUNC_UF32,
                 I64_TRUNC_SF64,
                 I64_TRUNC_UF64 -> {
-                    functionBodyVisitor.visitTruncateInstruction(opcode)
+                    functionBodyVisitor?.visitTruncateInstruction(opcode)
                 }
 
                 F32_CONVERT_SI32,
                 F32_CONVERT_UI32,
                 F32_CONVERT_SI64,
                 F32_CONVERT_UI64 -> {
-                    functionBodyVisitor.visitConvertInstruction(opcode)
+                    functionBodyVisitor?.visitConvertInstruction(opcode)
                 }
 
                 F32_DEMOTE_F64 -> {
-                    functionBodyVisitor.visitDemoteInstruction(opcode)
+                    functionBodyVisitor?.visitDemoteInstruction(opcode)
                 }
 
                 F64_CONVERT_SI32,
                 F64_CONVERT_UI32,
                 F64_CONVERT_SI64,
                 F64_CONVERT_UI64 -> {
-                    functionBodyVisitor.visitConvertInstruction(opcode)
+                    functionBodyVisitor?.visitConvertInstruction(opcode)
                 }
 
                 F64_PROMOTE_F32 -> {
-                    functionBodyVisitor.visitPromoteInstruction(opcode)
+                    functionBodyVisitor?.visitPromoteInstruction(opcode)
                 }
 
                 I32_REINTERPRET_F32,
                 I64_REINTERPRET_F64,
                 F32_REINTERPRET_I32,
                 F64_REINTERPRET_I64 -> {
-                    functionBodyVisitor.visitReinterpretInstruction(opcode)
+                    functionBodyVisitor?.visitReinterpretInstruction(opcode)
                 }
 
                 I32_EXTEND8_S,
@@ -756,7 +756,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid opcode: ${opcode.code} not enabled.")
                     }
 
-                    functionBodyVisitor.visitExtendInstruction(opcode)
+                    functionBodyVisitor?.visitExtendInstruction(opcode)
                 }
 
                 I32_TRUNC_S_SAT_F32,
@@ -771,7 +771,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitTruncateInstruction(opcode)
+                    functionBodyVisitor?.visitTruncateInstruction(opcode)
                 }
 
                 MEMORY_ATOMIC_NOTIFY -> {
@@ -782,7 +782,7 @@ public class FunctionBodyReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    functionBodyVisitor.visitAtomicWakeInstruction(opcode, alignment, offset)
+                    functionBodyVisitor?.visitAtomicWakeInstruction(opcode, alignment, offset)
                 }
 
                 MEMORY_ATOMIC_WAIT32,
@@ -794,7 +794,7 @@ public class FunctionBodyReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    functionBodyVisitor.visitAtomicWaitInstruction(opcode, alignment, offset)
+                    functionBodyVisitor?.visitAtomicWaitInstruction(opcode, alignment, offset)
                 }
 
                 I32_ATOMIC_LOAD,
@@ -811,7 +811,7 @@ public class FunctionBodyReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    functionBodyVisitor.visitAtomicLoadInstruction(opcode, alignment, offset)
+                    functionBodyVisitor?.visitAtomicLoadInstruction(opcode, alignment, offset)
                 }
 
                 I32_ATOMIC_STORE,
@@ -828,7 +828,7 @@ public class FunctionBodyReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    functionBodyVisitor.visitAtomicStoreInstruction(opcode, alignment, offset)
+                    functionBodyVisitor?.visitAtomicStoreInstruction(opcode, alignment, offset)
                 }
 
                 I32_ATOMIC_RMW_ADD,
@@ -845,7 +845,7 @@ public class FunctionBodyReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    functionBodyVisitor.visitAtomicRmwAddInstruction(opcode, alignment, offset)
+                    functionBodyVisitor?.visitAtomicRmwAddInstruction(opcode, alignment, offset)
                 }
 
                 I32_ATOMIC_RMW_SUB,
@@ -862,7 +862,7 @@ public class FunctionBodyReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    functionBodyVisitor.visitAtomicRmwSubtractInstruction(opcode, alignment, offset)
+                    functionBodyVisitor?.visitAtomicRmwSubtractInstruction(opcode, alignment, offset)
                 }
 
                 I32_ATOMIC_RMW_AND,
@@ -879,7 +879,7 @@ public class FunctionBodyReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    functionBodyVisitor.visitAtomicRmwAndInstruction(opcode, alignment, offset)
+                    functionBodyVisitor?.visitAtomicRmwAndInstruction(opcode, alignment, offset)
                 }
 
                 I32_ATOMIC_RMW_OR,
@@ -896,7 +896,7 @@ public class FunctionBodyReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    functionBodyVisitor.visitAtomicRmwOrInstruction(opcode, alignment, offset)
+                    functionBodyVisitor?.visitAtomicRmwOrInstruction(opcode, alignment, offset)
                 }
 
                 I32_ATOMIC_RMW_XOR,
@@ -913,7 +913,7 @@ public class FunctionBodyReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    functionBodyVisitor.visitAtomicRmwXorInstruction(opcode, alignment, offset)
+                    functionBodyVisitor?.visitAtomicRmwXorInstruction(opcode, alignment, offset)
                 }
 
                 I32_ATOMIC_RMW_XCHG,
@@ -930,7 +930,7 @@ public class FunctionBodyReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    functionBodyVisitor.visitAtomicRmwExchangeInstruction(opcode, alignment, offset)
+                    functionBodyVisitor?.visitAtomicRmwExchangeInstruction(opcode, alignment, offset)
                 }
 
                 I32_ATOMIC_RMW_CMPXCHG,
@@ -947,7 +947,7 @@ public class FunctionBodyReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    functionBodyVisitor.visitAtomicRmwCompareExchangeInstruction(opcode, alignment, offset)
+                    functionBodyVisitor?.visitAtomicRmwCompareExchangeInstruction(opcode, alignment, offset)
                 }
 
                 V128_CONST -> {
@@ -957,7 +957,7 @@ public class FunctionBodyReader(
 
                     val value: V128Value = source.readV128()
 
-                    functionBodyVisitor.visitSimdConstInstruction(value)
+                    functionBodyVisitor?.visitSimdConstInstruction(value)
                 }
 
                 V128_LOAD -> {
@@ -968,7 +968,7 @@ public class FunctionBodyReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    functionBodyVisitor.visitSimdLoadInstruction(opcode, alignment, offset)
+                    functionBodyVisitor?.visitSimdLoadInstruction(opcode, alignment, offset)
                 }
 
                 V128_STORE -> {
@@ -979,7 +979,7 @@ public class FunctionBodyReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    functionBodyVisitor.visitSimdStoreInstruction(opcode, alignment, offset)
+                    functionBodyVisitor?.visitSimdStoreInstruction(opcode, alignment, offset)
                 }
 
                 I8X16_SPLAT,
@@ -994,7 +994,7 @@ public class FunctionBodyReader(
 
                     val value = source.readVarUInt32()
 
-                    functionBodyVisitor.visitSimdSplatInstruction(opcode, value)
+                    functionBodyVisitor?.visitSimdSplatInstruction(opcode, value)
                 }
 
                 I8X16_EXTRACT_LANE_S,
@@ -1010,7 +1010,7 @@ public class FunctionBodyReader(
                     }
 
                     val index = source.readIndex()
-                    functionBodyVisitor.visitSimdExtractLaneInstruction(opcode, index)
+                    functionBodyVisitor?.visitSimdExtractLaneInstruction(opcode, index)
                 }
 
                 I8X16_REPLACE_LANE,
@@ -1024,7 +1024,7 @@ public class FunctionBodyReader(
                     }
 
                     val index = source.readIndex()
-                    functionBodyVisitor.visitSimdReplaceLaneInstruction(opcode, index)
+                    functionBodyVisitor?.visitSimdReplaceLaneInstruction(opcode, index)
                 }
 
                 V8X16_SHUFFLE -> {
@@ -1038,7 +1038,7 @@ public class FunctionBodyReader(
                         lanesIndex[i.toInt()] = source.readVarUInt32()
                     }
 
-                    functionBodyVisitor.visitSimdShuffleInstruction(opcode, V128Value(lanesIndex))
+                    functionBodyVisitor?.visitSimdShuffleInstruction(opcode, V128Value(lanesIndex))
                 }
 
                 I8X16_ADD,
@@ -1049,7 +1049,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdAddInstruction(opcode)
+                    functionBodyVisitor?.visitSimdAddInstruction(opcode)
                 }
 
                 I8X16_SUB,
@@ -1060,7 +1060,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdSubtractInstruction(opcode)
+                    functionBodyVisitor?.visitSimdSubtractInstruction(opcode)
                 }
 
                 I8X16_MUL,
@@ -1070,7 +1070,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdMultiplyInstruction(opcode)
+                    functionBodyVisitor?.visitSimdMultiplyInstruction(opcode)
                 }
 
                 I8X16_NEG,
@@ -1081,7 +1081,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdNegativeInstruction(opcode)
+                    functionBodyVisitor?.visitSimdNegativeInstruction(opcode)
                 }
 
                 I8X16_ADD_SATURATE_S,
@@ -1092,7 +1092,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdAddSaturateInstruction(opcode)
+                    functionBodyVisitor?.visitSimdAddSaturateInstruction(opcode)
                 }
 
                 I8X16_SUB_SATURATE_S,
@@ -1103,7 +1103,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdSubtractSaturateInstruction(opcode)
+                    functionBodyVisitor?.visitSimdSubtractSaturateInstruction(opcode)
                 }
 
                 I8X16_SHL,
@@ -1122,7 +1122,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdShiftLeftInstruction(opcode)
+                    functionBodyVisitor?.visitSimdShiftLeftInstruction(opcode)
                 }
 
                 V128_AND -> {
@@ -1130,7 +1130,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdAndInstruction(opcode)
+                    functionBodyVisitor?.visitSimdAndInstruction(opcode)
                 }
 
                 V128_OR -> {
@@ -1138,7 +1138,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdOrInstruction(opcode)
+                    functionBodyVisitor?.visitSimdOrInstruction(opcode)
                 }
 
                 V128_XOR -> {
@@ -1146,7 +1146,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdXorInstruction(opcode)
+                    functionBodyVisitor?.visitSimdXorInstruction(opcode)
                 }
 
                 V128_NOT -> {
@@ -1154,7 +1154,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid V128Value code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdNotInstruction(opcode)
+                    functionBodyVisitor?.visitSimdNotInstruction(opcode)
                 }
 
                 V128_BITSELECT -> {
@@ -1162,7 +1162,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid V128Value code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdBitSelectInstruction(opcode)
+                    functionBodyVisitor?.visitSimdBitSelectInstruction(opcode)
                 }
 
                 I8X16_ANY_TRUE,
@@ -1177,7 +1177,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdAllTrueInstruction(opcode)
+                    functionBodyVisitor?.visitSimdAllTrueInstruction(opcode)
                 }
 
                 I8X16_EQ,
@@ -1189,7 +1189,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdEqualInstruction(opcode)
+                    functionBodyVisitor?.visitSimdEqualInstruction(opcode)
                 }
 
                 I8X16_NE,
@@ -1201,7 +1201,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdNotEqualInstruction(opcode)
+                    functionBodyVisitor?.visitSimdNotEqualInstruction(opcode)
                 }
 
                 I8X16_LT_S,
@@ -1216,7 +1216,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdLessThanInstruction(opcode)
+                    functionBodyVisitor?.visitSimdLessThanInstruction(opcode)
                 }
 
                 I8X16_LE_S,
@@ -1231,7 +1231,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdLessEqualInstruction(opcode)
+                    functionBodyVisitor?.visitSimdLessEqualInstruction(opcode)
                 }
 
                 I8X16_GT_S,
@@ -1246,7 +1246,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdGreaterThanInstruction(opcode)
+                    functionBodyVisitor?.visitSimdGreaterThanInstruction(opcode)
                 }
 
                 I8X16_GE_S,
@@ -1261,7 +1261,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdGreaterEqualInstruction(opcode)
+                    functionBodyVisitor?.visitSimdGreaterEqualInstruction(opcode)
                 }
 
                 F32X4_NEG,
@@ -1270,7 +1270,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdNegativeInstruction(opcode)
+                    functionBodyVisitor?.visitSimdNegativeInstruction(opcode)
                 }
 
                 F32X4_ABS,
@@ -1279,7 +1279,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdAbsInstruction(opcode)
+                    functionBodyVisitor?.visitSimdAbsInstruction(opcode)
                 }
 
                 F32X4_MIN,
@@ -1288,7 +1288,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdMinInstruction(opcode)
+                    functionBodyVisitor?.visitSimdMinInstruction(opcode)
                 }
 
                 F32X4_MAX,
@@ -1297,7 +1297,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdMaxInstruction(opcode)
+                    functionBodyVisitor?.visitSimdMaxInstruction(opcode)
                 }
 
                 F32X4_ADD,
@@ -1306,7 +1306,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdAddInstruction(opcode)
+                    functionBodyVisitor?.visitSimdAddInstruction(opcode)
                 }
 
                 F32X4_SUB,
@@ -1315,7 +1315,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdSubtractInstruction(opcode)
+                    functionBodyVisitor?.visitSimdSubtractInstruction(opcode)
                 }
 
                 F32X4_DIV,
@@ -1324,7 +1324,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdDivideInstruction(opcode)
+                    functionBodyVisitor?.visitSimdDivideInstruction(opcode)
                 }
 
                 F32X4_MUL,
@@ -1333,7 +1333,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdMultiplyInstruction(opcode)
+                    functionBodyVisitor?.visitSimdMultiplyInstruction(opcode)
                 }
 
                 F32X4_SQRT,
@@ -1342,7 +1342,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdSqrtInstruction(opcode)
+                    functionBodyVisitor?.visitSimdSqrtInstruction(opcode)
                 }
 
                 F32X4_CONVERT_S_I32X4,
@@ -1353,7 +1353,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdConvertInstruction(opcode)
+                    functionBodyVisitor?.visitSimdConvertInstruction(opcode)
                 }
 
                 I32X4_TRUNC_S_F32X4_SAT,
@@ -1364,7 +1364,7 @@ public class FunctionBodyReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    functionBodyVisitor.visitSimdTruncateInstruction(opcode)
+                    functionBodyVisitor?.visitSimdTruncateInstruction(opcode)
                 }
 
                 MEMORY_FILL -> {
@@ -1376,7 +1376,7 @@ public class FunctionBodyReader(
                     val value = source.readVarUInt32()
                     val size = source.readVarUInt32()
 
-                    functionBodyVisitor.visitMemoryFillInstruction(opcode, address, value, size)
+                    functionBodyVisitor?.visitMemoryFillInstruction(opcode, address, value, size)
                 }
 
                 MEMORY_COPY -> {
@@ -1388,7 +1388,7 @@ public class FunctionBodyReader(
                     val address = source.readVarUInt32()
                     val size = source.readVarUInt32()
 
-                    functionBodyVisitor.visitMemoryFillInstruction(opcode, target, address, size)
+                    functionBodyVisitor?.visitMemoryFillInstruction(opcode, target, address, size)
                 }
 
                 MEMORY_INIT -> {
@@ -1402,7 +1402,7 @@ public class FunctionBodyReader(
 
                     val zero = source.readVarUInt32()
 
-                    functionBodyVisitor.visitMemoryInitInstruction(opcode, target, address, size)
+                    functionBodyVisitor?.visitMemoryInitInstruction(opcode, target, address, size)
                 }
 
                 DATA_DROP -> {

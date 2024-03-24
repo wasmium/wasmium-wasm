@@ -9,17 +9,14 @@ public class TypeSectionNode : SectionNode(SectionKind.TYPE), TypeSectionVisitor
 
     public fun accept(typeSectionVisitor: TypeSectionVisitor) {
         for (functionType in types) {
-            typeSectionVisitor.visitType(functionType.typeIndex!!, functionType.parameters!!, functionType.results!!)
+            typeSectionVisitor.visitType(functionType.typeIndex, functionType.parameters, functionType.results)
         }
+
+        typeSectionVisitor.visitEnd()
     }
 
     public override fun visitType(typeIndex: UInt, parameters: Array<WasmType>, results: Array<WasmType>) {
-        val functionType = FunctionTypeNode()
-        functionType.typeIndex = typeIndex
-        functionType.parameters = parameters
-        functionType.results = results
-
-        types.add(functionType)
+        types.add(FunctionTypeNode(typeIndex, parameters, results))
     }
 
     public override fun visitEnd() {

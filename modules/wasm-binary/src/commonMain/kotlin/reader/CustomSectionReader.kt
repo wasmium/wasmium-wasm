@@ -3,17 +3,14 @@ package org.wasmium.wasm.binary.reader
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.WasmSource
+import org.wasmium.wasm.binary.tree.SectionName
 import org.wasmium.wasm.binary.tree.LinkingKind
 import org.wasmium.wasm.binary.tree.LinkingSymbolType
 import org.wasmium.wasm.binary.tree.NameKind
 import org.wasmium.wasm.binary.tree.RelocationKind
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.WasmType
-import org.wasmium.wasm.binary.visitors.CustomSectionVisitor
-import org.wasmium.wasm.binary.visitors.LinkingSectionVisitor
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
-import org.wasmium.wasm.binary.visitors.NameSectionVisitor
-import org.wasmium.wasm.binary.visitors.RelocationSectionVisitor
 
 public class CustomSectionReader(
     private val context: ReaderContext,
@@ -25,32 +22,32 @@ public class CustomSectionReader(
         val sectionPayloadSize = payloadSize - (source.position - startPosition)
 
         when {
-            sectionName == WasmBinary.SECTION_NAME_NAME -> {
+            sectionName == SectionName.NAME.sectionName -> {
                 context.nameSectionConsumed = true
                 if (context.options.isDebugNamesEnabled) {
                     readNamesSection(source, source.position, sectionPayloadSize, visitor)
                 } else {
-                    source.skip(payloadSize)
+                    readUnknownSection(source, visitor, sectionName, startPosition, sectionPayloadSize)
                 }
             }
 
-            sectionName.startsWith(WasmBinary.SECTION_NAME_RELOCATION) -> {
+            sectionName.startsWith(SectionName.RELOCATION.sectionName) -> {
                 readRelocationSection(source, visitor)
             }
 
-            sectionName == WasmBinary.SECTION_NAME_LINKING -> {
+            sectionName == SectionName.LINKING.sectionName -> {
                 readLinkingSection(source, visitor)
             }
 
-            sectionName == WasmBinary.SECTION_NAME_EXCEPTION -> {
+            sectionName == SectionName.EXCEPTION.sectionName -> {
                 if (context.options.features.isExceptionHandlingEnabled) {
                     readExceptionSection(source, visitor)
                 } else {
-                    source.skip(payloadSize)
+                    readUnknownSection(source, visitor, sectionName, startPosition, sectionPayloadSize)
                 }
             }
 
-            sectionName == WasmBinary.SECTION_NAME_SOURCE_MAPPING_URL -> {
+            sectionName == SectionName.SOURCE_MAPPING_URL.sectionName -> {
                 readSourceMapSection(source, visitor)
             }
 
@@ -60,13 +57,13 @@ public class CustomSectionReader(
         }
     }
 
-    private fun readUnknownSection(source: WasmSource, visitor: ModuleVisitor, sectionName: String, startPosition: UInt, sectionPayloadSize: UInt) {
+    private fun readUnknownSection(source: WasmSource, visitor: ModuleVisitor, customSectionName: String, startPosition: UInt, sectionPayloadSize: UInt) {
         val payload = ByteArray(sectionPayloadSize.toInt())
         source.readTo(payload, 0u, sectionPayloadSize)
 
-        val customSectionVisitor: CustomSectionVisitor = visitor.visitCustomSection()
-        customSectionVisitor.visitSection(sectionName, payload)
-        customSectionVisitor.visitEnd()
+        val unknownSectionVisitor = visitor.visitUnknownSection(customSectionName, payload)
+        unknownSectionVisitor?.visitSection(customSectionName, payload)
+        unknownSectionVisitor?.visitEnd()
     }
 
     private fun readSourceMapSection(source: WasmSource, visitor: ModuleVisitor) {
@@ -75,7 +72,7 @@ public class CustomSectionReader(
     }
 
     private fun readNamesSection(source: WasmSource, startIndex: UInt, sectionPayloadSize: UInt, visitor: ModuleVisitor) {
-        val nameSectionVisitor: NameSectionVisitor = visitor.visitNameSection()
+        val nameSectionVisitor = visitor.visitNameSection()
 
         var lastNameKind: NameKind? = null
 
@@ -97,7 +94,7 @@ public class CustomSectionReader(
                 NameKind.MODULE -> {
                     val moduleName = source.readInlineString()
 
-                    nameSectionVisitor.visitModuleName(moduleName)
+                    nameSectionVisitor?.visitModuleName(moduleName)
                 }
 
                 NameKind.TABLE,
@@ -122,13 +119,13 @@ public class CustomSectionReader(
 
                         val functionName = source.readInlineString()
                         when (nameKind) {
-                            NameKind.FUNCTION -> nameSectionVisitor.visitFunctionName(functionIndex, functionName)
-                            NameKind.GLOBAL -> nameSectionVisitor.visitGlobalName(functionIndex, functionName)
-                            NameKind.TAG -> nameSectionVisitor.visitTagName(functionIndex, functionName)
-                            NameKind.TABLE -> nameSectionVisitor.visitTableName(functionIndex, functionName)
-                            NameKind.MEMORY -> nameSectionVisitor.visitMemoryName(functionIndex, functionName)
-                            NameKind.ELEMENT -> nameSectionVisitor.visitElementName(functionIndex, functionName)
-                            NameKind.DATA -> nameSectionVisitor.visitDataName(functionIndex, functionName)
+                            NameKind.FUNCTION -> nameSectionVisitor?.visitFunctionName(functionIndex, functionName)
+                            NameKind.GLOBAL -> nameSectionVisitor?.visitGlobalName(functionIndex, functionName)
+                            NameKind.TAG -> nameSectionVisitor?.visitTagName(functionIndex, functionName)
+                            NameKind.TABLE -> nameSectionVisitor?.visitTableName(functionIndex, functionName)
+                            NameKind.MEMORY -> nameSectionVisitor?.visitMemoryName(functionIndex, functionName)
+                            NameKind.ELEMENT -> nameSectionVisitor?.visitElementName(functionIndex, functionName)
+                            NameKind.DATA -> nameSectionVisitor?.visitDataName(functionIndex, functionName)
                             else -> throw ParserException("Unsupported name section: $nameKind")
                         }
 
@@ -169,8 +166,8 @@ public class CustomSectionReader(
                             }
 
                             when (nameKind) {
-                                NameKind.LOCAL -> nameSectionVisitor.visitLocalName(functionIndex, nameLocalIndex, localName)
-                                NameKind.LABEL -> nameSectionVisitor.visitLabelName(functionIndex, nameLocalIndex, localName)
+                                NameKind.LOCAL -> nameSectionVisitor?.visitLocalName(functionIndex, nameLocalIndex, localName)
+                                NameKind.LABEL -> nameSectionVisitor?.visitLabelName(functionIndex, nameLocalIndex, localName)
                                 else -> throw ParserException("Unsupported name section: $nameKind")
                             }
 
@@ -216,11 +213,11 @@ public class CustomSectionReader(
             throw ParserException("Wrong names section size")
         }
 
-        nameSectionVisitor.visitEnd()
+        nameSectionVisitor?.visitEnd()
     }
 
     private fun readLinkingSection(source: WasmSource, visitor: ModuleVisitor) {
-        val linkingSectionVisitor: LinkingSectionVisitor = visitor.visitLinkingSection()
+        val linkingSectionVisitor = visitor.visitLinkingSection()
 
         while (!source.exhausted()) {
             val linkingKind: LinkingKind = source.readLinkingKind()
@@ -240,7 +237,7 @@ public class CustomSectionReader(
                         val symbolType = source.readLinkingSymbolType()
                         val flags = source.readUInt32()
 
-                        linkingSectionVisitor.visitSymbol(symbolIndex, symbolType, flags)
+                        linkingSectionVisitor?.visitSymbol(symbolIndex, symbolType, flags)
 
                         when (symbolType) {
                             LinkingSymbolType.FUNCTION, LinkingSymbolType.GLOBAL -> {
@@ -252,9 +249,9 @@ public class CustomSectionReader(
                                 }
 
                                 if (symbolType == LinkingSymbolType.FUNCTION) {
-                                    linkingSectionVisitor.visitFunctionSymbol(symbolIndex, flags, name!!, index)
+                                    linkingSectionVisitor?.visitFunctionSymbol(symbolIndex, flags, name!!, index)
                                 } else {
-                                    linkingSectionVisitor.visitGlobalSymbol(symbolIndex, flags, name!!, index)
+                                    linkingSectionVisitor?.visitGlobalSymbol(symbolIndex, flags, name!!, index)
                                 }
                             }
 
@@ -270,13 +267,13 @@ public class CustomSectionReader(
                                     offset = source.readVarUInt32()
                                     size = source.readVarUInt32()
                                 }
-                                linkingSectionVisitor.visitDataSymbol(symbolIndex, flags, name, segment, offset, size)
+                                linkingSectionVisitor?.visitDataSymbol(symbolIndex, flags, name, segment, offset, size)
                             }
 
                             LinkingSymbolType.SECTION -> {
                                 val index = source.readIndex()
 
-                                linkingSectionVisitor.visitSectionSymbol(symbolIndex, flags, index)
+                                linkingSectionVisitor?.visitSectionSymbol(symbolIndex, flags, index)
                             }
                         }
                     }
@@ -290,7 +287,7 @@ public class CustomSectionReader(
                         val alignment = source.readVarUInt32()
                         val flags = source.readUInt32()
 
-                        linkingSectionVisitor.visitSegment(name, alignment, flags)
+                        linkingSectionVisitor?.visitSegment(name, alignment, flags)
                     }
                 }
 
@@ -301,7 +298,7 @@ public class CustomSectionReader(
             }
         }
 
-        linkingSectionVisitor.visitEnd()
+        linkingSectionVisitor?.visitEnd()
     }
 
     private fun readRelocationSection(source: WasmSource, visitor: ModuleVisitor) {
@@ -314,8 +311,8 @@ public class CustomSectionReader(
 
         val numberRelocations = source.readVarUInt32()
 
-        val relocationVisitor: RelocationSectionVisitor = visitor.visitRelocationSection()
-        relocationVisitor.visitSection(sectionKind, sectionName!!)
+        val relocationVisitor = visitor.visitRelocationSection()
+        relocationVisitor?.visitSection(sectionKind, sectionName!!)
 
         for (relocationIndex in 0u until numberRelocations) {
             val relocationKind = source.readRelocationKind()
@@ -325,7 +322,7 @@ public class CustomSectionReader(
                     val offset = source.readIndex()
                     val index = source.readIndex()
 
-                    relocationVisitor.visitRelocation(relocationKind, offset, index)
+                    relocationVisitor?.visitRelocation(relocationKind, offset, index, null)
                 }
 
                 RelocationKind.MEMORY_ADDRESS_LEB, RelocationKind.MEMORY_ADDRESS_SLEB, RelocationKind.MEMORY_ADDRESS_I32, RelocationKind.FUNCTION_OFFSET_I32, RelocationKind.SECTION_OFFSET_I32 -> {
@@ -333,12 +330,12 @@ public class CustomSectionReader(
                     val index = source.readIndex()
                     val addend: Int = source.readVarInt32()
 
-                    relocationVisitor.visitRelocation(relocationKind, offset, index, addend)
+                    relocationVisitor?.visitRelocation(relocationKind, offset, index, addend)
                 }
             }
         }
 
-        relocationVisitor.visitEnd()
+        relocationVisitor?.visitEnd()
     }
 
     private fun readExceptionSection(source: WasmSource, visitor: ModuleVisitor) {
@@ -354,10 +351,10 @@ public class CustomSectionReader(
 
             val exceptionType = readExceptionType(source)
 
-            exceptionVisitor.visitExceptionType(exceptionIndex, exceptionType)
+            exceptionVisitor?.visitExceptionType(exceptionIndex, exceptionType)
         }
 
-        exceptionVisitor.visitEnd()
+        exceptionVisitor?.visitEnd()
     }
 
     private fun readExceptionType(source: WasmSource): Array<WasmType> {

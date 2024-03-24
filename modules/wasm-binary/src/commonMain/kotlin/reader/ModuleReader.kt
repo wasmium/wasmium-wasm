@@ -22,20 +22,21 @@ import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 public class ModuleReader(
     private val context: ReaderContext,
-    private val codeSectionReader: CodeSectionReader = CodeSectionReader(context),
-    private val dataSectionReader: DataSectionReader = DataSectionReader(context),
-    private val dataCountSectionReader: DataCountSectionReader = DataCountSectionReader(context),
-    private val elementSectionReader: ElementSectionReader = ElementSectionReader(context),
-    private val exportSectionReader: ExportSectionReader = ExportSectionReader(context),
-    private val functionSectionReader: FunctionSectionReader = FunctionSectionReader(context),
-    private val globalSectionReader: GlobalSectionReader = GlobalSectionReader(context),
-    private val importSectionReader: ImportSectionReader = ImportSectionReader(context),
-    private val memorySectionReader: MemorySectionReader = MemorySectionReader(context),
-    private val startSectionReader: StartSectionReader = StartSectionReader(context),
-    private val tableSectionReader: TableSectionReader = TableSectionReader(context),
-    private val typeSectionReader: TypeSectionReader = TypeSectionReader(context),
-    private val customSectionReader: CustomSectionReader = CustomSectionReader(context),
 ) {
+    private val codeSectionReader: CodeSectionReader = CodeSectionReader(context)
+    private val dataSectionReader: DataSectionReader = DataSectionReader(context)
+    private val dataCountSectionReader: DataCountSectionReader = DataCountSectionReader(context)
+    private val elementSectionReader: ElementSectionReader = ElementSectionReader(context)
+    private val exportSectionReader: ExportSectionReader = ExportSectionReader(context)
+    private val functionSectionReader: FunctionSectionReader = FunctionSectionReader(context)
+    private val globalSectionReader: GlobalSectionReader = GlobalSectionReader(context)
+    private val importSectionReader: ImportSectionReader = ImportSectionReader(context)
+    private val memorySectionReader: MemorySectionReader = MemorySectionReader(context)
+    private val startSectionReader: StartSectionReader = StartSectionReader(context)
+    private val tableSectionReader: TableSectionReader = TableSectionReader(context)
+    private val typeSectionReader: TypeSectionReader = TypeSectionReader(context)
+    private val customSectionReader: CustomSectionReader = CustomSectionReader(context)
+
     public fun readModule(source: WasmSource, visitor: ModuleVisitor): ReaderResult {
         // minimum allowed module size
         val minSize = 8u
@@ -54,27 +55,13 @@ public class ModuleReader(
         if ((version <= 0u) || (version > WasmVersion.V1.version)) {
             throw ParserException("Unsupported version number: $version")
         }
+        visitor.visitHeader(version)
 
-        visitor.visit(version)
-        readSection(source, visitor)
-        visitor.visitEnd()
-
-        // maximum allowed module size
-        if (source.position > WasmBinary.MAX_MODULE_SIZE) {
-            throw ParserException("Module size of ${source.position} is too large, maximum allowed is ${WasmBinary.MAX_MODULE_SIZE}")
-        }
-
-        return ReaderResult.Success(context.messages)
-    }
-
-    private fun readSection(source: WasmSource, visitor: ModuleVisitor) {
         // current section
         var section: SectionKind
         // total read sections
         var numberOfSections = 0u
-
         var lastSection: SectionKind? = null
-
         while (!source.exhausted()) {
             if (numberOfSections > WasmBinary.MAX_SECTIONS) {
                 throw ParserException("Sections size of $numberOfSections exceed the maximum of ${WasmBinary.MAX_SECTIONS}")
@@ -129,5 +116,14 @@ public class ModuleReader(
 
             numberOfSections++
         }
+
+        visitor.visitEnd()
+
+        // maximum allowed module size
+        if (source.position > WasmBinary.MAX_MODULE_SIZE) {
+            throw ParserException("Module size of ${source.position} is too large, maximum allowed is ${WasmBinary.MAX_MODULE_SIZE}")
+        }
+
+        return ReaderResult.Success(context.messages)
     }
 }

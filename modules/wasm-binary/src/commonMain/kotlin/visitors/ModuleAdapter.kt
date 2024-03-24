@@ -1,144 +1,197 @@
 package org.wasmium.wasm.binary.visitors
 
 public open class ModuleAdapter(protected val delegate: ModuleVisitor? = null) : ModuleVisitor {
-    override fun visit(version: UInt) {
-        delegate?.visit(version)
+    override fun visitHeader(version: UInt) {
+        delegate?.visitHeader(version)
     }
 
-    public override fun visitTypeSection(): TypeSectionVisitor {
+    public override fun visitTypeSection(): TypeSectionVisitor? {
         if (delegate != null) {
-            return TypeSectionAdapter(delegate.visitTypeSection())
+            val typeSectionVisitor = delegate.visitTypeSection()
+            if (typeSectionVisitor != null) {
+                return TypeSectionAdapter(typeSectionVisitor)
+            }
         }
 
-        return TypeSectionAdapter()
+        return null
     }
 
-    public override fun visitFunctionSection(): FunctionSectionVisitor {
+
+    public override fun visitFunctionSection(): FunctionSectionVisitor? {
         if (delegate != null) {
-            return FunctionSectionAdapter(delegate.visitFunctionSection())
+            val functionSectionVisitor = delegate.visitFunctionSection()
+            if (functionSectionVisitor != null) {
+                return FunctionSectionAdapter(functionSectionVisitor)
+            }
         }
 
-        return FunctionSectionAdapter()
+        return null
     }
 
-    public override fun visitStartSection(): StartSectionVisitor {
+
+    public override fun visitStartSection(functionIndex: UInt): StartSectionVisitor? {
         if (delegate != null) {
-            return StartSectionAdapter(delegate.visitStartSection())
+            val startSectionVisitor = delegate.visitStartSection(functionIndex)
+            if (startSectionVisitor != null) {
+                return StartSectionAdapter(startSectionVisitor)
+            }
         }
 
-        return StartSectionAdapter()
+        return null
     }
 
-    public override fun visitImportSection(): ImportSectionVisitor {
+    public override fun visitImportSection(): ImportSectionVisitor? {
         if (delegate != null) {
-            return ImportSectionAdapter(delegate.visitImportSection())
+            val importSectionVisitor = delegate.visitImportSection()
+            if (importSectionVisitor != null) {
+                return ImportSectionAdapter(importSectionVisitor)
+            }
         }
 
-        return ImportSectionAdapter()
+        return null
     }
 
-    public override fun visitExportSection(): ExportSectionVisitor {
+    public override fun visitExportSection(): ExportSectionVisitor? {
         if (delegate != null) {
-            return ExportSectionAdapter(delegate.visitExportSection())
+            val exportSectionVisitor = delegate.visitExportSection()
+            if (exportSectionVisitor != null) {
+                return ExportSectionAdapter(exportSectionVisitor)
+            }
         }
 
-        return ExportSectionAdapter()
+        return null
     }
 
-    public override fun visitTableSection(): TableSectionVisitor {
+    public override fun visitTableSection(): TableSectionVisitor? {
         if (delegate != null) {
-            return TableSectionAdapter(delegate.visitTableSection())
+            val tableSectionVisitor = delegate.visitTableSection()
+            if (tableSectionVisitor != null) {
+                return TableSectionAdapter(tableSectionVisitor)
+            }
         }
 
-        return TableSectionAdapter()
+        return null
     }
 
-    public override fun visitElementSection(): ElementSectionVisitor {
+    public override fun visitElementSection(): ElementSectionVisitor? {
         if (delegate != null) {
-            return ElementSectionAdapter(delegate.visitElementSection())
+            val elementSectionVisitor = delegate.visitElementSection()
+            if (elementSectionVisitor != null) {
+                return ElementSectionAdapter(elementSectionVisitor)
+            }
         }
 
-        return ElementSectionAdapter()
+        return null
     }
 
-    public override fun visitGlobalSection(): GlobalSectionVisitor {
+    public override fun visitGlobalSection(): GlobalSectionVisitor? {
         if (delegate != null) {
-            return GlobalSectionAdapter(delegate.visitGlobalSection())
+            val globalSectionVisitor = delegate.visitGlobalSection()
+            if (globalSectionVisitor != null) {
+                return GlobalSectionAdapter(globalSectionVisitor)
+            }
         }
 
-        return GlobalSectionAdapter()
+        return null
     }
 
-    public override fun visitCodeSection(): CodeSectionVisitor {
+    public override fun visitCodeSection(): CodeSectionVisitor? {
         if (delegate != null) {
-            return CodeSectionAdapter(delegate.visitCodeSection())
+            val codeSectionVisitor = delegate.visitCodeSection()
+            if (codeSectionVisitor != null) {
+                return CodeSectionAdapter(codeSectionVisitor)
+            }
         }
 
-        return CodeSectionAdapter(null)
+        return null
     }
 
-    public override fun visitMemorySection(): MemorySectionVisitor {
+    public override fun visitMemorySection(): MemorySectionVisitor? {
         if (delegate != null) {
-            return MemorySectionAdapter(delegate.visitMemorySection())
+            val memorySectionVisitor = delegate.visitMemorySection()
+            if (memorySectionVisitor != null) {
+                return MemorySectionAdapter(memorySectionVisitor)
+            }
         }
 
-        return MemorySectionAdapter()
+        return null
     }
 
-    public override fun visitDataSection(): DataSectionVisitor {
+    public override fun visitDataSection(): DataSectionVisitor? {
         if (delegate != null) {
-            return DataSectionAdapter(delegate.visitDataSection())
+            val dataSectionVisitor = delegate.visitDataSection()
+            if (dataSectionVisitor != null) {
+                return DataSectionAdapter(dataSectionVisitor)
+            }
         }
 
-        return DataSectionAdapter()
+        return null
     }
 
-    public override fun visitExceptionSection(): ExceptionSectionVisitor {
+    public override fun visitExceptionSection(): ExceptionSectionVisitor? {
         if (delegate != null) {
-            return ExceptionSectionAdapter(delegate.visitExceptionSection())
+            val exceptionSectionVisitor = delegate.visitExceptionSection()
+            if (exceptionSectionVisitor != null) {
+                return ExceptionSectionAdapter(exceptionSectionVisitor)
+            }
         }
 
-        return ExceptionSectionAdapter()
+        return null
     }
 
-    public override fun visitRelocationSection(): RelocationSectionVisitor {
+    public override fun visitRelocationSection(): RelocationSectionVisitor? {
         if (delegate != null) {
-            return RelocationSectionAdapter(delegate.visitRelocationSection())
+            val relocationSectionVisitor = delegate.visitRelocationSection()
+            if (relocationSectionVisitor != null) {
+                return RelocationSectionAdapter(relocationSectionVisitor)
+            }
         }
 
-        return RelocationSectionAdapter()
+        return null
     }
 
-    public override fun visitCustomSection(): CustomSectionVisitor {
+    public override fun visitUnknownSection(customSectionName: String, content: ByteArray): UnknownSectionVisitor? {
         if (delegate != null) {
-            return CustomSectionAdapter(delegate.visitCustomSection())
+            val customSectionVisitor = delegate.visitUnknownSection(customSectionName, content)
+            if (customSectionVisitor != null) {
+                return UnknownSectionAdapter(customSectionVisitor)
+            }
         }
 
-        return CustomSectionAdapter()
+        return null
     }
 
-    public override fun visitLinkingSection(): LinkingSectionVisitor {
+    public override fun visitLinkingSection(): LinkingSectionVisitor? {
         if (delegate != null) {
-            return LinkingSectionAdapter(delegate.visitLinkingSection())
+            val linkingSectionVisitor = delegate.visitLinkingSection()
+            if (linkingSectionVisitor != null) {
+                return LinkingSectionAdapter(linkingSectionVisitor)
+            }
         }
 
-        return LinkingSectionAdapter()
+        return null
     }
 
-    public override fun visitNameSection(): NameSectionVisitor {
+    public override fun visitNameSection(): NameSectionVisitor? {
         if (delegate != null) {
-            return NameSectionAdapter(delegate.visitNameSection())
+            val nameSectionVisitor = delegate.visitNameSection()
+            if (nameSectionVisitor != null) {
+                return NameSectionAdapter(nameSectionVisitor)
+            }
         }
 
-        return NameSectionAdapter()
+        return null
     }
 
-    public override fun visitDataCountSection(): DataCountSectionVisitor {
+    public override fun visitDataCountSection(dataCount: UInt): DataCountSectionVisitor? {
         if (delegate != null) {
-            return DataCountSectionAdapter(delegate.visitDataCountSection())
+            val dataCountSectionVisitor = delegate.visitDataCountSection(dataCount)
+            if (dataCountSectionVisitor != null) {
+                return DataCountSectionAdapter(dataCountSectionVisitor)
+            }
         }
 
-        return DataCountSectionAdapter()
+        return null
     }
 
     public override fun visitEnd() {

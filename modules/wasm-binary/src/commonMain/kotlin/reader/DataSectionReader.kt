@@ -25,6 +25,6 @@ public class DataSectionReader(
             dataSegmentReader.readDataSegment(source, index, dataVisitor)
         }
 
-        dataVisitor.visitEnd()
+        dataVisitor?.visitEnd()
     }
 }

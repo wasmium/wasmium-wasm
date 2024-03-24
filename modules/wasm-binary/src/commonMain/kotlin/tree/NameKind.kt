@@ -13,7 +13,6 @@ public enum class NameKind(public val nameKindId: UInt) {
     DATA(9u),
     FIELD(10u),
     TAG(11u),
-
     // end
     ;
 

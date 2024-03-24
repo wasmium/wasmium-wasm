@@ -1,6 +1,6 @@
 package org.wasmium.wasm.binary.visitors
 
-public open class CodeSectionAdapter(protected val delegate: CodeSectionVisitor?) : CodeSectionVisitor {
+public open class CodeSectionAdapter(protected val delegate: CodeSectionVisitor? = null) : CodeSectionVisitor {
     override fun visitFunctionBody(functionIndex: UInt): FunctionBodyVisitor {
         if (delegate != null) {
             return FunctionBodyAdapter(delegate.visitFunctionBody(functionIndex))

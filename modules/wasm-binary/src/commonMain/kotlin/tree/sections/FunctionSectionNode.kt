@@ -8,16 +8,14 @@ public class FunctionSectionNode : SectionNode(SectionKind.FUNCTION), FunctionSe
 
     public fun accept(functionSectionVisitor: FunctionSectionVisitor) {
         for (functionIndex in types) {
-            functionSectionVisitor.visitFunction(functionIndex.functionIndex!!, functionIndex.typeIndex!!)
+            functionSectionVisitor.visitFunction(functionIndex.functionIndex, functionIndex.typeIndex)
         }
+
+        functionSectionVisitor.visitEnd()
     }
 
-    override fun visitFunction(functionIndex: UInt, typeIndex: UInt) {
-        val functionIndexNode = FunctionIndexTypeNode()
-        functionIndexNode.functionIndex = functionIndex
-        functionIndexNode.typeIndex = typeIndex
-
-        types.add(functionIndexNode)
+    public override fun visitFunction(functionIndex: UInt, typeIndex: UInt) {
+        types.add(FunctionIndexTypeNode(functionIndex, typeIndex))
     }
 
     public override fun visitEnd() {

@@ -9,18 +9,14 @@ public class ExportSectionNode : SectionNode(SectionKind.EXPORT), ExportSectionV
 
     public fun accept(exportSectionVisitor: ExportSectionVisitor) {
         for (exportType in exports) {
-            exportSectionVisitor.visitExport(exportType.exportIndex!!, exportType.kind!!, exportType.index!!, exportType.name!!)
+            exportSectionVisitor.visitExport(exportType.exportIndex, exportType.kind, exportType.index, exportType.name)
         }
+
+        exportSectionVisitor.visitEnd()
     }
 
     public override fun visitExport(exportIndex: UInt, externalKind: ExternalKind, itemIndex: UInt, name: String) {
-        val exportType = ExportTypeNode()
-        exportType.exportIndex = exportIndex
-        exportType.kind = externalKind
-        exportType.index = itemIndex
-        exportType.name = name
-
-        exports.add(exportType)
+        exports.add(ExportTypeNode(exportIndex, name, externalKind, itemIndex))
     }
 
     public override fun visitEnd() {

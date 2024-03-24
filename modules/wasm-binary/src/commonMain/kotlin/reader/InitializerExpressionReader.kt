@@ -10,31 +10,31 @@ import org.wasmium.wasm.binary.visitors.InitializerExpressionVisitor
 public class InitializerExpressionReader(
     private val context: ReaderContext,
 ) {
-    public fun readInitExpression(source: WasmSource, visitor: InitializerExpressionVisitor, requireUInt: Boolean) {
+    public fun readInitExpression(source: WasmSource, visitor: InitializerExpressionVisitor?, requireUInt: Boolean) {
         var opcode = source.readOpcode()
         when (opcode) {
             Opcode.I32_CONST -> {
                 val value: Int = source.readVarInt32()
 
-                visitor.visitInitExprI32ConstExpr(value)
+                visitor?.visitInitExprI32ConstExpr(value)
             }
 
             Opcode.I64_CONST -> {
                 val value: Long = source.readVarInt64()
 
-                visitor.visitInitExprI64ConstExpr(value)
+                visitor?.visitInitExprI64ConstExpr(value)
             }
 
             Opcode.F32_CONST -> {
                 val value: Float = source.readFloat32()
 
-                visitor.visitInitExprF32ConstExpr(value)
+                visitor?.visitInitExprF32ConstExpr(value)
             }
 
             Opcode.F64_CONST -> {
                 val value: Double = source.readFloat64()
 
-                visitor.visitInitExprF64ConstExpr(value)
+                visitor?.visitInitExprF64ConstExpr(value)
             }
 
             Opcode.V128_CONST -> {
@@ -44,7 +44,7 @@ public class InitializerExpressionReader(
 
                 val value: V128Value = source.readV128()
 
-                visitor.visitInitExprV128ConstExpr(value)
+                visitor?.visitInitExprV128ConstExpr(value)
             }
 
             Opcode.GET_GLOBAL -> {
@@ -58,11 +58,11 @@ public class InitializerExpressionReader(
                     throw ParserException("get_global index of $globaIndex exceed the number of globals of ${context.numberGlobalImports}")
                 }
 
-                visitor.visitInitExprGetGlobalExpr(globaIndex)
+                visitor?.visitInitExprGetGlobalExpr(globaIndex)
             }
 
             Opcode.END -> {
-                visitor.visitInitExprEnd()
+                visitor?.visitInitExprEnd()
                 return
             }
 
@@ -74,7 +74,7 @@ public class InitializerExpressionReader(
 
         opcode = source.readOpcode()
         if (opcode == Opcode.END) {
-            visitor.visitInitExprEnd()
+            visitor?.visitInitExprEnd()
         } else {
             throw ParserException("Expected END opcode after initializer expression: %$opcode")
         }

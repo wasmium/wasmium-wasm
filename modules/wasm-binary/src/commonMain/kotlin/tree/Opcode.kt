@@ -2,10 +2,10 @@ package org.wasmium.wasm.binary.tree
 
 import org.wasmium.wasm.binary.Features
 
-public const val PREFIX_GC: Int = 0xFB
-public const val PREFIX_FC: Int = 0xFC
-public const val PREFIX_SIMD: Int = 0xFD
-public const val PREFIX_THREADS: Int = 0xFE
+private const val PREFIX_GC: Int = 0xFB
+private const val PREFIX_FC: Int = 0xFC
+private const val PREFIX_SIMD: Int = 0xFD
+private const val PREFIX_THREADS: Int = 0xFE
 
 /**
  * List of WebAssembly opcodes.

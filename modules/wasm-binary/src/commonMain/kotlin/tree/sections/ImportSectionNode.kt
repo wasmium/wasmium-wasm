@@ -1,6 +1,5 @@
 package org.wasmium.wasm.binary.tree.sections
 
-import org.wasmium.wasm.binary.tree.ExternalKind
 import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.WasmType
@@ -10,140 +9,39 @@ public class ImportSectionNode : SectionNode(SectionKind.IMPORT), ImportSectionV
     public val imports: MutableList<ImportNode> = mutableListOf()
 
     public fun accept(importSectionVisitor: ImportSectionVisitor) {
-        for (importNode in imports) {
-            when (importNode.externalKind) {
-                ExternalKind.FUNCTION -> {
-                    val functionImport = importNode as FunctionImportNode
-                    importSectionVisitor.visitFunction(
-                        functionImport.importIndex!!,
-                        functionImport.module!!,
-                        functionImport.field!!,
-                        functionImport.functionIndex!!,
-                        functionImport.typeIndex!!,
-                    )
-                }
-
-                ExternalKind.TABLE -> {
-                    val tableImport: TableImportNode = importNode as TableImportNode
-                    val tableType: TableTypeNode = tableImport.tableType!!
-                    importSectionVisitor.visitTable(
-                        importNode.importIndex!!,
-                        tableImport.module!!,
-                        tableImport.field!!,
-                        tableImport.tableIndex!!,
-                        tableType.elementType!!,
-                        tableType.limits!!
-                    )
-                }
-
-                ExternalKind.MEMORY -> {
-                    val memoryImport: MemoryImportNode = importNode as MemoryImportNode
-                    importSectionVisitor.visitMemory(
-                        importNode.importIndex!!,
-                        memoryImport.module!!,
-                        memoryImport.field!!,
-                        memoryImport.memoryIndex!!,
-                        memoryImport.memoryType!!.limits!!
-                    )
-                }
-
-                ExternalKind.GLOBAL -> {
-                    val globalImport = importNode as GlobalImportNode
-                    val globalType = globalImport.globalType
-                    importSectionVisitor.visitGlobal(
-                        importNode.importIndex!!,
-                        globalImport.module!!,
-                        globalImport.field!!,
-                        globalImport.globalIndex!!,
-                        globalType!!.contentType!!,
-                        globalType.isMutable,
-                    )
-                }
-
-                ExternalKind.EXCEPTION -> {
-                    val exceptionImport = importNode as ExceptionImportNode
-                    val exceptionType = exceptionImport.exceptionType
-                    importSectionVisitor.visitException(
-                        importNode.importIndex!!,
-                        exceptionImport.module!!,
-                        exceptionImport.field!!,
-                        exceptionImport.exceptionIndex!!,
-                        exceptionType!!.types!!,
-                    )
-                }
-
-                else -> throw IllegalArgumentException()
-            }
+        for (import in imports) {
+            import.accept(importSectionVisitor)
         }
+
+        importSectionVisitor.visitEnd()
     }
 
     public override fun visitFunction(importIndex: UInt, moduleName: String, fieldName: String, functionIndex: UInt, typeIndex: UInt) {
-        val functionImport = FunctionImportNode()
-        functionImport.functionIndex = importIndex
-        functionImport.module = moduleName
-        functionImport.field = fieldName
-        functionImport.functionIndex = importIndex
-        functionImport.typeIndex = typeIndex
-
-        imports.add(functionImport)
+        imports.add(FunctionImportNode(importIndex, moduleName, fieldName, functionIndex, typeIndex))
     }
 
     public override fun visitGlobal(importIndex: UInt, moduleName: String, fieldName: String, globalIndex: UInt, type: WasmType, mutable: Boolean) {
-        val globalType = GlobalTypeNode()
-        globalType.contentType = type
-        globalType.isMutable = mutable
+        val globalType = GlobalTypeNode(type, mutable)
 
-        val globalImport = GlobalImportNode()
-        globalImport.importIndex = importIndex
-        globalImport.module = moduleName
-        globalImport.field = fieldName
-        globalImport.globalIndex = globalIndex
-        globalImport.globalType = globalType
-
-        imports.add(globalImport)
+        imports.add(GlobalImportNode(importIndex, moduleName, fieldName, globalIndex, globalType))
     }
 
     public override fun visitTable(importIndex: UInt, moduleName: String, fieldName: String, tableIndex: UInt, elementType: WasmType, limits: ResizableLimits) {
-        val tableType = TableTypeNode()
-        tableType.elementType = elementType
-        tableType.limits = limits
+        val tableType = TableTypeNode(tableIndex, elementType, limits)
 
-        val tableImport = TableImportNode()
-        tableImport.importIndex = importIndex
-        tableImport.module = moduleName
-        tableImport.field = fieldName
-        tableImport.tableIndex = tableIndex
-        tableImport.tableType = tableType
-
-        imports.add(tableImport)
+        imports.add(TableImportNode(importIndex, moduleName, fieldName, tableIndex, tableType))
     }
 
     public override fun visitMemory(importIndex: UInt, moduleName: String, fieldName: String, memoryIndex: UInt, limits: ResizableLimits) {
-        val memoryType = MemoryTypeNode()
-        memoryType.limits = limits
+        val memoryType = MemoryTypeNode(memoryIndex, limits)
 
-        val memoryImport = MemoryImportNode()
-        memoryImport.importIndex = importIndex
-        memoryImport.module = moduleName
-        memoryImport.field = fieldName
-        memoryImport.memoryIndex = memoryIndex
-        memoryImport.memoryType = memoryType
-
-        imports.add(memoryImport)
+        imports.add(MemoryImportNode(importIndex, moduleName, fieldName, memoryIndex, memoryType))
     }
 
-    public override fun visitException(importIndex: UInt, moduleName: String, fieldName: String, exceptionIndex: UInt, types: Array<WasmType>) {
-        val exceptionType = ExceptionTypeNode()
-        exceptionType.types = types
+    public override fun visitException(importIndex: UInt, moduleName: String, fieldName: String, exceptionIndex: UInt, exceptionTypes: Array<WasmType>) {
+        val exceptionType = ExceptionTypeNode(exceptionIndex, exceptionTypes)
 
-        val exceptionImport = ExceptionImportNode()
-        exceptionImport.importIndex = importIndex
-        exceptionImport.module = moduleName
-        exceptionImport.field = fieldName
-        exceptionImport.exceptionIndex = exceptionIndex
-        exceptionImport.exceptionType = exceptionType
-
-        imports.add(exceptionImport)
+        imports.add(ExceptionImportNode(importIndex, moduleName, fieldName, exceptionIndex, exceptionType))
     }
 
     public override fun visitEnd() {

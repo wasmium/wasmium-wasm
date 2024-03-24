@@ -10,17 +10,18 @@ public class DataSegmentReader(
     private val context: ReaderContext,
     private val initializerExpressionReader: InitializerExpressionReader = InitializerExpressionReader(context)
 ) {
-    public fun readDataSegment(source: WasmSource, index: UInt, dataVisitor: DataSectionVisitor) {
+    public fun readDataSegment(source: WasmSource, index: UInt, dataVisitor: DataSectionVisitor?) {
         val startIndex = source.position
 
-        val dataSegmentVisitor = dataVisitor.visitDataSegment(index)
+        val dataSegmentVisitor = dataVisitor?.visitDataSegment(index)
 
         val mode = source.readVarUInt32()
+        dataSegmentVisitor?.visitMode(mode)
         when (mode) {
             0u -> {
-                val initializerExpressionVisitor = dataSegmentVisitor.visitInitializerExpression()
+                val initializerExpressionVisitor = dataSegmentVisitor?.visitInitializerExpression()
                 initializerExpressionReader.readInitExpression(source, initializerExpressionVisitor, true)
-                initializerExpressionVisitor.visitEnd()
+                initializerExpressionVisitor?.visitEnd()
 
                 val dataSize = source.readVarUInt32()
 
@@ -31,7 +32,7 @@ public class DataSegmentReader(
                 val data = ByteArray(dataSize.toInt())
                 source.readTo(data, 0u, dataSize)
 
-                dataSegmentVisitor.visitData(data)
+                dataSegmentVisitor?.visitData(data)
             }
 
             1u -> {
@@ -48,7 +49,7 @@ public class DataSegmentReader(
                     throw ParserException("Invalid size of section id: ${SectionKind.DATA}")
                 }
 
-                dataSegmentVisitor.visitData(data)
+                dataSegmentVisitor?.visitData(data)
             }
 
             2u -> {
@@ -57,11 +58,9 @@ public class DataSegmentReader(
                     throw ParserException("Bad memory index, must be 0.")
                 }
 
-                dataSegmentVisitor.visitMemoryIndex(memoryIndex)
-
-                val initializerExpressionVisitor = dataSegmentVisitor.visitInitializerExpression()
+                val initializerExpressionVisitor = dataSegmentVisitor?.visitInitializerExpression()
                 initializerExpressionReader.readInitExpression(source, initializerExpressionVisitor, true)
-                initializerExpressionVisitor.visitEnd()
+                initializerExpressionVisitor?.visitEnd()
 
                 val dataSize = source.readVarUInt32()
 
@@ -76,12 +75,12 @@ public class DataSegmentReader(
                     throw ParserException("Invalid size of section id: ${SectionKind.DATA}")
                 }
 
-                dataSegmentVisitor.visitData(data)
+                dataSegmentVisitor?.visitMemoryData(memoryIndex, data)
             }
 
             else -> throw ParserException("Invalid mode: $mode")
         }
 
-        dataSegmentVisitor.visitEnd()
+        dataSegmentVisitor?.visitEnd()
     }
 }

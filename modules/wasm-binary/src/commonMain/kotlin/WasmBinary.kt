@@ -82,21 +82,6 @@ public object WasmBinary {
     /** Maximum number of section. */
     public const val MAX_SECTIONS: UInt = 1000u
 
-    /** Name of the custom section "name" */
-    public const val SECTION_NAME_NAME: String = "name"
-
-    /** Name of the custom section "reloc" */
-    public const val SECTION_NAME_RELOCATION: String = "reloc"
-
-    /** Name of the custom section "linking" */
-    public const val SECTION_NAME_LINKING: String = "linking"
-
-    /** Name of the custom section "exception" */
-    public const val SECTION_NAME_EXCEPTION: String = "exception"
-
-    /** Name of the custom section "sourceMappingURL" */
-    public const val SECTION_NAME_SOURCE_MAPPING_URL: String = "sourceMappingURL"
-
     public const val LINKING_SYMBOL_FLAG_UNDEFINED: UInt = 0x10u
     public const val LINKING_SYMBOL_MASK_VISIBILITY: UInt = 0x4u
     public const val LINKING_SYMBOL_MASK_BINDING: UInt = 0x3u

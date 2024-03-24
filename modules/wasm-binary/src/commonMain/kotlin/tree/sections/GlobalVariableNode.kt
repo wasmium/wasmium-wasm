@@ -15,18 +15,16 @@ public class GlobalVariableNode : GlobalVariableVisitor {
         val initializerExpressionVisitor = globalVariableVisitor.visitInitializerExpression()
         initializer?.accept(initializerExpressionVisitor)
         initializerExpressionVisitor.visitEnd()
+
+        globalVariableVisitor.visitEnd()
     }
 
     public override fun visitInitializerExpression(): InitializerExpressionVisitor {
         return InitializerExpressionNode().also { initializer = it }
     }
 
-    public override fun visitGlobalVariable(type: WasmType, mutable: Boolean) {
-        val globalType = GlobalTypeNode()
-        globalType.contentType = type
-        globalType.isMutable = mutable
-
-        this.globalType = globalType
+    public override fun visitGlobalVariable(contentType: WasmType, mutable: Boolean) {
+        this.globalType = GlobalTypeNode(contentType, mutable)
     }
 
     public override fun visitEnd() {

@@ -10,7 +10,7 @@ public class CodeSectionReader(
     private val functionBodyReader: FunctionBodyReader = FunctionBodyReader(context)
 ) {
     public fun readCodeSection(source: WasmSource, payloadSize: UInt, visitor: ModuleVisitor) {
-        if (!context.options.isSkipCodeSection) {
+        if (context.options.isSkipCodeSection) {
             source.skip(payloadSize)
             return
         }
@@ -24,8 +24,6 @@ public class CodeSectionReader(
 
         for (index in 0u until codeSize) {
             val functionIndex = context.numberFunctionImports + index
-
-            val functionBodyVisitor = codeVisitor.visitFunctionBody(functionIndex)
 
             val bodySize = source.readVarUInt32()
             if (bodySize == 0u) {
@@ -45,6 +43,8 @@ public class CodeSectionReader(
                 throw ParserException("Number of function locals $localsSize exceed the maximum of ${WasmBinary.MAX_FUNCTION_LOCALS}")
             }
 
+            val functionBodyVisitor = codeVisitor?.visitFunctionBody(functionIndex)
+
             for (localIndex in 0u until localsSize) {
                 val numberLocalTypes = source.readVarUInt32()
 
@@ -59,7 +59,7 @@ public class CodeSectionReader(
                     throw ParserException("Number of total function locals $totalLocals exceed the maximum of ${WasmBinary.MAX_FUNCTION_LOCALS_TOTAL}")
                 }
 
-                functionBodyVisitor.visitLocalVariable(localIndex, numberLocalTypes, localType)
+                functionBodyVisitor?.visitLocalVariable(localIndex, numberLocalTypes, localType)
             }
 
             val remainingSize = bodySize - (source.position - startAvailable)
@@ -69,9 +69,9 @@ public class CodeSectionReader(
                 throw ParserException("Binary offset at function exit not at expected location.")
             }
 
-            functionBodyVisitor.visitEnd()
+            functionBodyVisitor?.visitEnd()
         }
 
-        codeVisitor.visitEnd()
+        codeVisitor?.visitEnd()
     }
 }

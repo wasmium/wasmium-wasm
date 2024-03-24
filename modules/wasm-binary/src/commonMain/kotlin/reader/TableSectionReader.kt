@@ -18,7 +18,7 @@ public class TableSectionReader(
             throw ParserException("Number of tables ${context.numberTables} exceed the maximum of ${WasmBinary.MAX_TABLES}")
         }
 
-        val tableVisitor: TableSectionVisitor = visitor.visitTableSection()
+        val tableVisitor = visitor.visitTableSection()
         for (index in 0u until context.numberTables) {
             val tableIndex = context.numberTableImports + index
 
@@ -46,9 +46,9 @@ public class TableSectionReader(
                 }
             }
 
-            tableVisitor.visitTable(tableIndex, elementType, limits)
+            tableVisitor?.visitTable(tableIndex, elementType, limits)
         }
 
-        tableVisitor.visitEnd()
+        tableVisitor?.visitEnd()
     }
 }

@@ -1,12 +1,16 @@
 package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.ExternalKind
+import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 
-public class ExceptionImportNode : ImportNode() {
-    public var exceptionIndex: UInt? = null
-    public var exceptionType: ExceptionTypeNode? = null
-
-    public override val externalKind: ExternalKind
-        get() = ExternalKind.EXCEPTION
-
+public class ExceptionImportNode(
+    public override val importIndex: UInt,
+    public override val module: String,
+    public override val name: String,
+    public val exceptionIndex: UInt,
+    public val exceptionType: ExceptionTypeNode,
+) : ImportNode(importIndex, module, name, ExternalKind.EXCEPTION) {
+    override fun accept(importSectionVisitor: ImportSectionVisitor) {
+        importSectionVisitor.visitException(importIndex, module, name, exceptionIndex, exceptionType.exceptionTypes)
+    }
 }

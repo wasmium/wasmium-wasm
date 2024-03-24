@@ -59,6 +59,8 @@ public class InitializerExpressionNode : InitializerExpressionVisitor {
                 else -> throw IllegalArgumentException()
             }
         }
+
+        initializerExpressionVisitor.visitEnd()
     }
 
     public override fun visitInitExprI32ConstExpr(value: Int) {
@@ -77,7 +79,7 @@ public class InitializerExpressionNode : InitializerExpressionVisitor {
         instructions.add(ConstFloat64Instruction(value))
     }
 
-    override fun visitInitExprGetGlobalExpr(globalIndex: UInt) {
+    public override fun visitInitExprGetGlobalExpr(globalIndex: UInt) {
         instructions.add(GetGlobalInstruction(globalIndex))
     }
 

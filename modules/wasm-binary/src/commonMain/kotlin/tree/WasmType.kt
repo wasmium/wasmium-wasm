@@ -49,7 +49,6 @@ public enum class WasmType(public val wasmTypeId: UInt) {
 
     // block_type
     NONE(0x40u),
-
     // end
     ;
 

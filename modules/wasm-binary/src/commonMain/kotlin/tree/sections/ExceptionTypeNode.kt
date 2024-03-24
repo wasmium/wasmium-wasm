@@ -5,8 +5,8 @@ import org.wasmium.wasm.binary.tree.WasmType
 /**
  * Description of the exception type signature which corresponds to the data fields of an exception.
  */
-public class ExceptionTypeNode {
+public class ExceptionTypeNode(
+    public val exceptionIndex: UInt,
     /** The type of each element in the signature  */
-    public var types: Array<WasmType>? = null
-    public var exceptionIndex: UInt? = null
-}
+    public val exceptionTypes: Array<WasmType>,
+)

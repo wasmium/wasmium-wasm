@@ -16,7 +16,7 @@ public class FunctionSectionReader(
             throw ParserException("Number of functions ${context.numberFunctions} exceed the maximum of ${WasmBinary.MAX_FUNCTIONS}")
         }
 
-        val functionVisitor: FunctionSectionVisitor = visitor.visitFunctionSection()
+        val functionVisitor = visitor.visitFunctionSection()
         for (index in 0u until context.numberFunctions) {
             val functionIndex = context.numberFunctionImports + index
 
@@ -25,9 +25,9 @@ public class FunctionSectionReader(
                 throw ParserException("Invalid function signature index: %$signatureIndex")
             }
 
-            functionVisitor.visitFunction(functionIndex, signatureIndex)
+            functionVisitor?.visitFunction(functionIndex, signatureIndex)
         }
 
-        functionVisitor.visitEnd()
+        functionVisitor?.visitEnd()
     }
 }

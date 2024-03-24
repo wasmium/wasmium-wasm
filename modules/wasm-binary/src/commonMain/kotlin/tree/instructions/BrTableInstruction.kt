@@ -6,9 +6,7 @@ import org.wasmium.wasm.binary.visitors.FunctionBodyVisitor
 public class BrTableInstruction(
     public override val targets: Array<UInt>,
     public override val defaultTarget: UInt
-) : TableInstruction {
-    public override val opcode: Opcode = Opcode.BR_TABLE
-
+) : AbstractInstruction(Opcode.BR_TABLE), TableInstruction {
     override fun accept(functionBodyVisitor: FunctionBodyVisitor) {
         functionBodyVisitor.visitBrTableInstruction(targets, defaultTarget)
     }

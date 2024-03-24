@@ -10,17 +10,14 @@ public class TableSectionNode : SectionNode(SectionKind.TABLE), TableSectionVisi
 
     public fun accept(tableSectionVisitor: TableSectionVisitor) {
         for (tableType in tables) {
-            tableSectionVisitor.visitTable(tableType.tableIndex!!, tableType.elementType!!, tableType.limits!!)
+            tableSectionVisitor.visitTable(tableType.tableIndex, tableType.elementType, tableType.limits)
         }
+
+        tableSectionVisitor.visitEnd()
     }
 
     public override fun visitTable(tableIndex: UInt, elementType: WasmType, limits: ResizableLimits) {
-        val tableType = TableTypeNode()
-        tableType.tableIndex = tableIndex
-        tableType.elementType = elementType
-        tableType.limits = limits
-
-        tables.add(tableType)
+        tables.add(TableTypeNode(tableIndex, elementType, limits))
     }
 
     public override fun visitEnd() {

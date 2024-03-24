@@ -17,7 +17,7 @@ public class TypeSectionReader(
             throw ParserException("Number of types ${context.numberSignatures} exceed the maximum of ${WasmBinary.MAX_TYPES}")
         }
 
-        val typeVisitor: TypeSectionVisitor = visitor.visitTypeSection()
+        val typeVisitor = visitor.visitTypeSection()
         for (typeIndex in 0u until context.numberSignatures) {
             val form = source.readType()
 
@@ -71,9 +71,9 @@ public class TypeSectionReader(
                 }
             }
 
-            typeVisitor.visitType(typeIndex, parameters, resultType)
+            typeVisitor?.visitType(typeIndex, parameters, resultType)
         }
 
-        typeVisitor.visitEnd()
+        typeVisitor?.visitEnd()
     }
 }

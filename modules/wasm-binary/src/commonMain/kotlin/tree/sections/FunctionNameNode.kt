@@ -2,12 +2,10 @@ package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.visitors.FunctionNameVisitor
 
-public class FunctionNameNode : NameNode, FunctionNameVisitor {
-    public var functionIndex: UInt? = null
-    public var functionName: String? = null
-
-    public override val nameKind: NameNodeKind
-        get() = NameNodeKind.FUNCTION
+public class FunctionNameNode(
+    public var functionIndex: UInt,
+    public var functionName: String,
+) : NameNode(NameNodeKind.FUNCTION), FunctionNameVisitor {
 
     public override fun visitFunctionName(functionName: String) {
         this.functionName = functionName

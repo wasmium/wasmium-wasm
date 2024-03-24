@@ -5,10 +5,9 @@ import org.wasmium.wasm.binary.tree.WasmType
 /**
  * Global variable.
  */
-public class GlobalTypeNode {
+public class GlobalTypeNode(
     /** Type of the variable.  */
-    public var contentType: WasmType? = null
-
+    public val contentType: WasmType,
     /** Whether the variable is mutable.  */
-    public var isMutable: Boolean = false
-}
+    public val isMutable: Boolean,
+)

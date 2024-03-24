@@ -3,10 +3,13 @@ package org.wasmium.wasm.binary.reader
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.WasmSource
-import org.wasmium.wasm.binary.tree.ExternalKind
+import org.wasmium.wasm.binary.tree.ExternalKind.EXCEPTION
+import org.wasmium.wasm.binary.tree.ExternalKind.FUNCTION
+import org.wasmium.wasm.binary.tree.ExternalKind.GLOBAL
+import org.wasmium.wasm.binary.tree.ExternalKind.MEMORY
+import org.wasmium.wasm.binary.tree.ExternalKind.TABLE
 import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.tree.WasmType
-import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 public class ImportSectionReader(
@@ -19,26 +22,26 @@ public class ImportSectionReader(
             throw ParserException("Number of imports ${context.numberImports} exceed the maximum of ${WasmBinary.MAX_IMPORTS}")
         }
 
-        val importVisitor: ImportSectionVisitor = visitor.visitImportSection()
+        val importVisitor = visitor.visitImportSection()
         for (importIndex in 0u until context.numberImports) {
             val moduleName = source.readInlineString()
             val fieldName = source.readInlineString()
 
-            val externalKind: ExternalKind = source.readExternalKind()
+            val externalKind = source.readExternalKind()
             when (externalKind) {
-                ExternalKind.FUNCTION -> {
+                FUNCTION -> {
                     val typeIndex = source.readIndex()
 
                     if (typeIndex >= context.numberSignatures) {
                         throw ParserException("Invalid import function index $typeIndex")
                     }
 
-                    importVisitor.visitFunction(importIndex, moduleName, fieldName, context.numberFunctionImports, typeIndex)
+                    importVisitor?.visitFunction(importIndex, moduleName, fieldName, context.numberFunctionImports, typeIndex)
 
                     context.numberFunctionImports++
                 }
 
-                ExternalKind.TABLE -> {
+                TABLE -> {
                     val elementType = source.readType()
 
                     if (!elementType.isElementType()) {
@@ -50,19 +53,19 @@ public class ImportSectionReader(
                         throw ParserException("Tables may not be shared")
                     }
 
-                    importVisitor.visitTable(importIndex, moduleName, fieldName, context.numberTableImports, elementType, limits)
+                    importVisitor?.visitTable(importIndex, moduleName, fieldName, context.numberTableImports, elementType, limits)
 
                     context.numberTableImports++
                 }
 
-                ExternalKind.MEMORY -> {
+                MEMORY -> {
                     val pageLimits: ResizableLimits = source.readResizableLimits()
-                    importVisitor.visitMemory(importIndex, moduleName, fieldName, context.numberMemoryImports, pageLimits)
+                    importVisitor?.visitMemory(importIndex, moduleName, fieldName, context.numberMemoryImports, pageLimits)
 
                     context.numberMemoryImports++
                 }
 
-                ExternalKind.GLOBAL -> {
+                GLOBAL -> {
                     val globalType = source.readType()
 
                     if (!globalType.isValueType()) {
@@ -74,25 +77,25 @@ public class ImportSectionReader(
                         throw ParserException("Import mutate globals are not allowed")
                     }
 
-                    importVisitor.visitGlobal(importIndex, moduleName, fieldName, context.numberGlobalImports, globalType, false)
+                    importVisitor?.visitGlobal(importIndex, moduleName, fieldName, context.numberGlobalImports, globalType, false)
 
                     context.numberGlobalImports++
                 }
 
-                ExternalKind.EXCEPTION -> {
+                EXCEPTION -> {
                     if (!context.options.features.isExceptionHandlingEnabled) {
                         throw ParserException("Invalid import exception kind: exceptions not enabled.")
                     }
 
                     val signatures = readExceptionType(source)
-                    importVisitor.visitException(importIndex, moduleName, fieldName, context.numberExceptionImports, signatures)
+                    importVisitor?.visitException(importIndex, moduleName, fieldName, context.numberExceptionImports, signatures)
 
                     context.numberExceptionImports++
                 }
             }
         }
 
-        importVisitor.visitEnd()
+        importVisitor?.visitEnd()
     }
 
     private fun readExceptionType(source: WasmSource): Array<WasmType> {

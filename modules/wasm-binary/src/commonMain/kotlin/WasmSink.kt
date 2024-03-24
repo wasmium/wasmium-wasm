@@ -14,7 +14,7 @@ import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import kotlin.experimental.or
 
-public class WasmSink(protected val sink: Sink) {
+public class WasmSink(public val sink: Sink) {
 
     public fun writeUInt8(value: UInt): Unit = sink.writeByte(value.toByte())
 
@@ -48,19 +48,19 @@ public class WasmSink(protected val sink: Sink) {
         sink.writeByte(b.toByte())
     }
 
-    public fun writeVarUInt32(value: Long, isCanonical: Boolean): Int {
+    public fun writeVarUInt32(value: UInt, isCanonical: Boolean): Int {
         return if (isCanonical) {
             writeFixedVarUInt32(value)
         } else {
-            writeVarUInt32(value.toUInt())
+            writeVarUInt32(value)
         }
     }
 
-    public fun writeFixedVarUInt32(value: Long): Int {
-        sink.writeByte(((value and 0x7fL).toInt() or 0x80).toByte())
-        sink.writeByte((((value shr 7) and 0x7fL).toByte().toInt() or 0x80).toByte())
-        sink.writeByte((((value shr 14) and 0x7fL).toByte().toInt() or 0x80).toByte())
-        sink.writeByte((((value shr 21) and 0x7fL).toByte().toInt() or 0x80).toByte())
+    public fun writeFixedVarUInt32(value: UInt): Int {
+        sink.writeByte(((value and 0x7fu).toInt() or 0x80).toByte())
+        sink.writeByte((((value shr 7) and 0x7fu).toByte().toInt() or 0x80).toByte())
+        sink.writeByte((((value shr 14) and 0x7fu).toByte().toInt() or 0x80).toByte())
+        sink.writeByte((((value shr 21) and 0x7fu).toByte().toInt() or 0x80).toByte())
         sink.writeByte(((value shr 28).toByte().toInt() and 0x0f).toByte())
 
         // write 5 bytes
@@ -184,12 +184,11 @@ public class WasmSink(protected val sink: Sink) {
         return count
     }
 
-    public fun writeByteArray(value: ByteArray) {
+    public fun write(value: ByteArray) {
         sink.write(value)
     }
 
     public fun writeByteArray(value: ByteArray, offset: Int, length: Int) {
         sink.write(value, offset, length)
     }
-
 }

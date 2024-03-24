@@ -8,11 +8,7 @@ public open class RelocationSectionAdapter(protected val delegate: RelocationSec
         delegate?.visitSection(sectionKind, sectionName)
     }
 
-    public override fun visitRelocation(relocationKind: RelocationKind, offset: UInt, index: UInt) {
-        delegate?.visitRelocation(relocationKind, offset, index)
-    }
-
-    public override fun visitRelocation(relocationKind: RelocationKind, offset: UInt, index: UInt, addend: Int) {
+    public override fun visitRelocation(relocationKind: RelocationKind, offset: UInt, index: UInt, addend: Int?) {
         delegate?.visitRelocation(relocationKind, offset, index, addend)
     }
 

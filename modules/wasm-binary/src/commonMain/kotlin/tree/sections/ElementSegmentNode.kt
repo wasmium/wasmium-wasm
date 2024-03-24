@@ -19,9 +19,11 @@ public class ElementSegmentNode : ElementSegmentVisitor {
         val initializerExpressionVisitor = elementSegmentVisitor.visitInitializerExpression()
         initializer?.accept(initializerExpressionVisitor)
         initializerExpressionVisitor.visitEnd()
+
+        elementSegmentVisitor.visitEnd()
     }
 
-    override fun visitTableIndex(tableIndex: UInt) {
+    public override fun visitTableIndex(tableIndex: UInt) {
         this.tableIndex = tableIndex
     }
 
@@ -29,7 +31,7 @@ public class ElementSegmentNode : ElementSegmentVisitor {
         return InitializerExpressionNode().also { initializer = it }
     }
 
-    override fun visitFunctionIndex(index: UInt, functionIndex: UInt) {
+    public override fun visitFunctionIndex(index: UInt, functionIndex: UInt) {
         val functionIndexNode = FunctionIndexNode()
         functionIndexNode.index = index
         functionIndexNode.functionIndex = functionIndex

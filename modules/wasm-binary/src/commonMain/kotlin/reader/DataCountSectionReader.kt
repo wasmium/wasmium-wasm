@@ -9,8 +9,9 @@ public class DataCountSectionReader(
     public fun readDataCountSection(source: WasmSource, visitor: ModuleVisitor) {
         val dataCount = source.readVarUInt32()
 
-        val dataCountSectionVisitor = visitor.visitDataCountSection()
-        dataCountSectionVisitor.visitDataCount(dataCount)
-        dataCountSectionVisitor.visitEnd()
+        // TODO check count
+
+        val dataCountSectionVisitor = visitor.visitDataCountSection(dataCount)
+        dataCountSectionVisitor?.visitEnd()
     }
 }

@@ -21,11 +21,11 @@ public class ElementSectionReader(
             throw ParserException("Element section without table section.")
         }
 
-        val elementVisitor: ElementSectionVisitor = visitor.visitElementSection()
+        val elementVisitor = visitor.visitElementSection()
         for (index in 0u until context.numberElementSegments) {
             elementSegmentReader.readElementSegment(source, index, elementVisitor)
         }
 
-        elementVisitor.visitEnd()
+        elementVisitor?.visitEnd()
     }
 }

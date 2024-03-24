@@ -17,11 +17,11 @@ public class GlobalSectionReader(
             throw ParserException("Number of globals ${context.numberGlobals} exceed the maximum of ${WasmBinary.MAX_GLOBALS}")
         }
 
-        val globalVisitor: GlobalSectionVisitor = visitor.visitGlobalSection()
+        val globalVisitor = visitor.visitGlobalSection()
         for (index in 0u until context.numberGlobals) {
             globalVariableReader.readGlobalVariable(source, index, globalVisitor)
         }
 
-        globalVisitor.visitEnd()
+        globalVisitor?.visitEnd()
     }
 }

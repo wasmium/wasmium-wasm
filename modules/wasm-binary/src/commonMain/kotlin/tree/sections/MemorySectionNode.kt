@@ -11,14 +11,12 @@ public class MemorySectionNode : SectionNode(SectionKind.MEMORY), MemorySectionV
         for (memoryType in memories) {
             memorySectionVisitor.visitMemory(memoryType.memoryIndex!!, memoryType.limits!!)
         }
+
+        memorySectionVisitor.visitEnd()
     }
 
     public override fun visitMemory(memoryIndex: UInt, limits: ResizableLimits) {
-        val memoryType = MemoryTypeNode()
-        memoryType.memoryIndex = memoryIndex
-        memoryType.limits = limits
-
-        memories.add(memoryType)
+        memories.add(MemoryTypeNode(memoryIndex, limits))
     }
 
     public override fun visitEnd() {

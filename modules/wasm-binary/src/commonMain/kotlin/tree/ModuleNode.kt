@@ -1,7 +1,19 @@
 package org.wasmium.wasm.binary.tree
 
-import org.wasmium.wasm.binary.WasmBinary
-import org.wasmium.wasm.binary.tree.SectionKind.*
+import org.wasmium.wasm.binary.tree.SectionName.*
+import org.wasmium.wasm.binary.tree.SectionKind.CODE
+import org.wasmium.wasm.binary.tree.SectionKind.CUSTOM
+import org.wasmium.wasm.binary.tree.SectionKind.DATA
+import org.wasmium.wasm.binary.tree.SectionKind.DATA_COUNT
+import org.wasmium.wasm.binary.tree.SectionKind.ELEMENT
+import org.wasmium.wasm.binary.tree.SectionKind.EXPORT
+import org.wasmium.wasm.binary.tree.SectionKind.FUNCTION
+import org.wasmium.wasm.binary.tree.SectionKind.GLOBAL
+import org.wasmium.wasm.binary.tree.SectionKind.IMPORT
+import org.wasmium.wasm.binary.tree.SectionKind.MEMORY
+import org.wasmium.wasm.binary.tree.SectionKind.START
+import org.wasmium.wasm.binary.tree.SectionKind.TABLE
+import org.wasmium.wasm.binary.tree.SectionKind.TYPE
 import org.wasmium.wasm.binary.tree.sections.CodeSectionNode
 import org.wasmium.wasm.binary.tree.sections.CustomSectionNode
 import org.wasmium.wasm.binary.tree.sections.DataCountSectionNode
@@ -20,8 +32,9 @@ import org.wasmium.wasm.binary.tree.sections.SectionNode
 import org.wasmium.wasm.binary.tree.sections.StartSectionNode
 import org.wasmium.wasm.binary.tree.sections.TableSectionNode
 import org.wasmium.wasm.binary.tree.sections.TypeSectionNode
+import org.wasmium.wasm.binary.tree.sections.UnknownSectionNode
 import org.wasmium.wasm.binary.visitors.CodeSectionVisitor
-import org.wasmium.wasm.binary.visitors.CustomSectionVisitor
+import org.wasmium.wasm.binary.visitors.UnknownSectionVisitor
 import org.wasmium.wasm.binary.visitors.DataCountSectionVisitor
 import org.wasmium.wasm.binary.visitors.DataSectionVisitor
 import org.wasmium.wasm.binary.visitors.ElementSectionVisitor
@@ -40,153 +53,189 @@ import org.wasmium.wasm.binary.visitors.TableSectionVisitor
 import org.wasmium.wasm.binary.visitors.TypeSectionVisitor
 
 public class ModuleNode : ModuleVisitor {
-    protected var version: UInt? = null
+    public var version: UInt? = null
 
-    protected val sections: MutableList<SectionNode> = mutableListOf()
+    public val sections: MutableList<SectionNode> = mutableListOf()
 
     public fun accept(visitor: ModuleVisitor) {
-        visitor.visit(version!!)
+        visitor.visitHeader(version!!)
 
         for (section in sections) {
             when (section.sectionKind) {
                 CUSTOM -> {
-                    val customSection: CustomSectionNode = section as CustomSectionNode
+                    val customSection = section as CustomSectionNode
 
-                    when (customSection.name) {
-                        WasmBinary.SECTION_NAME_EXCEPTION -> {
-                            val exceptionSection: ExceptionSectionNode = customSection as ExceptionSectionNode
+                    when (customSection.customSectionName) {
+                        EXCEPTION.sectionName -> {
+                            val exceptionSection = customSection as ExceptionSectionNode
 
                             val exceptionSectionVisitor = visitor.visitExceptionSection()
-                            exceptionSection.accept(exceptionSectionVisitor)
-                            exceptionSectionVisitor.visitEnd()
+                            if (exceptionSectionVisitor != null) {
+                                exceptionSection.accept(exceptionSectionVisitor)
+                                exceptionSectionVisitor.visitEnd()
+                            }
                         }
 
-                        WasmBinary.SECTION_NAME_RELOCATION -> {
-                            val relocationSection: RelocationSectionNode = customSection as RelocationSectionNode
+                        RELOCATION.sectionName -> {
+                            val relocationSection = customSection as RelocationSectionNode
 
                             val relocationSectionVisitor = visitor.visitRelocationSection()
-                            relocationSection.accept(relocationSectionVisitor)
-                            relocationSectionVisitor.visitEnd()
+                            if (relocationSectionVisitor != null) {
+                                relocationSection.accept(relocationSectionVisitor)
+                                relocationSectionVisitor.visitEnd()
+                            }
                         }
 
-                        WasmBinary.SECTION_NAME_LINKING -> {
-                            val linkingSection: LinkingSectionNode = customSection as LinkingSectionNode
+                        LINKING.sectionName -> {
+                            val linkingSection = customSection as LinkingSectionNode
 
                             val linkingSectionVisitor = visitor.visitLinkingSection()
-                            linkingSection.accept(linkingSectionVisitor)
-                            linkingSectionVisitor.visitEnd()
+                            if (linkingSectionVisitor != null) {
+                                linkingSection.accept(linkingSectionVisitor)
+                                linkingSectionVisitor.visitEnd()
+                            }
                         }
 
-                        WasmBinary.SECTION_NAME_NAME -> {
-                            val nameSection: NameSectionNode = customSection as NameSectionNode
+                        NAME.sectionName -> {
+                            val nameSection = customSection as NameSectionNode
 
                             val nameSectionVisitor = visitor.visitNameSection()
-                            nameSection.accept(nameSectionVisitor)
-                            nameSectionVisitor.visitEnd()
+                            if (nameSectionVisitor != null) {
+                                nameSection.accept(nameSectionVisitor)
+                                nameSectionVisitor.visitEnd()
+                            }
                         }
 
                         else -> {
-                            val customSectionVisitor = visitor.visitCustomSection()
-                            customSection.accept(customSectionVisitor)
-                            customSectionVisitor.visitEnd()
+                            val unknownSection = customSection as UnknownSectionNode
+
+                            val unknownSectionVisitor = visitor.visitUnknownSection(unknownSection.customSectionName, unknownSection.content)
+                            if (unknownSectionVisitor != null) {
+                                unknownSection.accept(unknownSectionVisitor)
+                                unknownSectionVisitor.visitEnd()
+                            }
                         }
                     }
                 }
 
                 TYPE -> {
-                    val typeSection: TypeSectionNode = section as TypeSectionNode
+                    val typeSection = section as TypeSectionNode
 
                     val typeSectionVisitor = visitor.visitTypeSection()
-                    typeSection.accept(typeSectionVisitor)
-                    typeSectionVisitor.visitEnd()
+                    if (typeSectionVisitor != null) {
+                        typeSection.accept(typeSectionVisitor)
+                        typeSectionVisitor.visitEnd()
+                    }
                 }
 
                 IMPORT -> {
-                    val importSection: ImportSectionNode = section as ImportSectionNode
+                    val importSection = section as ImportSectionNode
 
                     val importSectionVisitor = visitor.visitImportSection()
-                    importSection.accept(importSectionVisitor)
-                    importSectionVisitor.visitEnd()
+                    if (importSectionVisitor != null) {
+                        importSection.accept(importSectionVisitor)
+                        importSectionVisitor.visitEnd()
+                    }
                 }
 
                 FUNCTION -> {
-                    val functionSection: FunctionSectionNode = section as FunctionSectionNode
+                    val functionSection = section as FunctionSectionNode
 
                     val functionSectionVisitor = visitor.visitFunctionSection()
-                    functionSection.accept(functionSectionVisitor)
-                    functionSectionVisitor.visitEnd()
+                    if (functionSectionVisitor != null) {
+                        functionSection.accept(functionSectionVisitor)
+                        functionSectionVisitor.visitEnd()
+                    }
                 }
 
                 TABLE -> {
-                    val tableSection: TableSectionNode = section as TableSectionNode
+                    val tableSection = section as TableSectionNode
 
                     val tableSectionVisitor = visitor.visitTableSection()
-                    tableSection.accept(tableSectionVisitor)
-                    tableSectionVisitor.visitEnd()
+                    if (tableSectionVisitor != null) {
+                        tableSection.accept(tableSectionVisitor)
+                        tableSectionVisitor.visitEnd()
+                    }
                 }
 
                 MEMORY -> {
-                    val memorySection: MemorySectionNode = section as MemorySectionNode
+                    val memorySection = section as MemorySectionNode
 
                     val memorySectionVisitor = visitor.visitMemorySection()
-                    memorySection.accept(memorySectionVisitor)
-                    memorySectionVisitor.visitEnd()
+                    if (memorySectionVisitor != null) {
+                        memorySection.accept(memorySectionVisitor)
+                        memorySectionVisitor.visitEnd()
+                    }
                 }
 
                 GLOBAL -> {
-                    val globalSection: GlobalSectionNode = section as GlobalSectionNode
+                    val globalSection = section as GlobalSectionNode
 
                     val globalSectionVisitor = visitor.visitGlobalSection()
-                    globalSection.accept(globalSectionVisitor)
-                    globalSectionVisitor.visitEnd()
+                    if (globalSectionVisitor != null) {
+                        globalSection.accept(globalSectionVisitor)
+                        globalSectionVisitor.visitEnd()
+                    }
                 }
 
                 EXPORT -> {
-                    val exportSection: ExportSectionNode = section as ExportSectionNode
+                    val exportSection = section as ExportSectionNode
 
                     val exportSectionVisitor = visitor.visitExportSection()
-                    exportSection.accept(exportSectionVisitor)
-                    exportSectionVisitor.visitEnd()
+                    if (exportSectionVisitor != null) {
+                        exportSection.accept(exportSectionVisitor)
+                        exportSectionVisitor.visitEnd()
+                    }
                 }
 
                 START -> {
-                    val startSection: StartSectionNode = section as StartSectionNode
+                    val startSection = section as StartSectionNode
 
-                    val startSectionVisitor = visitor.visitStartSection()
-                    startSection.accept(startSectionVisitor)
-                    startSectionVisitor.visitEnd()
+                    val startSectionVisitor = visitor.visitStartSection(startSection.functionIndex)
+                    if (startSectionVisitor != null) {
+                        startSection.accept(startSectionVisitor)
+                        startSectionVisitor.visitEnd()
+                    }
                 }
 
                 ELEMENT -> {
-                    val elementSection: ElementSectionNode = section as ElementSectionNode
+                    val elementSection = section as ElementSectionNode
 
                     val elementSectionVisitor = visitor.visitElementSection()
-                    elementSection.accept(elementSectionVisitor)
-                    elementSectionVisitor.visitEnd()
+                    if (elementSectionVisitor != null) {
+                        elementSection.accept(elementSectionVisitor)
+                        elementSectionVisitor.visitEnd()
+                    }
                 }
 
                 CODE -> {
-                    val codeSection: CodeSectionNode = section as CodeSectionNode
+                    val codeSection = section as CodeSectionNode
 
                     val codeSectionVisitor = visitor.visitCodeSection()
-                    codeSection.accept(codeSectionVisitor)
-                    codeSectionVisitor.visitEnd()
+                    if (codeSectionVisitor != null) {
+                        codeSection.accept(codeSectionVisitor)
+                        codeSectionVisitor.visitEnd()
+                    }
                 }
 
                 DATA -> {
-                    val dataSection: DataSectionNode = section as DataSectionNode
+                    val dataSection = section as DataSectionNode
 
                     val dataSectionVisitor = visitor.visitDataSection()
-                    dataSection.accept(dataSectionVisitor)
-                    dataSectionVisitor.visitEnd()
+                    if (dataSectionVisitor != null) {
+                        dataSection.accept(dataSectionVisitor)
+                        dataSectionVisitor.visitEnd()
+                    }
                 }
 
                 DATA_COUNT -> {
                     val dataCountSection = section as DataCountSectionNode
 
-                    val dataCountSectionVisitor = visitor.visitDataCountSection()
-                    dataCountSection.accept(dataCountSectionVisitor)
-                    dataCountSectionVisitor.visitEnd()
+                    val dataCountSectionVisitor = visitor.visitDataCountSection(dataCountSection.dataCount)
+                    if (dataCountSectionVisitor != null) {
+                        dataCountSection.accept(dataCountSectionVisitor)
+                        dataCountSectionVisitor.visitEnd()
+                    }
                 }
             }
         }
@@ -194,130 +243,130 @@ public class ModuleNode : ModuleVisitor {
         visitor.visitEnd()
     }
 
-    override fun visit(version: UInt) {
+    public override fun visitHeader(version: UInt) {
         this.version = version
     }
 
-    override fun visitTypeSection(): TypeSectionVisitor {
+    public override fun visitTypeSection(): TypeSectionVisitor {
         val typeSection = TypeSectionNode()
         sections.add(typeSection)
 
         return typeSection
     }
 
-    override fun visitFunctionSection(): FunctionSectionVisitor {
+    public override fun visitFunctionSection(): FunctionSectionVisitor {
         val functionSection = FunctionSectionNode()
         sections.add(functionSection)
 
         return functionSection
     }
 
-    override fun visitStartSection(): StartSectionVisitor {
-        val startSection = StartSectionNode()
+    public override fun visitStartSection(functionIndex: UInt): StartSectionVisitor {
+        val startSection = StartSectionNode(functionIndex)
         sections.add(startSection)
 
         return startSection
     }
 
-    override fun visitImportSection(): ImportSectionVisitor {
+    public override fun visitImportSection(): ImportSectionVisitor {
         val importSection = ImportSectionNode()
         sections.add(importSection)
 
         return importSection
     }
 
-    override fun visitExportSection(): ExportSectionVisitor {
+    public override fun visitExportSection(): ExportSectionVisitor {
         val exportSection = ExportSectionNode()
         sections.add(exportSection)
 
         return exportSection
     }
 
-    override fun visitTableSection(): TableSectionVisitor {
+    public override fun visitTableSection(): TableSectionVisitor {
         val tableSection = TableSectionNode()
         sections.add(tableSection)
 
         return tableSection
     }
 
-    override fun visitElementSection(): ElementSectionVisitor {
+    public override fun visitElementSection(): ElementSectionVisitor {
         val elementSection = ElementSectionNode()
         sections.add(elementSection)
 
         return elementSection
     }
 
-    override fun visitGlobalSection(): GlobalSectionVisitor {
+    public override fun visitGlobalSection(): GlobalSectionVisitor {
         val globalSection = GlobalSectionNode()
         sections.add(globalSection)
 
         return globalSection
     }
 
-    override fun visitCodeSection(): CodeSectionVisitor {
+    public override fun visitCodeSection(): CodeSectionVisitor {
         val codeSection = CodeSectionNode()
         sections.add(codeSection)
 
         return codeSection
     }
 
-    override fun visitMemorySection(): MemorySectionVisitor {
+    public override fun visitMemorySection(): MemorySectionVisitor {
         val memorySection = MemorySectionNode()
         sections.add(memorySection)
 
         return memorySection
     }
 
-    override fun visitDataSection(): DataSectionVisitor {
+    public override fun visitDataSection(): DataSectionVisitor {
         val dataSection = DataSectionNode()
         sections.add(dataSection)
 
         return dataSection
     }
 
-    override fun visitCustomSection(): CustomSectionVisitor {
-        val customSection = CustomSectionNode()
-        sections.add(customSection)
+    public override fun visitUnknownSection(customSectionName: String, content: ByteArray): UnknownSectionVisitor {
+        val unknownCustomSection = UnknownSectionNode(customSectionName, content)
+        sections.add(unknownCustomSection)
 
-        return customSection
+        return unknownCustomSection
     }
 
-    override fun visitExceptionSection(): ExceptionSectionVisitor {
+    public override fun visitExceptionSection(): ExceptionSectionVisitor {
         val exceptionSection = ExceptionSectionNode()
         sections.add(exceptionSection)
 
         return exceptionSection
     }
 
-    override fun visitRelocationSection(): RelocationSectionVisitor {
+    public override fun visitRelocationSection(): RelocationSectionVisitor {
         val relocationSection = RelocationSectionNode()
         sections.add(relocationSection)
 
         return relocationSection
     }
 
-    override fun visitLinkingSection(): LinkingSectionVisitor {
+    public override fun visitLinkingSection(): LinkingSectionVisitor {
         val linkingSection = LinkingSectionNode()
         sections.add(linkingSection)
 
         return linkingSection
     }
 
-    override fun visitNameSection(): NameSectionVisitor {
+    public override fun visitNameSection(): NameSectionVisitor {
         val nameSection = NameSectionNode()
         sections.add(nameSection)
 
         return nameSection
     }
 
-    public override fun visitDataCountSection(): DataCountSectionVisitor {
-        val dataCountSection = DataCountSectionNode()
+    public override fun visitDataCountSection(dataCount: UInt): DataCountSectionVisitor {
+        val dataCountSection = DataCountSectionNode(dataCount)
         sections.add(dataCountSection)
 
         return dataCountSection
     }
 
-    override fun visitEnd() {
+    public override fun visitEnd() {
         // empty
     }
 }

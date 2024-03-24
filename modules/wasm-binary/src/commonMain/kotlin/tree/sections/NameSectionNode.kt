@@ -1,8 +1,9 @@
 package org.wasmium.wasm.binary.tree.sections
 
+import org.wasmium.wasm.binary.tree.SectionName
 import org.wasmium.wasm.binary.visitors.NameSectionVisitor
 
-public class NameSectionNode : CustomSectionNode(), NameSectionVisitor {
+public class NameSectionNode : CustomSectionNode(SectionName.NAME.sectionName), NameSectionVisitor {
     public var module: ModuleNameNode? = null
     public val functions: MutableList<FunctionNameNode> = mutableListOf()
     public val globals: MutableList<FunctionNameNode> = mutableListOf()
@@ -15,126 +16,87 @@ public class NameSectionNode : CustomSectionNode(), NameSectionVisitor {
     public val datas: MutableList<FunctionNameNode> = mutableListOf()
 
     public fun accept(nameSectionVisitor: NameSectionVisitor) {
-        if (module != null) {
-            nameSectionVisitor.visitModuleName(module!!.name!!)
+        module?.let {
+            nameSectionVisitor.visitModuleName(it.name)
         }
 
         for (function in functions) {
-            nameSectionVisitor.visitFunctionName(function.functionIndex!!, function.functionName!!)
+            nameSectionVisitor.visitFunctionName(function.functionIndex, function.functionName)
         }
 
         for (local in locals) {
-            nameSectionVisitor.visitLocalName(local.functionIndex!!, local.localIndex!!, local.name!!)
+            nameSectionVisitor.visitLocalName(local.functionIndex, local.localIndex, local.name)
         }
 
         for (label in labels) {
-            nameSectionVisitor.visitLocalName(label.functionIndex!!, label.localIndex!!, label.name!!)
+            nameSectionVisitor.visitLocalName(label.functionIndex, label.localIndex, label.name)
         }
 
         for (globals in globals) {
-            nameSectionVisitor.visitFunctionName(globals.functionIndex!!, globals.functionName!!)
+            nameSectionVisitor.visitFunctionName(globals.functionIndex, globals.functionName)
         }
 
         for (table in tables) {
-            nameSectionVisitor.visitTagName(table.functionIndex!!, table.functionName!!)
+            nameSectionVisitor.visitTagName(table.functionIndex, table.functionName)
         }
 
         for (tag in tags) {
-            nameSectionVisitor.visitTagName(tag.functionIndex!!, tag.functionName!!)
+            nameSectionVisitor.visitTagName(tag.functionIndex, tag.functionName)
         }
 
         for (memory in memories) {
-            nameSectionVisitor.visitMemoryName(memory.functionIndex!!, memory.functionName!!)
+            nameSectionVisitor.visitMemoryName(memory.functionIndex, memory.functionName)
         }
 
         for (element in elements) {
-            nameSectionVisitor.visitElementName(element.functionIndex!!, element.functionName!!)
+            nameSectionVisitor.visitElementName(element.functionIndex, element.functionName)
         }
 
         for (data in datas) {
-            nameSectionVisitor.visitDataName(data.functionIndex!!, data.functionName!!)
+            nameSectionVisitor.visitDataName(data.functionIndex, data.functionName)
         }
+
+        nameSectionVisitor.visitEnd()
     }
 
     public override fun visitModuleName(name: String) {
-        val module = ModuleNameNode()
-        module.name = name
-
-        this.module = module
+        this.module = ModuleNameNode(name)
     }
 
     public override fun visitFunctionName(functionIndex: UInt, name: String) {
-        val functionName = FunctionNameNode()
-        functionName.functionIndex = functionIndex
-        functionName.functionName = name
-
-        functions.add(functionName)
+        functions.add(FunctionNameNode(functionIndex, name))
     }
 
     public override fun visitGlobalName(functionIndex: UInt, name: String) {
-        val functionName = FunctionNameNode()
-        functionName.functionIndex = functionIndex
-        functionName.functionName = name
-
-        globals.add(functionName)
+        globals.add(FunctionNameNode(functionIndex, name))
     }
 
     public override fun visitDataName(functionIndex: UInt, name: String) {
-        val functionName = FunctionNameNode()
-        functionName.functionIndex = functionIndex
-        functionName.functionName = name
-
-        datas.add(functionName)
+        datas.add(FunctionNameNode(functionIndex, name))
     }
 
     public override fun visitElementName(functionIndex: UInt, name: String) {
-        val functionName = FunctionNameNode()
-        functionName.functionIndex = functionIndex
-        functionName.functionName = name
-
-        elements.add(functionName)
+        elements.add(FunctionNameNode(functionIndex, name))
     }
 
     public override fun visitTagName(functionIndex: UInt, name: String) {
-        val functionName = FunctionNameNode()
-        functionName.functionIndex = functionIndex
-        functionName.functionName = name
-
-        tags.add(functionName)
+        tags.add(FunctionNameNode(functionIndex, name))
     }
 
     public override fun visitMemoryName(functionIndex: UInt, name: String) {
-        val functionName = FunctionNameNode()
-        functionName.functionIndex = functionIndex
-        functionName.functionName = name
-
-        memories.add(functionName)
+        memories.add(FunctionNameNode(functionIndex, name))
     }
 
     public override fun visitTableName(functionIndex: UInt, name: String) {
-        val functionName = FunctionNameNode()
-        functionName.functionIndex = functionIndex
-        functionName.functionName = name
-
-        tables.add(functionName)
+        tables.add(FunctionNameNode(functionIndex, name))
     }
 
     public override fun visitLocalName(functionIndex: UInt, localIndex: UInt, name: String) {
-        val localName = LocalNameNode()
-        localName.functionIndex = functionIndex
-        localName.localIndex = localIndex
-        localName.name = name
-
-        locals.add(localName)
+        locals.add(LocalNameNode(functionIndex, localIndex, name))
     }
 
     public override fun visitLabelName(functionIndex: UInt, localIndex: UInt, name: String) {
-        val localName = LocalNameNode()
-        localName.functionIndex = functionIndex
-        localName.localIndex = localIndex
-        localName.name = name
-
-        labels.add(localName)
+        labels.add(LocalNameNode(functionIndex, localIndex, name))
     }
 
     public override fun visitEnd() {

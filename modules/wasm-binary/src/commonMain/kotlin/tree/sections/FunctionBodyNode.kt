@@ -19,10 +19,13 @@ public class FunctionBodyNode : FunctionBodyVisitor {
         for (instruction in instructions) {
             instruction.accept(functionBodyVisitor)
         }
+
+        functionBodyVisitor.visitEnd()
     }
 
     public override fun visitLocalVariable(localIndex: UInt, count: UInt, localType: WasmType) {
         val localNode = LocalNode()
+        localNode.localIndex = localIndex
         localNode.count = count
         localNode.type = localType
 
@@ -37,27 +40,27 @@ public class FunctionBodyNode : FunctionBodyVisitor {
         // empty
     }
 
-    override fun visitAtomicLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+    public override fun visitAtomicLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
         instructions.add(AtomicLoadInstruction(opcode, alignment, offset))
     }
 
-    override fun visitAtomicStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+    public override fun visitAtomicStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
         instructions.add(AtomicStoreInstruction(opcode, alignment, offset))
     }
 
-    override fun visitAtomicRmwInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+    public override fun visitAtomicRmwInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
         instructions.add(AtomicRmwInstruction(opcode, alignment, offset))
     }
 
-    override fun visitAtomicRmwCompareExchangeInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+    public override fun visitAtomicRmwCompareExchangeInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
         instructions.add(AtomicRmwCompareExchangeInstruction(opcode, alignment, offset))
     }
 
-    override fun visitAtomicWaitInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+    public override fun visitAtomicWaitInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
         instructions.add(AtomicWaitInstruction(opcode, alignment, offset))
     }
 
-    override fun visitAtomicWakeInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+    public override fun visitAtomicWakeInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
         instructions.add(AtomicWakeInstruction(opcode, alignment, offset))
     }
 
@@ -65,11 +68,11 @@ public class FunctionBodyNode : FunctionBodyVisitor {
         instructions.add(BrTableInstruction(targets, defaultTarget))
     }
 
-    override fun visitCompareInstruction(opcode: Opcode) {
+    public override fun visitCompareInstruction(opcode: Opcode) {
         instructions.add(CompareInstruction(opcode))
     }
 
-    override fun visitConvertInstruction(opcode: Opcode) {
+    public override fun visitConvertInstruction(opcode: Opcode) {
         instructions.add(ConvertInstruction(opcode))
     }
 
@@ -97,11 +100,11 @@ public class FunctionBodyNode : FunctionBodyVisitor {
         instructions.add(ConstInt64Instruction(value))
     }
 
-    override fun visitLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+    public override fun visitLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
         instructions.add(LoadInstruction(opcode, alignment, offset))
     }
 
-    override fun visitStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+    public override fun visitStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
         instructions.add(StoreInstruction(opcode, alignment, offset))
     }
 
@@ -109,11 +112,11 @@ public class FunctionBodyNode : FunctionBodyVisitor {
         instructions.add(SimdShuffleInstruction(opcode, value))
     }
 
-    override fun visitSimdLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+    public override fun visitSimdLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
         instructions.add(SimdStoreInstruction(opcode, alignment, offset))
     }
 
-    override fun visitSimdStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+    public override fun visitSimdStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
         instructions.add(SimdLoadInstruction(opcode, alignment, offset))
     }
 
@@ -121,23 +124,23 @@ public class FunctionBodyNode : FunctionBodyVisitor {
         instructions.add(SimdConstInstruction(value))
     }
 
-    override fun visitWrapInstruction(opcode: Opcode) {
+    public override fun visitWrapInstruction(opcode: Opcode) {
         instructions.add(WrapInstruction(opcode))
     }
 
-    override fun visitExtendInstruction(opcode: Opcode) {
+    public override fun visitExtendInstruction(opcode: Opcode) {
         instructions.add(ExtendInstruction(opcode))
     }
 
-    override fun visitDemoteInstruction(opcode: Opcode) {
+    public override fun visitDemoteInstruction(opcode: Opcode) {
         instructions.add(DemoteInstruction(opcode))
     }
 
-    override fun visitPromoteInstruction(opcode: Opcode) {
+    public override fun visitPromoteInstruction(opcode: Opcode) {
         instructions.add(PromoteInstruction(opcode))
     }
 
-    override fun visitReinterpretInstruction(opcode: Opcode) {
+    public override fun visitReinterpretInstruction(opcode: Opcode) {
         instructions.add(ReinterpretInstruction(opcode))
     }
 
@@ -177,7 +180,7 @@ public class FunctionBodyNode : FunctionBodyVisitor {
         instructions.add(ThrowRefInstruction())
     }
 
-    override fun visitThrowInstruction(exceptionIndex: UInt) {
+    public override fun visitThrowInstruction(exceptionIndex: UInt) {
         instructions.add(ThrowInstruction(exceptionIndex))
     }
 
@@ -185,11 +188,11 @@ public class FunctionBodyNode : FunctionBodyVisitor {
         instructions.add(RethrowInstruction())
     }
 
-    override fun visitBrInstruction(depth: UInt) {
+    public override fun visitBrInstruction(depth: UInt) {
         instructions.add(BrInstruction(depth))
     }
 
-    override fun visitBrIfInstruction(depth: UInt) {
+    public override fun visitBrIfInstruction(depth: UInt) {
         instructions.add(BrIfInstruction(depth))
     }
 
@@ -197,11 +200,11 @@ public class FunctionBodyNode : FunctionBodyVisitor {
         instructions.add(ReturnInstruction())
     }
 
-    override fun visitCallInstruction(functionIndex: UInt) {
+    public override fun visitCallInstruction(functionIndex: UInt) {
         instructions.add(CallInstruction(functionIndex))
     }
 
-    override fun visitCallIndirectInstruction(signatureIndex: UInt, reserved: Boolean) {
+    public override fun visitCallIndirectInstruction(signatureIndex: UInt, reserved: Boolean) {
         instructions.add(CallIndirectInstruction(signatureIndex, reserved))
     }
 
@@ -213,23 +216,23 @@ public class FunctionBodyNode : FunctionBodyVisitor {
         instructions.add(SelectInstruction())
     }
 
-    override fun visitGetGlobalInstruction(globalIndex: UInt) {
+    public override fun visitGetGlobalInstruction(globalIndex: UInt) {
         instructions.add(GetGlobalInstruction(globalIndex))
     }
 
-    override fun visitSetLocalInstruction(localIndex: UInt) {
+    public override fun visitSetLocalInstruction(localIndex: UInt) {
         instructions.add(SetLocalInstruction(localIndex))
     }
 
-    override fun visitTeeLocalInstruction(localIndex: UInt) {
+    public override fun visitTeeLocalInstruction(localIndex: UInt) {
         instructions.add(TeeLocalInstruction(localIndex))
     }
 
-    override fun visitGetLocalInstruction(localIndex: UInt) {
+    public override fun visitGetLocalInstruction(localIndex: UInt) {
         instructions.add(GetLocalInstruction(localIndex))
     }
 
-    override fun visitSetGlobalInstruction(globalIndex: UInt) {
+    public override fun visitSetGlobalInstruction(globalIndex: UInt) {
         instructions.add(SetGlobalInstruction(globalIndex))
     }
 
@@ -241,282 +244,282 @@ public class FunctionBodyNode : FunctionBodyVisitor {
         instructions.add(GrowMemoryInstruction(reserved))
     }
 
-    override fun visitEqualZeroInstruction(opcode: Opcode) {
+    public override fun visitEqualZeroInstruction(opcode: Opcode) {
         instructions.add(EqualZeroInstruction(opcode))
     }
 
-    override fun visitEqualInstruction(opcode: Opcode) {
+    public override fun visitEqualInstruction(opcode: Opcode) {
         instructions.add(EqualInstruction(opcode))
     }
 
-    override fun visitNotEqualInstruction(opcode: Opcode) {
+    public override fun visitNotEqualInstruction(opcode: Opcode) {
         instructions.add(NotEqualInstruction(opcode))
     }
 
-    override fun visitLessThanInstruction(opcode: Opcode) {
+    public override fun visitLessThanInstruction(opcode: Opcode) {
         instructions.add(LessThanInstruction(opcode))
     }
 
-    override fun visitLessEqualInstruction(opcode: Opcode) {
+    public override fun visitLessEqualInstruction(opcode: Opcode) {
         instructions.add(LessEqualInstruction(opcode))
     }
 
-    override fun visitGreaterThanInstruction(opcode: Opcode) {
+    public override fun visitGreaterThanInstruction(opcode: Opcode) {
         instructions.add(GreaterThanInstruction(opcode))
     }
 
-    override fun visitGreaterEqualInstruction(opcode: Opcode) {
+    public override fun visitGreaterEqualInstruction(opcode: Opcode) {
         instructions.add(GreaterEqualInstruction(opcode))
     }
 
-    override fun visitCountLeadingZerosInstruction(opcode: Opcode) {
+    public override fun visitCountLeadingZerosInstruction(opcode: Opcode) {
         instructions.add(CountLeadingZerosInstruction(opcode))
     }
 
-    override fun visitCountTrailingZerosInstruction(opcode: Opcode) {
+    public override fun visitCountTrailingZerosInstruction(opcode: Opcode) {
         instructions.add(CountTrailingZerosInstruction(opcode))
     }
 
-    override fun visitPopulationCountInstruction(opcode: Opcode) {
+    public override fun visitPopulationCountInstruction(opcode: Opcode) {
         instructions.add(PopulationCountInstruction(opcode))
     }
 
-    override fun visitAddInstruction(opcode: Opcode) {
+    public override fun visitAddInstruction(opcode: Opcode) {
         instructions.add(AddInstruction(opcode))
     }
 
-    override fun visitSubtractInstruction(opcode: Opcode) {
+    public override fun visitSubtractInstruction(opcode: Opcode) {
         instructions.add(SubtractInstruction(opcode))
     }
 
-    override fun visitMultiplyInstruction(opcode: Opcode) {
+    public override fun visitMultiplyInstruction(opcode: Opcode) {
         instructions.add(MultiplyInstruction(opcode))
     }
 
-    override fun visitDivideInstruction(opcode: Opcode) {
+    public override fun visitDivideInstruction(opcode: Opcode) {
         instructions.add(DivideInstruction(opcode))
     }
 
-    override fun visitRemainderInstruction(opcode: Opcode) {
+    public override fun visitRemainderInstruction(opcode: Opcode) {
         instructions.add(RemainderInstruction(opcode))
     }
 
-    override fun visitAndInstruction(opcode: Opcode) {
+    public override fun visitAndInstruction(opcode: Opcode) {
         instructions.add(AndInstruction(opcode))
     }
 
-    override fun visitOrInstruction(opcode: Opcode) {
+    public override fun visitOrInstruction(opcode: Opcode) {
         instructions.add(OrInstruction(opcode))
     }
 
-    override fun visitSimdXorInstruction(opcode: Opcode) {
+    public override fun visitSimdXorInstruction(opcode: Opcode) {
         instructions.add(SimdXorInstruction(opcode))
     }
 
-    override fun visitShiftLeftInstruction(opcode: Opcode) {
+    public override fun visitShiftLeftInstruction(opcode: Opcode) {
         instructions.add(ShiftLeftInstruction(opcode))
     }
 
-    override fun visitRotateLeftInstruction(opcode: Opcode) {
+    public override fun visitRotateLeftInstruction(opcode: Opcode) {
         instructions.add(RotateLeftInstruction(opcode))
     }
 
-    override fun visitRotateRightInstruction(opcode: Opcode) {
+    public override fun visitRotateRightInstruction(opcode: Opcode) {
         instructions.add(RotateRightInstruction(opcode))
     }
 
-    override fun visitAbsoluteInstruction(opcode: Opcode) {
+    public override fun visitAbsoluteInstruction(opcode: Opcode) {
         instructions.add(AbsoluteInstruction(opcode))
     }
 
-    override fun visitNegativeInstruction(opcode: Opcode) {
+    public override fun visitNegativeInstruction(opcode: Opcode) {
         instructions.add(NegativeInstruction(opcode))
     }
 
-    override fun visitCeilingInstruction(opcode: Opcode) {
+    public override fun visitCeilingInstruction(opcode: Opcode) {
         instructions.add(CeilingInstruction(opcode))
     }
 
-    override fun visitFloorInstruction(opcode: Opcode) {
+    public override fun visitFloorInstruction(opcode: Opcode) {
         instructions.add(FloorInstruction(opcode))
     }
 
-    override fun visitTruncateInstruction(opcode: Opcode) {
+    public override fun visitTruncateInstruction(opcode: Opcode) {
         instructions.add(TruncateInstruction(opcode))
     }
 
-    override fun visitNearestInstruction(opcode: Opcode) {
+    public override fun visitNearestInstruction(opcode: Opcode) {
         instructions.add(NearestInstruction(opcode))
     }
 
-    override fun visitSqrtInstruction(opcode: Opcode) {
+    public override fun visitSqrtInstruction(opcode: Opcode) {
         instructions.add(SqrtInstruction(opcode))
     }
 
-    override fun visitMinInstruction(opcode: Opcode) {
+    public override fun visitMinInstruction(opcode: Opcode) {
         instructions.add(MinInstruction(opcode))
     }
 
-    override fun visitMaxInstruction(opcode: Opcode) {
+    public override fun visitMaxInstruction(opcode: Opcode) {
         instructions.add(MaxInstruction(opcode))
     }
 
-    override fun visitAtomicRmwAddInstruction(opcode: Opcode, align: UInt, offset: UInt) {
+    public override fun visitAtomicRmwAddInstruction(opcode: Opcode, align: UInt, offset: UInt) {
         instructions.add(AtomicRmwAddInstruction(opcode, align, offset))
     }
 
-    override fun visitAtomicRmwSubtractInstruction(opcode: Opcode, align: UInt, offset: UInt) {
+    public override fun visitAtomicRmwSubtractInstruction(opcode: Opcode, align: UInt, offset: UInt) {
         instructions.add(AtomicRmwAddInstruction(opcode, align, offset))
     }
 
-    override fun visitAtomicRmwAndInstruction(opcode: Opcode, align: UInt, offset: UInt) {
+    public override fun visitAtomicRmwAndInstruction(opcode: Opcode, align: UInt, offset: UInt) {
         instructions.add(AtomicRmwAndInstruction(opcode, align, offset))
     }
 
-    override fun visitAtomicRmwOrInstruction(opcode: Opcode, align: UInt, offset: UInt) {
+    public override fun visitAtomicRmwOrInstruction(opcode: Opcode, align: UInt, offset: UInt) {
         instructions.add(AtomicRmwOrInstruction(opcode, align, offset))
     }
 
-    override fun visitAtomicRmwXorInstruction(opcode: Opcode, align: UInt, offset: UInt) {
+    public override fun visitAtomicRmwXorInstruction(opcode: Opcode, align: UInt, offset: UInt) {
         instructions.add(AtomicRmwXorInstruction(opcode, align, offset))
     }
 
-    override fun visitAtomicRmwExchangeInstruction(opcode: Opcode, align: UInt, offset: UInt) {
+    public override fun visitAtomicRmwExchangeInstruction(opcode: Opcode, align: UInt, offset: UInt) {
         instructions.add(AtomicRmwExchangeInstruction(opcode, align, offset))
     }
 
-    override fun visitSimdSplatInstruction(opcode: Opcode, value: UInt) {
+    public override fun visitSimdSplatInstruction(opcode: Opcode, value: UInt) {
         instructions.add(SimdSplatInstruction(opcode, value))
     }
 
-    override fun visitSimdExtractLaneInstruction(opcode: Opcode, index: UInt) {
+    public override fun visitSimdExtractLaneInstruction(opcode: Opcode, index: UInt) {
         instructions.add(SimdExtractLaneInstruction(opcode, index))
     }
 
-    override fun visitSimdReplaceLaneInstruction(opcode: Opcode, index: UInt) {
+    public override fun visitSimdReplaceLaneInstruction(opcode: Opcode, index: UInt) {
         instructions.add(SimdReplaceLaneInstruction(opcode, index))
     }
 
-    override fun visitSimdAddInstruction(opcode: Opcode) {
+    public override fun visitSimdAddInstruction(opcode: Opcode) {
         instructions.add(SimdAddInstruction(opcode))
     }
 
-    override fun visitSimdSubtractInstruction(opcode: Opcode) {
+    public override fun visitSimdSubtractInstruction(opcode: Opcode) {
         instructions.add(SimdSubtractInstruction(opcode))
     }
 
-    override fun visitSimdMultiplyInstruction(opcode: Opcode) {
+    public override fun visitSimdMultiplyInstruction(opcode: Opcode) {
         instructions.add(SimdMultiplyInstruction(opcode))
     }
 
-    override fun visitSimdNegativeInstruction(opcode: Opcode) {
+    public override fun visitSimdNegativeInstruction(opcode: Opcode) {
         instructions.add(SimdNegativeInstruction(opcode))
     }
 
-    override fun visitSimdAddSaturateInstruction(opcode: Opcode) {
+    public override fun visitSimdAddSaturateInstruction(opcode: Opcode) {
         instructions.add(SimdAddSaturateInstruction(opcode))
     }
 
-    override fun visitSimdSubtractSaturateInstruction(opcode: Opcode) {
+    public override fun visitSimdSubtractSaturateInstruction(opcode: Opcode) {
         instructions.add(SimdSubtractSaturateInstruction(opcode))
     }
 
-    override fun visitSimdShiftLeftInstruction(opcode: Opcode) {
+    public override fun visitSimdShiftLeftInstruction(opcode: Opcode) {
         instructions.add(SimdShiftLeftInstruction(opcode))
     }
 
-    override fun visitSimdAndInstruction(opcode: Opcode) {
+    public override fun visitSimdAndInstruction(opcode: Opcode) {
         instructions.add(SimdAndInstruction(opcode))
     }
 
-    override fun visitSimdOrInstruction(opcode: Opcode) {
+    public override fun visitSimdOrInstruction(opcode: Opcode) {
         instructions.add(SimdOrInstruction(opcode))
     }
 
-    override fun visitSimdNotInstruction(opcode: Opcode) {
+    public override fun visitSimdNotInstruction(opcode: Opcode) {
         instructions.add(SimdNotInstruction(opcode))
     }
 
-    override fun visitSimdBitSelectInstruction(opcode: Opcode) {
+    public override fun visitSimdBitSelectInstruction(opcode: Opcode) {
         instructions.add(SimdBitSelectInstruction(opcode))
     }
 
-    override fun visitSimdAllTrueInstruction(opcode: Opcode) {
+    public override fun visitSimdAllTrueInstruction(opcode: Opcode) {
         instructions.add(SimdAllTrueInstruction(opcode))
     }
 
-    override fun visitSimdEqualInstruction(opcode: Opcode) {
+    public override fun visitSimdEqualInstruction(opcode: Opcode) {
         instructions.add(SimdEqualInstruction(opcode))
     }
 
-    override fun visitSimdNotEqualInstruction(opcode: Opcode) {
+    public override fun visitSimdNotEqualInstruction(opcode: Opcode) {
         instructions.add(SimdNotEqualInstruction(opcode))
     }
 
-    override fun visitSimdLessThanInstruction(opcode: Opcode) {
+    public override fun visitSimdLessThanInstruction(opcode: Opcode) {
         instructions.add(SimdLessThanInstruction(opcode))
     }
 
-    override fun visitSimdLessEqualInstruction(opcode: Opcode) {
+    public override fun visitSimdLessEqualInstruction(opcode: Opcode) {
         instructions.add(SimdLessEqualInstruction(opcode))
     }
 
-    override fun visitSimdGreaterThanInstruction(opcode: Opcode) {
+    public override fun visitSimdGreaterThanInstruction(opcode: Opcode) {
         instructions.add(SimdGreaterThanInstruction(opcode))
     }
 
-    override fun visitSimdGreaterEqualInstruction(opcode: Opcode) {
+    public override fun visitSimdGreaterEqualInstruction(opcode: Opcode) {
         instructions.add(SimdGreaterEqualInstruction(opcode))
     }
 
-    override fun visitSimdMinInstruction(opcode: Opcode) {
+    public override fun visitSimdMinInstruction(opcode: Opcode) {
         instructions.add(SimdMinInstruction(opcode))
     }
 
-    override fun visitSimdMaxInstruction(opcode: Opcode) {
+    public override fun visitSimdMaxInstruction(opcode: Opcode) {
         instructions.add(SimdMaxInstruction(opcode))
     }
 
-    override fun visitSimdDivideInstruction(opcode: Opcode) {
+    public override fun visitSimdDivideInstruction(opcode: Opcode) {
         instructions.add(SimdDivideInstruction(opcode))
     }
 
-    override fun visitSimdSqrtInstruction(opcode: Opcode) {
+    public override fun visitSimdSqrtInstruction(opcode: Opcode) {
         instructions.add(SimdSqrtInstruction(opcode))
     }
 
-    override fun visitSimdConvertInstruction(opcode: Opcode) {
+    public override fun visitSimdConvertInstruction(opcode: Opcode) {
         instructions.add(SimdConvertInstruction(opcode))
     }
 
-    override fun visitSimdTruncateInstruction(opcode: Opcode) {
+    public override fun visitSimdTruncateInstruction(opcode: Opcode) {
         instructions.add(SimdTruncateInstruction(opcode))
     }
 
-    override fun visitCopySignInstruction(opcode: Opcode) {
+    public override fun visitCopySignInstruction(opcode: Opcode) {
         instructions.add(CopySignInstruction(opcode))
     }
 
-    override fun visitXorInstruction(opcode: Opcode) {
+    public override fun visitXorInstruction(opcode: Opcode) {
         instructions.add(XorInstruction(opcode))
     }
 
-    override fun visitSimdAbsInstruction(opcode: Opcode) {
+    public override fun visitSimdAbsInstruction(opcode: Opcode) {
         instructions.add(SimdAbsInstruction(opcode))
     }
 
-    override fun visitMemoryFillInstruction(opcode: Opcode, address: UInt, value: UInt, size: UInt) {
+    public override fun visitMemoryFillInstruction(opcode: Opcode, address: UInt, value: UInt, size: UInt) {
         // TODO("Not yet implemented")
         instructions.add(NopInstruction())
     }
 
-    override fun visitMemoryCopyInstruction(opcode: Opcode, target: UInt, offset: UInt, size: UInt) {
+    public override fun visitMemoryCopyInstruction(opcode: Opcode, target: UInt, offset: UInt, size: UInt) {
         // TODO: Implement MemoryCopyInstruction
         // instructions.add(MemoryCopyInstruction(opcode, address, value, size))
         instructions.add(NopInstruction())
     }
 
-    override fun visitMemoryInitInstruction(opcode: Opcode, target: UInt, offset: UInt, size: UInt) {
+    public override fun visitMemoryInitInstruction(opcode: Opcode, target: UInt, offset: UInt, size: UInt) {
         // TODO: Implement MemoryInitInstruction
         // instructions.add(MemoryInitInstruction(opcode, address, value, size))
         instructions.add(NopInstruction())

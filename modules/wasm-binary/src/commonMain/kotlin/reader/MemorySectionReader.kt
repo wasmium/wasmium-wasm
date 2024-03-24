@@ -20,7 +20,7 @@ public class MemorySectionReader(
             throw ParserException("Number of memories ${context.numberMemories} exceed the maximum of ${WasmBinary.MAX_MEMORIES}")
         }
 
-        val memoryVisitor: MemorySectionVisitor = visitor.visitMemorySection()
+        val memoryVisitor = visitor.visitMemorySection()
         for (index in 0u until context.numberMemories) {
             val memoryIndex = context.numberMemoryImports + index
 
@@ -44,9 +44,9 @@ public class MemorySectionReader(
                 }
             }
 
-            memoryVisitor.visitMemory(memoryIndex, limits)
+            memoryVisitor?.visitMemory(memoryIndex, limits)
         }
 
-        memoryVisitor.visitEnd()
+        memoryVisitor?.visitEnd()
     }
 }

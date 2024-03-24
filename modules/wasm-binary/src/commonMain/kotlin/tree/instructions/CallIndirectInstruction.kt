@@ -6,10 +6,7 @@ import org.wasmium.wasm.binary.visitors.FunctionBodyVisitor
 public class CallIndirectInstruction(
     public override val index: UInt,
     public override val reserved: Boolean,
-) : IndexInstruction, ReservedInstruction {
-    override val opcode: Opcode = Opcode.CALL_INDIRECT
-
-
+) : AbstractInstruction(Opcode.CALL_INDIRECT), IndexInstruction, ReservedInstruction {
     override fun accept(functionBodyVisitor: FunctionBodyVisitor) {
         functionBodyVisitor.visitCallIndirectInstruction(index, reserved)
     }

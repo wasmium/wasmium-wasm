@@ -15,9 +15,11 @@ public class GlobalSectionNode : SectionNode(SectionKind.GLOBAL), GlobalSectionV
 
             globalVariableVisitor.visitEnd()
         }
+
+        globalSectionVisitor.visitEnd()
     }
 
-    override fun visitGlobalVariable(globalIndex: UInt): GlobalVariableVisitor {
+    public override fun visitGlobalVariable(globalIndex: UInt): GlobalVariableVisitor {
         val globalVariable = GlobalVariableNode()
         globalVariable.globalIndex = globalIndex
 

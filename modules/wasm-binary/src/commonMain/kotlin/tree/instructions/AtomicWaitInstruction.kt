@@ -12,4 +12,3 @@ public class AtomicWaitInstruction(
         functionBodyVisitor.visitAtomicWaitInstruction(opcode, alignment, offset)
     }
 }
-
