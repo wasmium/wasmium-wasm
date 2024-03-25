@@ -1,7 +1,7 @@
 package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.ParserException
-import org.wasmium.wasm.binary.WasmSource
+import org.wasmium.wasm.binary.WasmBinaryReader
 import org.wasmium.wasm.binary.toHexString
 import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.V128Value
@@ -10,7 +10,7 @@ import org.wasmium.wasm.binary.visitors.InitializerExpressionVisitor
 public class InitializerExpressionReader(
     private val context: ReaderContext,
 ) {
-    public fun readInitExpression(source: WasmSource, visitor: InitializerExpressionVisitor?, requireUInt: Boolean) {
+    public fun readInitExpression(source: WasmBinaryReader, visitor: InitializerExpressionVisitor?, requireUInt: Boolean) {
         var opcode = source.readOpcode()
         when (opcode) {
             Opcode.I32_CONST -> {

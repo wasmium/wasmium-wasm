@@ -2,15 +2,14 @@ package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
-import org.wasmium.wasm.binary.WasmSource
-import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
+import org.wasmium.wasm.binary.WasmBinaryReader
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 public class GlobalSectionReader(
     private val context: ReaderContext,
     private val globalVariableReader: GlobalVariableReader = GlobalVariableReader(context),
 ) {
-    public fun readGlobalSection(source: WasmSource, visitor: ModuleVisitor) {
+    public fun readGlobalSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         context.numberGlobals = source.readVarUInt32()
 
         if (context.numberGlobals > WasmBinary.MAX_GLOBALS) {

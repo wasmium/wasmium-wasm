@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
-import org.wasmium.wasm.binary.WasmSource
+import org.wasmium.wasm.binary.WasmBinaryReader
 import org.wasmium.wasm.binary.tree.SectionName
 import org.wasmium.wasm.binary.tree.LinkingKind
 import org.wasmium.wasm.binary.tree.LinkingSymbolType
@@ -15,7 +15,7 @@ import org.wasmium.wasm.binary.visitors.ModuleVisitor
 public class CustomSectionReader(
     private val context: ReaderContext,
 ) {
-    public fun readCustomSection(source: WasmSource, payloadSize: UInt, visitor: ModuleVisitor) {
+    public fun readCustomSection(source: WasmBinaryReader, payloadSize: UInt, visitor: ModuleVisitor) {
         val startPosition = source.position
 
         val sectionName = source.readInlineString()
@@ -57,7 +57,7 @@ public class CustomSectionReader(
         }
     }
 
-    private fun readUnknownSection(source: WasmSource, visitor: ModuleVisitor, customSectionName: String, startPosition: UInt, sectionPayloadSize: UInt) {
+    private fun readUnknownSection(source: WasmBinaryReader, visitor: ModuleVisitor, customSectionName: String, startPosition: UInt, sectionPayloadSize: UInt) {
         val payload = ByteArray(sectionPayloadSize.toInt())
         source.readTo(payload, 0u, sectionPayloadSize)
 
@@ -66,12 +66,12 @@ public class CustomSectionReader(
         unknownSectionVisitor?.visitEnd()
     }
 
-    private fun readSourceMapSection(source: WasmSource, visitor: ModuleVisitor) {
+    private fun readSourceMapSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         val sourceMapURL = source.readInlineString()
         // TODO
     }
 
-    private fun readNamesSection(source: WasmSource, startIndex: UInt, sectionPayloadSize: UInt, visitor: ModuleVisitor) {
+    private fun readNamesSection(source: WasmBinaryReader, startIndex: UInt, sectionPayloadSize: UInt, visitor: ModuleVisitor) {
         val nameSectionVisitor = visitor.visitNameSection()
 
         var lastNameKind: NameKind? = null
@@ -84,7 +84,7 @@ public class CustomSectionReader(
             }
 
             val subsectionSize = source.readVarUInt32()
-            if (!source.require(subsectionSize)) {
+            if (!source.request(subsectionSize)) {
                 throw ParserException("Name subsection greater then input")
             }
 
@@ -216,14 +216,14 @@ public class CustomSectionReader(
         nameSectionVisitor?.visitEnd()
     }
 
-    private fun readLinkingSection(source: WasmSource, visitor: ModuleVisitor) {
+    private fun readLinkingSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         val linkingSectionVisitor = visitor.visitLinkingSection()
 
         while (!source.exhausted()) {
             val linkingKind: LinkingKind = source.readLinkingKind()
 
             val subsectionSize = source.readVarUInt32()
-            if (!source.require(subsectionSize)) {
+            if (!source.request(subsectionSize)) {
                 throw ParserException("Linking subsection greater then input")
             }
 
@@ -301,7 +301,7 @@ public class CustomSectionReader(
         linkingSectionVisitor?.visitEnd()
     }
 
-    private fun readRelocationSection(source: WasmSource, visitor: ModuleVisitor) {
+    private fun readRelocationSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         val sectionKind: SectionKind = source.readSectionKind()
 
         var sectionName: String? = null
@@ -338,7 +338,7 @@ public class CustomSectionReader(
         relocationVisitor?.visitEnd()
     }
 
-    private fun readExceptionSection(source: WasmSource, visitor: ModuleVisitor) {
+    private fun readExceptionSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         context.numberExceptions = source.readVarUInt32()
 
         if (context.numberExceptions > WasmBinary.MAX_EXCEPTIONS) {
@@ -357,7 +357,7 @@ public class CustomSectionReader(
         exceptionVisitor?.visitEnd()
     }
 
-    private fun readExceptionType(source: WasmSource): Array<WasmType> {
+    private fun readExceptionType(source: WasmBinaryReader): Array<WasmType> {
         val numberExceptionTypes = source.readVarUInt32()
 
         if (numberExceptionTypes > WasmBinary.MAX_EXCEPTION_TYPES) {

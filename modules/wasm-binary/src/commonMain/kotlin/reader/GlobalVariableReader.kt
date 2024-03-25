@@ -1,14 +1,14 @@
 package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.ParserException
-import org.wasmium.wasm.binary.WasmSource
+import org.wasmium.wasm.binary.WasmBinaryReader
 import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
 
 public class GlobalVariableReader(
     private val context: ReaderContext,
     private val initializerExpressionReader: InitializerExpressionReader = InitializerExpressionReader(context),
 ) {
-    public fun readGlobalVariable(source: WasmSource, index: UInt, globalVisitor: GlobalSectionVisitor?) {
+    public fun readGlobalVariable(source: WasmBinaryReader, index: UInt, globalVisitor: GlobalSectionVisitor?) {
         val globalIndex = context.numberGlobalImports + index
 
         val contentType = source.readType()

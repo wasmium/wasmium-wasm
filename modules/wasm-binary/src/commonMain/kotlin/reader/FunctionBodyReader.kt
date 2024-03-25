@@ -4,7 +4,7 @@ package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
-import org.wasmium.wasm.binary.WasmSource
+import org.wasmium.wasm.binary.WasmBinaryReader
 import org.wasmium.wasm.binary.toHexString
 import org.wasmium.wasm.binary.tree.Opcode.*
 import org.wasmium.wasm.binary.tree.V128Value
@@ -14,7 +14,7 @@ import org.wasmium.wasm.binary.visitors.FunctionBodyVisitor
 public class FunctionBodyReader(
     private val context: ReaderContext,
 ) {
-    public fun readFunctionBody(source: WasmSource, bodySize: UInt, functionBodyVisitor: FunctionBodyVisitor?) {
+    public fun readFunctionBody(source: WasmBinaryReader, bodySize: UInt, functionBodyVisitor: FunctionBodyVisitor?) {
         val endBodyPosition = source.position + bodySize
 
         var seenEndOpcode = false

@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
-import org.wasmium.wasm.binary.WasmSource
+import org.wasmium.wasm.binary.WasmBinaryReader
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.SectionKind.CODE
 import org.wasmium.wasm.binary.tree.SectionKind.CUSTOM
@@ -37,10 +37,10 @@ public class ModuleReader(
     private val typeSectionReader: TypeSectionReader = TypeSectionReader(context)
     private val customSectionReader: CustomSectionReader = CustomSectionReader(context)
 
-    public fun readModule(source: WasmSource, visitor: ModuleVisitor): ReaderResult {
+    public fun readModule(source: WasmBinaryReader, visitor: ModuleVisitor): ReaderResult {
         // minimum allowed module size
         val minSize = 8u
-        if (!source.require(minSize)) {
+        if (!source.request(minSize)) {
             throw ParserException("Expecting module size of at least: $minSize")
         }
 
@@ -84,7 +84,7 @@ public class ModuleReader(
                 throw ParserException("Section size of $payloadSize exceed the maximum of ${WasmBinary.MAX_SECTION_LENGTH}")
             }
 
-            if (!source.require(payloadSize)) {
+            if (!source.request(payloadSize)) {
                 throw ParserException("Section payload greater then input.")
             }
 

@@ -2,16 +2,15 @@ package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
-import org.wasmium.wasm.binary.WasmSource
+import org.wasmium.wasm.binary.WasmBinaryReader
 import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
-import org.wasmium.wasm.binary.visitors.TableSectionVisitor
 
 public class TableSectionReader(
     private val context: ReaderContext,
 ) {
-    public fun readTableSection(source: WasmSource, visitor: ModuleVisitor) {
+    public fun readTableSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         context.numberTables = source.readVarUInt32()
 
         if (context.numberTables > WasmBinary.MAX_TABLES) {

@@ -2,9 +2,6 @@
 
 package org.wasmium.wasm.binary
 
-import kotlinx.io.EOFException
-import kotlinx.io.Source
-import kotlinx.io.readTo
 import org.wasmium.wasm.binary.tree.ExternalKind
 import org.wasmium.wasm.binary.tree.LimitFlags
 import org.wasmium.wasm.binary.tree.LinkingKind
@@ -18,9 +15,7 @@ import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import kotlin.experimental.and
 
-public class WasmSource(
-    protected val source: Source
-) {
+public class WasmBinaryReader(protected val reader: BinaryReader) {
     /** Current position in the source */
     public var position: UInt = 0u
         private set
@@ -29,34 +24,26 @@ public class WasmSource(
         position += byteCount
     }
 
-    public fun skip(byteCount: UInt): Unit = source.skip(byteCount.toLong()).also { consume(byteCount) }
-
-    public fun close(): Unit = source.close()
+    public fun skip(byteCount: UInt): Unit = reader.skip(byteCount).also { consume(byteCount) }
 
     public fun readTo(bytes: ByteArray, startIndex: UInt, endIndex: UInt): UInt {
-        source.readTo(bytes, startIndex.toInt(), endIndex.toInt())
+        reader.readTo(bytes, startIndex.toInt(), endIndex.toInt())
 
         return (endIndex - startIndex).also { consume(it) }
     }
 
-    public fun require(byteCount: UInt): Boolean = try {
-        source.require(byteCount.toLong())
-
-        true
-    } catch (e: EOFException) {
-        false
-    }
+    public fun request(byteCount: UInt): Boolean = reader.request(byteCount)
 
     private fun Int.toUnsignedLong(): Long = toLong() and 0xFFFFFFFFL
 
-    public fun exhausted(): Boolean = source.exhausted()
+    public fun exhausted(): Boolean = reader.exhausted()
 
-    public fun readUInt8(): UInt = (source.readByte().toInt() and 0xFF).toUInt().also { consume(1u) }
+    public fun readUInt8(): UInt = (reader.readByte().toInt() and 0xFF).toUInt().also { consume(1u) }
 
     public fun readUInt32(): UInt {
         var result = 0.toUInt()
         for (i in 0..3) {
-            result = result or ((source.readByte().toInt() and 0xFF) shl (8 * i)).toUInt()
+            result = result or ((reader.readByte().toInt() and 0xFF) shl (8 * i)).toUInt()
         }
 
         return result.also { consume(4u) }
@@ -65,24 +52,26 @@ public class WasmSource(
     public fun readUInt64(): ULong {
         var result = 0.toULong()
         for (i in 0..7) {
-            result = result or ((source.readByte().toInt() and 0xFF) shl (8 * i)).toULong()
+            result = result or ((reader.readByte().toInt() and 0xFF) shl (8 * i)).toULong()
         }
 
         return result.also { consume(8u) }
     }
 
-    public fun readVarUInt1(): UInt = (source.readByte() and 0b1).toUInt().also { consume(1u) }
+    public fun readVarUInt1(): UInt = (reader.readByte() and 0b1).toUInt().also { consume(1u) }
 
-    public fun readVarUInt7(): UInt = (source.readByte() and 0x7F).toUInt().also { consume(1u) }
+    public fun readVarUInt7(): UInt = (reader.readByte() and 0x7F).toUInt().also { consume(1u) }
 
     public fun readVarInt7(): Int = readVarInt32()
 
-    public fun readVarUInt32(maxCount: Int = 5): UInt {
+    public fun readVarUInt32(): UInt = readVarUIntX(5)
+
+    private fun readVarUIntX(maxCount: Int): UInt {
         var result = 0u
         var current: Int
         var count = 0
         do {
-            current = source.readByte().toInt() and 0xff
+            current = reader.readByte().toInt() and 0xff
             result = result or ((current and 0x7f).toLong() shl (count * 7)).toUInt()
             count++
         } while (current and 0x80 == 0x80 && count <= maxCount)
@@ -91,7 +80,7 @@ public class WasmSource(
             throw ParserException("Overflow: Number too large")
         }
 
-        if (current != 0 && count > (count * 8) / 7) {
+        if (current != 0 && count > (count * ULong.SIZE_BYTES) / 7) {
             throw ParserException("Underflow: Too many bytes for value")
         }
 
@@ -103,7 +92,7 @@ public class WasmSource(
         var current: Int
         var count = 0
         do {
-            current = source.readByte().toInt() and 0xff
+            current = reader.readByte().toInt() and 0xff
             result = result or ((current and 0x7f).toLong() shl (count * 7))
             count++
         } while (current and 0x80 == 0x80 && count <= maxCount)
@@ -130,7 +119,7 @@ public class WasmSource(
         var count = 0
 
         do {
-            current = source.readByte().toInt() and 0xff
+            current = reader.readByte().toInt() and 0xff
             result = result or ((current and 0x7f).toLong() shl (count * 7))
             count++
         } while (current and 0x80 == 0x80 && count <= maxCount)
@@ -219,7 +208,7 @@ public class WasmSource(
 
         val buffer = ByteArray(length.toInt())
         // TODO Change the exception to be raised here
-        source.readTo(buffer, 0, length.toInt())
+        reader.readTo(buffer, 0, length.toInt())
 
         val result = buffer.decodeToString()
         return result.also { consume(length) }

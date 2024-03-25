@@ -2,7 +2,6 @@
 
 package org.wasmium.wasm.binary
 
-import kotlinx.io.Sink
 import org.wasmium.wasm.binary.tree.ExternalKind
 import org.wasmium.wasm.binary.tree.LinkingKind
 import org.wasmium.wasm.binary.tree.NameKind
@@ -14,38 +13,38 @@ import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import kotlin.experimental.or
 
-public class WasmSink(public val sink: Sink) {
+public class WasmBinaryWriter(public val writer: BinaryWriter) {
 
-    public fun writeUInt8(value: UInt): Unit = sink.writeByte(value.toByte())
+    public fun writeUInt8(value: UInt): Unit = writer.writeByte(value.toByte())
 
     public fun writeUInt32(value: UInt) {
         for (i in 0..3) {
-            sink.writeByte((value shr (8 * i)).toByte())
+            writer.writeByte((value shr (8 * i)).toByte())
         }
     }
 
     public fun writeUInt64(value: ULong) {
         for (i in 0..7) {
-            sink.writeByte((value shr (8 * i)).toByte())
+            writer.writeByte((value shr (8 * i)).toByte())
         }
     }
 
     public fun writeVarUInt1(value: UInt) {
         val b = (value and 0b1u)
 
-        sink.writeByte(b.toByte())
+        writer.writeByte(b.toByte())
     }
 
     public fun writeVarUInt7(value: UInt) {
         val b = (value and 0x7Fu)
 
-        sink.writeByte(b.toByte())
+        writer.writeByte(b.toByte())
     }
 
     public fun writeVarUInt7(value: Int) {
         val b = (value and 0x7F)
 
-        sink.writeByte(b.toByte())
+        writer.writeByte(b.toByte())
     }
 
     public fun writeVarUInt32(value: UInt, isCanonical: Boolean): Int {
@@ -57,11 +56,11 @@ public class WasmSink(public val sink: Sink) {
     }
 
     public fun writeFixedVarUInt32(value: UInt): Int {
-        sink.writeByte(((value and 0x7fu).toInt() or 0x80).toByte())
-        sink.writeByte((((value shr 7) and 0x7fu).toByte().toInt() or 0x80).toByte())
-        sink.writeByte((((value shr 14) and 0x7fu).toByte().toInt() or 0x80).toByte())
-        sink.writeByte((((value shr 21) and 0x7fu).toByte().toInt() or 0x80).toByte())
-        sink.writeByte(((value shr 28).toByte().toInt() and 0x0f).toByte())
+        writer.writeByte(((value and 0x7fu).toInt() or 0x80).toByte())
+        writer.writeByte((((value shr 7) and 0x7fu).toByte().toInt() or 0x80).toByte())
+        writer.writeByte((((value shr 14) and 0x7fu).toByte().toInt() or 0x80).toByte())
+        writer.writeByte((((value shr 21) and 0x7fu).toByte().toInt() or 0x80).toByte())
+        writer.writeByte(((value shr 28).toByte().toInt() and 0x0f).toByte())
 
         // write 5 bytes
         return 5
@@ -78,7 +77,7 @@ public class WasmSink(public val sink: Sink) {
                 byte = byte or 0x80.toByte()
             }
 
-            sink.writeByte(byte)
+            writer.writeByte(byte)
             count++
         } while (remaining != 0u)
 
@@ -101,7 +100,7 @@ public class WasmSink(public val sink: Sink) {
                 byte = (byte.toInt() or 0x80).toByte()
             }
 
-            sink.writeByte(byte)
+            writer.writeByte(byte)
             count++
         }
         return count
@@ -146,7 +145,7 @@ public class WasmSink(public val sink: Sink) {
         val bytes = value.toCharArray()
 
         for (c in bytes) {
-            sink.writeByte(c.code.toByte())
+            writer.writeByte(c.code.toByte())
         }
     }
 
@@ -185,10 +184,10 @@ public class WasmSink(public val sink: Sink) {
     }
 
     public fun write(value: ByteArray) {
-        sink.write(value)
+        writer.writeTo(value, 0, value.size)
     }
 
     public fun writeByteArray(value: ByteArray, offset: Int, length: Int) {
-        sink.write(value, offset, length)
+        writer.writeTo(value, offset, length)
     }
 }

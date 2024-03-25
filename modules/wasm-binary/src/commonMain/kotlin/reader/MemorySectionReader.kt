@@ -2,15 +2,14 @@ package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
-import org.wasmium.wasm.binary.WasmSource
+import org.wasmium.wasm.binary.WasmBinaryReader
 import org.wasmium.wasm.binary.tree.ResizableLimits
-import org.wasmium.wasm.binary.visitors.MemorySectionVisitor
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 public class MemorySectionReader(
     private val context: ReaderContext,
 ) {
-    public fun readMemorySection(source: WasmSource, visitor: ModuleVisitor) {
+    public fun readMemorySection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         context.numberMemories = source.readVarUInt32()
         if (context.numberMemories == 0u) {
             return

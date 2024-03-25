@@ -2,14 +2,13 @@ package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
-import org.wasmium.wasm.binary.WasmSource
-import org.wasmium.wasm.binary.visitors.FunctionSectionVisitor
+import org.wasmium.wasm.binary.WasmBinaryReader
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 public class FunctionSectionReader(
     private val context: ReaderContext,
 ) {
-    public fun readFunctionSection(source: WasmSource, visitor: ModuleVisitor) {
+    public fun readFunctionSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         context.numberFunctions = source.readVarUInt32()
 
         if (context.numberFunctions > WasmBinary.MAX_FUNCTIONS) {

@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
-import org.wasmium.wasm.binary.WasmSource
+import org.wasmium.wasm.binary.WasmBinaryReader
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.visitors.DataSectionVisitor
 
@@ -10,7 +10,7 @@ public class DataSegmentReader(
     private val context: ReaderContext,
     private val initializerExpressionReader: InitializerExpressionReader = InitializerExpressionReader(context)
 ) {
-    public fun readDataSegment(source: WasmSource, index: UInt, dataVisitor: DataSectionVisitor?) {
+    public fun readDataSegment(source: WasmBinaryReader, index: UInt, dataVisitor: DataSectionVisitor?) {
         val startIndex = source.position
 
         val dataSegmentVisitor = dataVisitor?.visitDataSegment(index)

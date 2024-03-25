@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
-import org.wasmium.wasm.binary.WasmSource
+import org.wasmium.wasm.binary.WasmBinaryReader
 import org.wasmium.wasm.binary.tree.ExternalKind.EXCEPTION
 import org.wasmium.wasm.binary.tree.ExternalKind.FUNCTION
 import org.wasmium.wasm.binary.tree.ExternalKind.GLOBAL
@@ -13,7 +13,7 @@ import org.wasmium.wasm.binary.visitors.ModuleVisitor
 public class ExportSectionReader(
     private val context: ReaderContext,
 ) {
-    public fun readExportSection(source: WasmSource, visitor: ModuleVisitor) {
+    public fun readExportSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         context.numberExports = source.readVarUInt32()
 
         if (context.numberExports > WasmBinary.MAX_EXPORTS) {

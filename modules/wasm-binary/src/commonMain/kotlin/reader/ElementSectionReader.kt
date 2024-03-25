@@ -2,15 +2,14 @@ package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
-import org.wasmium.wasm.binary.WasmSource
-import org.wasmium.wasm.binary.visitors.ElementSectionVisitor
+import org.wasmium.wasm.binary.WasmBinaryReader
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 public class ElementSectionReader(
     private val context: ReaderContext,
     private val elementSegmentReader: ElementSegmentReader = ElementSegmentReader(context),
 ) {
-    public fun readElementSection(source: WasmSource, visitor: ModuleVisitor) {
+    public fun readElementSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         context.numberElementSegments = source.readVarUInt32()
 
         if (context.numberElementSegments > WasmBinary.MAX_ELEMENT_SEGMENTS) {
