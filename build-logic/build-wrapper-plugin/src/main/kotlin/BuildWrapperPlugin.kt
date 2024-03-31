@@ -7,7 +7,7 @@ import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
 import org.gradle.kotlin.dsl.named
 import org.gradle.util.GradleVersion
 
-private const val DEFAULT_GRADLE_WRAPPER_VERSION: String = "8.6"
+private const val DEFAULT_GRADLE_WRAPPER_VERSION: String = "8.7"
 
 public class BuildWrapperPlugin : Plugin<Project> {
     override fun apply(project: Project): Unit = with(project) {
@@ -26,8 +26,8 @@ public class BuildWrapperPlugin : Plugin<Project> {
     private fun Project.getGradleWrapperVersion(): String = findProperty("gradle-wrapper.version")?.toString() ?: DEFAULT_GRADLE_WRAPPER_VERSION
 
     private fun checkCompatibility() {
-        if (GradleVersion.current().baseVersion < GradleVersion.version("8.6")) {
-            throw IllegalStateException("This version of the Wrapper Upgrade Gradle plugin is not compatible with Gradle < 8.6")
+        if (GradleVersion.current().baseVersion < GradleVersion.version("8.7")) {
+            throw IllegalStateException("This version of the Wrapper Upgrade Gradle plugin is not compatible with Gradle < 8.7")
         }
     }
 }
