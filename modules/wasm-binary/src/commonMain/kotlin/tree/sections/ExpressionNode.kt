@@ -485,16 +485,16 @@ public class ExpressionNode : ExpressionVisitor {
         instructions.add(SimdAbsInstruction(opcode))
     }
 
-    public override fun visitMemoryFillInstruction(memoryIndex: UInt, address: UInt, value: UInt, size: UInt) {
-        instructions.add(MemoryFillInstruction(memoryIndex, address, value))
+    public override fun visitMemoryFillInstruction(memoryIndex: UInt) {
+        instructions.add(MemoryFillInstruction(memoryIndex))
     }
 
-    public override fun visitMemoryCopyInstruction(targetIndex: UInt, sourceIndex: UInt, targetOffset: UInt, sourceOffset: UInt, size: UInt) {
-        instructions.add(MemoryCopyInstruction(targetIndex, sourceIndex, targetOffset, sourceOffset, size))
+    public override fun visitMemoryCopyInstruction(targetIndex: UInt, sourceIndex: UInt) {
+        instructions.add(MemoryCopyInstruction(targetIndex, sourceIndex))
     }
 
-    public override fun visitMemoryInitInstruction(memoryIndex: UInt, segmentIndex: UInt, target: UInt, address: UInt, size: UInt) {
-        instructions.add(MemoryInitInstruction(memoryIndex, segmentIndex, target, address, size))
+    public override fun visitMemoryInitInstruction(memoryIndex: UInt, segmentIndex: UInt) {
+        instructions.add(MemoryInitInstruction(memoryIndex, segmentIndex))
     }
 
     public override fun visitDataDropInstruction(segmentIndex: UInt) {
@@ -509,11 +509,19 @@ public class ExpressionNode : ExpressionVisitor {
         instructions.add(TableGrowInstruction(tableIndex, value, delta))
     }
 
-    override fun visitTableFillInstruction(tableIndex: UInt, target: UInt, value: UInt, size: UInt) {
-        instructions.add(TableFillInstruction(tableIndex, target, value, size))
+    override fun visitTableFillInstruction(tableIndex: UInt) {
+        instructions.add(TableFillInstruction(tableIndex))
     }
 
-    override fun visitTableCopyInstruction(targetTableIndex: UInt, sourceTableIndex: UInt, target: UInt, value: UInt, size: UInt) {
-        instructions.add(TableCopyInstruction(targetTableIndex, sourceTableIndex, target, value, size))
+    override fun visitTableCopyInstruction(targetTableIndex: UInt, sourceTableIndex: UInt) {
+        instructions.add(TableCopyInstruction(targetTableIndex, sourceTableIndex))
+    }
+
+    override fun visitElementDropInstruction(segmentIndex: UInt) {
+        instructions.add(ElementDropInstruction(segmentIndex))
+    }
+
+    override fun visitTableInitInstruction(segmentIndex: UInt, tableIndex: UInt) {
+        instructions.add(TableInitInstruction(segmentIndex, tableIndex))
     }
 }

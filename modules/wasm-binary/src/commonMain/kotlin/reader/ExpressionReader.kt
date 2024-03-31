@@ -5,7 +5,6 @@ package org.wasmium.wasm.binary.reader
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.WasmBinaryReader
-import org.wasmium.wasm.binary.toHexString
 import org.wasmium.wasm.binary.tree.Opcode.*
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
@@ -1370,14 +1369,9 @@ public class ExpressionReader(
                         throw ParserException("Invalid memory.fill code: bulk memory not enabled.")
                     }
 
-                    TODO()
-
                     val memoryIndex = source.readVarUInt32()
-                    val address = source.readVarUInt32()
-                    val value = source.readVarUInt32()
-                    val size = source.readVarUInt32()
 
-                    expressionVisitor?.visitMemoryFillInstruction(memoryIndex, address, value, size)
+                    expressionVisitor?.visitMemoryFillInstruction(memoryIndex)
                 }
 
                 MEMORY_COPY -> {
@@ -1385,15 +1379,10 @@ public class ExpressionReader(
                         throw ParserException("Invalid memory.copy code: bulk memory not enabled.")
                     }
 
-                    TODO()
-
                     val targetIndex = source.readVarUInt32()
                     val sourceIndex = source.readVarUInt32()
-                    val targetOffset = source.readVarUInt32()
-                    val sourceOffset = source.readVarUInt32()
-                    val size = source.readVarUInt32()
 
-                    expressionVisitor?.visitMemoryCopyInstruction(targetIndex, sourceIndex, targetOffset, sourceOffset, size)
+                    expressionVisitor?.visitMemoryCopyInstruction(targetIndex, sourceIndex)
                 }
 
                 MEMORY_INIT -> {
@@ -1401,15 +1390,21 @@ public class ExpressionReader(
                         throw ParserException("Invalid memory.init code: bulk memory not enabled.")
                     }
 
-                    TODO()
-
-                    val memoryIndex = source.readVarUInt32()
                     val segmentIndex = source.readVarUInt32()
-                    val target = source.readVarUInt32()
-                    val address = source.readVarUInt32()
-                    val size = source.readVarUInt32()
+                    val memoryIndex = source.readVarUInt32()
 
-                    expressionVisitor?.visitMemoryInitInstruction(memoryIndex, segmentIndex, target, address, size)
+                    expressionVisitor?.visitMemoryInitInstruction(memoryIndex, segmentIndex)
+                }
+
+                TABLE_INIT -> {
+                    if (!context.options.features.isBulkMemoryEnabled) {
+                        throw ParserException("Invalid table.init code: bulk memory not enabled.")
+                    }
+
+                    val segmentIndex = source.readVarUInt32()
+                    val tableIndex = source.readVarUInt32()
+
+                    expressionVisitor?.visitTableInitInstruction(segmentIndex, tableIndex)
                 }
 
                 DATA_DROP -> {
@@ -1417,19 +1412,25 @@ public class ExpressionReader(
                         throw ParserException("Invalid data.drop code: bulk memory not enabled.")
                     }
 
-                    TODO()
-
                     val segmentIndex = source.readVarUInt32()
 
                     expressionVisitor?.visitDataDropInstruction(segmentIndex)
+                }
+
+                ELEMENT_DROP -> {
+                    if (!context.options.features.isBulkMemoryEnabled) {
+                        throw ParserException("Invalid elem.drop code: bulk memory not enabled.")
+                    }
+
+                    val segmentIndex = source.readVarUInt32()
+
+                    expressionVisitor?.visitElementDropInstruction(segmentIndex)
                 }
 
                 TABLE_SIZE -> {
                     if (!context.options.features.isBulkMemoryEnabled) {
                         throw ParserException("Invalid table.size code: bulk memory not enabled.")
                     }
-
-                    TODO()
 
                     val tableIndex = source.readVarUInt32()
                     // TODO check table index
@@ -1441,8 +1442,6 @@ public class ExpressionReader(
                     if (!context.options.features.isBulkMemoryEnabled) {
                         throw ParserException("Invalid table.grow code: bulk memory not enabled.")
                     }
-
-                    TODO()
 
                     val tableIndex = source.readVarUInt32()
                     // TODO check table index
@@ -1458,16 +1457,10 @@ public class ExpressionReader(
                         throw ParserException("Invalid table.fill code: bulk memory not enabled.")
                     }
 
-                    TODO()
-
                     val tableIndex = source.readVarUInt32()
                     // TODO check table index
 
-                    val target = source.readVarUInt32()
-                    val value = source.readVarUInt32()
-                    val size = source.readVarUInt32()
-
-                    expressionVisitor?.visitTableFillInstruction(tableIndex, target, value, size)
+                    expressionVisitor?.visitTableFillInstruction(tableIndex)
                 }
 
                 TABLE_COPY -> {
@@ -1475,17 +1468,12 @@ public class ExpressionReader(
                         throw ParserException("Invalid table.copy code: bulk memory not enabled.")
                     }
 
-                    TODO()
-
                     val targetTableIndex = source.readVarUInt32()
                     // TODO check table index
                     val sourceTableIndex = source.readVarUInt32()
                     // TODO check table index
-                    val target = source.readVarUInt32()
-                    val value = source.readVarUInt32()
-                    val size = source.readVarUInt32()
 
-                    expressionVisitor?.visitTableCopyInstruction(targetTableIndex, sourceTableIndex, target, value, size)
+                    expressionVisitor?.visitTableCopyInstruction(targetTableIndex, sourceTableIndex)
                 }
 
                 CALL_REF -> {
@@ -1528,7 +1516,109 @@ public class ExpressionReader(
                     TODO()
                 }
 
-                else -> throw ParserException("Unexpected opcode: %$opcode(0x${opcode.opcode.toHexString()})")
+                RETURN_CALL -> {
+                    if (!context.options.features.isTailCallsEnabled) {
+                        throw ParserException("Invalid return_call code: tail call not enabled.")
+                    }
+
+                    TODO()
+                }
+
+                RETURN_CALL_INDIRECT -> {
+                    if (!context.options.features.isTailCallsEnabled) {
+                        throw ParserException("Invalid return_call_indirect code: tail call not enabled.")
+                    }
+
+                    TODO()
+                }
+
+                DELEGATE -> {
+                    if (!context.options.features.isExceptionHandlingEnabled) {
+                        throw ParserException("Invalid delegate code: exception handling not enabled.")
+                    }
+
+                    TODO()
+                }
+
+                CATCH_ALL -> {
+                    if (!context.options.features.isExceptionHandlingEnabled) {
+                        throw ParserException("Invalid catch_call code: exception handling not enabled.")
+                    }
+
+                    TODO()
+                }
+
+                SELECT_T -> {
+                    if (!context.options.features.isReferenceTypesEnabled) {
+                        throw ParserException("Invalid select_t code: reference types not enabled.")
+                    }
+
+                    TODO()
+                }
+
+                TRY_TABLE -> {
+                    if (!context.options.features.isExceptionHandlingEnabled) {
+                        throw ParserException("Invalid try_table code: exception handling not enabled.")
+                    }
+
+                    TODO()
+                }
+
+                GET_TABLE -> {
+                    if (!context.options.features.isReferenceTypesEnabled) {
+                        throw ParserException("Invalid table.get code: reference types not enabled.")
+                    }
+
+                    TODO()
+                }
+
+                SET_TABLE -> {
+                    if (!context.options.features.isReferenceTypesEnabled) {
+                        throw ParserException("Invalid table.set code: reference types not enabled.")
+                    }
+
+                    TODO()
+                }
+
+                REF_NULL -> {
+                    if (!context.options.features.isReferenceTypesEnabled) {
+                        throw ParserException("Invalid ref_null code: reference types not enabled.")
+                    }
+
+                    TODO()
+                }
+
+                REF_IS_NULL -> {
+                    if (!context.options.features.isReferenceTypesEnabled) {
+                        throw ParserException("Invalid ref_is_null code: reference types not enabled.")
+                    }
+
+                    TODO()
+                }
+
+                REF_FUNC -> {
+                    if (!context.options.features.isReferenceTypesEnabled) {
+                        throw ParserException("Invalid ref_func code: reference types not enabled.")
+                    }
+
+                    TODO()
+                }
+
+                REF_EQ -> {
+                    if (!context.options.features.isReferenceTypesEnabled) {
+                        throw ParserException("Invalid ref_eq code: reference types not enabled.")
+                    }
+
+                    TODO()
+                }
+
+                ATOMIC_FENCE -> {
+                    if (!context.options.features.isThreadsEnabled) {
+                        throw ParserException("Invalid atomic.fence code: threads not enabled.")
+                    }
+
+                    TODO()
+                }
             }
         }
 

@@ -3,11 +3,11 @@ package org.wasmium.wasm.binary.tree.instructions
 import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
-public class MemoryInitInstruction(
-    public val memoryIndex: UInt,
+public class TableInitInstruction(
     public val segmentIndex: UInt,
-) : AbstractInstruction(Opcode.MEMORY_INIT) {
+    public val tableIndex: UInt,
+) : AbstractInstruction(Opcode.TABLE_INIT) {
     public override fun accept(expressionVisitor: ExpressionVisitor) {
-        expressionVisitor.visitMemoryInitInstruction(memoryIndex, segmentIndex)
+        expressionVisitor.visitTableInitInstruction(segmentIndex, tableIndex)
     }
 }

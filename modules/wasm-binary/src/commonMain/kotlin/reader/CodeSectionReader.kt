@@ -21,6 +21,7 @@ public class CodeSectionReader(
 
         for (index in 0u until numberOfCodes) {
             val functionIndex = context.numberOfFunctionImports + index
+            // TODO check max?
 
             val bodySize = source.readVarUInt32()
             if (bodySize == 0u) {

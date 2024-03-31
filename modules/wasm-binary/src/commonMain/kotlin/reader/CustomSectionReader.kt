@@ -246,7 +246,7 @@ public class CustomSectionReader(
                         val symbolType = source.readLinkingSymbolType()
                         val flags = source.readUInt32()
 
-                        linkingSectionVisitor?.visitSymbol(symbolIndex, symbolType, flags)
+                        linkingSectionVisitor?.visitSymbol(symbolType, flags)
 
                         when (symbolType) {
                             LinkingSymbolType.FUNCTION, LinkingSymbolType.GLOBAL -> {
@@ -258,9 +258,9 @@ public class CustomSectionReader(
                                 }
 
                                 if (symbolType == LinkingSymbolType.FUNCTION) {
-                                    linkingSectionVisitor?.visitFunctionSymbol(symbolIndex, flags, name!!, index)
+                                    linkingSectionVisitor?.visitFunctionSymbol(flags, name!!, index)
                                 } else {
-                                    linkingSectionVisitor?.visitGlobalSymbol(symbolIndex, flags, name!!, index)
+                                    linkingSectionVisitor?.visitGlobalSymbol(flags, name!!, index)
                                 }
                             }
 
@@ -276,13 +276,13 @@ public class CustomSectionReader(
                                     offset = source.readVarUInt32()
                                     size = source.readVarUInt32()
                                 }
-                                linkingSectionVisitor?.visitDataSymbol(symbolIndex, flags, name, segment, offset, size)
+                                linkingSectionVisitor?.visitDataSymbol(flags, name, segment, offset, size)
                             }
 
                             LinkingSymbolType.SECTION -> {
                                 val index = source.readIndex()
 
-                                linkingSectionVisitor?.visitSectionSymbol(symbolIndex, flags, index)
+                                linkingSectionVisitor?.visitSectionSymbol(flags, index)
                             }
                         }
                     }

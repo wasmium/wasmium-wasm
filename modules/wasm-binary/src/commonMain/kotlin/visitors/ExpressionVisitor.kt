@@ -240,11 +240,13 @@ public interface ExpressionVisitor {
 
     public fun visitSimdAbsInstruction(opcode: Opcode)
 
-    public fun visitMemoryFillInstruction(memoryIndex: UInt, address: UInt, value: UInt, size: UInt)
+    public fun visitMemoryFillInstruction(memoryIndex: UInt)
 
-    public fun visitMemoryCopyInstruction(targetIndex: UInt, sourceIndex: UInt, targetOffset: UInt, sourceOffset: UInt, size: UInt)
+    public fun visitMemoryCopyInstruction(targetIndex: UInt, sourceIndex: UInt)
 
-    public fun visitMemoryInitInstruction(memoryIndex: UInt, segmentIndex: UInt, target: UInt, address: UInt, size: UInt)
+    public fun visitMemoryInitInstruction(memoryIndex: UInt, segmentIndex: UInt)
+
+    public fun visitTableInitInstruction(segmentIndex: UInt, tableIndex: UInt)
 
     public fun visitDataDropInstruction(segmentIndex: UInt)
 
@@ -252,7 +254,9 @@ public interface ExpressionVisitor {
 
     public fun visitTableGrowInstruction(tableIndex: UInt, value: UInt, delta: UInt)
 
-    public fun visitTableFillInstruction(tableIndex: UInt, target: UInt, value: UInt, size: UInt)
+    public fun visitTableFillInstruction(tableIndex: UInt)
 
-    public fun visitTableCopyInstruction(targetTableIndex: UInt, sourceTableIndex: UInt, target: UInt, value: UInt, size: UInt)
+    public fun visitTableCopyInstruction(targetTableIndex: UInt, sourceTableIndex: UInt)
+
+    public fun visitElementDropInstruction(segmentIndex: UInt)
 }

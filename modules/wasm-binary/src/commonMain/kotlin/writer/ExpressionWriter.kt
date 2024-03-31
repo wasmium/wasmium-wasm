@@ -566,27 +566,21 @@ public class ExpressionWriter(
         WasmBinaryWriter(instructionsBuffer).writeOpcode(opcode)
     }
 
-    override fun visitMemoryFillInstruction(memoryIndex: UInt, address: UInt, value: UInt, size: UInt) {
+    override fun visitMemoryFillInstruction(memoryIndex: UInt) {
         WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.MEMORY_FILL)
         WasmBinaryWriter(instructionsBuffer).writeVarUInt32(memoryIndex)
-        WasmBinaryWriter(instructionsBuffer).writeVarUInt32(address)
-        WasmBinaryWriter(instructionsBuffer).writeVarUInt32(value)
     }
 
-    override fun visitMemoryCopyInstruction(targetIndex: UInt, sourceIndex: UInt,  targetOffset: UInt, sourceOffset: UInt, size: UInt) {
+    override fun visitMemoryCopyInstruction(targetIndex: UInt, sourceIndex: UInt) {
         WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.MEMORY_COPY)
         WasmBinaryWriter(instructionsBuffer).writeVarUInt32(sourceIndex)
         WasmBinaryWriter(instructionsBuffer).writeVarUInt32(targetIndex)
-        WasmBinaryWriter(instructionsBuffer).writeVarUInt32(targetOffset)
     }
 
-    override fun visitMemoryInitInstruction(memoryIndex: UInt, segmentIndex: UInt, target: UInt, address: UInt, size: UInt) {
+    override fun visitMemoryInitInstruction(memoryIndex: UInt, segmentIndex: UInt) {
         WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.MEMORY_INIT)
         WasmBinaryWriter(instructionsBuffer).writeVarUInt32(memoryIndex)
         WasmBinaryWriter(instructionsBuffer).writeVarUInt32(segmentIndex)
-        WasmBinaryWriter(instructionsBuffer).writeVarUInt32(target)
-        WasmBinaryWriter(instructionsBuffer).writeVarUInt32(address)
-        WasmBinaryWriter(instructionsBuffer).writeVarUInt32(size)
     }
 
     override fun visitDataDropInstruction(segmentIndex: UInt) {
@@ -606,20 +600,25 @@ public class ExpressionWriter(
         WasmBinaryWriter(instructionsBuffer).writeVarUInt32(delta)
     }
 
-    override fun visitTableFillInstruction(tableIndex: UInt, target: UInt, value: UInt, size: UInt) {
+    override fun visitTableFillInstruction(tableIndex: UInt) {
         WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.TABLE_FILL)
         WasmBinaryWriter(instructionsBuffer).writeVarUInt32(tableIndex)
-        WasmBinaryWriter(instructionsBuffer).writeVarUInt32(target)
-        WasmBinaryWriter(instructionsBuffer).writeVarUInt32(value)
-        WasmBinaryWriter(instructionsBuffer).writeVarUInt32(size)
     }
 
-    override fun visitTableCopyInstruction(targetTableIndex: UInt, sourceTableIndex: UInt, target: UInt, value: UInt, size: UInt) {
+    override fun visitTableCopyInstruction(targetTableIndex: UInt, sourceTableIndex: UInt) {
         WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.TABLE_COPY)
         WasmBinaryWriter(instructionsBuffer).writeVarUInt32(targetTableIndex)
         WasmBinaryWriter(instructionsBuffer).writeVarUInt32(sourceTableIndex)
-        WasmBinaryWriter(instructionsBuffer).writeVarUInt32(target)
-        WasmBinaryWriter(instructionsBuffer).writeVarUInt32(value)
-        WasmBinaryWriter(instructionsBuffer).writeVarUInt32(size)
+    }
+
+    override fun visitTableInitInstruction(segmentIndex: UInt, tableIndex: UInt) {
+        WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.TABLE_INIT)
+        WasmBinaryWriter(instructionsBuffer).writeVarUInt32(segmentIndex)
+        WasmBinaryWriter(instructionsBuffer).writeVarUInt32(tableIndex)
+    }
+
+    override fun visitElementDropInstruction(segmentIndex: UInt) {
+        WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.ELEMENT_DROP)
+        WasmBinaryWriter(instructionsBuffer).writeVarUInt32(segmentIndex)
     }
 }
