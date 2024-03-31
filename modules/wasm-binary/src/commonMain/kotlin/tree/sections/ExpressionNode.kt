@@ -4,39 +4,20 @@ import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.instructions.*
-import org.wasmium.wasm.binary.visitors.FunctionBodyVisitor
+import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
-public class FunctionBodyNode : FunctionBodyVisitor {
-    public var functionIndex: UInt? = null
-    public val locals: MutableList<LocalNode> = mutableListOf()
+public class ExpressionNode : ExpressionVisitor {
     public val instructions: MutableList<Instruction> = mutableListOf()
 
-    public fun accept(functionBodyVisitor: FunctionBodyVisitor) {
-        for (local in locals) {
-            functionBodyVisitor.visitLocalVariable(local.localIndex!!, local.count!!, local.type!!)
-        }
-
+    public fun accept(expressionVisitor: ExpressionVisitor) {
         for (instruction in instructions) {
-            instruction.accept(functionBodyVisitor)
+            instruction.accept(expressionVisitor)
         }
 
-        functionBodyVisitor.visitEnd()
+        expressionVisitor.visitEnd()
     }
 
-    public override fun visitLocalVariable(localIndex: UInt, count: UInt, localType: WasmType) {
-        val localNode = LocalNode()
-        localNode.localIndex = localIndex
-        localNode.count = count
-        localNode.type = localType
-
-        locals.add(localNode)
-    }
-
-    public override fun visitCode() {
-        // empty
-    }
-
-    public override fun visitEnd() {
+    override fun visitEnd() {
         // empty
     }
 
@@ -46,10 +27,6 @@ public class FunctionBodyNode : FunctionBodyVisitor {
 
     public override fun visitAtomicStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
         instructions.add(AtomicStoreInstruction(opcode, alignment, offset))
-    }
-
-    public override fun visitAtomicRmwInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        instructions.add(AtomicRmwInstruction(opcode, alignment, offset))
     }
 
     public override fun visitAtomicRmwCompareExchangeInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
@@ -364,28 +341,28 @@ public class FunctionBodyNode : FunctionBodyVisitor {
         instructions.add(MaxInstruction(opcode))
     }
 
-    public override fun visitAtomicRmwAddInstruction(opcode: Opcode, align: UInt, offset: UInt) {
-        instructions.add(AtomicRmwAddInstruction(opcode, align, offset))
+    public override fun visitAtomicRmwAddInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        instructions.add(AtomicRmwAddInstruction(opcode, alignment, offset))
     }
 
-    public override fun visitAtomicRmwSubtractInstruction(opcode: Opcode, align: UInt, offset: UInt) {
-        instructions.add(AtomicRmwAddInstruction(opcode, align, offset))
+    public override fun visitAtomicRmwSubtractInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        instructions.add(AtomicRmwAddInstruction(opcode, alignment, offset))
     }
 
-    public override fun visitAtomicRmwAndInstruction(opcode: Opcode, align: UInt, offset: UInt) {
-        instructions.add(AtomicRmwAndInstruction(opcode, align, offset))
+    public override fun visitAtomicRmwAndInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        instructions.add(AtomicRmwAndInstruction(opcode, alignment, offset))
     }
 
-    public override fun visitAtomicRmwOrInstruction(opcode: Opcode, align: UInt, offset: UInt) {
-        instructions.add(AtomicRmwOrInstruction(opcode, align, offset))
+    public override fun visitAtomicRmwOrInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        instructions.add(AtomicRmwOrInstruction(opcode, alignment, offset))
     }
 
-    public override fun visitAtomicRmwXorInstruction(opcode: Opcode, align: UInt, offset: UInt) {
-        instructions.add(AtomicRmwXorInstruction(opcode, align, offset))
+    public override fun visitAtomicRmwXorInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        instructions.add(AtomicRmwXorInstruction(opcode, alignment, offset))
     }
 
-    public override fun visitAtomicRmwExchangeInstruction(opcode: Opcode, align: UInt, offset: UInt) {
-        instructions.add(AtomicRmwExchangeInstruction(opcode, align, offset))
+    public override fun visitAtomicRmwExchangeInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        instructions.add(AtomicRmwExchangeInstruction(opcode, alignment, offset))
     }
 
     public override fun visitSimdSplatInstruction(opcode: Opcode, value: UInt) {
@@ -508,21 +485,35 @@ public class FunctionBodyNode : FunctionBodyVisitor {
         instructions.add(SimdAbsInstruction(opcode))
     }
 
-    public override fun visitMemoryFillInstruction(opcode: Opcode, address: UInt, value: UInt, size: UInt) {
-        // TODO("Not yet implemented")
-        instructions.add(NopInstruction())
+    public override fun visitMemoryFillInstruction(memoryIndex: UInt, address: UInt, value: UInt, size: UInt) {
+        instructions.add(MemoryFillInstruction(memoryIndex, address, value))
     }
 
-    public override fun visitMemoryCopyInstruction(opcode: Opcode, target: UInt, offset: UInt, size: UInt) {
-        // TODO: Implement MemoryCopyInstruction
-        // instructions.add(MemoryCopyInstruction(opcode, address, value, size))
-        instructions.add(NopInstruction())
+    public override fun visitMemoryCopyInstruction(targetIndex: UInt, sourceIndex: UInt, targetOffset: UInt, sourceOffset: UInt, size: UInt) {
+        instructions.add(MemoryCopyInstruction(targetIndex, sourceIndex, targetOffset, sourceOffset, size))
     }
 
-    public override fun visitMemoryInitInstruction(opcode: Opcode, target: UInt, offset: UInt, size: UInt) {
-        // TODO: Implement MemoryInitInstruction
-        // instructions.add(MemoryInitInstruction(opcode, address, value, size))
-        instructions.add(NopInstruction())
+    public override fun visitMemoryInitInstruction(memoryIndex: UInt, segmentIndex: UInt, target: UInt, address: UInt, size: UInt) {
+        instructions.add(MemoryInitInstruction(memoryIndex, segmentIndex, target, address, size))
     }
 
+    public override fun visitDataDropInstruction(segmentIndex: UInt) {
+        instructions.add(DataDropInstruction(segmentIndex))
+    }
+
+    override fun visitTableSizeInstruction(tableIndex: UInt) {
+        instructions.add(TableSizeInstruction(tableIndex))
+    }
+
+    override fun visitTableGrowInstruction(tableIndex: UInt, value: UInt, delta: UInt) {
+        instructions.add(TableGrowInstruction(tableIndex, value, delta))
+    }
+
+    override fun visitTableFillInstruction(tableIndex: UInt, target: UInt, value: UInt, size: UInt) {
+        instructions.add(TableFillInstruction(tableIndex, target, value, size))
+    }
+
+    override fun visitTableCopyInstruction(targetTableIndex: UInt, sourceTableIndex: UInt, target: UInt, value: UInt, size: UInt) {
+        instructions.add(TableCopyInstruction(targetTableIndex, sourceTableIndex, target, value, size))
+    }
 }

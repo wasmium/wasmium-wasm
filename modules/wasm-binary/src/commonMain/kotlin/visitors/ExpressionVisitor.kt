@@ -4,18 +4,13 @@ import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 
-public interface FunctionBodyVisitor {
-    public fun visitLocalVariable(localIndex: UInt, count: UInt, localType: WasmType)
-
-    public fun visitCode()
+public interface ExpressionVisitor {
 
     public fun visitEnd()
 
     public fun visitAtomicLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt)
 
     public fun visitAtomicStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt)
-
-    public fun visitAtomicRmwInstruction(opcode: Opcode, alignment: UInt, offset: UInt)
 
     public fun visitAtomicRmwCompareExchangeInstruction(opcode: Opcode, alignment: UInt, offset: UInt)
 
@@ -173,17 +168,17 @@ public interface FunctionBodyVisitor {
 
     public fun visitMaxInstruction(opcode: Opcode)
 
-    public fun visitAtomicRmwAddInstruction(opcode: Opcode, align: UInt, offset: UInt)
+    public fun visitAtomicRmwAddInstruction(opcode: Opcode, alignment: UInt, offset: UInt)
 
-    public fun visitAtomicRmwSubtractInstruction(opcode: Opcode, align: UInt, offset: UInt)
+    public fun visitAtomicRmwSubtractInstruction(opcode: Opcode, alignment: UInt, offset: UInt)
 
-    public fun visitAtomicRmwAndInstruction(opcode: Opcode, align: UInt, offset: UInt)
+    public fun visitAtomicRmwAndInstruction(opcode: Opcode, alignment: UInt, offset: UInt)
 
-    public fun visitAtomicRmwOrInstruction(opcode: Opcode, align: UInt, offset: UInt)
+    public fun visitAtomicRmwOrInstruction(opcode: Opcode, alignment: UInt, offset: UInt)
 
-    public fun visitAtomicRmwXorInstruction(opcode: Opcode, align: UInt, offset: UInt)
+    public fun visitAtomicRmwXorInstruction(opcode: Opcode, alignment: UInt, offset: UInt)
 
-    public fun visitAtomicRmwExchangeInstruction(opcode: Opcode, align: UInt, offset: UInt)
+    public fun visitAtomicRmwExchangeInstruction(opcode: Opcode, alignment: UInt, offset: UInt)
 
     public fun visitSimdSplatInstruction(opcode: Opcode, value: UInt)
 
@@ -245,9 +240,19 @@ public interface FunctionBodyVisitor {
 
     public fun visitSimdAbsInstruction(opcode: Opcode)
 
-    public fun visitMemoryFillInstruction(opcode: Opcode, address: UInt, value: UInt, size: UInt)
+    public fun visitMemoryFillInstruction(memoryIndex: UInt, address: UInt, value: UInt, size: UInt)
 
-    public fun visitMemoryCopyInstruction(opcode: Opcode, target: UInt, offset: UInt, size: UInt)
+    public fun visitMemoryCopyInstruction(targetIndex: UInt, sourceIndex: UInt, targetOffset: UInt, sourceOffset: UInt, size: UInt)
 
-    public fun visitMemoryInitInstruction(opcode: Opcode, target: UInt, offset: UInt, size: UInt)
+    public fun visitMemoryInitInstruction(memoryIndex: UInt, segmentIndex: UInt, target: UInt, address: UInt, size: UInt)
+
+    public fun visitDataDropInstruction(segmentIndex: UInt)
+
+    public fun visitTableSizeInstruction(tableIndex: UInt)
+
+    public fun visitTableGrowInstruction(tableIndex: UInt, value: UInt, delta: UInt)
+
+    public fun visitTableFillInstruction(tableIndex: UInt, target: UInt, value: UInt, size: UInt)
+
+    public fun visitTableCopyInstruction(targetTableIndex: UInt, sourceTableIndex: UInt, target: UInt, value: UInt, size: UInt)
 }

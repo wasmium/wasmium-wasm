@@ -1,17 +1,18 @@
 package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.Features
+import org.wasmium.wasm.binary.tree.SectionKind
 
 public class ReaderOptionsBuilder {
-    protected var isDebugNamesEnabled: Boolean = false
-    protected var isSkipCodeSection: Boolean = false
+    protected var debugNames: Boolean = false
+    protected var skipSections: List<SectionKind> = mutableListOf()
     protected var features: Features = Features()
 
     public constructor()
 
     public constructor(options: ReaderOptions) {
-        isDebugNamesEnabled = options.isDebugNamesEnabled
-        isSkipCodeSection = options.isSkipCodeSection
+        debugNames = options.debugNames
+        skipSections = options.skipSections
         features.apply {
             isExceptionHandlingEnabled = options.features.isExceptionHandlingEnabled
             isThreadsEnabled = options.features.isThreadsEnabled
@@ -27,13 +28,13 @@ public class ReaderOptionsBuilder {
     }
 
     public fun debugNames(enable: Boolean): ReaderOptionsBuilder {
-        isDebugNamesEnabled = enable
+        debugNames = enable
 
         return this
     }
 
-    public fun skipCodeSection(enable: Boolean): ReaderOptionsBuilder {
-        isSkipCodeSection = enable
+    public fun skipSections(sections: List<SectionKind>): ReaderOptionsBuilder {
+        skipSections = sections
 
         return this
     }
@@ -45,8 +46,8 @@ public class ReaderOptionsBuilder {
     }
 
     public fun build(): ReaderOptions = ReaderOptions(
-        isDebugNamesEnabled = isDebugNamesEnabled,
-        isSkipCodeSection = isSkipCodeSection,
+        debugNames = debugNames,
+        skipSections = skipSections,
         features = features,
     )
 }

@@ -9,14 +9,14 @@ public class ExceptionSectionNode : CustomSectionNode(SectionName.EXCEPTION.sect
 
     public fun accept(exceptionSectionVisitor: ExceptionSectionVisitor) {
         for (exceptionType in exceptionTypes) {
-            exceptionSectionVisitor.visitExceptionType(exceptionType.exceptionIndex, exceptionType.exceptionTypes)
+            exceptionSectionVisitor.visitExceptionType(exceptionType.exceptionTypes)
         }
 
         exceptionSectionVisitor.visitEnd()
     }
 
-    public override fun visitExceptionType(exceptionIndex: UInt, types: Array<WasmType>) {
-        exceptionTypes.add(ExceptionTypeNode(exceptionIndex, types))
+    public override fun visitExceptionType(types: List<WasmType>) {
+        exceptionTypes.add(ExceptionTypeNode(types))
     }
 
     public override fun visitEnd() {

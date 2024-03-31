@@ -1,30 +1,27 @@
 package org.wasmium.wasm.binary.tree.sections
 
+import org.wasmium.wasm.binary.tree.LocalVariable
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.visitors.CodeSectionVisitor
-import org.wasmium.wasm.binary.visitors.FunctionBodyVisitor
+import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
 public class CodeSectionNode : SectionNode(SectionKind.CODE), CodeSectionVisitor {
-    public val functionBodies: MutableList<FunctionBodyNode> = mutableListOf()
+    public val codes: MutableList<CodeNode> = mutableListOf()
 
     public fun accept(codeSectionVisitor: CodeSectionVisitor) {
-        for (functionBody in functionBodies) {
-            val functionBodyVisitor = codeSectionVisitor.visitFunctionBody(functionBody.functionIndex!!)
-
-            functionBody.accept(functionBodyVisitor)
-
-            functionBodyVisitor.visitEnd()
+        for (code in codes) {
+            val expressionVisitor = codeSectionVisitor.visitCode(code.locals)
+            code.expression.accept(expressionVisitor)
         }
 
         codeSectionVisitor.visitEnd()
     }
 
-    public override fun visitFunctionBody(functionIndex: UInt): FunctionBodyVisitor {
-        val functionBody = FunctionBodyNode()
-        functionBody.functionIndex = functionIndex
-        functionBodies.add(functionBody)
+    public override fun visitCode(locals: List<LocalVariable>): ExpressionVisitor {
+        val expressionNode = ExpressionNode()
+        codes.add(CodeNode(locals, expressionNode))
 
-        return functionBody
+        return expressionNode
     }
 
     public override fun visitEnd() {

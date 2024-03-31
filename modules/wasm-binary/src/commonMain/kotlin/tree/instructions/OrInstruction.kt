@@ -1,10 +1,10 @@
 package org.wasmium.wasm.binary.tree.instructions
 
 import org.wasmium.wasm.binary.tree.Opcode
-import org.wasmium.wasm.binary.visitors.FunctionBodyVisitor
+import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
 public class OrInstruction(public override val opcode: Opcode) : NoneInstruction {
-    override fun accept(functionBodyVisitor: FunctionBodyVisitor) {
-        functionBodyVisitor.visitOrInstruction(opcode)
+    override fun accept(expressionVisitor: ExpressionVisitor) {
+        expressionVisitor.visitOrInstruction(opcode)
     }
 }

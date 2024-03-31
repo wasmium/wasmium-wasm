@@ -10,14 +10,14 @@ public class GlobalSectionReader(
     private val globalVariableReader: GlobalVariableReader = GlobalVariableReader(context),
 ) {
     public fun readGlobalSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
-        context.numberGlobals = source.readVarUInt32()
+        context.numberOfGlobals = source.readVarUInt32()
 
-        if (context.numberGlobals > WasmBinary.MAX_GLOBALS) {
-            throw ParserException("Number of globals ${context.numberGlobals} exceed the maximum of ${WasmBinary.MAX_GLOBALS}")
+        if (context.numberOfGlobals > WasmBinary.MAX_GLOBALS) {
+            throw ParserException("Number of globals ${context.numberOfGlobals} exceed the maximum of ${WasmBinary.MAX_GLOBALS}")
         }
 
         val globalVisitor = visitor.visitGlobalSection()
-        for (index in 0u until context.numberGlobals) {
+        for (index in 0u until context.numberOfGlobals) {
             globalVariableReader.readGlobalVariable(source, index, globalVisitor)
         }
 

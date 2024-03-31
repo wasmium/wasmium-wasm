@@ -10,7 +10,7 @@ public class StartSectionReader(
     public fun readStartSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         val functionIndex = source.readIndex()
 
-        if (functionIndex >= context.numberTotalFunctions) {
+        if (functionIndex >= context.numberOfTotalFunctions) {
             throw ParserException("Invalid start function index: %$functionIndex")
         }
 

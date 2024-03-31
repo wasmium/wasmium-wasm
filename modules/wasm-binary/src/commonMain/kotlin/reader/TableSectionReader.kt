@@ -11,15 +11,15 @@ public class TableSectionReader(
     private val context: ReaderContext,
 ) {
     public fun readTableSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
-        context.numberTables = source.readVarUInt32()
+        context.numberOfTables = source.readVarUInt32()
 
-        if (context.numberTables > WasmBinary.MAX_TABLES) {
-            throw ParserException("Number of tables ${context.numberTables} exceed the maximum of ${WasmBinary.MAX_TABLES}")
+        if (context.numberOfTables > WasmBinary.MAX_TABLES) {
+            throw ParserException("Number of tables ${context.numberOfTables} exceed the maximum of ${WasmBinary.MAX_TABLES}")
         }
 
         val tableVisitor = visitor.visitTableSection()
-        for (index in 0u until context.numberTables) {
-            val tableIndex = context.numberTableImports + index
+        for (index in 0u until context.numberOfTables) {
+            val tableIndex = context.numberOfTableImports + index
 
             val elementType = source.readType()
             if (elementType != WasmType.FUNC_REF) {
@@ -45,7 +45,7 @@ public class TableSectionReader(
                 }
             }
 
-            tableVisitor?.visitTable(tableIndex, elementType, limits)
+            tableVisitor?.visitTable(elementType, limits)
         }
 
         tableVisitor?.visitEnd()

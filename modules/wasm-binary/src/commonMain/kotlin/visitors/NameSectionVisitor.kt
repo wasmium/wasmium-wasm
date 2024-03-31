@@ -1,25 +1,31 @@
 package org.wasmium.wasm.binary.visitors
 
+import org.wasmium.wasm.binary.tree.IndexName
+
 public interface NameSectionVisitor {
     public fun visitModuleName(name: String)
 
-    public fun visitFunctionName(functionIndex: UInt, name: String)
+    public fun visitFunctionNames(names: List<IndexName>)
 
-    public fun visitGlobalName(functionIndex: UInt, name: String)
+    public fun visitGlobalNames(names: List<IndexName>)
 
-    public fun visitTagName(functionIndex: UInt, name: String)
+    public fun visitTagNames(names: List<IndexName>)
 
-    public fun visitTableName(functionIndex: UInt, name: String)
+    public fun visitTableNames(names: List<IndexName>)
 
-    public fun visitMemoryName(functionIndex: UInt, name: String)
+    public fun visitMemoryNames(names: List<IndexName>)
 
-    public fun visitElementName(functionIndex: UInt, name: String)
+    public fun visitElementNames(names: List<IndexName>)
 
-    public fun visitDataName(functionIndex: UInt, name: String)
+    public fun visitDataNames(names: List<IndexName>)
 
-    public fun visitLocalName(functionIndex: UInt, localIndex: UInt, name: String)
+    public fun visitTypeNames(names: List<IndexName>)
 
-    public fun visitLabelName(functionIndex: UInt, localIndex: UInt, name: String)
+    public fun visitLocalNames(functionIndex: UInt, names: List<IndexName>)
+
+    public fun visitLabelNames(functionIndex: UInt, names: List<IndexName>)
+
+    public fun visitFieldNames(functionIndex: UInt, names: List<IndexName>)
 
     public fun visitEnd()
 }

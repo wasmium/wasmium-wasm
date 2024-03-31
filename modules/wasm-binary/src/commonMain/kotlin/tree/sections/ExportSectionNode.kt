@@ -9,14 +9,14 @@ public class ExportSectionNode : SectionNode(SectionKind.EXPORT), ExportSectionV
 
     public fun accept(exportSectionVisitor: ExportSectionVisitor) {
         for (exportType in exports) {
-            exportSectionVisitor.visitExport(exportType.exportIndex, exportType.kind, exportType.index, exportType.name)
+            exportSectionVisitor.visitExport(exportType.name, exportType.kind, exportType.index)
         }
 
         exportSectionVisitor.visitEnd()
     }
 
-    public override fun visitExport(exportIndex: UInt, externalKind: ExternalKind, itemIndex: UInt, name: String) {
-        exports.add(ExportTypeNode(exportIndex, name, externalKind, itemIndex))
+    public override fun visitExport(name: String, externalKind: ExternalKind, itemIndex: UInt) {
+        exports.add(ExportTypeNode(name, externalKind, itemIndex))
     }
 
     public override fun visitEnd() {

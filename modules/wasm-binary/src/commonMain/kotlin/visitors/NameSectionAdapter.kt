@@ -1,44 +1,54 @@
 package org.wasmium.wasm.binary.visitors
 
+import org.wasmium.wasm.binary.tree.IndexName
+
 public open class NameSectionAdapter(protected val delegate: NameSectionVisitor? = null) : NameSectionVisitor {
     public override fun visitModuleName(name: String) {
         delegate?.visitModuleName(name)
     }
 
-    public override fun visitLocalName(functionIndex: UInt, localIndex: UInt, name: String) {
-        delegate?.visitLocalName(functionIndex, localIndex, name)
+    public override fun visitLocalNames(functionIndex: UInt, names: List<IndexName>) {
+        delegate?.visitLocalNames(functionIndex, names)
     }
 
-    override fun visitLabelName(functionIndex: UInt, nameLocalIndex: UInt, name: String) {
-        delegate?.visitLabelName(functionIndex, nameLocalIndex, name)
+    override fun visitLabelNames(functionIndex: UInt, names: List<IndexName>) {
+        delegate?.visitLabelNames(functionIndex, names)
     }
 
-    public override fun visitFunctionName(functionIndex: UInt, name: String) {
-        delegate?.visitFunctionName(functionIndex, name)
+    override fun visitFieldNames(functionIndex: UInt, names: List<IndexName>) {
+        delegate?.visitFieldNames(functionIndex, names)
     }
 
-    override fun visitGlobalName(functionIndex: UInt, name: String) {
-        delegate?.visitGlobalName(functionIndex, name)
+    public override fun visitFunctionNames(names: List<IndexName>) {
+        delegate?.visitFunctionNames(names)
     }
 
-    override fun visitTagName(functionIndex: UInt, name: String) {
-        delegate?.visitTagName(functionIndex, name)
+    override fun visitGlobalNames(names: List<IndexName>) {
+        delegate?.visitGlobalNames(names)
     }
 
-    override fun visitTableName(functionIndex: UInt, name: String) {
-        delegate?.visitTableName(functionIndex, name)
+    override fun visitTagNames(names: List<IndexName>) {
+        delegate?.visitTagNames(names)
     }
 
-    override fun visitMemoryName(functionIndex: UInt, name: String) {
-        delegate?.visitMemoryName(functionIndex, name)
+    override fun visitTableNames(names: List<IndexName>) {
+        delegate?.visitTableNames(names)
     }
 
-    override fun visitElementName(functionIndex: UInt, name: String) {
-        delegate?.visitElementName(functionIndex, name)
+    override fun visitMemoryNames(names: List<IndexName>) {
+        delegate?.visitMemoryNames(names)
     }
 
-    override fun visitDataName(functionIndex: UInt, name: String) {
-        delegate?.visitDataName(functionIndex, name)
+    override fun visitElementNames(names: List<IndexName>) {
+        delegate?.visitElementNames(names)
+    }
+
+    override fun visitDataNames(names: List<IndexName>) {
+        delegate?.visitDataNames(names)
+    }
+
+    override fun visitTypeNames(names: List<IndexName>) {
+        delegate?.visitTypeNames(names)
     }
 
     public override fun visitEnd() {

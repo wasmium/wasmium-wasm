@@ -10,21 +10,20 @@ public class ElementSectionReader(
     private val elementSegmentReader: ElementSegmentReader = ElementSegmentReader(context),
 ) {
     public fun readElementSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
-        context.numberElementSegments = source.readVarUInt32()
+        context.numberOfElementSegments = source.readVarUInt32()
 
-        if (context.numberElementSegments > WasmBinary.MAX_ELEMENT_SEGMENTS) {
-            throw ParserException("Number of element segments ${context.numberElementSegments} exceed the maximum of ${WasmBinary.MAX_ELEMENT_SEGMENTS}")
+        if (context.numberOfElementSegments > WasmBinary.MAX_ELEMENT_SEGMENTS) {
+            throw ParserException("Number of element segments ${context.numberOfElementSegments} exceed the maximum of ${WasmBinary.MAX_ELEMENT_SEGMENTS}")
         }
 
-        if (context.numberElementSegments != 0u && context.numberTotalTables <= 0u) {
+        if (context.numberOfElementSegments != 0u && context.numberOfTotalTables <= 0u) {
             throw ParserException("Element section without table section.")
         }
 
         val elementVisitor = visitor.visitElementSection()
-        for (index in 0u until context.numberElementSegments) {
+        for (index in 0u until context.numberOfElementSegments) {
             elementSegmentReader.readElementSegment(source, index, elementVisitor)
         }
-
         elementVisitor?.visitEnd()
     }
 }

@@ -1,6 +1,5 @@
 package org.wasmium.wasm.binary.tree
 
-import org.wasmium.wasm.binary.tree.SectionName.*
 import org.wasmium.wasm.binary.tree.SectionKind.CODE
 import org.wasmium.wasm.binary.tree.SectionKind.CUSTOM
 import org.wasmium.wasm.binary.tree.SectionKind.DATA
@@ -14,6 +13,10 @@ import org.wasmium.wasm.binary.tree.SectionKind.MEMORY
 import org.wasmium.wasm.binary.tree.SectionKind.START
 import org.wasmium.wasm.binary.tree.SectionKind.TABLE
 import org.wasmium.wasm.binary.tree.SectionKind.TYPE
+import org.wasmium.wasm.binary.tree.SectionName.EXCEPTION
+import org.wasmium.wasm.binary.tree.SectionName.LINKING
+import org.wasmium.wasm.binary.tree.SectionName.NAME
+import org.wasmium.wasm.binary.tree.SectionName.RELOCATION
 import org.wasmium.wasm.binary.tree.sections.CodeSectionNode
 import org.wasmium.wasm.binary.tree.sections.CustomSectionNode
 import org.wasmium.wasm.binary.tree.sections.DataCountSectionNode
@@ -34,7 +37,6 @@ import org.wasmium.wasm.binary.tree.sections.TableSectionNode
 import org.wasmium.wasm.binary.tree.sections.TypeSectionNode
 import org.wasmium.wasm.binary.tree.sections.UnknownSectionNode
 import org.wasmium.wasm.binary.visitors.CodeSectionVisitor
-import org.wasmium.wasm.binary.visitors.UnknownSectionVisitor
 import org.wasmium.wasm.binary.visitors.DataCountSectionVisitor
 import org.wasmium.wasm.binary.visitors.DataSectionVisitor
 import org.wasmium.wasm.binary.visitors.ElementSectionVisitor
@@ -51,6 +53,7 @@ import org.wasmium.wasm.binary.visitors.RelocationSectionVisitor
 import org.wasmium.wasm.binary.visitors.StartSectionVisitor
 import org.wasmium.wasm.binary.visitors.TableSectionVisitor
 import org.wasmium.wasm.binary.visitors.TypeSectionVisitor
+import org.wasmium.wasm.binary.visitors.UnknownSectionVisitor
 
 public class ModuleNode : ModuleVisitor {
     public var version: UInt? = null
@@ -65,14 +68,13 @@ public class ModuleNode : ModuleVisitor {
                 CUSTOM -> {
                     val customSection = section as CustomSectionNode
 
-                    when (customSection.customSectionName) {
+                    when (customSection.name) {
                         EXCEPTION.sectionName -> {
                             val exceptionSection = customSection as ExceptionSectionNode
 
                             val exceptionSectionVisitor = visitor.visitExceptionSection()
                             if (exceptionSectionVisitor != null) {
                                 exceptionSection.accept(exceptionSectionVisitor)
-                                exceptionSectionVisitor.visitEnd()
                             }
                         }
 
@@ -82,7 +84,6 @@ public class ModuleNode : ModuleVisitor {
                             val relocationSectionVisitor = visitor.visitRelocationSection()
                             if (relocationSectionVisitor != null) {
                                 relocationSection.accept(relocationSectionVisitor)
-                                relocationSectionVisitor.visitEnd()
                             }
                         }
 
@@ -92,7 +93,6 @@ public class ModuleNode : ModuleVisitor {
                             val linkingSectionVisitor = visitor.visitLinkingSection()
                             if (linkingSectionVisitor != null) {
                                 linkingSection.accept(linkingSectionVisitor)
-                                linkingSectionVisitor.visitEnd()
                             }
                         }
 
@@ -102,17 +102,15 @@ public class ModuleNode : ModuleVisitor {
                             val nameSectionVisitor = visitor.visitNameSection()
                             if (nameSectionVisitor != null) {
                                 nameSection.accept(nameSectionVisitor)
-                                nameSectionVisitor.visitEnd()
                             }
                         }
 
                         else -> {
                             val unknownSection = customSection as UnknownSectionNode
 
-                            val unknownSectionVisitor = visitor.visitUnknownSection(unknownSection.customSectionName, unknownSection.content)
+                            val unknownSectionVisitor = visitor.visitUnknownSection(unknownSection.name, unknownSection.content)
                             if (unknownSectionVisitor != null) {
                                 unknownSection.accept(unknownSectionVisitor)
-                                unknownSectionVisitor.visitEnd()
                             }
                         }
                     }
@@ -124,7 +122,6 @@ public class ModuleNode : ModuleVisitor {
                     val typeSectionVisitor = visitor.visitTypeSection()
                     if (typeSectionVisitor != null) {
                         typeSection.accept(typeSectionVisitor)
-                        typeSectionVisitor.visitEnd()
                     }
                 }
 
@@ -134,7 +131,6 @@ public class ModuleNode : ModuleVisitor {
                     val importSectionVisitor = visitor.visitImportSection()
                     if (importSectionVisitor != null) {
                         importSection.accept(importSectionVisitor)
-                        importSectionVisitor.visitEnd()
                     }
                 }
 
@@ -144,7 +140,6 @@ public class ModuleNode : ModuleVisitor {
                     val functionSectionVisitor = visitor.visitFunctionSection()
                     if (functionSectionVisitor != null) {
                         functionSection.accept(functionSectionVisitor)
-                        functionSectionVisitor.visitEnd()
                     }
                 }
 
@@ -154,7 +149,6 @@ public class ModuleNode : ModuleVisitor {
                     val tableSectionVisitor = visitor.visitTableSection()
                     if (tableSectionVisitor != null) {
                         tableSection.accept(tableSectionVisitor)
-                        tableSectionVisitor.visitEnd()
                     }
                 }
 
@@ -164,7 +158,6 @@ public class ModuleNode : ModuleVisitor {
                     val memorySectionVisitor = visitor.visitMemorySection()
                     if (memorySectionVisitor != null) {
                         memorySection.accept(memorySectionVisitor)
-                        memorySectionVisitor.visitEnd()
                     }
                 }
 
@@ -174,7 +167,6 @@ public class ModuleNode : ModuleVisitor {
                     val globalSectionVisitor = visitor.visitGlobalSection()
                     if (globalSectionVisitor != null) {
                         globalSection.accept(globalSectionVisitor)
-                        globalSectionVisitor.visitEnd()
                     }
                 }
 
@@ -184,7 +176,6 @@ public class ModuleNode : ModuleVisitor {
                     val exportSectionVisitor = visitor.visitExportSection()
                     if (exportSectionVisitor != null) {
                         exportSection.accept(exportSectionVisitor)
-                        exportSectionVisitor.visitEnd()
                     }
                 }
 
@@ -194,7 +185,6 @@ public class ModuleNode : ModuleVisitor {
                     val startSectionVisitor = visitor.visitStartSection(startSection.functionIndex)
                     if (startSectionVisitor != null) {
                         startSection.accept(startSectionVisitor)
-                        startSectionVisitor.visitEnd()
                     }
                 }
 
@@ -204,27 +194,6 @@ public class ModuleNode : ModuleVisitor {
                     val elementSectionVisitor = visitor.visitElementSection()
                     if (elementSectionVisitor != null) {
                         elementSection.accept(elementSectionVisitor)
-                        elementSectionVisitor.visitEnd()
-                    }
-                }
-
-                CODE -> {
-                    val codeSection = section as CodeSectionNode
-
-                    val codeSectionVisitor = visitor.visitCodeSection()
-                    if (codeSectionVisitor != null) {
-                        codeSection.accept(codeSectionVisitor)
-                        codeSectionVisitor.visitEnd()
-                    }
-                }
-
-                DATA -> {
-                    val dataSection = section as DataSectionNode
-
-                    val dataSectionVisitor = visitor.visitDataSection()
-                    if (dataSectionVisitor != null) {
-                        dataSection.accept(dataSectionVisitor)
-                        dataSectionVisitor.visitEnd()
                     }
                 }
 
@@ -234,9 +203,28 @@ public class ModuleNode : ModuleVisitor {
                     val dataCountSectionVisitor = visitor.visitDataCountSection(dataCountSection.dataCount)
                     if (dataCountSectionVisitor != null) {
                         dataCountSection.accept(dataCountSectionVisitor)
-                        dataCountSectionVisitor.visitEnd()
                     }
                 }
+
+                CODE -> {
+                    val codeSection = section as CodeSectionNode
+
+                    val codeSectionVisitor = visitor.visitCodeSection()
+                    if (codeSectionVisitor != null) {
+                        codeSection.accept(codeSectionVisitor)
+                    }
+                }
+
+                DATA -> {
+                    val dataSection = section as DataSectionNode
+
+                    val dataSectionVisitor = visitor.visitDataSection()
+                    if (dataSectionVisitor != null) {
+                        dataSection.accept(dataSectionVisitor)
+                    }
+                }
+
+                else -> {}
             }
         }
 
@@ -324,8 +312,8 @@ public class ModuleNode : ModuleVisitor {
         return dataSection
     }
 
-    public override fun visitUnknownSection(customSectionName: String, content: ByteArray): UnknownSectionVisitor {
-        val unknownCustomSection = UnknownSectionNode(customSectionName, content)
+    public override fun visitUnknownSection(name: String, content: ByteArray): UnknownSectionVisitor {
+        val unknownCustomSection = UnknownSectionNode(name, content)
         sections.add(unknownCustomSection)
 
         return unknownCustomSection

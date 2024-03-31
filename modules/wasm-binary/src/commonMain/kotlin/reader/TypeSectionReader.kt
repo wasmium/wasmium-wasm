@@ -10,16 +10,17 @@ public class TypeSectionReader(
     private val context: ReaderContext,
 ) {
     public fun readTypeSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
-        context.numberSignatures = source.readVarUInt32()
+        context.numberOfSignatures = source.readVarUInt32()
 
-        if (context.numberSignatures > WasmBinary.MAX_TYPES) {
-            throw ParserException("Number of types ${context.numberSignatures} exceed the maximum of ${WasmBinary.MAX_TYPES}")
+        if (context.numberOfSignatures > WasmBinary.MAX_TYPES) {
+            throw ParserException("Number of types ${context.numberOfSignatures} exceed the maximum of ${WasmBinary.MAX_TYPES}")
         }
 
         val typeVisitor = visitor.visitTypeSection()
-        for (typeIndex in 0u until context.numberSignatures) {
+        for (signatureIndex in 0u until context.numberOfSignatures) {
             val form = source.readType()
 
+            // TODO allow other types
             if (form != WasmType.FUNC) {
                 throw ParserException("Invalid signature form with type: $form")
             }
@@ -29,7 +30,7 @@ public class TypeSectionReader(
                 throw ParserException("Number of function parameters $parameterCount exceed the maximum of ${WasmBinary.MAX_FUNCTION_PARAMS}")
             }
 
-            val parameters = Array(parameterCount.toInt()) { WasmType.NONE }
+            val parameters = mutableListOf<WasmType>()
             for (paramIndex in 0u until parameterCount) {
                 val type = source.readType()
 
@@ -37,11 +38,10 @@ public class TypeSectionReader(
                     throw ParserException("Expected valid param type but got: ${type.name}")
                 }
 
-                parameters[paramIndex.toInt()] = type
+                parameters.add(type)
             }
 
             val resultCount = source.readVarUInt1()
-
             if (resultCount > WasmBinary.MAX_FUNCTION_RESULTS) {
                 throw ParserException("Number of function results $resultCount exceed the maximum of ${WasmBinary.MAX_FUNCTION_RESULTS}")
             }
@@ -50,27 +50,24 @@ public class TypeSectionReader(
                 throw ParserException("Result size must be 0 or 1 but got: $resultCount")
             }
 
-            var resultType: Array<WasmType>
-            if (resultCount == 0u) {
-                resultType = arrayOf()
-            } else {
+            val resultType = mutableListOf<WasmType>()
+            if (resultCount != 0u) {
                 if (!context.options.features.isMultiValueEnabled && (resultCount > 1u)) {
                     throw ParserException("Function with multi-value result not allowed.")
                 }
 
-                resultType = Array(resultCount.toInt()) { WasmType.NONE }
-                for (rtype in 0 until resultCount.toInt()) {
+                for (typeIndex in 0 until resultCount.toInt()) {
                     val type = source.readType()
 
                     if (!type.isValueType()) {
                         throw ParserException("Expected valid param value type but got: ${type.name}")
                     }
 
-                    resultType[rtype] = type
+                    resultType.add(type)
                 }
             }
 
-            typeVisitor?.visitType(typeIndex, parameters, resultType)
+            typeVisitor?.visitType(parameters, resultType)
         }
 
         typeVisitor?.visitEnd()

@@ -90,27 +90,31 @@ public class ModuleReader(
 
             val startPosition = source.position
 
-            when (section) {
-                CUSTOM -> customSectionReader.readCustomSection(source, payloadSize, visitor)
-                TYPE -> typeSectionReader.readTypeSection(source, visitor)
-                IMPORT -> importSectionReader.readImportSection(source, visitor)
-                FUNCTION -> functionSectionReader.readFunctionSection(source, visitor)
-                TABLE -> tableSectionReader.readTableSection(source, visitor)
-                MEMORY -> memorySectionReader.readMemorySection(source, visitor)
-                GLOBAL -> globalSectionReader.readGlobalSection(source, visitor)
-                EXPORT -> exportSectionReader.readExportSection(source, visitor)
-                START -> startSectionReader.readStartSection(source, visitor)
-                ELEMENT -> elementSectionReader.readElementSection(source, visitor)
-                CODE -> codeSectionReader.readCodeSection(source, payloadSize, visitor)
-                DATA -> dataSectionReader.readDataSection(source, visitor)
-                DATA_COUNT -> dataCountSectionReader.readDataCountSection(source, visitor)
+            if (context.options.skipSections.contains(section)) {
+                source.skip(payloadSize)
+            } else {
+                when (section) {
+                    CUSTOM -> customSectionReader.readCustomSection(source, payloadSize, visitor)
+                    TYPE -> typeSectionReader.readTypeSection(source, visitor)
+                    IMPORT -> importSectionReader.readImportSection(source, visitor)
+                    FUNCTION -> functionSectionReader.readFunctionSection(source, visitor)
+                    TABLE -> tableSectionReader.readTableSection(source, visitor)
+                    MEMORY -> memorySectionReader.readMemorySection(source, visitor)
+                    GLOBAL -> globalSectionReader.readGlobalSection(source, visitor)
+                    EXPORT -> exportSectionReader.readExportSection(source, visitor)
+                    START -> startSectionReader.readStartSection(source, visitor)
+                    ELEMENT -> elementSectionReader.readElementSection(source, visitor)
+                    CODE -> codeSectionReader.readCodeSection(source, payloadSize, visitor)
+                    DATA -> dataSectionReader.readDataSection(source, visitor)
+                    DATA_COUNT -> dataCountSectionReader.readDataCountSection(source, visitor)
+                }
             }
 
             if (payloadSize != source.position - startPosition) {
                 throw ParserException("Invalid size of section id: $section, expected: $payloadSize, actual: ${source.position - startPosition}")
             }
 
-            if (context.nameSectionConsumed && section != CUSTOM) {
+            if (context.nameOfSectionConsumed && section != CUSTOM) {
                 throw ParserException("${section.name} section can not occur after Name section")
             }
 

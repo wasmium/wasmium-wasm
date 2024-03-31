@@ -81,7 +81,7 @@ public enum class Opcode(
     I32_CONST(0, 0x41, "i32.const"),
     I64_CONST(0, 0x42, "i64.const"),
     F32_CONST(0, 0x43, "f32.const"),
-    F64_CONST(0, 0x44, "i64.const"),
+    F64_CONST(0, 0x44, "f64.const"),
     I32_EQZ(0, 0x45, "i32.eqz"),
     I32_EQ(0, 0x46, "i32.eq"),
     I32_NE(0, 0x47, "i32.ne"),

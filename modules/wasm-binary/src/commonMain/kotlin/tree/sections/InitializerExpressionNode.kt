@@ -25,32 +25,32 @@ public class InitializerExpressionNode : InitializerExpressionVisitor {
         for (instruction in instructions) {
             when (instruction.opcode) {
                 I32_CONST -> {
-                    val constInt32Instruction: ConstInt32Instruction = instruction as ConstInt32Instruction
+                    val constInt32Instruction = instruction as ConstInt32Instruction
                     initializerExpressionVisitor.visitInitExprI32ConstExpr(constInt32Instruction.value)
                 }
 
                 I64_CONST -> {
-                    val constInt64Instruction: ConstInt64Instruction = instruction as ConstInt64Instruction
+                    val constInt64Instruction = instruction as ConstInt64Instruction
                     initializerExpressionVisitor.visitInitExprI64ConstExpr(constInt64Instruction.value)
                 }
 
                 F32_CONST -> {
-                    val constFloat32Instruction: ConstFloat32Instruction = instruction as ConstFloat32Instruction
+                    val constFloat32Instruction = instruction as ConstFloat32Instruction
                     initializerExpressionVisitor.visitInitExprF32ConstExpr(constFloat32Instruction.value)
                 }
 
                 F64_CONST -> {
-                    val constFloat64Instruction: ConstFloat64Instruction = instruction as ConstFloat64Instruction
+                    val constFloat64Instruction = instruction as ConstFloat64Instruction
                     initializerExpressionVisitor.visitInitExprF64ConstExpr(constFloat64Instruction.value)
                 }
 
                 V128_CONST -> {
-                    val simdConstInstruction: SimdConstInstruction = instruction as SimdConstInstruction
+                    val simdConstInstruction = instruction as SimdConstInstruction
                     initializerExpressionVisitor.visitInitExprV128ConstExpr(simdConstInstruction.value)
                 }
 
                 GET_GLOBAL -> {
-                    val getGlobalInstruction: GetGlobalInstruction = instruction as GetGlobalInstruction
+                    val getGlobalInstruction = instruction as GetGlobalInstruction
                     initializerExpressionVisitor.visitInitExprGetGlobalExpr(getGlobalInstruction.index)
                 }
 

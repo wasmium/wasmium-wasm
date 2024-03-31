@@ -1,8 +1,8 @@
 package org.wasmium.wasm.binary.tree.sections
 
-import org.wasmium.wasm.binary.tree.SectionName
 import org.wasmium.wasm.binary.tree.RelocationKind
 import org.wasmium.wasm.binary.tree.SectionKind
+import org.wasmium.wasm.binary.tree.SectionName
 import org.wasmium.wasm.binary.visitors.RelocationSectionVisitor
 
 public class RelocationSectionNode : CustomSectionNode(SectionName.RELOCATION.sectionName), RelocationSectionVisitor {

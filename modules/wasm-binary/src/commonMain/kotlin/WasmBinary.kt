@@ -82,6 +82,14 @@ public object WasmBinary {
     /** Maximum number of section. */
     public const val MAX_SECTIONS: UInt = 1000u
 
+    public const val ELEMENT_KIND: Byte = 0x00
+    public const val ELEMENT_PASSIVE_OR_DECLARATIVE: Int = 1
+    public const val ELEMENT_TABLE_INDEX: Int = 1 shl 1
+    public const val ELEMENT_EXPRESSIONS: Int = 1 shl 2
+
+    public const val DATA_PASSIVE: Int = 1
+    public const val DATA_EXPLICIT: Int = 1 shl 1
+
     public const val LINKING_SYMBOL_FLAG_UNDEFINED: UInt = 0x10u
     public const val LINKING_SYMBOL_MASK_VISIBILITY: UInt = 0x4u
     public const val LINKING_SYMBOL_MASK_BINDING: UInt = 0x3u

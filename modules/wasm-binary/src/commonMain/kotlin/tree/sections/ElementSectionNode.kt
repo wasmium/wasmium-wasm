@@ -9,17 +9,15 @@ public class ElementSectionNode : SectionNode(SectionKind.ELEMENT), ElementSecti
 
     public fun accept(elementSectionVisitor: ElementSectionVisitor) {
         for (elementSegment in segments) {
-            val elementSegmentVisitor = elementSectionVisitor.visitElementSegment(elementSegment.elementIndex!!)
+            val elementSegmentVisitor = elementSectionVisitor.visitElementSegment()
             elementSegment.accept(elementSegmentVisitor)
-            elementSectionVisitor.visitEnd()
         }
 
         elementSectionVisitor.visitEnd()
     }
 
-    public override fun visitElementSegment(elementIndex: UInt): ElementSegmentVisitor {
+    public override fun visitElementSegment(): ElementSegmentVisitor {
         val elementSegment = ElementSegmentNode()
-        elementSegment.elementIndex = elementIndex
         segments.add(elementSegment)
         return elementSegment
     }

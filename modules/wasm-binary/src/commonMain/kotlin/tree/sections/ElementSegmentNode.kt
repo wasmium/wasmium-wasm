@@ -1,41 +1,76 @@
 package org.wasmium.wasm.binary.tree.sections
 
+import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.ElementSegmentVisitor
 import org.wasmium.wasm.binary.visitors.InitializerExpressionVisitor
 
 public class ElementSegmentNode : ElementSegmentVisitor {
+    public var initializers: MutableList<InitializerExpressionNode> = mutableListOf()
+
+    public var elementIndices: MutableList<UInt> = mutableListOf()
+
+    /** The reference type of the element segment. */
+    public var type: WasmType? = null
+
+    /** The table index of the element segment, if it is active. */
     public var tableIndex: UInt? = null
-    public var elementIndex: UInt? = null
-    public var initializer: InitializerExpressionNode? = null
-    public var functionIndexes: MutableList<FunctionIndexNode> = mutableListOf()
+
+    /** The offset expression of an active element segment, or `null` if it is not active. */
+    public var offsetExpression: InitializerExpressionNode? = null
+
+    /** Whether the element segment is passive, if it is not active. True if passive, false if declarative, ignored if active. */
+    public var passive: Boolean = false
 
     public fun accept(elementSegmentVisitor: ElementSegmentVisitor) {
-        elementSegmentVisitor.visitTableIndex(tableIndex!!)
-
-        for (functionIndex in functionIndexes) {
-            elementSegmentVisitor.visitFunctionIndex(functionIndex.index!!, functionIndex.functionIndex!!)
+        if (offsetExpression == null) {
+            elementSegmentVisitor.visitNonActiveMode(passive)
+        } else {
+            val offset = elementSegmentVisitor.visitActiveMode(tableIndex!!)
+            offsetExpression!!.accept(offset)
         }
 
-        val initializerExpressionVisitor = elementSegmentVisitor.visitInitializerExpression()
-        initializer?.accept(initializerExpressionVisitor)
-        initializerExpressionVisitor.visitEnd()
+        if (type != null) {
+            elementSegmentVisitor.visitType(type!!)
+        }
+
+        if (elementIndices.isNotEmpty()) {
+            elementSegmentVisitor.visitElementIndices(elementIndices)
+        } else if (initializers.isNotEmpty()) {
+            for (initializer in initializers) {
+                val initializerExpressionVisitor = elementSegmentVisitor.visitInitializerExpression()
+                initializer.accept(initializerExpressionVisitor)
+            }
+        }
 
         elementSegmentVisitor.visitEnd()
     }
 
-    public override fun visitTableIndex(tableIndex: UInt) {
+    override fun visitElementIndices(elementIndices: List<UInt>) {
+        this.elementIndices.addAll(elementIndices)
+    }
+
+    override fun visitNonActiveMode(passive: Boolean) {
+        this.passive = passive
+    }
+
+    override fun visitActiveMode(tableIndex: UInt): InitializerExpressionVisitor {
         this.tableIndex = tableIndex
+
+        this.offsetExpression = InitializerExpressionNode()
+
+        return this.offsetExpression!!
     }
 
-    public override fun visitInitializerExpression(): InitializerExpressionVisitor {
-        return InitializerExpressionNode().also { initializer = it }
+    override fun visitType(type: WasmType) {
+        this.type = type
     }
 
-    public override fun visitFunctionIndex(index: UInt, functionIndex: UInt) {
-        val functionIndexNode = FunctionIndexNode()
-        functionIndexNode.index = index
-        functionIndexNode.functionIndex = functionIndex
-        functionIndexes.add(functionIndexNode)
+    override fun visitInitializerExpression(): InitializerExpressionVisitor {
+        val initializer = InitializerExpressionNode()
+
+        initializers.add(initializer)
+
+        return initializer
     }
 
     public override fun visitEnd() {

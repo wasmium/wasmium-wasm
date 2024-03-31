@@ -3,84 +3,37 @@ package org.wasmium.wasm.binary.reader
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.WasmBinaryReader
-import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.visitors.DataSectionVisitor
 
 public class DataSegmentReader(
     private val context: ReaderContext,
     private val initializerExpressionReader: InitializerExpressionReader = InitializerExpressionReader(context)
 ) {
-    public fun readDataSegment(source: WasmBinaryReader, index: UInt, dataVisitor: DataSectionVisitor?) {
+    public fun readDataSegment(source: WasmBinaryReader, dataVisitor: DataSectionVisitor?) {
         val startIndex = source.position
 
-        val dataSegmentVisitor = dataVisitor?.visitDataSegment(index)
+        val dataSegmentVisitor = dataVisitor?.visitDataSegment()
 
-        val mode = source.readVarUInt32()
-        dataSegmentVisitor?.visitMode(mode)
-        when (mode) {
-            0u -> {
-                val initializerExpressionVisitor = dataSegmentVisitor?.visitInitializerExpression()
-                initializerExpressionReader.readInitExpression(source, initializerExpressionVisitor, true)
-                initializerExpressionVisitor?.visitEnd()
-
-                val dataSize = source.readVarUInt32()
-
-                if (dataSize + (source.position - startIndex) > WasmBinary.MAX_DATA_SEGMENT_LENGTH) {
-                    throw ParserException("Data segment size of $dataSize${source.position - startIndex} exceed the maximum of ${WasmBinary.MAX_DATA_SEGMENT_LENGTH}")
-                }
-
-                val data = ByteArray(dataSize.toInt())
-                source.readTo(data, 0u, dataSize)
-
-                dataSegmentVisitor?.visitData(data)
+        val dataType = source.readVarUInt32()
+        if (dataType and WasmBinary.DATA_PASSIVE.toUInt() == 0u) {
+            val memoryIndex = if ((dataType and WasmBinary.DATA_EXPLICIT.toUInt()) == 0u) 0u else source.readVarUInt32()
+            if (memoryIndex != 0u) {
+                throw ParserException("Bad memory index, must be 0.")
             }
 
-            1u -> {
-                val dataSize = source.readVarUInt32()
-
-                if (dataSize + (source.position - startIndex) > WasmBinary.MAX_DATA_SEGMENT_LENGTH) {
-                    throw ParserException("Data segment size of $dataSize${source.position - startIndex} exceed the maximum of ${WasmBinary.MAX_DATA_SEGMENT_LENGTH}")
-                }
-
-                val data = ByteArray(dataSize.toInt())
-                source.readTo(data, 0u, dataSize)
-
-                if (dataSize != source.position - startIndex) {
-                    throw ParserException("Invalid size of section id: ${SectionKind.DATA}")
-                }
-
-                dataSegmentVisitor?.visitData(data)
-            }
-
-            2u -> {
-                val memoryIndex = source.readVarUInt32()
-                if (memoryIndex != 0u) {
-                    throw ParserException("Bad memory index, must be 0.")
-                }
-
-                val initializerExpressionVisitor = dataSegmentVisitor?.visitInitializerExpression()
-                initializerExpressionReader.readInitExpression(source, initializerExpressionVisitor, true)
-                initializerExpressionVisitor?.visitEnd()
-
-                val dataSize = source.readVarUInt32()
-
-                if (dataSize + (source.position - startIndex) > WasmBinary.MAX_DATA_SEGMENT_LENGTH) {
-                    throw ParserException("Data segment size of $dataSize${source.position - startIndex} exceed the maximum of ${WasmBinary.MAX_DATA_SEGMENT_LENGTH}")
-                }
-
-                val data = ByteArray(dataSize.toInt())
-                source.readTo(data, 0u, dataSize)
-
-                if (dataSize != source.position - startIndex) {
-                    throw ParserException("Invalid size of section id: ${SectionKind.DATA}")
-                }
-
-                dataSegmentVisitor?.visitMemoryData(memoryIndex, data)
-            }
-
-            else -> throw ParserException("Invalid mode: $mode")
+            val initializerExpressionVisitor = dataSegmentVisitor?.visitActive(memoryIndex)
+            initializerExpressionReader.readInitExpression(source, initializerExpressionVisitor, true)
+            initializerExpressionVisitor?.visitEnd()
         }
 
-        dataSegmentVisitor?.visitEnd()
+        val dataSize = source.readVarUInt32()
+        if (dataSize + (source.position - startIndex) > WasmBinary.MAX_DATA_SEGMENT_LENGTH) {
+            throw ParserException("Data segment size of $dataSize${source.position - startIndex} exceed the maximum of ${WasmBinary.MAX_DATA_SEGMENT_LENGTH}")
+        }
+        val data = ByteArray(dataSize.toInt())
+        source.readTo(data, 0u, dataSize)
+        dataSegmentVisitor?.visitData(data)
+
+        dataVisitor?.visitEnd()
     }
 }

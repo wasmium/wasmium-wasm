@@ -9,18 +9,17 @@ public class MemorySectionNode : SectionNode(SectionKind.MEMORY), MemorySectionV
 
     public fun accept(memorySectionVisitor: MemorySectionVisitor) {
         for (memoryType in memories) {
-            memorySectionVisitor.visitMemory(memoryType.memoryIndex!!, memoryType.limits!!)
+            memoryType.accept(memorySectionVisitor)
         }
 
         memorySectionVisitor.visitEnd()
     }
 
-    public override fun visitMemory(memoryIndex: UInt, limits: ResizableLimits) {
-        memories.add(MemoryTypeNode(memoryIndex, limits))
+    public override fun visitMemory(limits: ResizableLimits) {
+        memories.add(MemoryTypeNode(limits))
     }
 
     public override fun visitEnd() {
         // empty
     }
-
 }

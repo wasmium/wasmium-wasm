@@ -23,8 +23,6 @@ plugins {
     id("build-settings-plugin")
 }
 
-gradle.beforeSettings {
-    rootProject.name = "wasmium-wasm-binary"
-}
+rootProject.name = "wasmium-wasm-binary"
 
 includeModule("wasm-binary")

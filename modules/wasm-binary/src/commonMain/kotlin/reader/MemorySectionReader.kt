@@ -10,18 +10,18 @@ public class MemorySectionReader(
     private val context: ReaderContext,
 ) {
     public fun readMemorySection(source: WasmBinaryReader, visitor: ModuleVisitor) {
-        context.numberMemories = source.readVarUInt32()
-        if (context.numberMemories == 0u) {
+        context.numberOfMemories = source.readVarUInt32()
+        if (context.numberOfMemories == 0u) {
             return
         }
 
-        if (context.numberMemories > WasmBinary.MAX_MEMORIES) {
-            throw ParserException("Number of memories ${context.numberMemories} exceed the maximum of ${WasmBinary.MAX_MEMORIES}")
+        if (context.numberOfMemories > WasmBinary.MAX_MEMORIES) {
+            throw ParserException("Number of memories ${context.numberOfMemories} exceed the maximum of ${WasmBinary.MAX_MEMORIES}")
         }
 
         val memoryVisitor = visitor.visitMemorySection()
-        for (index in 0u until context.numberMemories) {
-            val memoryIndex = context.numberMemoryImports + index
+        for (index in 0u until context.numberOfMemories) {
+            val memoryIndex = context.numberOfMemoryImports + index
 
             val limits: ResizableLimits = source.readResizableLimits()
 
@@ -43,7 +43,7 @@ public class MemorySectionReader(
                 }
             }
 
-            memoryVisitor?.visitMemory(memoryIndex, limits)
+            memoryVisitor?.visitMemory(limits)
         }
 
         memoryVisitor?.visitEnd()

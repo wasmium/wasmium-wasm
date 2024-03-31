@@ -4,63 +4,63 @@ public class ReaderContext(
     public val options: ReaderOptions,
 ) {
     /** Total number of imported functions. */
-    public var numberFunctionImports: UInt = 0u
+    public var numberOfFunctionImports: UInt = 0u
 
     /** Total number of imported tables. */
-    public var numberTableImports: UInt = 0u
+    public var numberOfTableImports: UInt = 0u
 
     /** Total number of imported memories. */
-    public var numberMemoryImports: UInt = 0u
+    public var numberOfMemoryImports: UInt = 0u
 
     /** Total number of imported globals. */
-    public var numberGlobalImports: UInt = 0u
+    public var numberOfGlobalImports: UInt = 0u
 
     /** Total number of imported exceptions. */
-    public var numberExceptionImports: UInt = 0u
+    public var numberOfExceptionImports: UInt = 0u
 
     /** Total number of signatures. */
-    public var numberSignatures: UInt = 0u
+    public var numberOfSignatures: UInt = 0u
 
     /** Total number of tables. */
-    public var numberTables: UInt = 0u
+    public var numberOfTables: UInt = 0u
 
     /** Total number of memories. */
-    public var numberMemories: UInt = 0u
+    public var numberOfMemories: UInt = 0u
 
     /** Total number of globals. */
-    public var numberGlobals: UInt = 0u
+    public var numberOfGlobals: UInt = 0u
 
     /** Total number of imports. */
-    public var numberImports: UInt = 0u
+    public var numberOfImports: UInt = 0u
 
     /** Total number of functions. */
-    public var numberFunctions: UInt = 0u
+    public var numberOfFunctions: UInt = 0u
 
     /** Total number of exports. */
-    public var numberExports: UInt = 0u
+    public var numberOfExports: UInt = 0u
 
     /** Total number of elements. */
-    public var numberElementSegments: UInt = 0u
+    public var numberOfElementSegments: UInt = 0u
 
     /** Total number of exceptions. */
-    public var numberExceptions: UInt = 0u
+    public var numberOfExceptions: UInt = 0u
 
-    public val numberTotalFunctions: UInt
-        get() = numberFunctionImports + numberFunctions
+    public val numberOfTotalFunctions: UInt
+        get() = numberOfFunctionImports + numberOfFunctions
 
-    public val numberTotalTables: UInt
-        get() = numberTableImports + numberTables
+    public val numberOfTotalTables: UInt
+        get() = numberOfTableImports + numberOfTables
 
     public val numberTotalMemories: UInt
-        get() = numberMemoryImports + numberMemories
+        get() = numberOfMemoryImports + numberOfMemories
 
-    public val numberTotalGlobals: UInt
-        get() = numberGlobalImports + numberGlobals
+    public val numberOfTotalGlobals: UInt
+        get() = numberOfGlobalImports + numberOfGlobals
 
-    public val numberTotalExceptions: UInt
-        get() = numberExceptionImports + numberExceptions
+    public val numberOfTotalExceptions: UInt
+        get() = numberOfExceptionImports + numberOfExceptions
 
-    public var nameSectionConsumed: Boolean = false
+    public var nameOfSectionConsumed: Boolean = false
 
     public val messages: MutableList<String> = mutableListOf()
 }

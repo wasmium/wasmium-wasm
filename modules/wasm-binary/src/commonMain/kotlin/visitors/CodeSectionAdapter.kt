@@ -1,12 +1,10 @@
 package org.wasmium.wasm.binary.visitors
 
-public open class CodeSectionAdapter(protected val delegate: CodeSectionVisitor? = null) : CodeSectionVisitor {
-    override fun visitFunctionBody(functionIndex: UInt): FunctionBodyVisitor {
-        if (delegate != null) {
-            return FunctionBodyAdapter(delegate.visitFunctionBody(functionIndex))
-        }
+import org.wasmium.wasm.binary.tree.LocalVariable
 
-        return FunctionBodyAdapter()
+public open class CodeSectionAdapter(protected val delegate: CodeSectionVisitor? = null) : CodeSectionVisitor {
+    public override fun visitCode(locals: List<LocalVariable>): ExpressionVisitor {
+        return delegate?.visitCode(locals) ?: ExpressionAdapter()
     }
 
     public override fun visitEnd() {

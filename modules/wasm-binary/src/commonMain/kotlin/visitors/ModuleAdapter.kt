@@ -150,9 +150,9 @@ public open class ModuleAdapter(protected val delegate: ModuleVisitor? = null) :
         return null
     }
 
-    public override fun visitUnknownSection(customSectionName: String, content: ByteArray): UnknownSectionVisitor? {
+    public override fun visitUnknownSection(name: String, content: ByteArray): UnknownSectionVisitor? {
         if (delegate != null) {
-            val customSectionVisitor = delegate.visitUnknownSection(customSectionName, content)
+            val customSectionVisitor = delegate.visitUnknownSection(name, content)
             if (customSectionVisitor != null) {
                 return UnknownSectionAdapter(customSectionVisitor)
             }

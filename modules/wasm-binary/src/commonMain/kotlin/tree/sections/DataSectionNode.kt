@@ -9,20 +9,15 @@ public class DataSectionNode : SectionNode(SectionKind.DATA), DataSectionVisitor
 
     public fun accept(dataSectionVisitor: DataSectionVisitor) {
         for (segment in segments) {
-            val dataSegmentVisitor = dataSectionVisitor.visitDataSegment(segment.segmentIndex!!)
-
+            val dataSegmentVisitor = dataSectionVisitor.visitDataSegment()
             segment.accept(dataSegmentVisitor)
-
-            dataSegmentVisitor.visitEnd()
         }
 
         dataSectionVisitor.visitEnd()
     }
 
-    public override fun visitDataSegment(segmentIndex: UInt): DataSegmentVisitor {
+    public override fun visitDataSegment(): DataSegmentVisitor {
         val dataSegment = DataSegmentNode()
-        dataSegment.segmentIndex = segmentIndex
-
         segments.add(dataSegment)
 
         return dataSegment

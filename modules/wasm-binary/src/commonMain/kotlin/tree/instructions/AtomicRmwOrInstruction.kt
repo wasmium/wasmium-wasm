@@ -1,14 +1,14 @@
 package org.wasmium.wasm.binary.tree.instructions
 
-import org.wasmium.wasm.binary.visitors.FunctionBodyVisitor
 import org.wasmium.wasm.binary.tree.Opcode
+import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
 public class AtomicRmwOrInstruction(
     public override val opcode: Opcode,
     public override val alignment: UInt,
     public override val offset: UInt
 ) : AlignOffsetInstruction {
-    override fun accept(functionBodyVisitor: FunctionBodyVisitor) {
-        functionBodyVisitor.visitAtomicRmwOrInstruction(opcode, alignment, offset)
+    override fun accept(expressionVisitor: ExpressionVisitor) {
+        expressionVisitor.visitAtomicRmwOrInstruction(opcode, alignment, offset)
     }
 }

@@ -5,7 +5,8 @@ import org.wasmium.wasm.binary.Features
 public class WriterOptionsBuilder {
     protected var isDebugNamesEnabled: Boolean = false
     protected var isRelocatableEnabled: Boolean = false
-    protected  var isCanonical: Boolean = false
+    protected var isCanonical: Boolean = false
+
     /** Available features. */
     protected var features: Features = Features()
 

@@ -16,32 +16,32 @@ public class ImportSectionNode : SectionNode(SectionKind.IMPORT), ImportSectionV
         importSectionVisitor.visitEnd()
     }
 
-    public override fun visitFunction(importIndex: UInt, moduleName: String, fieldName: String, functionIndex: UInt, typeIndex: UInt) {
-        imports.add(FunctionImportNode(importIndex, moduleName, fieldName, functionIndex, typeIndex))
+    public override fun visitFunction(moduleName: String, fieldName: String, typeIndex: UInt) {
+        imports.add(FunctionImportNode(moduleName, fieldName, typeIndex))
     }
 
-    public override fun visitGlobal(importIndex: UInt, moduleName: String, fieldName: String, globalIndex: UInt, type: WasmType, mutable: Boolean) {
+    public override fun visitGlobal(moduleName: String, fieldName: String, type: WasmType, mutable: Boolean) {
         val globalType = GlobalTypeNode(type, mutable)
 
-        imports.add(GlobalImportNode(importIndex, moduleName, fieldName, globalIndex, globalType))
+        imports.add(GlobalImportNode(moduleName, fieldName, globalType))
     }
 
-    public override fun visitTable(importIndex: UInt, moduleName: String, fieldName: String, tableIndex: UInt, elementType: WasmType, limits: ResizableLimits) {
-        val tableType = TableTypeNode(tableIndex, elementType, limits)
+    public override fun visitTable(moduleName: String, fieldName: String, elementType: WasmType, limits: ResizableLimits) {
+        val tableType = TableTypeNode(elementType, limits)
 
-        imports.add(TableImportNode(importIndex, moduleName, fieldName, tableIndex, tableType))
+        imports.add(TableImportNode(moduleName, fieldName, tableType))
     }
 
-    public override fun visitMemory(importIndex: UInt, moduleName: String, fieldName: String, memoryIndex: UInt, limits: ResizableLimits) {
-        val memoryType = MemoryTypeNode(memoryIndex, limits)
+    public override fun visitMemory(moduleName: String, fieldName: String, limits: ResizableLimits) {
+        val memoryType = MemoryTypeNode(limits)
 
-        imports.add(MemoryImportNode(importIndex, moduleName, fieldName, memoryIndex, memoryType))
+        imports.add(MemoryImportNode(moduleName, fieldName, memoryType))
     }
 
-    public override fun visitException(importIndex: UInt, moduleName: String, fieldName: String, exceptionIndex: UInt, exceptionTypes: Array<WasmType>) {
-        val exceptionType = ExceptionTypeNode(exceptionIndex, exceptionTypes)
+    public override fun visitException(moduleName: String, fieldName: String, exceptionTypes: List<WasmType>) {
+        val exceptionType = ExceptionTypeNode(exceptionTypes)
 
-        imports.add(ExceptionImportNode(importIndex, moduleName, fieldName, exceptionIndex, exceptionType))
+        imports.add(ExceptionImportNode(moduleName, fieldName, exceptionType))
     }
 
     public override fun visitEnd() {

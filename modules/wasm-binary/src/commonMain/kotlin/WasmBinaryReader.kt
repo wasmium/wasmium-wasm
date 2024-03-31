@@ -43,7 +43,7 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
     public fun readUInt32(): UInt {
         var result = 0.toUInt()
         for (i in 0..3) {
-            result = result or ((reader.readByte().toInt() and 0xFF) shl (8 * i)).toUInt()
+            result = result or ((reader.readByte().toUInt() and 0xFFu) shl (8 * i))
         }
 
         return result.also { consume(4u) }
@@ -52,7 +52,7 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
     public fun readUInt64(): ULong {
         var result = 0.toULong()
         for (i in 0..7) {
-            result = result or ((reader.readByte().toInt() and 0xFF) shl (8 * i)).toULong()
+            result = result or ((reader.readByte().toULong() and 0xFFu) shl (8 * i))
         }
 
         return result.also { consume(8u) }
@@ -87,13 +87,14 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         return result.also { consume(count.toUInt()) }
     }
 
-    public fun readVarInt32(maxCount: Int = 10): Int {
+    public fun readVarInt32(): Int {
+        val maxCount = 5
         var result = 0L
         var current: Int
         var count = 0
         do {
             current = reader.readByte().toInt() and 0xff
-            result = result or ((current and 0x7f).toLong() shl (count * 7))
+            result = result or ((current.toLong() and 0x7f) shl (count * 7))
             count++
         } while (current and 0x80 == 0x80 && count <= maxCount)
 
@@ -113,14 +114,14 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         return result.toInt().also { consume(count.toUInt()) }
     }
 
-    public fun readVarInt64(maxCount: Int = 10): Long {
+    public fun readVarInt64(): Long {
+        val maxCount = 10
         var result = 0L
         var current: Int
         var count = 0
-
         do {
             current = reader.readByte().toInt() and 0xff
-            result = result or ((current and 0x7f).toLong() shl (count * 7))
+            result = result or ((current.toLong() and 0x7f) shl (count * 7))
             count++
         } while (current and 0x80 == 0x80 && count <= maxCount)
 
@@ -169,6 +170,16 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         return wasmType ?: throw ParserException("Invalid wasm type 0x${wasmTypeId.toHexString()}")
     }
 
+    public fun readWasmRefType(): WasmType {
+        val wasmTypeId = readVarUInt7()
+
+        val wasmType = WasmType.fromWasmTypeId(wasmTypeId)
+        if (wasmType != WasmType.FUNC_REF && wasmType != WasmType.EXTERN_REF) {
+            throw ParserException("Invalid wasm reference type 0x${wasmTypeId.toHexString()}")
+        }
+        return wasmType
+    }
+
     public fun readIndex(): UInt = readVarUInt32()
 
     public fun readResizableLimits(): ResizableLimits {
@@ -199,7 +210,7 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         }
     }
 
-    public fun readInlineString(): String {
+    public fun readString(): String {
         val length = readVarUInt32()
 
         if (length > WasmBinary.MAX_STRING_SIZE) {
@@ -242,7 +253,7 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
     }
 
     public fun readFloat64(): Double {
-        val bits = readUInt64().toLong()
+        val bits = readUInt64().toLong().reverseBytes()
 
         return Double.fromBits(bits)
     }
@@ -256,4 +267,40 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
 
         return V128Value(value)
     }
+}
+
+public fun Int.reverseBytes(): Int {
+    return ((this and 0xFF) shl 24) or
+        ((this and 0xFF00) shl 8) or
+        ((this and 0xFF0000) ushr 8) or
+        ((this shr 24) and 0xff)
+}
+
+public fun Long.reverseBytes(): Long {
+    return ((this and 0xFF).toLong() shl 56) or
+        ((this and 0xFF00).toLong() shl 40) or
+        ((this and 0xFF0000).toLong() shl 24) or
+        ((this and 0xFF000000).toLong() shl 8) or
+        ((this and 0xFF00000000).toLong() ushr 8) or
+        ((this and 0xFF0000000000).toLong() ushr 24) or
+        ((this and 0xFF000000000000).toLong() ushr 40) or
+        ((this.toULong() and 0xFF00000000000000u).toLong() ushr 56)
+}
+
+public fun UInt.reverseBytes(): UInt {
+    return ((this and 0xFFu) shl 24) or
+        ((this and 0xFF00u) shl 8) or
+        ((this and 0xFF0000u) shr 8) or
+        ((this shr 24) and 0xFFu)
+}
+
+public fun ULong.reverseBytes(): ULong {
+    return ((this and 0xFFu) shl 56) or
+        ((this and 0xFF00u) shl 40) or
+        ((this and 0xFF0000u) shl 24) or
+        ((this and 0xFF000000u) shl 8) or
+        ((this and 0xFF00000000u) shr 8) or
+        ((this and 0xFF0000000000u) shr 24) or
+        ((this and 0xFF000000000000u) shr 40) or
+        ((this shr 56) and 0xFFu)
 }

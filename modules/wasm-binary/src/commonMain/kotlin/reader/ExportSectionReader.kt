@@ -14,16 +14,16 @@ public class ExportSectionReader(
     private val context: ReaderContext,
 ) {
     public fun readExportSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
-        context.numberExports = source.readVarUInt32()
+        context.numberOfExports = source.readVarUInt32()
 
-        if (context.numberExports > WasmBinary.MAX_EXPORTS) {
-            throw ParserException("Number of exports ${context.numberExports} exceed the maximum of ${WasmBinary.MAX_EXPORTS}")
+        if (context.numberOfExports > WasmBinary.MAX_EXPORTS) {
+            throw ParserException("Number of exports ${context.numberOfExports} exceed the maximum of ${WasmBinary.MAX_EXPORTS}")
         }
 
         val exportVisitor = visitor.visitExportSection()
         val names = mutableSetOf<String>()
-        for (exportIndex in 0u until context.numberExports) {
-            val name = source.readInlineString()
+        for (exportIndex in 0u until context.numberOfExports) {
+            val name = source.readString()
 
             if (!names.add(name)) {
                 throw ParserException("Duplicate export name $name")
@@ -34,13 +34,13 @@ public class ExportSectionReader(
 
             when (externalKind) {
                 FUNCTION -> {
-                    if (itemIndex >= context.numberTotalFunctions) {
+                    if (itemIndex >= context.numberOfTotalFunctions) {
                         throw ParserException("Invalid export function index: %$itemIndex")
                     }
                 }
 
                 TABLE -> {
-                    if (context.numberTotalTables == 0u) {
+                    if (context.numberOfTotalTables == 0u) {
                         throw ParserException("Cannot index non existing table")
                     }
 
@@ -48,7 +48,7 @@ public class ExportSectionReader(
                         throw ParserException("Only table index 0 is supported, but using index $itemIndex")
                     }
 
-                    if (itemIndex > context.numberTotalTables) {
+                    if (itemIndex > context.numberOfTotalTables) {
                         throw ParserException("Invalid export table index: %$itemIndex")
                     }
                 }
@@ -68,7 +68,7 @@ public class ExportSectionReader(
                 }
 
                 GLOBAL -> {
-                    if (itemIndex >= context.numberTotalGlobals) {
+                    if (itemIndex >= context.numberOfTotalGlobals) {
                         throw ParserException("Invalid export global index: %$itemIndex")
                     }
                 }
@@ -82,7 +82,7 @@ public class ExportSectionReader(
                     throw IllegalArgumentException()
                 }
             }
-            exportVisitor?.visitExport(exportIndex, externalKind, itemIndex, name)
+            exportVisitor?.visitExport(name, externalKind, itemIndex)
         }
 
         exportVisitor?.visitEnd()

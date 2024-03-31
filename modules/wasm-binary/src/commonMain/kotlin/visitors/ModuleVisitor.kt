@@ -29,7 +29,7 @@ public interface ModuleVisitor {
 
     public fun visitRelocationSection(): RelocationSectionVisitor?
 
-    public fun visitUnknownSection(customSectionName: String, content: ByteArray): UnknownSectionVisitor?
+    public fun visitUnknownSection(name: String, content: ByteArray): UnknownSectionVisitor?
 
     public fun visitLinkingSection(): LinkingSectionVisitor?
 

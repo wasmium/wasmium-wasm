@@ -1,12 +1,10 @@
 package org.wasmium.wasm.binary.visitors
 
-public open class GlobalSectionAdapter(protected val delegate: GlobalSectionVisitor? = null) : GlobalSectionVisitor {
-    public override fun visitGlobalVariable(globalIndex: UInt): GlobalVariableVisitor {
-        if (delegate != null) {
-            return GlobalVariableAdapter(delegate.visitGlobalVariable(globalIndex))
-        }
+import org.wasmium.wasm.binary.tree.WasmType
 
-        return GlobalVariableAdapter()
+public open class GlobalSectionAdapter(protected val delegate: GlobalSectionVisitor? = null) : GlobalSectionVisitor {
+    public override fun visitGlobalVariable(type: WasmType, mutable: Boolean): InitializerExpressionVisitor {
+        return InitializerExpressionAdapter()
     }
 
     public override fun visitEnd() {

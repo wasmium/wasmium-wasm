@@ -9,7 +9,7 @@ public class GlobalVariableReader(
     private val initializerExpressionReader: InitializerExpressionReader = InitializerExpressionReader(context),
 ) {
     public fun readGlobalVariable(source: WasmBinaryReader, index: UInt, globalVisitor: GlobalSectionVisitor?) {
-        val globalIndex = context.numberGlobalImports + index
+        val globalIndex = context.numberOfGlobalImports + index
 
         val contentType = source.readType()
         if (!contentType.isValueType()) {
@@ -18,13 +18,10 @@ public class GlobalVariableReader(
 
         val mutable = source.readVarUInt1() == 1u
 
-        val globalVariableVisitor = globalVisitor?.visitGlobalVariable(globalIndex)
-        globalVariableVisitor?.visitGlobalVariable(contentType, mutable)
-
-        val initializerExpressionVisitor = globalVariableVisitor?.visitInitializerExpression()
+        val initializerExpressionVisitor = globalVisitor?.visitGlobalVariable(contentType, mutable)
         initializerExpressionReader.readInitExpression(source, initializerExpressionVisitor, false)
         initializerExpressionVisitor?.visitEnd()
 
-        globalVariableVisitor?.visitEnd()
+        globalVisitor?.visitEnd()
     }
 }

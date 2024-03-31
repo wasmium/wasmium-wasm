@@ -4,14 +4,7 @@ import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 
-public open class FunctionBodyAdapter(protected val delegate: FunctionBodyVisitor? = null) : FunctionBodyVisitor {
-    public override fun visitLocalVariable(localIndex: UInt, count: UInt, localType: WasmType) {
-        delegate?.visitLocalVariable(localIndex, count, localType)
-    }
-
-    public override fun visitCode() {
-        delegate?.visitCode()
-    }
+public open class ExpressionAdapter(protected val delegate: ExpressionVisitor? = null) : ExpressionVisitor {
 
     public override fun visitEnd() {
         delegate?.visitEnd()
@@ -23,10 +16,6 @@ public open class FunctionBodyAdapter(protected val delegate: FunctionBodyVisito
 
     public override fun visitAtomicStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
         delegate?.visitAtomicStoreInstruction(opcode, alignment, offset)
-    }
-
-    public override fun visitAtomicRmwInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        delegate?.visitAtomicRmwInstruction(opcode, alignment, offset)
     }
 
     public override fun visitAtomicRmwCompareExchangeInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
@@ -221,18 +210,6 @@ public open class FunctionBodyAdapter(protected val delegate: FunctionBodyVisito
         delegate?.visitMemoryGrowInstruction(reserved)
     }
 
-    public override fun visitMemoryFillInstruction(opcode: Opcode, address: UInt, value: UInt, size: UInt) {
-        delegate?.visitMemoryFillInstruction(opcode, address, value, size)
-    }
-
-    override fun visitMemoryCopyInstruction(opcode: Opcode, target: UInt, offset: UInt, size: UInt) {
-        delegate?.visitMemoryCopyInstruction(opcode, target, offset, size)
-    }
-
-    override fun visitMemoryInitInstruction(opcode: Opcode, target: UInt, offset: UInt, size: UInt) {
-        delegate?.visitMemoryInitInstruction(opcode, target, offset, size)
-    }
-
     public override fun visitEqualZeroInstruction(opcode: Opcode) {
         delegate?.visitEqualZeroInstruction(opcode)
     }
@@ -353,28 +330,28 @@ public open class FunctionBodyAdapter(protected val delegate: FunctionBodyVisito
         delegate?.visitMaxInstruction(opcode)
     }
 
-    public override fun visitAtomicRmwAddInstruction(opcode: Opcode, align: UInt, offset: UInt) {
-        delegate?.visitAtomicRmwAddInstruction(opcode, align, offset)
+    public override fun visitAtomicRmwAddInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        delegate?.visitAtomicRmwAddInstruction(opcode, alignment, offset)
     }
 
-    public override fun visitAtomicRmwSubtractInstruction(opcode: Opcode, align: UInt, offset: UInt) {
-        delegate?.visitAtomicRmwSubtractInstruction(opcode, align, offset)
+    public override fun visitAtomicRmwSubtractInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        delegate?.visitAtomicRmwSubtractInstruction(opcode, alignment, offset)
     }
 
-    public override fun visitAtomicRmwAndInstruction(opcode: Opcode, align: UInt, offset: UInt) {
-        delegate?.visitAtomicRmwAndInstruction(opcode, align, offset)
+    public override fun visitAtomicRmwAndInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        delegate?.visitAtomicRmwAndInstruction(opcode, alignment, offset)
     }
 
-    public override fun visitAtomicRmwOrInstruction(opcode: Opcode, align: UInt, offset: UInt) {
-        delegate?.visitAtomicRmwOrInstruction(opcode, align, offset)
+    public override fun visitAtomicRmwOrInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        delegate?.visitAtomicRmwOrInstruction(opcode, alignment, offset)
     }
 
-    public override fun visitAtomicRmwXorInstruction(opcode: Opcode, align: UInt, offset: UInt) {
-        delegate?.visitAtomicRmwXorInstruction(opcode, align, offset)
+    public override fun visitAtomicRmwXorInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        delegate?.visitAtomicRmwXorInstruction(opcode, alignment, offset)
     }
 
-    public override fun visitAtomicRmwExchangeInstruction(opcode: Opcode, align: UInt, offset: UInt) {
-        delegate?.visitAtomicRmwExchangeInstruction(opcode, align, offset)
+    public override fun visitAtomicRmwExchangeInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        delegate?.visitAtomicRmwExchangeInstruction(opcode, alignment, offset)
     }
 
     public override fun visitSimdSplatInstruction(opcode: Opcode, value: UInt) {
@@ -495,5 +472,37 @@ public open class FunctionBodyAdapter(protected val delegate: FunctionBodyVisito
 
     public override fun visitSimdAbsInstruction(opcode: Opcode) {
         delegate?.visitSimdAbsInstruction(opcode)
+    }
+
+    override fun visitMemoryFillInstruction(memoryIndex: UInt, address: UInt, value: UInt, size: UInt) {
+        delegate?.visitMemoryFillInstruction(memoryIndex, address, value, size)
+    }
+
+    override fun visitMemoryCopyInstruction(targetIndex: UInt, sourceIndex: UInt, targetOffset: UInt, sourceOffset: UInt, size: UInt) {
+        delegate?.visitMemoryCopyInstruction(targetIndex, sourceIndex, targetOffset, sourceOffset, size)
+    }
+
+    override fun visitMemoryInitInstruction(memoryIndex: UInt, segmentIndex: UInt, target: UInt, address: UInt, size: UInt) {
+        delegate?.visitMemoryInitInstruction(memoryIndex, segmentIndex, target, address, size)
+    }
+
+    public override fun visitDataDropInstruction(segmentIndex: UInt){
+        delegate?.visitDataDropInstruction(segmentIndex)
+    }
+
+    public override fun visitTableSizeInstruction(tableIndex: UInt) {
+        delegate?.visitTableSizeInstruction(tableIndex)
+    }
+
+    public override fun visitTableGrowInstruction(tableIndex: UInt, value: UInt, delta: UInt){
+        delegate?.visitTableGrowInstruction(tableIndex, value, delta)
+    }
+
+    public override fun visitTableFillInstruction(tableIndex: UInt, target: UInt, value: UInt, size: UInt){
+        delegate?.visitTableFillInstruction(tableIndex, target, value, size)
+    }
+
+    public override fun visitTableCopyInstruction(targetTableIndex: UInt, sourceTableIndex: UInt, target: UInt, value: UInt, size: UInt){
+        delegate?.visitTableCopyInstruction(targetTableIndex, sourceTableIndex, target, value, size)
     }
 }

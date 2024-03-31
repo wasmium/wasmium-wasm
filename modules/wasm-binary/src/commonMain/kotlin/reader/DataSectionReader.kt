@@ -17,12 +17,12 @@ public class DataSectionReader(
         }
 
         if (dataSegmentCount > WasmBinary.MAX_DATA_SEGMENTS) {
-            throw ParserException("Number of data segments ${context.numberGlobals} exceed the maximum of ${WasmBinary.MAX_DATA_SEGMENTS}")
+            throw ParserException("Number of data segments ${context.numberOfGlobals} exceed the maximum of ${WasmBinary.MAX_DATA_SEGMENTS}")
         }
 
         val dataVisitor = visitor.visitDataSection()
-        for (index in 0u until dataSegmentCount) {
-            dataSegmentReader.readDataSegment(source, index, dataVisitor)
+        for (segment in 0u until dataSegmentCount) {
+            dataSegmentReader.readDataSegment(source, dataVisitor)
         }
 
         dataVisitor?.visitEnd()

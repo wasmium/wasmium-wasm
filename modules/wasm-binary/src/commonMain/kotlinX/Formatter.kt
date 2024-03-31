@@ -12,6 +12,16 @@ public fun Short.toHexString(padded: Boolean = false): String = toUShort().toHex
 
 public fun UInt.toHexString(padded: Boolean = false): String = toString(16).padStartIfNeeded(padded, UInt.SIZE_BITS / 4)
 
+public fun ByteArray.toHexString(padded: Boolean = false): String {
+    val builder = StringBuilder()
+    for(value in this) {
+        builder.append(value.toUByte().toHexString(padded))
+        builder.append(" ")
+    }
+
+    return builder.toString()
+}
+
 public fun Int.toHexString(padded: Boolean = false): String = toUInt().toHexString(padded)
 
 public fun ULong.toHexString(padded: Boolean = false): String = toString(16).padStartIfNeeded(padded, ULong.SIZE_BITS / 4)
