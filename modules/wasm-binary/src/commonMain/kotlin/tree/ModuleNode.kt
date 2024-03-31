@@ -17,6 +17,7 @@ import org.wasmium.wasm.binary.tree.SectionName.EXCEPTION
 import org.wasmium.wasm.binary.tree.SectionName.LINKING
 import org.wasmium.wasm.binary.tree.SectionName.NAME
 import org.wasmium.wasm.binary.tree.SectionName.RELOCATION
+import org.wasmium.wasm.binary.tree.SectionName.SOURCE_MAPPING_URL
 import org.wasmium.wasm.binary.tree.sections.CodeSectionNode
 import org.wasmium.wasm.binary.tree.sections.CustomSectionNode
 import org.wasmium.wasm.binary.tree.sections.DataCountSectionNode
@@ -32,6 +33,7 @@ import org.wasmium.wasm.binary.tree.sections.MemorySectionNode
 import org.wasmium.wasm.binary.tree.sections.NameSectionNode
 import org.wasmium.wasm.binary.tree.sections.RelocationSectionNode
 import org.wasmium.wasm.binary.tree.sections.SectionNode
+import org.wasmium.wasm.binary.tree.sections.SourceMapSectionNode
 import org.wasmium.wasm.binary.tree.sections.StartSectionNode
 import org.wasmium.wasm.binary.tree.sections.TableSectionNode
 import org.wasmium.wasm.binary.tree.sections.TypeSectionNode
@@ -50,6 +52,7 @@ import org.wasmium.wasm.binary.visitors.MemorySectionVisitor
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 import org.wasmium.wasm.binary.visitors.NameSectionVisitor
 import org.wasmium.wasm.binary.visitors.RelocationSectionVisitor
+import org.wasmium.wasm.binary.visitors.SourceMapSectionVisitor
 import org.wasmium.wasm.binary.visitors.StartSectionVisitor
 import org.wasmium.wasm.binary.visitors.TableSectionVisitor
 import org.wasmium.wasm.binary.visitors.TypeSectionVisitor
@@ -103,6 +106,12 @@ public class ModuleNode : ModuleVisitor {
                             if (nameSectionVisitor != null) {
                                 nameSection.accept(nameSectionVisitor)
                             }
+                        }
+
+                        SOURCE_MAPPING_URL.sectionName -> {
+                            val sourceMap = customSection as SourceMapSectionNode
+
+                            visitor.visitSourceMapSection(sourceMap.url)
                         }
 
                         else -> {
@@ -352,6 +361,14 @@ public class ModuleNode : ModuleVisitor {
         sections.add(dataCountSection)
 
         return dataCountSection
+    }
+
+    public override fun visitSourceMapSection(sourceMap: String): SourceMapSectionVisitor {
+        val sourceMapSection = SourceMapSectionNode(sourceMap)
+
+        sections.add(sourceMapSection)
+
+        return sourceMapSection
     }
 
     public override fun visitEnd() {

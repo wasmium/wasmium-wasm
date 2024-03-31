@@ -38,4 +38,6 @@ public interface ModuleVisitor {
     public fun visitDataCountSection(dataCount: UInt): DataCountSectionVisitor?
 
     public fun visitEnd(): Unit
+
+    public fun visitSourceMapSection(sourceMap: String): SourceMapSectionVisitor?
 }

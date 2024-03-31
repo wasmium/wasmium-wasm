@@ -5,6 +5,7 @@ import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.IndexName
 import org.wasmium.wasm.binary.tree.NameKind
 import org.wasmium.wasm.binary.tree.SectionKind
+import org.wasmium.wasm.binary.tree.SectionName
 import org.wasmium.wasm.binary.visitors.NameSectionVisitor
 
 public class NameSectionWriter(
@@ -229,6 +230,7 @@ public class NameSectionWriter(
         val buffer = ByteBuffer()
         val payload = WasmBinaryWriter(buffer)
 
+        payload.writeString(SectionName.NAME.sectionName)
         payload.writeByteArray(body.toByteArray())
 
         context.writer.writeSection(SectionKind.CUSTOM, context.options.isCanonical, buffer.toByteArray())

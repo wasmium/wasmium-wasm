@@ -14,6 +14,7 @@ import org.wasmium.wasm.binary.visitors.MemorySectionVisitor
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 import org.wasmium.wasm.binary.visitors.NameSectionVisitor
 import org.wasmium.wasm.binary.visitors.RelocationSectionVisitor
+import org.wasmium.wasm.binary.visitors.SourceMapSectionVisitor
 import org.wasmium.wasm.binary.visitors.StartSectionVisitor
 import org.wasmium.wasm.binary.visitors.TableSectionVisitor
 import org.wasmium.wasm.binary.visitors.TypeSectionVisitor
@@ -89,6 +90,10 @@ public class ModuleValidator : ModuleVisitor {
     }
 
     override fun visitDataCountSection(dataCount: UInt): DataCountSectionVisitor? {
+        return null
+    }
+
+    override fun visitSourceMapSection(sourceMap: String): SourceMapSectionVisitor? {
         return null
     }
 

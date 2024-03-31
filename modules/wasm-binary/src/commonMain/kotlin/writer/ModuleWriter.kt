@@ -16,6 +16,7 @@ import org.wasmium.wasm.binary.visitors.MemorySectionVisitor
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 import org.wasmium.wasm.binary.visitors.NameSectionVisitor
 import org.wasmium.wasm.binary.visitors.RelocationSectionVisitor
+import org.wasmium.wasm.binary.visitors.SourceMapSectionVisitor
 import org.wasmium.wasm.binary.visitors.StartSectionVisitor
 import org.wasmium.wasm.binary.visitors.TableSectionVisitor
 import org.wasmium.wasm.binary.visitors.TypeSectionVisitor
@@ -96,6 +97,10 @@ public class ModuleWriter(
 
     public override fun visitUnknownSection(name: String, content: ByteArray): UnknownSectionVisitor {
         return UnknownSectionWriter(context, name, content)
+    }
+
+    public override fun visitSourceMapSection(sourceMap: String): SourceMapSectionVisitor {
+        return SourceMapSectionWriter(context, sourceMap)
     }
 
     public override fun visitEnd() {

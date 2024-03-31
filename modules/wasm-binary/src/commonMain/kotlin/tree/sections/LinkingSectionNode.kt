@@ -22,23 +22,23 @@ public class LinkingSectionNode : CustomSectionNode(SectionName.LINKING.sectionN
         // TODO
     }
 
-    public override fun visitSectionSymbol(index: UInt, flags: UInt, sectionIndex: UInt) {
+    public override fun visitSectionSymbol(flags: UInt, sectionIndex: UInt) {
         // TODO
     }
 
-    public override fun visitSymbol(index: UInt, symbolType: LinkingSymbolType, flags: UInt) {
+    public override fun visitSymbol(symbolType: LinkingSymbolType, flags: UInt) {
         // TODO
     }
 
-    public override fun visitDataSymbol(index: UInt, flags: UInt, name: String, segmentIndex: UInt, offset: UInt, size: UInt) {
+    public override fun visitDataSymbol(flags: UInt, name: String, segmentIndex: UInt, offset: UInt, size: UInt) {
         // TODO
     }
 
-    public override fun visitFunctionSymbol(index: UInt, flags: UInt, name: String, functionIndex: UInt) {
+    public override fun visitFunctionSymbol(flags: UInt, name: String, functionIndex: UInt) {
         // TODO
     }
 
-    public override fun visitGlobalSymbol(index: UInt, flags: UInt, name: String, globalIndex: UInt) {
+    public override fun visitGlobalSymbol(flags: UInt, name: String, globalIndex: UInt) {
         // TODO
     }
 

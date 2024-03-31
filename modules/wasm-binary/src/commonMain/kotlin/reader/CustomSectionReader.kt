@@ -68,7 +68,10 @@ public class CustomSectionReader(
 
     private fun readSourceMapSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         val sourceMapURL = source.readString()
-        // TODO
+
+        visitor.visitSourceMapSection(sourceMapURL)
+
+        visitor.visitEnd()
     }
 
     private fun readNamesSection(source: WasmBinaryReader, startIndex: UInt, sectionPayloadSize: UInt, visitor: ModuleVisitor) {

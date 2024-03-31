@@ -11,7 +11,7 @@ public class LinkingSectionWriter(private val context: WriterContext) : LinkingS
     private var numberOfLinks = 0u
     private val body = ByteBuffer()
 
-    public override fun visitSymbol(index: UInt, symbolType: LinkingSymbolType, flags: UInt) {
+    public override fun visitSymbol(symbolType: LinkingSymbolType, flags: UInt) {
         // TODO
 
         numberOfLinks++
@@ -29,25 +29,25 @@ public class LinkingSectionWriter(private val context: WriterContext) : LinkingS
         numberOfLinks++
     }
 
-    public override fun visitSectionSymbol(index: UInt, flags: UInt, sectionIndex: UInt) {
+    public override fun visitSectionSymbol(flags: UInt, sectionIndex: UInt) {
         // TODO
 
         numberOfLinks++
     }
 
-    public override fun visitDataSymbol(index: UInt, flags: UInt, name: String, segmentIndex: UInt, offset: UInt, size: UInt) {
+    public override fun visitDataSymbol(flags: UInt, name: String, segmentIndex: UInt, offset: UInt, size: UInt) {
         // TODO
 
         numberOfLinks++
     }
 
-    public override fun visitFunctionSymbol(index: UInt, flags: UInt, name: String, functionIndex: UInt) {
+    public override fun visitFunctionSymbol(flags: UInt, name: String, functionIndex: UInt) {
         // TODO
 
         numberOfLinks++
     }
 
-    public override fun visitGlobalSymbol(index: UInt, flags: UInt, name: String, globalIndex: UInt) {
+    public override fun visitGlobalSymbol(flags: UInt, name: String, globalIndex: UInt) {
         // TODO
 
         numberOfLinks++
@@ -62,6 +62,6 @@ public class LinkingSectionWriter(private val context: WriterContext) : LinkingS
         payload.writeVarUInt32(numberOfLinks)
         payload.writeByteArray(body.toByteArray())
 
-        context.writer.writeSection(SectionKind.IMPORT, context.options.isCanonical, buffer.toByteArray())
+        context.writer.writeSection(SectionKind.CUSTOM, context.options.isCanonical, buffer.toByteArray())
     }
 }
