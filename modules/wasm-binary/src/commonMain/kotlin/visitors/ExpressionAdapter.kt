@@ -6,9 +6,7 @@ import org.wasmium.wasm.binary.tree.WasmType
 
 public open class ExpressionAdapter(protected val delegate: ExpressionVisitor? = null) : ExpressionVisitor {
 
-    public override fun visitEnd() {
-        delegate?.visitEnd()
-    }
+    public override fun visitEnd(): Unit = delegate?.visitEnd() ?: Unit
 
     public override fun visitAtomicLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
         delegate?.visitAtomicLoadInstruction(opcode, alignment, offset)
@@ -486,7 +484,7 @@ public open class ExpressionAdapter(protected val delegate: ExpressionVisitor? =
         delegate?.visitMemoryInitInstruction(memoryIndex, segmentIndex)
     }
 
-    public override fun visitDataDropInstruction(segmentIndex: UInt){
+    public override fun visitDataDropInstruction(segmentIndex: UInt) {
         delegate?.visitDataDropInstruction(segmentIndex)
     }
 
@@ -494,23 +492,23 @@ public open class ExpressionAdapter(protected val delegate: ExpressionVisitor? =
         delegate?.visitTableSizeInstruction(tableIndex)
     }
 
-    public override fun visitTableGrowInstruction(tableIndex: UInt, value: UInt, delta: UInt){
+    public override fun visitTableGrowInstruction(tableIndex: UInt, value: UInt, delta: UInt) {
         delegate?.visitTableGrowInstruction(tableIndex, value, delta)
     }
 
-    public override fun visitTableFillInstruction(tableIndex: UInt){
+    public override fun visitTableFillInstruction(tableIndex: UInt) {
         delegate?.visitTableFillInstruction(tableIndex)
     }
 
-    public override fun visitTableCopyInstruction(targetTableIndex: UInt, sourceTableIndex: UInt){
+    public override fun visitTableCopyInstruction(targetTableIndex: UInt, sourceTableIndex: UInt) {
         delegate?.visitTableCopyInstruction(targetTableIndex, sourceTableIndex)
     }
 
-    public override fun visitTableInitInstruction(segmentIndex: UInt, tableIndex: UInt){
+    public override fun visitTableInitInstruction(segmentIndex: UInt, tableIndex: UInt) {
         delegate?.visitTableInitInstruction(segmentIndex, tableIndex)
     }
 
-    public override fun visitElementDropInstruction(segmentIndex: UInt){
+    public override fun visitElementDropInstruction(segmentIndex: UInt) {
         delegate?.visitElementDropInstruction(segmentIndex)
     }
 }

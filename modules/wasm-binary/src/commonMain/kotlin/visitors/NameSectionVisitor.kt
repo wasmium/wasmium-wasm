@@ -3,6 +3,7 @@ package org.wasmium.wasm.binary.visitors
 import org.wasmium.wasm.binary.tree.IndexName
 
 public interface NameSectionVisitor {
+
     public fun visitModuleName(name: String)
 
     public fun visitFunctionNames(names: List<IndexName>)

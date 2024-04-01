@@ -3,6 +3,7 @@ package org.wasmium.wasm.binary.visitors
 import org.wasmium.wasm.binary.tree.WasmType
 
 public interface ElementSegmentVisitor {
+
     public fun visitElementIndices(elementIndices: List<UInt>)
 
     public fun visitNonActiveMode(passive: Boolean)

@@ -3,6 +3,7 @@ package org.wasmium.wasm.binary.visitors
 import org.wasmium.wasm.binary.tree.LinkingSymbolType
 
 public interface LinkingSectionVisitor {
+
     public fun visitSegment(name: String, alignment: UInt, flags: UInt)
 
     public fun visitDataAlignment(alignment: Long)

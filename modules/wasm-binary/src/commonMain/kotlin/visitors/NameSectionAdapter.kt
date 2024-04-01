@@ -3,55 +3,30 @@ package org.wasmium.wasm.binary.visitors
 import org.wasmium.wasm.binary.tree.IndexName
 
 public open class NameSectionAdapter(protected val delegate: NameSectionVisitor? = null) : NameSectionVisitor {
-    public override fun visitModuleName(name: String) {
-        delegate?.visitModuleName(name)
-    }
 
-    public override fun visitLocalNames(functionIndex: UInt, names: List<IndexName>) {
-        delegate?.visitLocalNames(functionIndex, names)
-    }
+    public override fun visitModuleName(name: String): Unit = delegate?.visitModuleName(name) ?: Unit
 
-    override fun visitLabelNames(functionIndex: UInt, names: List<IndexName>) {
-        delegate?.visitLabelNames(functionIndex, names)
-    }
+    public override fun visitLocalNames(functionIndex: UInt, names: List<IndexName>): Unit = delegate?.visitLocalNames(functionIndex, names) ?: Unit
 
-    override fun visitFieldNames(functionIndex: UInt, names: List<IndexName>) {
-        delegate?.visitFieldNames(functionIndex, names)
-    }
+    override fun visitLabelNames(functionIndex: UInt, names: List<IndexName>): Unit = delegate?.visitLabelNames(functionIndex, names) ?: Unit
 
-    public override fun visitFunctionNames(names: List<IndexName>) {
-        delegate?.visitFunctionNames(names)
-    }
+    override fun visitFieldNames(functionIndex: UInt, names: List<IndexName>): Unit = delegate?.visitFieldNames(functionIndex, names) ?: Unit
 
-    override fun visitGlobalNames(names: List<IndexName>) {
-        delegate?.visitGlobalNames(names)
-    }
+    public override fun visitFunctionNames(names: List<IndexName>): Unit = delegate?.visitFunctionNames(names) ?: Unit
 
-    override fun visitTagNames(names: List<IndexName>) {
-        delegate?.visitTagNames(names)
-    }
+    override fun visitGlobalNames(names: List<IndexName>): Unit = delegate?.visitGlobalNames(names) ?: Unit
 
-    override fun visitTableNames(names: List<IndexName>) {
-        delegate?.visitTableNames(names)
-    }
+    override fun visitTagNames(names: List<IndexName>): Unit = delegate?.visitTagNames(names) ?: Unit
 
-    override fun visitMemoryNames(names: List<IndexName>) {
-        delegate?.visitMemoryNames(names)
-    }
+    override fun visitTableNames(names: List<IndexName>): Unit = delegate?.visitTableNames(names) ?: Unit
 
-    override fun visitElementNames(names: List<IndexName>) {
-        delegate?.visitElementNames(names)
-    }
+    override fun visitMemoryNames(names: List<IndexName>): Unit = delegate?.visitMemoryNames(names) ?: Unit
 
-    override fun visitDataNames(names: List<IndexName>) {
-        delegate?.visitDataNames(names)
-    }
+    override fun visitElementNames(names: List<IndexName>): Unit = delegate?.visitElementNames(names) ?: Unit
 
-    override fun visitTypeNames(names: List<IndexName>) {
-        delegate?.visitTypeNames(names)
-    }
+    override fun visitDataNames(names: List<IndexName>): Unit = delegate?.visitDataNames(names) ?: Unit
 
-    public override fun visitEnd() {
-        delegate?.visitEnd()
-    }
+    override fun visitTypeNames(names: List<IndexName>): Unit = delegate?.visitTypeNames(names) ?: Unit
+
+    public override fun visitEnd(): Unit = delegate?.visitEnd() ?: Unit
 }

@@ -76,6 +76,8 @@ public object WasmBinary {
     /** Maximum number of exceptions types. */
     public const val MAX_EXCEPTION_TYPES: UInt = 1000000u
 
+    public const val MAX_RELOCATIONS: UInt = 1000000u
+
     /** Maximum size of bytes of a section. */
     public const val MAX_SECTION_LENGTH: UInt = 100000000u
 

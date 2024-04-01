@@ -9,8 +9,8 @@ public class FunctionSectionWriter(private val context: WriterContext) : Functio
     private var numberOfFunctions = 0u
     private val body = ByteBuffer()
 
-    public override fun visitFunction(typeIndex: UInt) {
-        WasmBinaryWriter(body).writeIndex(typeIndex)
+    public override fun visitFunction(signatureIndex: UInt) {
+        WasmBinaryWriter(body).writeIndex(signatureIndex)
 
         numberOfFunctions++
     }
