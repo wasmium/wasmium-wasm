@@ -33,7 +33,5 @@ public class DataSegmentReader(
         val data = ByteArray(dataSize.toInt())
         source.readTo(data, 0u, dataSize)
         dataSegmentVisitor?.visitData(data)
-
-        dataVisitor?.visitEnd()
     }
 }

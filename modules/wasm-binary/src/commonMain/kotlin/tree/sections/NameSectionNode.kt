@@ -74,7 +74,7 @@ public class NameSectionNode : CustomSectionNode(SectionName.NAME.sectionName), 
     }
 
     override fun visitTypeNames(names: List<IndexName>) {
-        TODO("Not yet implemented")
+        datas.addAll(names)
     }
 
     public override fun visitElementNames(names: List<IndexName>) {
@@ -102,7 +102,7 @@ public class NameSectionNode : CustomSectionNode(SectionName.NAME.sectionName), 
     }
 
     override fun visitFieldNames(functionIndex: UInt, names: List<IndexName>) {
-        TODO("Not yet implemented")
+        datas.addAll(names)
     }
 
     public override fun visitEnd() {

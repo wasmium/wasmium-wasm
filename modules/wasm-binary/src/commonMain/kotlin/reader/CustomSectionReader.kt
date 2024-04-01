@@ -63,15 +63,13 @@ public class CustomSectionReader(
         source.readTo(payload, 0u, sectionPayloadSize)
 
         val unknownSectionVisitor = visitor.visitUnknownSection(customSectionName, payload)
-        unknownSectionVisitor?.visitEnd()
+        unknownSectionVisitor.visitEnd()
     }
 
     private fun readSourceMapSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         val sourceMapURL = source.readString()
 
         visitor.visitSourceMapSection(sourceMapURL)
-
-        visitor.visitEnd()
     }
 
     private fun readNamesSection(source: WasmBinaryReader, startIndex: UInt, sectionPayloadSize: UInt, visitor: ModuleVisitor) {
@@ -97,7 +95,7 @@ public class CustomSectionReader(
                 NameKind.MODULE -> {
                     val moduleName = source.readString()
 
-                    nameSectionVisitor?.visitModuleName(moduleName)
+                    nameSectionVisitor.visitModuleName(moduleName)
                 }
 
                 NameKind.TYPE,
@@ -129,14 +127,14 @@ public class CustomSectionReader(
                     }
 
                     when (nameKind) {
-                        NameKind.FUNCTION -> nameSectionVisitor?.visitFunctionNames(names)
-                        NameKind.GLOBAL -> nameSectionVisitor?.visitGlobalNames(names)
-                        NameKind.TAG -> nameSectionVisitor?.visitTagNames(names)
-                        NameKind.TABLE -> nameSectionVisitor?.visitTableNames(names)
-                        NameKind.MEMORY -> nameSectionVisitor?.visitMemoryNames(names)
-                        NameKind.ELEMENT -> nameSectionVisitor?.visitElementNames(names)
-                        NameKind.DATA -> nameSectionVisitor?.visitDataNames(names)
-                        NameKind.TYPE -> nameSectionVisitor?.visitTypeNames(names)
+                        NameKind.FUNCTION -> nameSectionVisitor.visitFunctionNames(names)
+                        NameKind.GLOBAL -> nameSectionVisitor.visitGlobalNames(names)
+                        NameKind.TAG -> nameSectionVisitor.visitTagNames(names)
+                        NameKind.TABLE -> nameSectionVisitor.visitTableNames(names)
+                        NameKind.MEMORY -> nameSectionVisitor.visitMemoryNames(names)
+                        NameKind.ELEMENT -> nameSectionVisitor.visitElementNames(names)
+                        NameKind.DATA -> nameSectionVisitor.visitDataNames(names)
+                        NameKind.TYPE -> nameSectionVisitor.visitTypeNames(names)
                         else -> throw ParserException("Unsupported name section: $nameKind")
                     }
                 }

@@ -9,8 +9,10 @@ public class DataSegmentNode : DataSegmentVisitor {
     public var data: ByteArray? = null
 
     public fun accept(dataSegmentVisitor: DataSegmentVisitor) {
-        val initializerExpressionVisitor = dataSegmentVisitor.visitActive(memoryIndex!!)
-        initializer?.accept(initializerExpressionVisitor)
+        if(memoryIndex != null) {
+            val initializerExpressionVisitor = dataSegmentVisitor.visitActive(memoryIndex!!)
+            initializer?.accept(initializerExpressionVisitor)
+        }
 
         dataSegmentVisitor.visitData(data!!)
 

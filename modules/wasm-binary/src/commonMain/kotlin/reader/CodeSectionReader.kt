@@ -59,7 +59,7 @@ public class CodeSectionReader(
                 locals.add(LocalVariable(numberOfLocalTypes, localType))
             }
 
-            val expressionVisitor = codeVisitor?.visitCode(locals)
+            val expressionVisitor = codeVisitor.visitCode(locals)
             val remainingSize = bodySize - (source.position - startAvailable)
             expressionReader.readExpression(source, remainingSize, expressionVisitor)
 
@@ -67,10 +67,10 @@ public class CodeSectionReader(
                 throw ParserException("Binary offset at function exit not at expected location.")
             }
 
-            expressionVisitor?.visitEnd()
+            expressionVisitor.visitEnd()
         }
 
-        codeVisitor?.visitEnd()
+        codeVisitor.visitEnd()
     }
 
     private enum class DataUse {

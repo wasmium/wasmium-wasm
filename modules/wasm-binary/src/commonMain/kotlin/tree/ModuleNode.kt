@@ -75,51 +75,48 @@ public class ModuleNode : ModuleVisitor {
                         EXCEPTION.sectionName -> {
                             val exceptionSection = customSection as ExceptionSectionNode
 
-                            val exceptionSectionVisitor = visitor.visitExceptionSection()
-                            if (exceptionSectionVisitor != null) {
-                                exceptionSection.accept(exceptionSectionVisitor)
+                            visitor.visitExceptionSection()?.let {
+                                exceptionSection.accept(it)
                             }
                         }
 
                         RELOCATION.sectionName -> {
                             val relocationSection = customSection as RelocationSectionNode
 
-                            val relocationSectionVisitor = visitor.visitRelocationSection()
-                            if (relocationSectionVisitor != null) {
-                                relocationSection.accept(relocationSectionVisitor)
+                            visitor.visitRelocationSection()?.let {
+                                relocationSection.accept(it)
                             }
                         }
 
                         LINKING.sectionName -> {
                             val linkingSection = customSection as LinkingSectionNode
 
-                            val linkingSectionVisitor = visitor.visitLinkingSection()
-                            if (linkingSectionVisitor != null) {
-                                linkingSection.accept(linkingSectionVisitor)
+                            visitor.visitLinkingSection()?.let {
+                                linkingSection.accept(it)
                             }
                         }
 
                         NAME.sectionName -> {
                             val nameSection = customSection as NameSectionNode
 
-                            val nameSectionVisitor = visitor.visitNameSection()
-                            if (nameSectionVisitor != null) {
-                                nameSection.accept(nameSectionVisitor)
+                            visitor.visitNameSection()?.let {
+                                nameSection.accept(it)
                             }
                         }
 
                         SOURCE_MAPPING_URL.sectionName -> {
                             val sourceMap = customSection as SourceMapSectionNode
 
-                            visitor.visitSourceMapSection(sourceMap.url)
+                            visitor.visitSourceMapSection(sourceMap.url)?.let {
+                                sourceMap.accept(it)
+                            }
                         }
 
                         else -> {
                             val unknownSection = customSection as UnknownSectionNode
 
-                            val unknownSectionVisitor = visitor.visitUnknownSection(unknownSection.name, unknownSection.content)
-                            if (unknownSectionVisitor != null) {
-                                unknownSection.accept(unknownSectionVisitor)
+                            visitor.visitUnknownSection(unknownSection.name, unknownSection.content)?.let {
+                                unknownSection.accept(it)
                             }
                         }
                     }
@@ -128,112 +125,98 @@ public class ModuleNode : ModuleVisitor {
                 TYPE -> {
                     val typeSection = section as TypeSectionNode
 
-                    val typeSectionVisitor = visitor.visitTypeSection()
-                    if (typeSectionVisitor != null) {
-                        typeSection.accept(typeSectionVisitor)
+                    visitor.visitTypeSection() ?.let {
+                        typeSection.accept(it)
                     }
                 }
 
                 IMPORT -> {
                     val importSection = section as ImportSectionNode
 
-                    val importSectionVisitor = visitor.visitImportSection()
-                    if (importSectionVisitor != null) {
-                        importSection.accept(importSectionVisitor)
+                    val importSectionVisitor = visitor.visitImportSection()?.let {
+                        importSection.accept(it)
                     }
                 }
 
                 FUNCTION -> {
                     val functionSection = section as FunctionSectionNode
 
-                    val functionSectionVisitor = visitor.visitFunctionSection()
-                    if (functionSectionVisitor != null) {
-                        functionSection.accept(functionSectionVisitor)
+                    visitor.visitFunctionSection()?.let {
+                        functionSection.accept(it)
                     }
                 }
 
                 TABLE -> {
                     val tableSection = section as TableSectionNode
 
-                    val tableSectionVisitor = visitor.visitTableSection()
-                    if (tableSectionVisitor != null) {
-                        tableSection.accept(tableSectionVisitor)
+                    visitor.visitTableSection()?.let {
+                        tableSection.accept(it)
                     }
                 }
 
                 MEMORY -> {
                     val memorySection = section as MemorySectionNode
 
-                    val memorySectionVisitor = visitor.visitMemorySection()
-                    if (memorySectionVisitor != null) {
-                        memorySection.accept(memorySectionVisitor)
+                    visitor.visitMemorySection()?.let {
+                        memorySection.accept(it)
                     }
                 }
 
                 GLOBAL -> {
                     val globalSection = section as GlobalSectionNode
 
-                    val globalSectionVisitor = visitor.visitGlobalSection()
-                    if (globalSectionVisitor != null) {
-                        globalSection.accept(globalSectionVisitor)
+                    visitor.visitGlobalSection()?.let {
+                        globalSection.accept(it)
                     }
                 }
 
                 EXPORT -> {
                     val exportSection = section as ExportSectionNode
 
-                    val exportSectionVisitor = visitor.visitExportSection()
-                    if (exportSectionVisitor != null) {
-                        exportSection.accept(exportSectionVisitor)
+                    visitor.visitExportSection()?.let {
+                        exportSection.accept(it)
                     }
                 }
 
                 START -> {
                     val startSection = section as StartSectionNode
 
-                    val startSectionVisitor = visitor.visitStartSection(startSection.functionIndex)
-                    if (startSectionVisitor != null) {
-                        startSection.accept(startSectionVisitor)
+                    visitor.visitStartSection(startSection.functionIndex)?.let {
+                        startSection.accept(it)
                     }
                 }
 
                 ELEMENT -> {
                     val elementSection = section as ElementSectionNode
 
-                    val elementSectionVisitor = visitor.visitElementSection()
-                    if (elementSectionVisitor != null) {
-                        elementSection.accept(elementSectionVisitor)
+                    visitor.visitElementSection()?.let {
+                        elementSection.accept(it)
                     }
                 }
 
                 DATA_COUNT -> {
                     val dataCountSection = section as DataCountSectionNode
 
-                    val dataCountSectionVisitor = visitor.visitDataCountSection(dataCountSection.dataCount)
-                    if (dataCountSectionVisitor != null) {
-                        dataCountSection.accept(dataCountSectionVisitor)
+                    visitor.visitDataCountSection(dataCountSection.dataCount) ?.let {
+                        dataCountSection.accept(it)
                     }
                 }
 
                 CODE -> {
                     val codeSection = section as CodeSectionNode
 
-                    val codeSectionVisitor = visitor.visitCodeSection()
-                    if (codeSectionVisitor != null) {
-                        codeSection.accept(codeSectionVisitor)
+                    visitor.visitCodeSection()?.let {
+                        codeSection.accept(it)
                     }
                 }
 
                 DATA -> {
                     val dataSection = section as DataSectionNode
 
-                    val dataSectionVisitor = visitor.visitDataSection()
-                    if (dataSectionVisitor != null) {
-                        dataSection.accept(dataSectionVisitor)
+                    visitor.visitDataSection()?.let {
+                        dataSection.accept(it)
                     }
                 }
-
-                else -> {}
             }
         }
 

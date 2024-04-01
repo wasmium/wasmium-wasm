@@ -21,7 +21,5 @@ public class GlobalVariableReader(
         val initializerExpressionVisitor = globalVisitor?.visitGlobalVariable(contentType, mutable)
         initializerExpressionReader.readInitExpression(source, initializerExpressionVisitor, false)
         initializerExpressionVisitor?.visitEnd()
-
-        globalVisitor?.visitEnd()
     }
 }

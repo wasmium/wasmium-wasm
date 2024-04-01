@@ -12,9 +12,10 @@ public class DataSectionReader(
     public fun readDataSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         val dataSegmentCount = source.readVarUInt32()
 
-        if (dataSegmentCount >= 0u && context.numberTotalMemories == 0u) {
-            throw ParserException("Data section without memory section")
-        }
+        // TODO check if memory section is present
+//        if (dataSegmentCount >= 0u && context.numberTotalMemories == 0u) {
+//            throw ParserException("Data section without memory section")
+//        }
 
         if (dataSegmentCount > WasmBinary.MAX_DATA_SEGMENTS) {
             throw ParserException("Number of data segments ${context.numberOfGlobals} exceed the maximum of ${WasmBinary.MAX_DATA_SEGMENTS}")
