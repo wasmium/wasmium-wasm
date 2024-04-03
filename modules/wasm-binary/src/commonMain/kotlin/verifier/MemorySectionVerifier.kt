@@ -1,5 +1,6 @@
 package org.wasmium.wasm.binary.verifier
 
+import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.visitors.MemorySectionVisitor
@@ -10,6 +11,16 @@ public class MemorySectionVerifier(private val delegate: MemorySectionVisitor, p
 
     override fun visitMemory(limits: ResizableLimits) {
         checkEnd()
+
+        if (limits.initial > WasmBinary.MAX_MEMORY_PAGES) {
+            throw ParserException("Invalid initial memory pages")
+        }
+
+        if (limits.maximum != null) {
+            if (limits.maximum > WasmBinary.MAX_MEMORY_PAGES) {
+                throw ParserException("Invalid memory max page")
+            }
+        }
 
         numberOfMemories++
 

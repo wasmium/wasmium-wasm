@@ -1,5 +1,7 @@
 package org.wasmium.wasm.binary.verifier
 
+import org.wasmium.wasm.binary.ParserException
+import org.wasmium.wasm.binary.WasmBinary.MAX_ELEMENT_SEGMENT_FUNCTION_INDEXES
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.ElementSegmentVisitor
 import org.wasmium.wasm.binary.visitors.InitializerExpressionVisitor
@@ -9,6 +11,10 @@ public class ElementSegmentVerifier(private val delegate: ElementSegmentVisitor,
 
     override fun visitElementIndices(elementIndices: List<UInt>) {
         checkEnd()
+
+        if (elementIndices.size.toUInt() > MAX_ELEMENT_SEGMENT_FUNCTION_INDEXES) {
+            throw ParserException("Number of element indices ${elementIndices.size} exceed the maximum of $MAX_ELEMENT_SEGMENT_FUNCTION_INDEXES")
+        }
 
         delegate.visitElementIndices(elementIndices)
     }
@@ -22,11 +28,19 @@ public class ElementSegmentVerifier(private val delegate: ElementSegmentVisitor,
     override fun visitActiveMode(tableIndex: UInt): InitializerExpressionVisitor {
         checkEnd()
 
+        if (tableIndex != 0u) {
+            throw ParserException("Table elements must refer to table 0.")
+        }
+
         return InitializerExpressionVerifier(delegate.visitInitializerExpression(), context)
     }
 
     override fun visitType(type: WasmType) {
         checkEnd()
+
+        if (type != WasmType.FUNC_REF) {
+            throw ParserException("Invalid element kind $type")
+        }
 
         delegate.visitType(type)
     }

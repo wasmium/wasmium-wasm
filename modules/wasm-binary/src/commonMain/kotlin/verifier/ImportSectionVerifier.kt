@@ -1,5 +1,6 @@
 package org.wasmium.wasm.binary.verifier
 
+import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.tree.WasmType
@@ -8,13 +9,20 @@ import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 public class ImportSectionVerifier(private val delegate: ImportSectionVisitor, private val context: VerifierContext) : ImportSectionVisitor {
     private var done: Boolean = false
     private var numberOfImports: UInt = 0u
-    private var numberOfFunctionImports: UInt = 0u
 
     override fun visitFunction(moduleName: String, fieldName: String, typeIndex: UInt) {
         checkEnd()
 
+        val numberOfTypes = context.signatures.size.toUInt()
+        if (typeIndex >= numberOfTypes) {
+            throw ParserException("Invalid import function index $typeIndex")
+        }
+
+        val functionIndex = context.functions.size.toUInt()
+        context.functions.add(functionIndex)
+
         numberOfImports++
-        numberOfFunctionImports++
+        context.numberOfFunctionImports++
 
         delegate.visitFunction(moduleName, fieldName, typeIndex)
     }
@@ -23,6 +31,7 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor, p
         checkEnd()
 
         numberOfImports++
+        context.numberOfGlobalImports++
 
         delegate.visitGlobal(moduleName, fieldName, type, mutable)
     }
@@ -31,6 +40,7 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor, p
         checkEnd()
 
         numberOfImports++
+        context.numberOfTableImports++
 
         delegate.visitTable(moduleName, fieldName, elementType, limits)
     }
@@ -39,6 +49,7 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor, p
         checkEnd()
 
         numberOfImports++
+        context.numberOfMemoryImports++
 
         delegate.visitMemory(moduleName, fieldName, limits)
     }
@@ -46,7 +57,12 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor, p
     override fun visitException(moduleName: String, fieldName: String, exceptionTypes: List<WasmType>) {
         checkEnd()
 
+        if (exceptionTypes.size.toUInt() > WasmBinary.MAX_EXCEPTION_TYPES) {
+            throw ParserException("Number of exceptions types ${exceptionTypes.size.toUInt()} exceed the maximum of ${WasmBinary.MAX_EXCEPTIONS}")
+        }
+
         numberOfImports++
+        context.numberOfExceptionImports++
 
         delegate.visitException(moduleName, fieldName, exceptionTypes)
     }
@@ -54,11 +70,9 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor, p
     override fun visitEnd() {
         checkEnd()
 
-        if (this.numberOfImports > WasmBinary.MAX_IMPORTS) {
+        if (numberOfImports > WasmBinary.MAX_IMPORTS) {
             throw VerifierException("Number of imports $numberOfImports exceed the maximum of ${WasmBinary.MAX_IMPORTS}")
         }
-
-        context.numberOfFunctionImports = numberOfFunctionImports
 
         done = true
         delegate.visitEnd()

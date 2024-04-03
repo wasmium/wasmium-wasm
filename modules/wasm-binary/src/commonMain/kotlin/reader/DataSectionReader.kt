@@ -1,7 +1,5 @@
 package org.wasmium.wasm.binary.reader
 
-import org.wasmium.wasm.binary.ParserException
-import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.WasmBinaryReader
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
@@ -11,15 +9,6 @@ public class DataSectionReader(
 ) {
     public fun readDataSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         val dataSegmentCount = source.readVarUInt32()
-
-        // TODO check if memory section is present
-//        if (dataSegmentCount >= 0u && context.numberTotalMemories == 0u) {
-//            throw ParserException("Data section without memory section")
-//        }
-
-        if (dataSegmentCount > WasmBinary.MAX_DATA_SEGMENTS) {
-            throw ParserException("Number of data segments ${context.numberOfGlobals} exceed the maximum of ${WasmBinary.MAX_DATA_SEGMENTS}")
-        }
 
         val dataVisitor = visitor.visitDataSection()
         for (segment in 0u until dataSegmentCount) {

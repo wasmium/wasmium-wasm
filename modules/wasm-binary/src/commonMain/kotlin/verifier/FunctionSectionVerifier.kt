@@ -1,5 +1,6 @@
 package org.wasmium.wasm.binary.verifier
 
+import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.visitors.FunctionSectionVisitor
 
@@ -9,6 +10,12 @@ public class FunctionSectionVerifier(private val delegate: FunctionSectionVisito
 
     override fun visitFunction(signatureIndex: UInt) {
         checkEnd()
+
+        if (signatureIndex >= context.numberOfSignatures) {
+            throw ParserException("Invalid function signature index: %$signatureIndex")
+        }
+
+        context.functions.add(signatureIndex)
 
         numberOfFunctions++
 

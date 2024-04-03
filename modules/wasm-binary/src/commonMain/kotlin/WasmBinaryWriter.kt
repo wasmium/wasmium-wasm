@@ -13,7 +13,6 @@ import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import kotlin.experimental.or
 
-
 public class WasmBinaryWriter(public val writer: BinaryWriter) {
 
     public fun writeUInt8(value: UInt): Unit = writer.writeByte(value.toByte())
@@ -111,7 +110,7 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
         return count
     }
 
-    public fun writeVarInt64(value: Long, isCanonical: Boolean = false, padding: Int = 5): Int {
+    public fun writeVarInt64(value: Long): Int {
         var reminder = value
         var count = 0
         var hasMore = true
@@ -129,22 +128,7 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
             count++
         }
 
-//        while (isCanonical && count < padding) {
-//            writer.writeByte(0x80.toByte())
-//            count++
-//        }
-
         return count
-    }
-
-    public fun writeVarint64_(value: Long) {
-        @Suppress("NAME_SHADOWING")
-        var value = value
-        while (value and 0x7fL.inv() != 0L) {
-            writer.writeByte(((value.toInt() and 0x7f).toLong() or 0x80L).toByte())
-            value = value ushr 7
-        }
-        writer.writeByte(value.toByte())
     }
 
     public fun writeSectionKind(sectionKind: SectionKind): Unit = writeVarUInt7(sectionKind.sectionKindId)
@@ -224,13 +208,9 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
         return count
     }
 
-    public fun writeByteArray(byteArray: ByteArray) {
-        writer.writeTo(byteArray, 0, byteArray.size)
-    }
+    public fun writeByteArray(byteArray: ByteArray): Unit = writer.writeTo(byteArray, 0, byteArray.size)
 
-    private fun writeByteArray(byteArray: ByteArray, offset: Int, length: Int) {
-        writer.writeTo(byteArray, offset, length)
-    }
+    private fun writeByteArray(byteArray: ByteArray, offset: Int, length: Int) = writer.writeTo(byteArray, offset, length)
 
     public fun writeSection(sectionKind: SectionKind, canonical: Boolean, data: ByteArray) {
         writeSectionKind(sectionKind)

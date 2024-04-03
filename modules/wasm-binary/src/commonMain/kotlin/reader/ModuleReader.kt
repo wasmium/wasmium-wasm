@@ -104,7 +104,7 @@ public class ModuleReader(
                     EXPORT -> exportSectionReader.readExportSection(source, visitor)
                     START -> startSectionReader.readStartSection(source, visitor)
                     ELEMENT -> elementSectionReader.readElementSection(source, visitor)
-                    CODE -> codeSectionReader.readCodeSection(source, payloadSize, visitor)
+                    CODE -> codeSectionReader.readCodeSection(source, visitor)
                     DATA -> dataSectionReader.readDataSection(source, visitor)
                     DATA_COUNT -> dataCountSectionReader.readDataCountSection(source, visitor)
                 }

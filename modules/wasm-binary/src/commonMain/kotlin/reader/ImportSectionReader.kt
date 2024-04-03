@@ -1,7 +1,6 @@
 package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.ParserException
-import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.WasmBinaryReader
 import org.wasmium.wasm.binary.tree.ExternalKind.EXCEPTION
 import org.wasmium.wasm.binary.tree.ExternalKind.FUNCTION
@@ -17,10 +16,6 @@ public class ImportSectionReader(
     public fun readImportSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         context.numberOfImports = source.readVarUInt32()
 
-        if (context.numberOfImports > WasmBinary.MAX_IMPORTS) {
-            throw ParserException("Number of imports ${context.numberOfImports} exceed the maximum of ${WasmBinary.MAX_IMPORTS}")
-        }
-
         val importVisitor = visitor.visitImportSection()
         for (importIndex in 0u until context.numberOfImports) {
             val moduleName = source.readString()
@@ -31,11 +26,7 @@ public class ImportSectionReader(
                 FUNCTION -> {
                     val typeIndex = source.readIndex()
 
-                    if (typeIndex >= context.numberOfSignatures) {
-                        throw ParserException("Invalid import function index $typeIndex")
-                    }
-
-                    importVisitor?.visitFunction(moduleName, fieldName, typeIndex)
+                    importVisitor.visitFunction(moduleName, fieldName, typeIndex)
 
                     context.numberOfFunctionImports++
                 }
@@ -52,14 +43,14 @@ public class ImportSectionReader(
                         throw ParserException("Tables may not be shared")
                     }
 
-                    importVisitor?.visitTable(moduleName, fieldName, elementType, limits)
+                    importVisitor.visitTable(moduleName, fieldName, elementType, limits)
 
                     context.numberOfTableImports++
                 }
 
                 MEMORY -> {
                     val pageLimits = source.readResizableLimits()
-                    importVisitor?.visitMemory(moduleName, fieldName, pageLimits)
+                    importVisitor.visitMemory(moduleName, fieldName, pageLimits)
 
                     context.numberOfMemoryImports++
                 }
@@ -76,7 +67,7 @@ public class ImportSectionReader(
                         throw ParserException("Import mutate globals are not allowed")
                     }
 
-                    importVisitor?.visitGlobal(moduleName, fieldName, globalType, false)
+                    importVisitor.visitGlobal(moduleName, fieldName, globalType, false)
 
                     context.numberOfGlobalImports++
                 }
@@ -87,22 +78,18 @@ public class ImportSectionReader(
                     }
 
                     val signatures = readExceptionType(source)
-                    importVisitor?.visitException(moduleName, fieldName, signatures)
+                    importVisitor.visitException(moduleName, fieldName, signatures)
 
                     context.numberOfExceptionImports++
                 }
             }
         }
 
-        importVisitor?.visitEnd()
+        importVisitor.visitEnd()
     }
 
     private fun readExceptionType(source: WasmBinaryReader): List<WasmType> {
         val numberOfExceptionTypes = source.readVarUInt32()
-
-        if (numberOfExceptionTypes > WasmBinary.MAX_EXCEPTION_TYPES) {
-            throw ParserException("Number of exceptions types $numberOfExceptionTypes exceed the maximum of ${WasmBinary.MAX_EXCEPTIONS}")
-        }
 
         val exceptionTypes = mutableListOf<WasmType>()
         for (exceptionIndex in 0u until numberOfExceptionTypes) {
@@ -112,7 +99,7 @@ public class ImportSectionReader(
                 throw ParserException("Invalid exception type: %#$exceptionType")
             }
 
-            exceptionTypes[exceptionIndex.toInt()] = exceptionType
+            exceptionTypes.add(exceptionType)
         }
 
         return exceptionTypes

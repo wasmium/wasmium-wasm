@@ -21,8 +21,8 @@ import org.wasmium.wasm.binary.visitors.TableSectionVisitor
 import org.wasmium.wasm.binary.visitors.TypeSectionVisitor
 import org.wasmium.wasm.binary.visitors.UnknownSectionVisitor
 
-public class ModuleVerifier(private val delegate: ModuleVisitor) : ModuleVisitor {
-    private val context: VerifierContext = VerifierContext()
+public class ModuleVerifier(private val delegate: ModuleVisitor, private val options: VerifierOptions) : ModuleVisitor {
+    private val context: VerifierContext = VerifierContext(options)
     private var started: Boolean = false
     private var done: Boolean = false
     private var numberOfSections = 0u
@@ -202,7 +202,7 @@ public class ModuleVerifier(private val delegate: ModuleVisitor) : ModuleVisitor
         checkEnd()
 
         if (numberOfSections > WasmBinary.MAX_SECTIONS) {
-            throw VerifierException("Sections size of $numberOfSections exceed the maximum of ${WasmBinary.MAX_SECTIONS}")
+            throw VerifierException("Number of sections $numberOfSections exceed the maximum of ${WasmBinary.MAX_SECTIONS}")
         }
 
         // only at the module end, can check if exceptions index are valid, exceptions section comes later

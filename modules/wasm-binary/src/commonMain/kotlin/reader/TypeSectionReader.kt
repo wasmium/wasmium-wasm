@@ -1,7 +1,6 @@
 package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.ParserException
-import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.WasmBinaryReader
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
@@ -12,23 +11,14 @@ public class TypeSectionReader(
     public fun readTypeSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         context.numberOfSignatures = source.readVarUInt32()
 
-        if (context.numberOfSignatures > WasmBinary.MAX_TYPES) {
-            throw ParserException("Number of types ${context.numberOfSignatures} exceed the maximum of ${WasmBinary.MAX_TYPES}")
-        }
-
         val typeVisitor = visitor.visitTypeSection()
         for (signatureIndex in 0u until context.numberOfSignatures) {
             val form = source.readType()
-
-            // TODO allow other types
             if (form != WasmType.FUNC) {
                 throw ParserException("Invalid signature form with type: $form")
             }
 
             val parameterCount = source.readVarUInt32()
-            if (parameterCount > WasmBinary.MAX_FUNCTION_PARAMS) {
-                throw ParserException("Number of function parameters $parameterCount exceed the maximum of ${WasmBinary.MAX_FUNCTION_PARAMS}")
-            }
 
             val parameters = mutableListOf<WasmType>()
             for (paramIndex in 0u until parameterCount) {
@@ -42,10 +32,6 @@ public class TypeSectionReader(
             }
 
             val resultCount = source.readVarUInt1()
-            if (resultCount > WasmBinary.MAX_FUNCTION_RESULTS) {
-                throw ParserException("Number of function results $resultCount exceed the maximum of ${WasmBinary.MAX_FUNCTION_RESULTS}")
-            }
-
             if (resultCount != 0u && resultCount != 1u) {
                 throw ParserException("Result size must be 0 or 1 but got: $resultCount")
             }
@@ -67,9 +53,9 @@ public class TypeSectionReader(
                 }
             }
 
-            typeVisitor?.visitType(parameters, resultType)
+            typeVisitor.visitType(parameters, resultType)
         }
 
-        typeVisitor?.visitEnd()
+        typeVisitor.visitEnd()
     }
 }

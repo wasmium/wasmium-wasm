@@ -1,5 +1,6 @@
 package org.wasmium.wasm.binary.verifier
 
+import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.visitors.InitializerExpressionVisitor
 
@@ -32,6 +33,14 @@ public class InitializerExpressionVerifier(private val delegate: InitializerExpr
 
     override fun visitInitExprGetGlobalExpr(globalIndex: UInt) {
         checkEnd()
+
+        if (globalIndex > context.numberOfTotalGlobals) {
+            throw ParserException("get_global index of $globalIndex exceed the maximum of ${context.numberOfTotalGlobals}")
+        }
+
+        if (globalIndex > context.numberOfGlobalImports) {
+            throw ParserException("get_global index of $globalIndex exceed the number of globals of ${context.numberOfGlobalImports}")
+        }
 
         delegate.visitInitExprGetGlobalExpr(globalIndex)
     }

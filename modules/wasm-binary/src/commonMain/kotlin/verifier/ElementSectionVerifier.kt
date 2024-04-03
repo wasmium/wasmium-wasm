@@ -23,6 +23,8 @@ public class ElementSectionVerifier(private val delegate: ElementSectionVisitor,
             throw VerifierException("Number of element segments $numberOfElementSegments exceed the maximum of ${WasmBinary.MAX_ELEMENT_SEGMENTS}")
         }
 
+        context.numberOfElements = numberOfElementSegments
+
         done = true
         delegate.visitEnd()
     }

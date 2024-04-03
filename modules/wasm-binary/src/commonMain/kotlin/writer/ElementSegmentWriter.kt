@@ -2,10 +2,10 @@ package org.wasmium.wasm.binary.writer
 
 import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinary.ELEMENT_EXPRESSIONS
-import org.wasmium.wasm.binary.WasmBinary.ELEMENT_KIND
 import org.wasmium.wasm.binary.WasmBinary.ELEMENT_PASSIVE_OR_DECLARATIVE
 import org.wasmium.wasm.binary.WasmBinary.ELEMENT_TABLE_INDEX
 import org.wasmium.wasm.binary.WasmBinaryWriter
+import org.wasmium.wasm.binary.tree.ElementKind
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.ElementSegmentVisitor
 import org.wasmium.wasm.binary.visitors.InitializerExpressionVisitor
@@ -76,7 +76,7 @@ public class ElementSegmentWriter(
             WasmBinaryWriter(body).writeByteArray(expressionsBody.toByteArray())
         } else {
             if ((elementType and 0b011u) != 0u) {
-                WasmBinaryWriter(body).writeVarUInt32(ELEMENT_KIND.toUInt())
+                WasmBinaryWriter(body).writeVarUInt32(ElementKind.FUNCTION_REF.elementKindId)
             }
 
             WasmBinaryWriter(body).writeVarUInt32(elementIndices.size.toUInt())

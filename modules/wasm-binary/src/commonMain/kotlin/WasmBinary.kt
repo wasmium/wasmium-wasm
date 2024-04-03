@@ -37,6 +37,8 @@ public object WasmBinary {
     /** Maximum size of bytes in a element segment. */
     public const val MAX_ELEMENT_SEGMENT_LENGTH: UInt = 1000000u
 
+    public const val MAX_ELEMENT_SEGMENT_FUNCTION_INDEXES: UInt = 1000000u
+
     /** Maximum number of memories. */
     public const val MAX_MEMORIES: UInt = 1u
 
@@ -62,7 +64,7 @@ public object WasmBinary {
     public const val MAX_FUNCTION_LOCALS: UInt = 50000u
 
     /** Maximum number of function locals. Sum of all local counts. */
-    public const val MAX_FUNCTION_LOCALS_TOTAL: UInt = 0x10000000u
+    public const val MAX_FUNCTION_LOCALS_TOTAL: UInt = 10000000u
 
     /** Maximum size of bytes of a function body is 1024 * 128 * 64 */
     public const val MAX_FUNCTION_SIZE: UInt = 8388608u
@@ -78,13 +80,18 @@ public object WasmBinary {
 
     public const val MAX_RELOCATIONS: UInt = 1000000u
 
+    public const val MAX_NAMES: UInt = 10000000u
+
+    public const val MAX_NAMES_LABELS: UInt = 10000000u
+
+    public const val MAX_NAMES_FIELDS: UInt = 10000000u
+
     /** Maximum size of bytes of a section. */
     public const val MAX_SECTION_LENGTH: UInt = 100000000u
 
     /** Maximum number of section. */
     public const val MAX_SECTIONS: UInt = 1000u
 
-    public const val ELEMENT_KIND: Byte = 0x00
     public const val ELEMENT_PASSIVE_OR_DECLARATIVE: Int = 1
     public const val ELEMENT_TABLE_INDEX: Int = 1 shl 1
     public const val ELEMENT_EXPRESSIONS: Int = 1 shl 2

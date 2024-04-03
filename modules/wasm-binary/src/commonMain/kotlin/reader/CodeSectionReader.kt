@@ -11,11 +11,8 @@ public class CodeSectionReader(
     private val expressionReader: ExpressionReader = ExpressionReader(context)
 ) {
 
-    public fun readCodeSection(source: WasmBinaryReader, payloadSize: UInt, visitor: ModuleVisitor) {
+    public fun readCodeSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         val numberOfCodes = source.readVarUInt32()
-        if (numberOfCodes != context.numberOfFunctions) {
-            throw ParserException("Invalid function section size: $numberOfCodes must be equal to functionSize of: ${context.numberOfFunctions}")
-        }
 
         val codeVisitor = visitor.visitCodeSection()
 
@@ -35,25 +32,14 @@ public class CodeSectionReader(
             val startAvailable = source.position
 
             val locals = mutableListOf<LocalVariable>()
-            var totalOfLocals = 0u
-            val localsSize = source.readVarUInt32()
+            val numberOfLocals = source.readVarUInt32()
 
-            if (localsSize > WasmBinary.MAX_FUNCTION_LOCALS) {
-                throw ParserException("Number of function locals $localsSize exceed the maximum of ${WasmBinary.MAX_FUNCTION_LOCALS}")
-            }
-
-            for (localIndex in 0u until localsSize) {
+            for (localIndex in 0u until numberOfLocals) {
                 val numberOfLocalTypes = source.readVarUInt32()
 
                 val localType = source.readType()
                 if (!localType.isValueType()) {
                     throw ParserException("Invalid local type: %#$localType")
-                }
-
-                totalOfLocals += numberOfLocalTypes
-
-                if (numberOfLocalTypes > WasmBinary.MAX_FUNCTION_LOCALS_TOTAL) {
-                    throw ParserException("Number of total function locals $totalOfLocals exceed the maximum of ${WasmBinary.MAX_FUNCTION_LOCALS_TOTAL}")
                 }
 
                 locals.add(LocalVariable(numberOfLocalTypes, localType))

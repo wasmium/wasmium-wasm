@@ -1,16 +1,18 @@
 package org.wasmium.wasm.binary.verifier
 
+import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.visitors.DataSegmentVisitor
 import org.wasmium.wasm.binary.visitors.InitializerExpressionVisitor
 
 public class DataSegmentVerifier(private val delegate: DataSegmentVisitor, private val context: VerifierContext) : DataSegmentVisitor {
     private var done: Boolean = false
-    private var numberOfDataSegments: UInt = 0u
 
     override fun visitActive(memoryIndex: UInt): InitializerExpressionVisitor {
         checkEnd()
 
-        numberOfDataSegments++
+        if (memoryIndex != 0u) {
+            throw ParserException("Bad memory index, must be 0.")
+        }
 
         return InitializerExpressionVerifier(delegate.visitActive(memoryIndex), context)
     }
@@ -18,15 +20,11 @@ public class DataSegmentVerifier(private val delegate: DataSegmentVisitor, priva
     override fun visitData(data: ByteArray) {
         checkEnd()
 
-        numberOfDataSegments++
-
         delegate.visitData(data)
     }
 
     override fun visitEnd() {
         checkEnd()
-
-        context.numberOfDataSegments = numberOfDataSegments
 
         done = true
         delegate.visitEnd()

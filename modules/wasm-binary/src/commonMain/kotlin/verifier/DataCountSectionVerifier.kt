@@ -1,20 +1,23 @@
 package org.wasmium.wasm.binary.verifier
 
+import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.visitors.DataCountSectionVisitor
 
 public class DataCountSectionVerifier(
     private val delegate: DataCountSectionVisitor,
     private val context: VerifierContext,
-    private val dataCount: UInt
+    private val dataSegmentCount: UInt
 ) : DataCountSectionVisitor {
     private var done: Boolean = false
 
     override fun visitEnd() {
         checkEnd()
 
-        if (context.numberOfDataSegments != dataCount) {
-            throw VerifierException("Number of data segments ${context.numberOfDataSegments} is different then the data count of $dataCount")
+        if (dataSegmentCount > WasmBinary.MAX_DATA_SEGMENTS) {
+            throw VerifierException("Number of data segments $dataSegmentCount exceed the maximum of ${WasmBinary.MAX_DATA_SEGMENTS}")
         }
+
+        context.dataSegmentCount = dataSegmentCount
 
         done = true
         delegate.visitEnd()

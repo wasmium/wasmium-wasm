@@ -7,12 +7,11 @@ import org.wasmium.wasm.binary.visitors.InitializerExpressionVisitor
 
 public class GlobalSectionVerifier(private val delegate: GlobalSectionVisitor, private val context: VerifierContext) : GlobalSectionVisitor {
     private var done: Boolean = false
-    private var numberOfGlobals: UInt = 0u
 
     override fun visitGlobalVariable(type: WasmType, mutable: Boolean): InitializerExpressionVisitor {
         checkEnd()
 
-        numberOfGlobals++
+        context.numberOfGlobals++
 
         context.mutableGlobals.add(mutable)
 
@@ -22,8 +21,8 @@ public class GlobalSectionVerifier(private val delegate: GlobalSectionVisitor, p
     override fun visitEnd() {
         checkEnd()
 
-        if (this.numberOfGlobals > WasmBinary.MAX_GLOBALS) {
-            throw VerifierException("Number of globals $numberOfGlobals exceed the maximum of ${WasmBinary.MAX_GLOBALS}")
+        if (context.numberOfGlobals > WasmBinary.MAX_GLOBALS) {
+            throw VerifierException("Number of globals ${context.numberOfGlobals} exceed the maximum of ${WasmBinary.MAX_GLOBALS}")
         }
 
         done = true

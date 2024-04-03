@@ -3,7 +3,6 @@
 package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.ParserException
-import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.WasmBinaryReader
 import org.wasmium.wasm.binary.tree.Opcode.*
 import org.wasmium.wasm.binary.tree.V128Value
@@ -13,7 +12,7 @@ import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 public class ExpressionReader(
     private val context: ReaderContext,
 ) {
-    public fun readExpression(source: WasmBinaryReader, bodySize: UInt, expressionVisitor: ExpressionVisitor?) {
+    public fun readExpression(source: WasmBinaryReader, bodySize: UInt, expressionVisitor: ExpressionVisitor) {
         val endBodyPosition = source.position + bodySize
 
         var seenEndOpcode = false
@@ -26,11 +25,11 @@ public class ExpressionReader(
 
             when (opcode) {
                 UNREACHABLE -> {
-                    expressionVisitor?.visitUnreachableInstruction()
+                    expressionVisitor.visitUnreachableInstruction()
                 }
 
                 NOP -> {
-                    expressionVisitor?.visitNopInstruction()
+                    expressionVisitor.visitNopInstruction()
                 }
 
                 BLOCK -> {
@@ -41,7 +40,7 @@ public class ExpressionReader(
                     }
 
                     val blockType = if (type != WasmType.NONE) arrayOf(type) else arrayOf(WasmType.NONE)
-                    expressionVisitor?.visitBlockInstruction(blockType)
+                    expressionVisitor.visitBlockInstruction(blockType)
                 }
 
                 LOOP -> {
@@ -52,7 +51,7 @@ public class ExpressionReader(
                     }
 
                     val blockType = if (type != WasmType.NONE) arrayOf(type) else arrayOf(WasmType.NONE)
-                    expressionVisitor?.visitLoopInstruction(blockType)
+                    expressionVisitor.visitLoopInstruction(blockType)
                 }
 
                 IF -> {
@@ -63,11 +62,11 @@ public class ExpressionReader(
                     }
 
                     val blockType = if (type != WasmType.NONE) arrayOf(type) else arrayOf(WasmType.NONE)
-                    expressionVisitor?.visitIfInstruction(blockType)
+                    expressionVisitor.visitIfInstruction(blockType)
                 }
 
                 ELSE -> {
-                    expressionVisitor?.visitElseInstruction()
+                    expressionVisitor.visitElseInstruction()
                 }
 
                 TRY -> {
@@ -82,7 +81,7 @@ public class ExpressionReader(
 
                     val blockType = if (type != WasmType.NONE) arrayOf(type) else arrayOf(WasmType.NONE)
 
-                    expressionVisitor?.visitTryInstruction(blockType)
+                    expressionVisitor.visitTryInstruction(blockType)
                 }
 
                 CATCH -> {
@@ -90,7 +89,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid catch code: exceptions not enabled.")
                     }
 
-                    expressionVisitor?.visitCatchInstruction()
+                    expressionVisitor.visitCatchInstruction()
                 }
 
                 THROW -> {
@@ -103,7 +102,7 @@ public class ExpressionReader(
                         throw ParserException("invalid call exception index: %$exceptionIndex")
                     }
 
-                    expressionVisitor?.visitThrowInstruction(exceptionIndex)
+                    expressionVisitor.visitThrowInstruction(exceptionIndex)
                 }
 
                 RETHROW -> {
@@ -111,7 +110,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid rethrow code: exceptions not enabled.")
                     }
 
-                    expressionVisitor?.visitRethrowInstruction()
+                    expressionVisitor.visitRethrowInstruction()
                 }
 
                 THROW_REF -> {
@@ -119,28 +118,28 @@ public class ExpressionReader(
                         throw ParserException("Invalid catch code: exceptions not enabled.")
                     }
 
-                    expressionVisitor?.visitThrowRefInstruction()
+                    expressionVisitor.visitThrowRefInstruction()
                 }
 
                 END -> {
                     if (endBodyPosition == source.position) {
                         seenEndOpcode = true
-                        expressionVisitor?.visitEndFunctionInstruction()
+                        expressionVisitor.visitEndFunctionInstruction()
                     } else {
-                        expressionVisitor?.visitEndInstruction()
+                        expressionVisitor.visitEndInstruction()
                     }
                 }
 
                 BR -> {
                     val depth = source.readIndex()
 
-                    expressionVisitor?.visitBrInstruction(depth)
+                    expressionVisitor.visitBrInstruction(depth)
                 }
 
                 BR_IF -> {
                     val depth = source.readIndex()
 
-                    expressionVisitor?.visitBrIfInstruction(depth)
+                    expressionVisitor.visitBrIfInstruction(depth)
                 }
 
                 BR_TABLE -> {
@@ -155,11 +154,11 @@ public class ExpressionReader(
 
                     val defaultTarget = source.readIndex()
 
-                    expressionVisitor?.visitBrTableInstruction(targets, defaultTarget)
+                    expressionVisitor.visitBrTableInstruction(targets, defaultTarget)
                 }
 
                 RETURN -> {
-                    expressionVisitor?.visitReturnInstruction()
+                    expressionVisitor.visitReturnInstruction()
                 }
 
                 CALL -> {
@@ -169,7 +168,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid call function index: %$funcIndex")
                     }
 
-                    expressionVisitor?.visitCallInstruction(funcIndex)
+                    expressionVisitor.visitCallInstruction(funcIndex)
                 }
 
                 CALL_INDIRECT -> {
@@ -183,45 +182,45 @@ public class ExpressionReader(
                         throw ParserException("Call_indirect reserved value must be 0")
                     }
 
-                    expressionVisitor?.visitCallIndirectInstruction(signatureIndex, reserved = false)
+                    expressionVisitor.visitCallIndirectInstruction(signatureIndex, reserved = false)
                 }
 
                 DROP -> {
-                    expressionVisitor?.visitDropInstruction()
+                    expressionVisitor.visitDropInstruction()
                 }
 
                 SELECT -> {
-                    expressionVisitor?.visitSelectInstruction()
+                    expressionVisitor.visitSelectInstruction()
                 }
 
                 GET_GLOBAL -> {
                     val globalIndex = source.readIndex()
 
-                    expressionVisitor?.visitGetGlobalInstruction(globalIndex)
+                    expressionVisitor.visitGetGlobalInstruction(globalIndex)
                 }
 
                 SET_LOCAL -> {
                     val localIndex = source.readIndex()
 
-                    expressionVisitor?.visitSetLocalInstruction(localIndex)
+                    expressionVisitor.visitSetLocalInstruction(localIndex)
                 }
 
                 TEE_LOCAL -> {
                     val localIndex = source.readIndex()
 
-                    expressionVisitor?.visitTeeLocalInstruction(localIndex)
+                    expressionVisitor.visitTeeLocalInstruction(localIndex)
                 }
 
                 GET_LOCAL -> {
                     val localIndex = source.readIndex()
 
-                    expressionVisitor?.visitGetLocalInstruction(localIndex)
+                    expressionVisitor.visitGetLocalInstruction(localIndex)
                 }
 
                 SET_GLOBAL -> {
                     val globalIndex = source.readIndex()
 
-                    expressionVisitor?.visitSetGlobalInstruction(globalIndex)
+                    expressionVisitor.visitSetGlobalInstruction(globalIndex)
                 }
 
                 I32_LOAD,
@@ -241,7 +240,7 @@ public class ExpressionReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    expressionVisitor?.visitLoadInstruction(opcode, alignment, offset)
+                    expressionVisitor.visitLoadInstruction(opcode, alignment, offset)
                 }
 
                 I32_STORE8,
@@ -256,7 +255,7 @@ public class ExpressionReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    expressionVisitor?.visitStoreInstruction(opcode, alignment, offset)
+                    expressionVisitor.visitStoreInstruction(opcode, alignment, offset)
                 }
 
                 MEMORY_SIZE -> {
@@ -264,7 +263,7 @@ public class ExpressionReader(
                     if (reserved != 0u) {
                         throw ParserException("MemorySize reserved value must be 0.")
                     }
-                    expressionVisitor?.visitMemorySizeInstruction(reserved = false)
+                    expressionVisitor.visitMemorySizeInstruction(reserved = false)
                 }
 
                 MEMORY_GROW -> {
@@ -273,475 +272,475 @@ public class ExpressionReader(
                         throw ParserException("MemoryGrow reserved value must be 0")
                     }
 
-                    expressionVisitor?.visitMemoryGrowInstruction(reserved = false)
+                    expressionVisitor.visitMemoryGrowInstruction(reserved = false)
                 }
 
                 I32_CONST -> {
                     val value = source.readVarInt32()
 
-                    expressionVisitor?.visitConstInt32Instruction(value)
+                    expressionVisitor.visitConstInt32Instruction(value)
                 }
 
                 I64_CONST -> {
                     val value = source.readVarInt64()
 
-                    expressionVisitor?.visitConstInt64Instruction(value)
+                    expressionVisitor.visitConstInt64Instruction(value)
                 }
 
                 F32_CONST -> {
                     val value = source.readFloat32()
 
-                    expressionVisitor?.visitConstFloat32Instruction(value)
+                    expressionVisitor.visitConstFloat32Instruction(value)
                 }
 
                 F64_CONST -> {
                     val value = source.readFloat64()
 
-                    expressionVisitor?.visitConstFloat64Instruction(value)
+                    expressionVisitor.visitConstFloat64Instruction(value)
                 }
 
                 I32_EQZ -> {
-                    expressionVisitor?.visitEqualZeroInstruction(opcode)
+                    expressionVisitor.visitEqualZeroInstruction(opcode)
                 }
 
                 I32_EQ -> {
-                    expressionVisitor?.visitEqualInstruction(opcode)
+                    expressionVisitor.visitEqualInstruction(opcode)
                 }
 
                 I32_NE -> {
-                    expressionVisitor?.visitNotEqualInstruction(opcode)
+                    expressionVisitor.visitNotEqualInstruction(opcode)
                 }
 
                 I32_LT_S -> {
-                    expressionVisitor?.visitLessThanInstruction(opcode)
+                    expressionVisitor.visitLessThanInstruction(opcode)
                 }
 
                 I32_LE_S -> {
-                    expressionVisitor?.visitLessEqualInstruction(opcode)
+                    expressionVisitor.visitLessEqualInstruction(opcode)
                 }
 
                 I32_LT_U -> {
-                    expressionVisitor?.visitLessThanInstruction(opcode)
+                    expressionVisitor.visitLessThanInstruction(opcode)
                 }
 
                 I32_LE_U -> {
-                    expressionVisitor?.visitLessEqualInstruction(opcode)
+                    expressionVisitor.visitLessEqualInstruction(opcode)
                 }
 
                 I32_GT_S -> {
-                    expressionVisitor?.visitGreaterThanInstruction(opcode)
+                    expressionVisitor.visitGreaterThanInstruction(opcode)
                 }
 
                 I32_GE_S -> {
-                    expressionVisitor?.visitGreaterEqualInstruction(opcode)
+                    expressionVisitor.visitGreaterEqualInstruction(opcode)
                 }
 
                 I32_GT_U -> {
-                    expressionVisitor?.visitGreaterThanInstruction(opcode)
+                    expressionVisitor.visitGreaterThanInstruction(opcode)
                 }
 
                 I32_GE_U -> {
-                    expressionVisitor?.visitGreaterEqualInstruction(opcode)
+                    expressionVisitor.visitGreaterEqualInstruction(opcode)
                 }
 
                 I64_EQZ -> {
-                    expressionVisitor?.visitEqualZeroInstruction(opcode)
+                    expressionVisitor.visitEqualZeroInstruction(opcode)
                 }
 
                 I64_EQ -> {
-                    expressionVisitor?.visitEqualInstruction(opcode)
+                    expressionVisitor.visitEqualInstruction(opcode)
                 }
 
                 I64_NE -> {
-                    expressionVisitor?.visitNotEqualInstruction(opcode)
+                    expressionVisitor.visitNotEqualInstruction(opcode)
                 }
 
                 I64_LT_S -> {
-                    expressionVisitor?.visitLessThanInstruction(opcode)
+                    expressionVisitor.visitLessThanInstruction(opcode)
                 }
 
                 I64_LE_S -> {
-                    expressionVisitor?.visitLessEqualInstruction(opcode)
+                    expressionVisitor.visitLessEqualInstruction(opcode)
                 }
 
                 I64_LT_U -> {
-                    expressionVisitor?.visitLessThanInstruction(opcode)
+                    expressionVisitor.visitLessThanInstruction(opcode)
                 }
 
                 I64_LE_U -> {
-                    expressionVisitor?.visitLessEqualInstruction(opcode)
+                    expressionVisitor.visitLessEqualInstruction(opcode)
                 }
 
                 I64_GT_S -> {
-                    expressionVisitor?.visitGreaterThanInstruction(opcode)
+                    expressionVisitor.visitGreaterThanInstruction(opcode)
                 }
 
                 I64_GE_S -> {
-                    expressionVisitor?.visitGreaterEqualInstruction(opcode)
+                    expressionVisitor.visitGreaterEqualInstruction(opcode)
                 }
 
                 I64_GT_U -> {
-                    expressionVisitor?.visitGreaterThanInstruction(opcode)
+                    expressionVisitor.visitGreaterThanInstruction(opcode)
                 }
 
                 I64_GE_U -> {
-                    expressionVisitor?.visitGreaterEqualInstruction(opcode)
+                    expressionVisitor.visitGreaterEqualInstruction(opcode)
                 }
 
                 F32_EQ -> {
-                    expressionVisitor?.visitEqualInstruction(opcode)
+                    expressionVisitor.visitEqualInstruction(opcode)
                 }
 
                 F32_NE -> {
-                    expressionVisitor?.visitNotEqualInstruction(opcode)
+                    expressionVisitor.visitNotEqualInstruction(opcode)
                 }
 
                 F32_LT -> {
-                    expressionVisitor?.visitLessThanInstruction(opcode)
+                    expressionVisitor.visitLessThanInstruction(opcode)
                 }
 
                 F32_LE -> {
-                    expressionVisitor?.visitLessEqualInstruction(opcode)
+                    expressionVisitor.visitLessEqualInstruction(opcode)
                 }
 
                 F32_GT -> {
-                    expressionVisitor?.visitGreaterThanInstruction(opcode)
+                    expressionVisitor.visitGreaterThanInstruction(opcode)
                 }
 
                 F32_GE -> {
-                    expressionVisitor?.visitGreaterEqualInstruction(opcode)
+                    expressionVisitor.visitGreaterEqualInstruction(opcode)
                 }
 
                 F64_EQ -> {
-                    expressionVisitor?.visitEqualInstruction(opcode)
+                    expressionVisitor.visitEqualInstruction(opcode)
                 }
 
                 F64_NE -> {
-                    expressionVisitor?.visitNotEqualInstruction(opcode)
+                    expressionVisitor.visitNotEqualInstruction(opcode)
                 }
 
                 F64_LT -> {
-                    expressionVisitor?.visitLessThanInstruction(opcode)
+                    expressionVisitor.visitLessThanInstruction(opcode)
                 }
 
                 F64_LE -> {
-                    expressionVisitor?.visitLessEqualInstruction(opcode)
+                    expressionVisitor.visitLessEqualInstruction(opcode)
                 }
 
                 F64_GT -> {
-                    expressionVisitor?.visitGreaterThanInstruction(opcode)
+                    expressionVisitor.visitGreaterThanInstruction(opcode)
                 }
 
                 F64_GE -> {
-                    expressionVisitor?.visitCompareInstruction(opcode)
+                    expressionVisitor.visitCompareInstruction(opcode)
                 }
 
                 I32_CLZ -> {
-                    expressionVisitor?.visitCountLeadingZerosInstruction(opcode)
+                    expressionVisitor.visitCountLeadingZerosInstruction(opcode)
                 }
 
                 I32_CTZ -> {
-                    expressionVisitor?.visitCountTrailingZerosInstruction(opcode)
+                    expressionVisitor.visitCountTrailingZerosInstruction(opcode)
                 }
 
                 I32_POPCNT -> {
-                    expressionVisitor?.visitPopulationCountInstruction(opcode)
+                    expressionVisitor.visitPopulationCountInstruction(opcode)
                 }
 
                 I32_ADD -> {
-                    expressionVisitor?.visitAddInstruction(opcode)
+                    expressionVisitor.visitAddInstruction(opcode)
                 }
 
                 I32_SUB -> {
-                    expressionVisitor?.visitSubtractInstruction(opcode)
+                    expressionVisitor.visitSubtractInstruction(opcode)
                 }
 
                 I32_MUL -> {
-                    expressionVisitor?.visitMultiplyInstruction(opcode)
+                    expressionVisitor.visitMultiplyInstruction(opcode)
                 }
 
                 I32_DIV_S -> {
-                    expressionVisitor?.visitDivideInstruction(opcode)
+                    expressionVisitor.visitDivideInstruction(opcode)
                 }
 
                 I32_DIV_U -> {
-                    expressionVisitor?.visitDivideInstruction(opcode)
+                    expressionVisitor.visitDivideInstruction(opcode)
                 }
 
                 I32_REM_S -> {
-                    expressionVisitor?.visitRemainderInstruction(opcode)
+                    expressionVisitor.visitRemainderInstruction(opcode)
                 }
 
                 I32_REM_U -> {
-                    expressionVisitor?.visitRemainderInstruction(opcode)
+                    expressionVisitor.visitRemainderInstruction(opcode)
                 }
 
                 I32_AND -> {
-                    expressionVisitor?.visitAndInstruction(opcode)
+                    expressionVisitor.visitAndInstruction(opcode)
                 }
 
                 I32_OR -> {
-                    expressionVisitor?.visitOrInstruction(opcode)
+                    expressionVisitor.visitOrInstruction(opcode)
                 }
 
                 I32_XOR -> {
-                    expressionVisitor?.visitXorInstruction(opcode)
+                    expressionVisitor.visitXorInstruction(opcode)
                 }
 
                 I32_SHL -> {
-                    expressionVisitor?.visitShiftLeftInstruction(opcode)
+                    expressionVisitor.visitShiftLeftInstruction(opcode)
                 }
 
                 I32_SHR_U -> {
-                    expressionVisitor?.visitShiftLeftInstruction(opcode)
+                    expressionVisitor.visitShiftLeftInstruction(opcode)
                 }
 
                 I32_SHR_S -> {
-                    expressionVisitor?.visitShiftLeftInstruction(opcode)
+                    expressionVisitor.visitShiftLeftInstruction(opcode)
                 }
 
                 I32_ROTL -> {
-                    expressionVisitor?.visitRotateLeftInstruction(opcode)
+                    expressionVisitor.visitRotateLeftInstruction(opcode)
                 }
 
                 I32_ROTR -> {
-                    expressionVisitor?.visitRotateRightInstruction(opcode)
+                    expressionVisitor.visitRotateRightInstruction(opcode)
                 }
 
                 I64_CLZ -> {
-                    expressionVisitor?.visitCountLeadingZerosInstruction(opcode)
+                    expressionVisitor.visitCountLeadingZerosInstruction(opcode)
                 }
 
                 I64_CTZ -> {
-                    expressionVisitor?.visitCountTrailingZerosInstruction(opcode)
+                    expressionVisitor.visitCountTrailingZerosInstruction(opcode)
                 }
 
                 I64_POPCNT -> {
-                    expressionVisitor?.visitPopulationCountInstruction(opcode)
+                    expressionVisitor.visitPopulationCountInstruction(opcode)
                 }
 
                 I64_ADD -> {
-                    expressionVisitor?.visitAddInstruction(opcode)
+                    expressionVisitor.visitAddInstruction(opcode)
                 }
 
                 I64_SUB -> {
-                    expressionVisitor?.visitSubtractInstruction(opcode)
+                    expressionVisitor.visitSubtractInstruction(opcode)
                 }
 
                 I64_MUL -> {
-                    expressionVisitor?.visitMultiplyInstruction(opcode)
+                    expressionVisitor.visitMultiplyInstruction(opcode)
                 }
 
                 I64_DIV_S -> {
-                    expressionVisitor?.visitDivideInstruction(opcode)
+                    expressionVisitor.visitDivideInstruction(opcode)
                 }
 
                 I64_DIV_U -> {
-                    expressionVisitor?.visitDivideInstruction(opcode)
+                    expressionVisitor.visitDivideInstruction(opcode)
                 }
 
                 I64_REM_S -> {
-                    expressionVisitor?.visitRemainderInstruction(opcode)
+                    expressionVisitor.visitRemainderInstruction(opcode)
                 }
 
                 I64_REM_U -> {
-                    expressionVisitor?.visitRemainderInstruction(opcode)
+                    expressionVisitor.visitRemainderInstruction(opcode)
                 }
 
                 I64_AND -> {
-                    expressionVisitor?.visitAndInstruction(opcode)
+                    expressionVisitor.visitAndInstruction(opcode)
                 }
 
                 I64_OR -> {
-                    expressionVisitor?.visitOrInstruction(opcode)
+                    expressionVisitor.visitOrInstruction(opcode)
                 }
 
                 I64_XOR -> {
-                    expressionVisitor?.visitXorInstruction(opcode)
+                    expressionVisitor.visitXorInstruction(opcode)
                 }
 
                 I64_SHL -> {
-                    expressionVisitor?.visitShiftLeftInstruction(opcode)
+                    expressionVisitor.visitShiftLeftInstruction(opcode)
                 }
 
                 I64_SHR_U -> {
-                    expressionVisitor?.visitShiftLeftInstruction(opcode)
+                    expressionVisitor.visitShiftLeftInstruction(opcode)
                 }
 
                 I64_SHR_S -> {
-                    expressionVisitor?.visitShiftLeftInstruction(opcode)
+                    expressionVisitor.visitShiftLeftInstruction(opcode)
                 }
 
                 I64_ROTL -> {
-                    expressionVisitor?.visitRotateLeftInstruction(opcode)
+                    expressionVisitor.visitRotateLeftInstruction(opcode)
                 }
 
                 I64_ROTR -> {
-                    expressionVisitor?.visitRotateRightInstruction(opcode)
+                    expressionVisitor.visitRotateRightInstruction(opcode)
                 }
 
                 F32_ABS -> {
-                    expressionVisitor?.visitAbsoluteInstruction(opcode)
+                    expressionVisitor.visitAbsoluteInstruction(opcode)
                 }
 
                 F32_NEG -> {
-                    expressionVisitor?.visitNegativeInstruction(opcode)
+                    expressionVisitor.visitNegativeInstruction(opcode)
                 }
 
                 F32_CEIL -> {
-                    expressionVisitor?.visitCeilingInstruction(opcode)
+                    expressionVisitor.visitCeilingInstruction(opcode)
                 }
 
                 F32_FLOOR -> {
-                    expressionVisitor?.visitFloorInstruction(opcode)
+                    expressionVisitor.visitFloorInstruction(opcode)
                 }
 
                 F32_TRUNC -> {
-                    expressionVisitor?.visitTruncateInstruction(opcode)
+                    expressionVisitor.visitTruncateInstruction(opcode)
                 }
 
                 F32_NEAREST -> {
-                    expressionVisitor?.visitNearestInstruction(opcode)
+                    expressionVisitor.visitNearestInstruction(opcode)
                 }
 
                 F32_SQRT -> {
-                    expressionVisitor?.visitSqrtInstruction(opcode)
+                    expressionVisitor.visitSqrtInstruction(opcode)
                 }
 
                 F32_ADD -> {
-                    expressionVisitor?.visitAddInstruction(opcode)
+                    expressionVisitor.visitAddInstruction(opcode)
                 }
 
                 F32_SUB -> {
-                    expressionVisitor?.visitSubtractInstruction(opcode)
+                    expressionVisitor.visitSubtractInstruction(opcode)
                 }
 
                 F32_MUL -> {
-                    expressionVisitor?.visitMultiplyInstruction(opcode)
+                    expressionVisitor.visitMultiplyInstruction(opcode)
                 }
 
                 F32_DIV -> {
-                    expressionVisitor?.visitDivideInstruction(opcode)
+                    expressionVisitor.visitDivideInstruction(opcode)
                 }
 
                 F32_MIN -> {
-                    expressionVisitor?.visitMinInstruction(opcode)
+                    expressionVisitor.visitMinInstruction(opcode)
                 }
 
                 F32_MAX -> {
-                    expressionVisitor?.visitMaxInstruction(opcode)
+                    expressionVisitor.visitMaxInstruction(opcode)
                 }
 
                 F32_COPYSIGN -> {
-                    expressionVisitor?.visitCopySignInstruction(opcode)
+                    expressionVisitor.visitCopySignInstruction(opcode)
                 }
 
                 F64_ABS -> {
-                    expressionVisitor?.visitAbsoluteInstruction(opcode)
+                    expressionVisitor.visitAbsoluteInstruction(opcode)
                 }
 
                 F64_NEG -> {
-                    expressionVisitor?.visitNegativeInstruction(opcode)
+                    expressionVisitor.visitNegativeInstruction(opcode)
                 }
 
                 F64_CEIL -> {
-                    expressionVisitor?.visitCeilingInstruction(opcode)
+                    expressionVisitor.visitCeilingInstruction(opcode)
                 }
 
                 F64_FLOOR -> {
-                    expressionVisitor?.visitFloorInstruction(opcode)
+                    expressionVisitor.visitFloorInstruction(opcode)
                 }
 
                 F64_TRUNC -> {
-                    expressionVisitor?.visitTruncateInstruction(opcode)
+                    expressionVisitor.visitTruncateInstruction(opcode)
                 }
 
                 F64_NEAREST -> {
-                    expressionVisitor?.visitNearestInstruction(opcode)
+                    expressionVisitor.visitNearestInstruction(opcode)
                 }
 
                 F64_SQRT -> {
-                    expressionVisitor?.visitSqrtInstruction(opcode)
+                    expressionVisitor.visitSqrtInstruction(opcode)
                 }
 
                 F64_ADD -> {
-                    expressionVisitor?.visitAddInstruction(opcode)
+                    expressionVisitor.visitAddInstruction(opcode)
                 }
 
                 F64_SUB -> {
-                    expressionVisitor?.visitSubtractInstruction(opcode)
+                    expressionVisitor.visitSubtractInstruction(opcode)
                 }
 
                 F64_MUL -> {
-                    expressionVisitor?.visitMultiplyInstruction(opcode)
+                    expressionVisitor.visitMultiplyInstruction(opcode)
                 }
 
                 F64_DIV -> {
-                    expressionVisitor?.visitDivideInstruction(opcode)
+                    expressionVisitor.visitDivideInstruction(opcode)
                 }
 
                 F64_MIN -> {
-                    expressionVisitor?.visitMinInstruction(opcode)
+                    expressionVisitor.visitMinInstruction(opcode)
                 }
 
                 F64_MAX -> {
-                    expressionVisitor?.visitMaxInstruction(opcode)
+                    expressionVisitor.visitMaxInstruction(opcode)
                 }
 
                 F64_COPYSIGN -> {
-                    expressionVisitor?.visitCopySignInstruction(opcode)
+                    expressionVisitor.visitCopySignInstruction(opcode)
                 }
 
                 I32_WRAP_I64 -> {
-                    expressionVisitor?.visitWrapInstruction(opcode)
+                    expressionVisitor.visitWrapInstruction(opcode)
                 }
 
                 I32_TRUNC_SF32,
                 I32_TRUNC_UF32,
                 I32_TRUNC_SF64,
                 I32_TRUNC_UF64 -> {
-                    expressionVisitor?.visitTruncateInstruction(opcode)
+                    expressionVisitor.visitTruncateInstruction(opcode)
                 }
 
                 I64_EXTEND_SI32,
                 I64_EXTEND_UI32 -> {
-                    expressionVisitor?.visitExtendInstruction(opcode)
+                    expressionVisitor.visitExtendInstruction(opcode)
                 }
 
                 I64_TRUNC_SF32,
                 I64_TRUNC_UF32,
                 I64_TRUNC_SF64,
                 I64_TRUNC_UF64 -> {
-                    expressionVisitor?.visitTruncateInstruction(opcode)
+                    expressionVisitor.visitTruncateInstruction(opcode)
                 }
 
                 F32_CONVERT_SI32,
                 F32_CONVERT_UI32,
                 F32_CONVERT_SI64,
                 F32_CONVERT_UI64 -> {
-                    expressionVisitor?.visitConvertInstruction(opcode)
+                    expressionVisitor.visitConvertInstruction(opcode)
                 }
 
                 F32_DEMOTE_F64 -> {
-                    expressionVisitor?.visitDemoteInstruction(opcode)
+                    expressionVisitor.visitDemoteInstruction(opcode)
                 }
 
                 F64_CONVERT_SI32,
                 F64_CONVERT_UI32,
                 F64_CONVERT_SI64,
                 F64_CONVERT_UI64 -> {
-                    expressionVisitor?.visitConvertInstruction(opcode)
+                    expressionVisitor.visitConvertInstruction(opcode)
                 }
 
                 F64_PROMOTE_F32 -> {
-                    expressionVisitor?.visitPromoteInstruction(opcode)
+                    expressionVisitor.visitPromoteInstruction(opcode)
                 }
 
                 I32_REINTERPRET_F32,
                 I64_REINTERPRET_F64,
                 F32_REINTERPRET_I32,
                 F64_REINTERPRET_I64 -> {
-                    expressionVisitor?.visitReinterpretInstruction(opcode)
+                    expressionVisitor.visitReinterpretInstruction(opcode)
                 }
 
                 I32_EXTEND8_S,
@@ -753,7 +752,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid opcode: ${opcode.code} not enabled.")
                     }
 
-                    expressionVisitor?.visitExtendInstruction(opcode)
+                    expressionVisitor.visitExtendInstruction(opcode)
                 }
 
                 I32_TRUNC_S_SAT_F32,
@@ -768,7 +767,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitTruncateInstruction(opcode)
+                    expressionVisitor.visitTruncateInstruction(opcode)
                 }
 
                 MEMORY_ATOMIC_NOTIFY -> {
@@ -779,7 +778,7 @@ public class ExpressionReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    expressionVisitor?.visitAtomicWakeInstruction(opcode, alignment, offset)
+                    expressionVisitor.visitAtomicWakeInstruction(opcode, alignment, offset)
                 }
 
                 MEMORY_ATOMIC_WAIT32,
@@ -791,7 +790,7 @@ public class ExpressionReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    expressionVisitor?.visitAtomicWaitInstruction(opcode, alignment, offset)
+                    expressionVisitor.visitAtomicWaitInstruction(opcode, alignment, offset)
                 }
 
                 I32_ATOMIC_LOAD,
@@ -808,7 +807,7 @@ public class ExpressionReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    expressionVisitor?.visitAtomicLoadInstruction(opcode, alignment, offset)
+                    expressionVisitor.visitAtomicLoadInstruction(opcode, alignment, offset)
                 }
 
                 I32_ATOMIC_STORE,
@@ -825,7 +824,7 @@ public class ExpressionReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    expressionVisitor?.visitAtomicStoreInstruction(opcode, alignment, offset)
+                    expressionVisitor.visitAtomicStoreInstruction(opcode, alignment, offset)
                 }
 
                 I32_ATOMIC_RMW_ADD,
@@ -842,7 +841,7 @@ public class ExpressionReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    expressionVisitor?.visitAtomicRmwAddInstruction(opcode, alignment, offset)
+                    expressionVisitor.visitAtomicRmwAddInstruction(opcode, alignment, offset)
                 }
 
                 I32_ATOMIC_RMW_SUB,
@@ -859,7 +858,7 @@ public class ExpressionReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    expressionVisitor?.visitAtomicRmwSubtractInstruction(opcode, alignment, offset)
+                    expressionVisitor.visitAtomicRmwSubtractInstruction(opcode, alignment, offset)
                 }
 
                 I32_ATOMIC_RMW_AND,
@@ -876,7 +875,7 @@ public class ExpressionReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    expressionVisitor?.visitAtomicRmwAndInstruction(opcode, alignment, offset)
+                    expressionVisitor.visitAtomicRmwAndInstruction(opcode, alignment, offset)
                 }
 
                 I32_ATOMIC_RMW_OR,
@@ -893,7 +892,7 @@ public class ExpressionReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    expressionVisitor?.visitAtomicRmwOrInstruction(opcode, alignment, offset)
+                    expressionVisitor.visitAtomicRmwOrInstruction(opcode, alignment, offset)
                 }
 
                 I32_ATOMIC_RMW_XOR,
@@ -910,7 +909,7 @@ public class ExpressionReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    expressionVisitor?.visitAtomicRmwXorInstruction(opcode, alignment, offset)
+                    expressionVisitor.visitAtomicRmwXorInstruction(opcode, alignment, offset)
                 }
 
                 I32_ATOMIC_RMW_XCHG,
@@ -927,7 +926,7 @@ public class ExpressionReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    expressionVisitor?.visitAtomicRmwExchangeInstruction(opcode, alignment, offset)
+                    expressionVisitor.visitAtomicRmwExchangeInstruction(opcode, alignment, offset)
                 }
 
                 I32_ATOMIC_RMW_CMPXCHG,
@@ -944,7 +943,7 @@ public class ExpressionReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    expressionVisitor?.visitAtomicRmwCompareExchangeInstruction(opcode, alignment, offset)
+                    expressionVisitor.visitAtomicRmwCompareExchangeInstruction(opcode, alignment, offset)
                 }
 
                 V128_CONST -> {
@@ -954,7 +953,7 @@ public class ExpressionReader(
 
                     val value: V128Value = source.readV128()
 
-                    expressionVisitor?.visitSimdConstInstruction(value)
+                    expressionVisitor.visitSimdConstInstruction(value)
                 }
 
                 V128_LOAD -> {
@@ -965,7 +964,7 @@ public class ExpressionReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    expressionVisitor?.visitSimdLoadInstruction(opcode, alignment, offset)
+                    expressionVisitor.visitSimdLoadInstruction(opcode, alignment, offset)
                 }
 
                 V128_STORE -> {
@@ -976,7 +975,7 @@ public class ExpressionReader(
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
-                    expressionVisitor?.visitSimdStoreInstruction(opcode, alignment, offset)
+                    expressionVisitor.visitSimdStoreInstruction(opcode, alignment, offset)
                 }
 
                 I8X16_SPLAT,
@@ -991,7 +990,7 @@ public class ExpressionReader(
 
                     val value = source.readVarUInt32()
 
-                    expressionVisitor?.visitSimdSplatInstruction(opcode, value)
+                    expressionVisitor.visitSimdSplatInstruction(opcode, value)
                 }
 
                 I8X16_EXTRACT_LANE_S,
@@ -1007,7 +1006,7 @@ public class ExpressionReader(
                     }
 
                     val index = source.readIndex()
-                    expressionVisitor?.visitSimdExtractLaneInstruction(opcode, index)
+                    expressionVisitor.visitSimdExtractLaneInstruction(opcode, index)
                 }
 
                 I8X16_REPLACE_LANE,
@@ -1021,7 +1020,7 @@ public class ExpressionReader(
                     }
 
                     val index = source.readIndex()
-                    expressionVisitor?.visitSimdReplaceLaneInstruction(opcode, index)
+                    expressionVisitor.visitSimdReplaceLaneInstruction(opcode, index)
                 }
 
                 V8X16_SHUFFLE -> {
@@ -1035,7 +1034,7 @@ public class ExpressionReader(
                         lanesIndex[i.toInt()] = source.readVarUInt32()
                     }
 
-                    expressionVisitor?.visitSimdShuffleInstruction(opcode, V128Value(lanesIndex))
+                    expressionVisitor.visitSimdShuffleInstruction(opcode, V128Value(lanesIndex))
                 }
 
                 I8X16_ADD,
@@ -1046,7 +1045,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdAddInstruction(opcode)
+                    expressionVisitor.visitSimdAddInstruction(opcode)
                 }
 
                 I8X16_SUB,
@@ -1057,7 +1056,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdSubtractInstruction(opcode)
+                    expressionVisitor.visitSimdSubtractInstruction(opcode)
                 }
 
                 I8X16_MUL,
@@ -1067,7 +1066,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdMultiplyInstruction(opcode)
+                    expressionVisitor.visitSimdMultiplyInstruction(opcode)
                 }
 
                 I8X16_NEG,
@@ -1078,7 +1077,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdNegativeInstruction(opcode)
+                    expressionVisitor.visitSimdNegativeInstruction(opcode)
                 }
 
                 I8X16_ADD_SATURATE_S,
@@ -1089,7 +1088,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdAddSaturateInstruction(opcode)
+                    expressionVisitor.visitSimdAddSaturateInstruction(opcode)
                 }
 
                 I8X16_SUB_SATURATE_S,
@@ -1100,7 +1099,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdSubtractSaturateInstruction(opcode)
+                    expressionVisitor.visitSimdSubtractSaturateInstruction(opcode)
                 }
 
                 I8X16_SHL,
@@ -1119,7 +1118,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdShiftLeftInstruction(opcode)
+                    expressionVisitor.visitSimdShiftLeftInstruction(opcode)
                 }
 
                 V128_AND -> {
@@ -1127,7 +1126,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdAndInstruction(opcode)
+                    expressionVisitor.visitSimdAndInstruction(opcode)
                 }
 
                 V128_OR -> {
@@ -1135,7 +1134,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdOrInstruction(opcode)
+                    expressionVisitor.visitSimdOrInstruction(opcode)
                 }
 
                 V128_XOR -> {
@@ -1143,7 +1142,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdXorInstruction(opcode)
+                    expressionVisitor.visitSimdXorInstruction(opcode)
                 }
 
                 V128_NOT -> {
@@ -1151,7 +1150,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid V128Value code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdNotInstruction(opcode)
+                    expressionVisitor.visitSimdNotInstruction(opcode)
                 }
 
                 V128_BITSELECT -> {
@@ -1159,7 +1158,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid V128Value code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdBitSelectInstruction(opcode)
+                    expressionVisitor.visitSimdBitSelectInstruction(opcode)
                 }
 
                 I8X16_ANY_TRUE,
@@ -1174,7 +1173,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdAllTrueInstruction(opcode)
+                    expressionVisitor.visitSimdAllTrueInstruction(opcode)
                 }
 
                 I8X16_EQ,
@@ -1186,7 +1185,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdEqualInstruction(opcode)
+                    expressionVisitor.visitSimdEqualInstruction(opcode)
                 }
 
                 I8X16_NE,
@@ -1198,7 +1197,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdNotEqualInstruction(opcode)
+                    expressionVisitor.visitSimdNotEqualInstruction(opcode)
                 }
 
                 I8X16_LT_S,
@@ -1213,7 +1212,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdLessThanInstruction(opcode)
+                    expressionVisitor.visitSimdLessThanInstruction(opcode)
                 }
 
                 I8X16_LE_S,
@@ -1228,7 +1227,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdLessEqualInstruction(opcode)
+                    expressionVisitor.visitSimdLessEqualInstruction(opcode)
                 }
 
                 I8X16_GT_S,
@@ -1243,7 +1242,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdGreaterThanInstruction(opcode)
+                    expressionVisitor.visitSimdGreaterThanInstruction(opcode)
                 }
 
                 I8X16_GE_S,
@@ -1258,7 +1257,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdGreaterEqualInstruction(opcode)
+                    expressionVisitor.visitSimdGreaterEqualInstruction(opcode)
                 }
 
                 F32X4_NEG,
@@ -1267,7 +1266,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdNegativeInstruction(opcode)
+                    expressionVisitor.visitSimdNegativeInstruction(opcode)
                 }
 
                 F32X4_ABS,
@@ -1276,7 +1275,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdAbsInstruction(opcode)
+                    expressionVisitor.visitSimdAbsInstruction(opcode)
                 }
 
                 F32X4_MIN,
@@ -1285,7 +1284,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdMinInstruction(opcode)
+                    expressionVisitor.visitSimdMinInstruction(opcode)
                 }
 
                 F32X4_MAX,
@@ -1294,7 +1293,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdMaxInstruction(opcode)
+                    expressionVisitor.visitSimdMaxInstruction(opcode)
                 }
 
                 F32X4_ADD,
@@ -1303,7 +1302,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdAddInstruction(opcode)
+                    expressionVisitor.visitSimdAddInstruction(opcode)
                 }
 
                 F32X4_SUB,
@@ -1312,7 +1311,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdSubtractInstruction(opcode)
+                    expressionVisitor.visitSimdSubtractInstruction(opcode)
                 }
 
                 F32X4_DIV,
@@ -1321,7 +1320,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdDivideInstruction(opcode)
+                    expressionVisitor.visitSimdDivideInstruction(opcode)
                 }
 
                 F32X4_MUL,
@@ -1330,7 +1329,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdMultiplyInstruction(opcode)
+                    expressionVisitor.visitSimdMultiplyInstruction(opcode)
                 }
 
                 F32X4_SQRT,
@@ -1339,7 +1338,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdSqrtInstruction(opcode)
+                    expressionVisitor.visitSimdSqrtInstruction(opcode)
                 }
 
                 F32X4_CONVERT_S_I32X4,
@@ -1350,7 +1349,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdConvertInstruction(opcode)
+                    expressionVisitor.visitSimdConvertInstruction(opcode)
                 }
 
                 I32X4_TRUNC_S_F32X4_SAT,
@@ -1361,7 +1360,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid SIMD code: SIMD support not enabled.")
                     }
 
-                    expressionVisitor?.visitSimdTruncateInstruction(opcode)
+                    expressionVisitor.visitSimdTruncateInstruction(opcode)
                 }
 
                 MEMORY_FILL -> {
@@ -1371,7 +1370,7 @@ public class ExpressionReader(
 
                     val memoryIndex = source.readVarUInt32()
 
-                    expressionVisitor?.visitMemoryFillInstruction(memoryIndex)
+                    expressionVisitor.visitMemoryFillInstruction(memoryIndex)
                 }
 
                 MEMORY_COPY -> {
@@ -1382,7 +1381,7 @@ public class ExpressionReader(
                     val targetIndex = source.readVarUInt32()
                     val sourceIndex = source.readVarUInt32()
 
-                    expressionVisitor?.visitMemoryCopyInstruction(targetIndex, sourceIndex)
+                    expressionVisitor.visitMemoryCopyInstruction(targetIndex, sourceIndex)
                 }
 
                 MEMORY_INIT -> {
@@ -1393,7 +1392,7 @@ public class ExpressionReader(
                     val segmentIndex = source.readVarUInt32()
                     val memoryIndex = source.readVarUInt32()
 
-                    expressionVisitor?.visitMemoryInitInstruction(memoryIndex, segmentIndex)
+                    expressionVisitor.visitMemoryInitInstruction(memoryIndex, segmentIndex)
                 }
 
                 TABLE_INIT -> {
@@ -1404,7 +1403,7 @@ public class ExpressionReader(
                     val segmentIndex = source.readVarUInt32()
                     val tableIndex = source.readVarUInt32()
 
-                    expressionVisitor?.visitTableInitInstruction(segmentIndex, tableIndex)
+                    expressionVisitor.visitTableInitInstruction(segmentIndex, tableIndex)
                 }
 
                 DATA_DROP -> {
@@ -1414,7 +1413,7 @@ public class ExpressionReader(
 
                     val segmentIndex = source.readVarUInt32()
 
-                    expressionVisitor?.visitDataDropInstruction(segmentIndex)
+                    expressionVisitor.visitDataDropInstruction(segmentIndex)
                 }
 
                 ELEMENT_DROP -> {
@@ -1424,7 +1423,7 @@ public class ExpressionReader(
 
                     val segmentIndex = source.readVarUInt32()
 
-                    expressionVisitor?.visitElementDropInstruction(segmentIndex)
+                    expressionVisitor.visitElementDropInstruction(segmentIndex)
                 }
 
                 TABLE_SIZE -> {
@@ -1435,7 +1434,7 @@ public class ExpressionReader(
                     val tableIndex = source.readVarUInt32()
                     // TODO check table index
 
-                    expressionVisitor?.visitTableSizeInstruction(tableIndex)
+                    expressionVisitor.visitTableSizeInstruction(tableIndex)
                 }
 
                 TABLE_GROW -> {
@@ -1449,7 +1448,7 @@ public class ExpressionReader(
                     val value = source.readVarUInt32()
                     val delta = source.readVarUInt32()
 
-                    expressionVisitor?.visitTableGrowInstruction(tableIndex, value, delta)
+                    expressionVisitor.visitTableGrowInstruction(tableIndex, value, delta)
                 }
 
                 TABLE_FILL -> {
@@ -1460,7 +1459,7 @@ public class ExpressionReader(
                     val tableIndex = source.readVarUInt32()
                     // TODO check table index
 
-                    expressionVisitor?.visitTableFillInstruction(tableIndex)
+                    expressionVisitor.visitTableFillInstruction(tableIndex)
                 }
 
                 TABLE_COPY -> {
@@ -1473,7 +1472,7 @@ public class ExpressionReader(
                     val sourceTableIndex = source.readVarUInt32()
                     // TODO check table index
 
-                    expressionVisitor?.visitTableCopyInstruction(targetTableIndex, sourceTableIndex)
+                    expressionVisitor.visitTableCopyInstruction(targetTableIndex, sourceTableIndex)
                 }
 
                 CALL_REF -> {
@@ -1620,10 +1619,6 @@ public class ExpressionReader(
                     TODO()
                 }
             }
-        }
-
-        if (numberOfInstructions > WasmBinary.MAX_FUNCTION_INSTRUCTIONS) {
-            throw ParserException("Number of function locals $numberOfInstructions exceed the maximum of ${WasmBinary.MAX_FUNCTION_LOCALS}")
         }
 
         if (!seenEndOpcode) {

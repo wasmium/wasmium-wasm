@@ -39,9 +39,6 @@ public class ReaderContext(
     /** Total number of exports. */
     public var numberOfExports: UInt = 0u
 
-    /** Total number of elements. */
-    public var numberOfElementSegments: UInt = 0u
-
     /** Total number of exceptions. */
     public var numberOfExceptions: UInt = 0u
 

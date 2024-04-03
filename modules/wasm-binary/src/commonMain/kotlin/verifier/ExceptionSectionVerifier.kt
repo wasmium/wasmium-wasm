@@ -11,6 +11,9 @@ public class ExceptionSectionVerifier(private val delegate: ExceptionSectionVisi
     override fun visitExceptionType(types: List<WasmType>) {
         checkEnd()
 
+        if (types.size.toUInt() > WasmBinary.MAX_EXCEPTION_TYPES) {
+            throw VerifierException("Number of exception types ${types.size} exceed the maximum of ${WasmBinary.MAX_EXCEPTION_TYPES}")
+        }
         numberOfExceptions++
 
         delegate.visitExceptionType(types)
