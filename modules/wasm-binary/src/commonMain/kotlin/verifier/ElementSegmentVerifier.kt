@@ -4,7 +4,7 @@ import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary.MAX_ELEMENT_SEGMENT_FUNCTION_INDEXES
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.ElementSegmentVisitor
-import org.wasmium.wasm.binary.visitors.InitializerExpressionVisitor
+import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
 public class ElementSegmentVerifier(private val delegate: ElementSegmentVisitor, private val context: VerifierContext) : ElementSegmentVisitor {
     private var done: Boolean = false
@@ -25,14 +25,14 @@ public class ElementSegmentVerifier(private val delegate: ElementSegmentVisitor,
         delegate.visitNonActiveMode(passive)
     }
 
-    override fun visitActiveMode(tableIndex: UInt): InitializerExpressionVisitor {
+    override fun visitActiveMode(tableIndex: UInt): ExpressionVisitor {
         checkEnd()
 
         if (tableIndex != 0u) {
             throw ParserException("Table elements must refer to table 0.")
         }
 
-        return InitializerExpressionVerifier(delegate.visitInitializerExpression(), context)
+        return ExpressionVerifier(delegate.visitexpression(), context)
     }
 
     override fun visitType(type: WasmType) {
@@ -45,10 +45,10 @@ public class ElementSegmentVerifier(private val delegate: ElementSegmentVisitor,
         delegate.visitType(type)
     }
 
-    override fun visitInitializerExpression(): InitializerExpressionVisitor {
+    override fun visitexpression(): ExpressionVisitor {
         checkEnd()
 
-        return InitializerExpressionVerifier(delegate.visitInitializerExpression(), context)
+        return ExpressionVerifier(delegate.visitexpression(), context)
     }
 
     override fun visitEnd() {

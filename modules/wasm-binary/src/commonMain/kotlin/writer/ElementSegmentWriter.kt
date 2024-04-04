@@ -8,7 +8,7 @@ import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.ElementKind
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.ElementSegmentVisitor
-import org.wasmium.wasm.binary.visitors.InitializerExpressionVisitor
+import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
 public class ElementSegmentWriter(
     private val context: WriterContext,
@@ -30,13 +30,13 @@ public class ElementSegmentWriter(
         }
     }
 
-    public override fun visitActiveMode(tableIndex: UInt): InitializerExpressionVisitor {
+    public override fun visitActiveMode(tableIndex: UInt): ExpressionVisitor {
         if (tableIndex != 0u) {
             elementType = elementType or ELEMENT_TABLE_INDEX.toUInt()
             this.tableIndex = tableIndex
         }
 
-        return InitializerExpressionWriter(context, offsetBody)
+        return ExpressionWriter(context, offsetBody)
     }
 
     override fun visitType(type: WasmType) {
@@ -44,12 +44,12 @@ public class ElementSegmentWriter(
         this.type = type
     }
 
-    public override fun visitInitializerExpression(): InitializerExpressionVisitor {
+    public override fun visitexpression(): ExpressionVisitor {
         elementType = elementType or ELEMENT_EXPRESSIONS.toUInt()
 
         numberOfExpressions++
 
-        return InitializerExpressionWriter(context, expressionsBody)
+        return ExpressionWriter(context, expressionsBody)
     }
 
     public override fun visitElementIndices(elementIndices: List<UInt>) {

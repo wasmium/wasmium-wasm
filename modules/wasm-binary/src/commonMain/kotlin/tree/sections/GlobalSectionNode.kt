@@ -2,8 +2,8 @@ package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.WasmType
+import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
-import org.wasmium.wasm.binary.visitors.InitializerExpressionVisitor
 
 public class GlobalSectionNode : SectionNode(SectionKind.GLOBAL), GlobalSectionVisitor {
     public val globals: MutableList<GlobalVariableNode> = mutableListOf()
@@ -17,13 +17,13 @@ public class GlobalSectionNode : SectionNode(SectionKind.GLOBAL), GlobalSectionV
         globalSectionVisitor.visitEnd()
     }
 
-    public override fun visitGlobalVariable(type: WasmType, mutable: Boolean): InitializerExpressionVisitor {
+    public override fun visitGlobalVariable(type: WasmType, mutable: Boolean): ExpressionVisitor {
         val globalVariable = GlobalTypeNode(type, mutable)
-        val initializerExpressionNode = InitializerExpressionNode()
+        val expressionNode = ExpressionNode()
 
-        globals.add(GlobalVariableNode(globalVariable, initializerExpressionNode))
+        globals.add(GlobalVariableNode(globalVariable, expressionNode))
 
-        return initializerExpressionNode
+        return expressionNode
     }
 
     public override fun visitEnd() {

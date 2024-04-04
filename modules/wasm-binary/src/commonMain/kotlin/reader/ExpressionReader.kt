@@ -30,7 +30,6 @@ public class ExpressionReader(
                     --depth
 
                     if (depth <= 0u) {
-                        expressionVisitor.visitEnd()
                         return
                     } else {
                         expressionVisitor.visitEndInstruction()

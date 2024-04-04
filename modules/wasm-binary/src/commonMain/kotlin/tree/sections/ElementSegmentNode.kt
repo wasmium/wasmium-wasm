@@ -2,10 +2,10 @@ package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.ElementSegmentVisitor
-import org.wasmium.wasm.binary.visitors.InitializerExpressionVisitor
+import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
 public class ElementSegmentNode : ElementSegmentVisitor {
-    public var initializers: MutableList<InitializerExpressionNode> = mutableListOf()
+    public var initializers: MutableList<ExpressionNode> = mutableListOf()
 
     public var elementIndices: MutableList<UInt> = mutableListOf()
 
@@ -16,7 +16,7 @@ public class ElementSegmentNode : ElementSegmentVisitor {
     public var tableIndex: UInt? = null
 
     /** The offset expression of an active element segment, or `null` if it is not active. */
-    public var offsetExpression: InitializerExpressionNode? = null
+    public var offsetExpression: ExpressionNode? = null
 
     /** Whether the element segment is passive, if it is not active. True if passive, false if declarative, ignored if active. */
     public var passive: Boolean = false
@@ -37,8 +37,8 @@ public class ElementSegmentNode : ElementSegmentVisitor {
             elementSegmentVisitor.visitElementIndices(elementIndices)
         } else if (initializers.isNotEmpty()) {
             for (initializer in initializers) {
-                val initializerExpressionVisitor = elementSegmentVisitor.visitInitializerExpression()
-                initializer.accept(initializerExpressionVisitor)
+                val expressionVisitor = elementSegmentVisitor.visitexpression()
+                initializer.accept(expressionVisitor)
             }
         }
 
@@ -53,10 +53,10 @@ public class ElementSegmentNode : ElementSegmentVisitor {
         this.passive = passive
     }
 
-    override fun visitActiveMode(tableIndex: UInt): InitializerExpressionVisitor {
+    override fun visitActiveMode(tableIndex: UInt): ExpressionVisitor {
         this.tableIndex = tableIndex
 
-        this.offsetExpression = InitializerExpressionNode()
+        this.offsetExpression = ExpressionNode()
 
         return this.offsetExpression!!
     }
@@ -65,8 +65,8 @@ public class ElementSegmentNode : ElementSegmentVisitor {
         this.type = type
     }
 
-    override fun visitInitializerExpression(): InitializerExpressionVisitor {
-        val initializer = InitializerExpressionNode()
+    override fun visitexpression(): ExpressionVisitor {
+        val initializer = ExpressionNode()
 
         initializers.add(initializer)
 

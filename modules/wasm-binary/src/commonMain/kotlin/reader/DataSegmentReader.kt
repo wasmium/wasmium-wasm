@@ -7,7 +7,7 @@ import org.wasmium.wasm.binary.visitors.DataSectionVisitor
 
 public class DataSegmentReader(
     private val context: ReaderContext,
-    private val initializerExpressionReader: InitializerExpressionReader = InitializerExpressionReader(context)
+    private val expressionReader: ExpressionReader = ExpressionReader(context)
 ) {
     public fun readDataSegment(source: WasmBinaryReader, dataVisitor: DataSectionVisitor) {
         val startIndex = source.position
@@ -18,9 +18,9 @@ public class DataSegmentReader(
         if (dataType and WasmBinary.DATA_PASSIVE.toUInt() == 0u) {
             val memoryIndex = if ((dataType and WasmBinary.DATA_EXPLICIT.toUInt()) == 0u) 0u else source.readVarUInt32()
 
-            val initializerExpressionVisitor = dataSegmentVisitor.visitActive(memoryIndex)
-            initializerExpressionReader.readInitExpression(source, initializerExpressionVisitor, true)
-            initializerExpressionVisitor.visitEnd()
+            val expressionVisitor = dataSegmentVisitor.visitActive(memoryIndex)
+            expressionReader.readExpression(source, expressionVisitor)
+            expressionVisitor.visitEnd()
         }
 
         val dataSize = source.readVarUInt32()

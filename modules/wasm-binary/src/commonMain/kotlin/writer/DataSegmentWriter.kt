@@ -3,7 +3,7 @@ package org.wasmium.wasm.binary.writer
 import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.visitors.DataSegmentVisitor
-import org.wasmium.wasm.binary.visitors.InitializerExpressionVisitor
+import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
 public class DataSegmentWriter(
     private val context: WriterContext,
@@ -11,10 +11,10 @@ public class DataSegmentWriter(
 ) : DataSegmentVisitor {
     private val dataSegmentBuffer: ByteBuffer = ByteBuffer()
 
-    public override fun visitActive(memoryIndex: UInt): InitializerExpressionVisitor {
+    public override fun visitActive(memoryIndex: UInt): ExpressionVisitor {
         WasmBinaryWriter(dataSegmentBuffer).writeVarUInt32(memoryIndex)
 
-        return InitializerExpressionWriter(context, dataSegmentBuffer)
+        return ExpressionWriter(context, dataSegmentBuffer)
     }
 
     public override fun visitData(data: ByteArray) {

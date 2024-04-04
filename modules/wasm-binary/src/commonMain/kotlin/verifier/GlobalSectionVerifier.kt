@@ -2,20 +2,20 @@ package org.wasmium.wasm.binary.verifier
 
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.tree.WasmType
+import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
-import org.wasmium.wasm.binary.visitors.InitializerExpressionVisitor
 
 public class GlobalSectionVerifier(private val delegate: GlobalSectionVisitor, private val context: VerifierContext) : GlobalSectionVisitor {
     private var done: Boolean = false
 
-    override fun visitGlobalVariable(type: WasmType, mutable: Boolean): InitializerExpressionVisitor {
+    override fun visitGlobalVariable(type: WasmType, mutable: Boolean): ExpressionVisitor {
         checkEnd()
 
         context.numberOfGlobals++
 
         context.mutableGlobals.add(mutable)
 
-        return InitializerExpressionVerifier(delegate.visitGlobalVariable(type, mutable), context)
+        return ExpressionVerifier(delegate.visitGlobalVariable(type, mutable), context)
     }
 
     override fun visitEnd() {

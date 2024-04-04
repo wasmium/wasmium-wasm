@@ -13,7 +13,7 @@ import org.wasmium.wasm.binary.visitors.ElementSectionVisitor
 
 public class ElementSegmentReader(
     private val context: ReaderContext,
-    private val initializerExpressionReader: InitializerExpressionReader = InitializerExpressionReader(context),
+    private val expressionReader: ExpressionReader = ExpressionReader(context),
 ) {
     public fun readElementSegment(source: WasmBinaryReader, elementVisitor: ElementSectionVisitor) {
         val startIndex = source.position
@@ -30,9 +30,9 @@ public class ElementSegmentReader(
         } else {
             val tableIndex = if ((elementType and ELEMENT_TABLE_INDEX.toUInt()) != 0u) source.readIndex() else 0u
 
-            val initializerExpressionVisitor = elementSegmentVisitor.visitActiveMode(tableIndex)
-            initializerExpressionReader.readInitExpression(source, initializerExpressionVisitor, true)
-            initializerExpressionVisitor.visitEnd()
+            val expressionVisitor = elementSegmentVisitor.visitActiveMode(tableIndex)
+            expressionReader.readExpression(source, expressionVisitor)
+            expressionVisitor.visitEnd()
         }
 
         val implicitFuncRef = (elementType and 0b011u) == 0u
@@ -44,9 +44,9 @@ public class ElementSegmentReader(
 
             val initLength = source.readVarUInt32()
             (0u until initLength).forEach { _ ->
-                val initializerExpressionVisitor = elementSegmentVisitor.visitInitializerExpression()
-                initializerExpressionReader.readInitExpression(source, initializerExpressionVisitor, true)
-                initializerExpressionVisitor.visitEnd()
+                val expressionVisitor = elementSegmentVisitor.visitexpression()
+                expressionReader.readExpression(source, expressionVisitor)
+                expressionVisitor.visitEnd()
             }
         } else {
             if (!implicitFuncRef) {

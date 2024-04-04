@@ -6,7 +6,7 @@ import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
 
 public class GlobalVariableReader(
     private val context: ReaderContext,
-    private val initializerExpressionReader: InitializerExpressionReader = InitializerExpressionReader(context),
+    private val expressionReader: ExpressionReader = ExpressionReader(context),
 ) {
     public fun readGlobalVariable(source: WasmBinaryReader, index: UInt, globalVisitor: GlobalSectionVisitor) {
         val globalIndex = context.numberOfGlobalImports + index
@@ -18,8 +18,8 @@ public class GlobalVariableReader(
 
         val mutable = source.readVarUInt1() == 1u
 
-        val initializerExpressionVisitor = globalVisitor.visitGlobalVariable(contentType, mutable)
-        initializerExpressionReader.readInitExpression(source, initializerExpressionVisitor, false)
-        initializerExpressionVisitor.visitEnd()
+        val expressionVisitor = globalVisitor.visitGlobalVariable(contentType, mutable)
+        expressionReader.readExpression(source, expressionVisitor)
+        expressionVisitor.visitEnd()
     }
 }

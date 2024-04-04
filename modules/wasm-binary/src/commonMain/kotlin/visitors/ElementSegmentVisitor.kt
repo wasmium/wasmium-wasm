@@ -8,11 +8,11 @@ public interface ElementSegmentVisitor {
 
     public fun visitNonActiveMode(passive: Boolean)
 
-    public fun visitActiveMode(tableIndex: UInt): InitializerExpressionVisitor
+    public fun visitActiveMode(tableIndex: UInt): ExpressionVisitor
 
     public fun visitType(type: WasmType)
 
-    public fun visitInitializerExpression(): InitializerExpressionVisitor
+    public fun visitexpression(): ExpressionVisitor
 
     public fun visitEnd()
 }
