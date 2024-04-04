@@ -42,20 +42,15 @@ public class ReaderContext(
     /** Total number of exceptions. */
     public var numberOfExceptions: UInt = 0u
 
-    public val numberOfTotalFunctions: UInt
-        get() = numberOfFunctionImports + numberOfFunctions
+    public val numberOfTotalFunctions: UInt get() = numberOfFunctionImports + numberOfFunctions
 
-    public val numberOfTotalTables: UInt
-        get() = numberOfTableImports + numberOfTables
+    public val numberOfTotalTables: UInt get() = numberOfTableImports + numberOfTables
 
-    public val numberTotalMemories: UInt
-        get() = numberOfMemoryImports + numberOfMemories
+    public val numberTotalMemories: UInt get() = numberOfMemoryImports + numberOfMemories
 
-    public val numberOfTotalGlobals: UInt
-        get() = numberOfGlobalImports + numberOfGlobals
+    public val numberOfTotalGlobals: UInt get() = numberOfGlobalImports + numberOfGlobals
 
-    public val numberOfTotalExceptions: UInt
-        get() = numberOfExceptionImports + numberOfExceptions
+    public val numberOfTotalExceptions: UInt get() = numberOfExceptionImports + numberOfExceptions
 
     public var nameOfSectionConsumed: Boolean = false
 

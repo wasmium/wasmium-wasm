@@ -12,7 +12,7 @@ public class GlobalSectionReader(
 
         val globalVisitor = visitor.visitGlobalSection()
         for (index in 0u until context.numberOfGlobals) {
-            globalVariableReader.readGlobalVariable(source, index, globalVisitor)
+            globalVariableReader.readGlobalVariable(source, globalVisitor)
         }
 
         globalVisitor.visitEnd()

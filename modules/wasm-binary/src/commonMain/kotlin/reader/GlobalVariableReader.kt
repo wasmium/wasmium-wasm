@@ -8,9 +8,7 @@ public class GlobalVariableReader(
     private val context: ReaderContext,
     private val expressionReader: ExpressionReader = ExpressionReader(context),
 ) {
-    public fun readGlobalVariable(source: WasmBinaryReader, index: UInt, globalVisitor: GlobalSectionVisitor) {
-        val globalIndex = context.numberOfGlobalImports + index
-
+    public fun readGlobalVariable(source: WasmBinaryReader, globalVisitor: GlobalSectionVisitor) {
         val contentType = source.readType()
         if (!contentType.isValueType()) {
             throw ParserException("Invalid global type: %#$contentType")
