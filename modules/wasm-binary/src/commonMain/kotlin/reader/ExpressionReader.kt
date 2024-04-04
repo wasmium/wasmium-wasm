@@ -12,17 +12,11 @@ import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 public class ExpressionReader(
     private val context: ReaderContext,
 ) {
-    public fun readExpression(source: WasmBinaryReader, bodySize: UInt, expressionVisitor: ExpressionVisitor) {
-        val endBodyPosition = source.position + bodySize
+    public fun readExpression(source: WasmBinaryReader, expressionVisitor: ExpressionVisitor) {
+        var depth = 1u
 
-        var seenEndOpcode = false
-        var numberOfInstructions = 0u
-        while (endBodyPosition - source.position > 0u) {
+        while (true) {
             val opcode = source.readOpcode()
-
-            numberOfInstructions++
-            seenEndOpcode = false
-
             when (opcode) {
                 UNREACHABLE -> {
                     expressionVisitor.visitUnreachableInstruction()
@@ -32,37 +26,51 @@ public class ExpressionReader(
                     expressionVisitor.visitNopInstruction()
                 }
 
+                END -> {
+                    --depth
+
+                    if (depth <= 0u) {
+                        expressionVisitor.visitEnd()
+                        return
+                    } else {
+                        expressionVisitor.visitEndInstruction()
+                    }
+                }
+
                 BLOCK -> {
                     val type = source.readType()
-
                     if (!type.isInlineType()) {
                         throw ParserException("Expected valid block signature type")
                     }
 
                     val blockType = if (type != WasmType.NONE) arrayOf(type) else arrayOf(WasmType.NONE)
                     expressionVisitor.visitBlockInstruction(blockType)
+
+                    ++depth
                 }
 
                 LOOP -> {
                     val type = source.readType()
-
                     if (!type.isInlineType()) {
                         throw ParserException("Expected valid block signature type")
                     }
 
                     val blockType = if (type != WasmType.NONE) arrayOf(type) else arrayOf(WasmType.NONE)
                     expressionVisitor.visitLoopInstruction(blockType)
+
+                    ++depth
                 }
 
                 IF -> {
                     val type = source.readType()
-
                     if (!type.isInlineType()) {
                         throw ParserException("Expected valid block signature type")
                     }
 
                     val blockType = if (type != WasmType.NONE) arrayOf(type) else arrayOf(WasmType.NONE)
                     expressionVisitor.visitIfInstruction(blockType)
+
+                    ++depth
                 }
 
                 ELSE -> {
@@ -80,7 +88,6 @@ public class ExpressionReader(
                     }
 
                     val blockType = if (type != WasmType.NONE) arrayOf(type) else arrayOf(WasmType.NONE)
-
                     expressionVisitor.visitTryInstruction(blockType)
                 }
 
@@ -119,15 +126,6 @@ public class ExpressionReader(
                     }
 
                     expressionVisitor.visitThrowRefInstruction()
-                }
-
-                END -> {
-                    if (endBodyPosition == source.position) {
-                        seenEndOpcode = true
-                        expressionVisitor.visitEndFunctionInstruction()
-                    } else {
-                        expressionVisitor.visitEndInstruction()
-                    }
                 }
 
                 BR -> {
@@ -1619,10 +1617,6 @@ public class ExpressionReader(
                     TODO()
                 }
             }
-        }
-
-        if (!seenEndOpcode) {
-            throw ParserException("Function Body must end with END opcode")
         }
     }
 }

@@ -57,10 +57,6 @@ public class ExpressionNode : ExpressionVisitor {
         instructions.add(EndInstruction())
     }
 
-    public override fun visitEndFunctionInstruction() {
-        instructions.add(EndInstruction())
-    }
-
     public override fun visitConstFloat32Instruction(value: Float) {
         instructions.add(ConstFloat32Instruction(value))
     }

@@ -82,14 +82,6 @@ public class ExpressionVerifier(private val delegate: ExpressionVisitor, private
         delegate.visitEndInstruction()
     }
 
-    override fun visitEndFunctionInstruction() {
-        checkEnd()
-
-        numberOfInstructions++
-
-        delegate.visitEndFunctionInstruction()
-    }
-
     override fun visitConstFloat32Instruction(value: Float) {
         checkEnd()
 

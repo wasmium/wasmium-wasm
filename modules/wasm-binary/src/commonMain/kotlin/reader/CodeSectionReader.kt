@@ -46,14 +46,11 @@ public class CodeSectionReader(
             }
 
             val expressionVisitor = codeVisitor.visitCode(locals)
-            val remainingSize = bodySize - (source.position - startAvailable)
-            expressionReader.readExpression(source, remainingSize, expressionVisitor)
+            expressionReader.readExpression(source, expressionVisitor)
 
             if (bodySize != source.position - startAvailable) {
                 throw ParserException("Binary offset at function exit not at expected location.")
             }
-
-            expressionVisitor.visitEnd()
         }
 
         codeVisitor.visitEnd()

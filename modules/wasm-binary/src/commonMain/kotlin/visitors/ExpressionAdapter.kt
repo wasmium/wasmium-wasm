@@ -44,10 +44,6 @@ public open class ExpressionAdapter(protected val delegate: ExpressionVisitor? =
         delegate?.visitEndInstruction()
     }
 
-    public override fun visitEndFunctionInstruction() {
-        delegate?.visitEndInstruction()
-    }
-
     public override fun visitConstFloat32Instruction(value: Float) {
         delegate?.visitConstFloat32Instruction(value)
     }

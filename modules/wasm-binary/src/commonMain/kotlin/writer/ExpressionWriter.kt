@@ -78,10 +78,6 @@ public class ExpressionWriter(
         WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.END)
     }
 
-    override fun visitEndFunctionInstruction() {
-        WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.END)
-    }
-
     override fun visitConstFloat32Instruction(value: Float) {
         WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.F32_CONST)
         WasmBinaryWriter(instructionsBuffer).writeFloat32(value)

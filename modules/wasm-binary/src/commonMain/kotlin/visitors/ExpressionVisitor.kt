@@ -26,8 +26,6 @@ public interface ExpressionVisitor {
 
     public fun visitEndInstruction()
 
-    public fun visitEndFunctionInstruction()
-
     public fun visitConstFloat32Instruction(value: Float)
 
     public fun visitConstFloat64Instruction(value: Double)
