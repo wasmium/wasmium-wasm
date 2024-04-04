@@ -617,4 +617,27 @@ public class ExpressionWriter(
         WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.ELEMENT_DROP)
         WasmBinaryWriter(instructionsBuffer).writeVarUInt32(segmentIndex)
     }
+
+    override fun visitAtomicFenceInstruction(reserved: Boolean) {
+        WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.ATOMIC_FENCE)
+        WasmBinaryWriter(instructionsBuffer).writeVarUInt32(0u)
+    }
+
+    override fun visitReferenceEqualInstruction() {
+        WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.REF_EQ)
+    }
+
+    override fun visitReferenceFunctionInstruction(functionIndex: UInt) {
+        WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.REF_FUNC)
+        WasmBinaryWriter(instructionsBuffer).writeIndex(functionIndex)
+    }
+
+    override fun visitReferenceIsNullInstruction() {
+        WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.REF_NULL)
+    }
+
+    override fun visitReferenceNullInstruction(type: WasmType) {
+        WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.REF_NULL)
+        WasmBinaryWriter(instructionsBuffer).writeType(type)
+    }
 }

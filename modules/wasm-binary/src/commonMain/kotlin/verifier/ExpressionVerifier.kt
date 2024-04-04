@@ -1010,6 +1010,46 @@ public class ExpressionVerifier(private val delegate: ExpressionVisitor, private
         delegate.visitElementDropInstruction(segmentIndex)
     }
 
+    override fun visitAtomicFenceInstruction(reserved: Boolean) {
+        checkEnd()
+
+        numberOfInstructions++
+
+        delegate.visitAtomicFenceInstruction(reserved)
+    }
+
+    override fun visitReferenceEqualInstruction() {
+        checkEnd()
+
+        numberOfInstructions++
+
+        delegate.visitReferenceEqualInstruction()
+    }
+
+    override fun visitReferenceFunctionInstruction(functionIndex: UInt) {
+        checkEnd()
+
+        numberOfInstructions++
+
+        delegate.visitReferenceFunctionInstruction(functionIndex)
+    }
+
+    override fun visitReferenceIsNullInstruction() {
+        checkEnd()
+
+        numberOfInstructions++
+
+        delegate.visitReferenceIsNullInstruction()
+    }
+
+    override fun visitReferenceNullInstruction(type: WasmType) {
+        checkEnd()
+
+        numberOfInstructions++
+
+        delegate.visitReferenceNullInstruction(type)
+    }
+
     override fun visitEnd() {
         checkEnd()
 

@@ -517,6 +517,26 @@ public class ExpressionNode : ExpressionVisitor {
         instructions.add(ElementDropInstruction(segmentIndex))
     }
 
+    override fun visitAtomicFenceInstruction(reserved: Boolean) {
+        instructions.add(AtomicFenceInstruction(reserved))
+    }
+
+    override fun visitReferenceEqualInstruction() {
+        instructions.add(ReferenceEqualInstruction())
+    }
+
+    override fun visitReferenceFunctionInstruction(functionIndex: UInt) {
+        instructions.add(ReferenceFunctionInstruction(functionIndex))
+    }
+
+    override fun visitReferenceIsNullInstruction() {
+        instructions.add(ReferenceIsNullInstruction())
+    }
+
+    override fun visitReferenceNullInstruction(type: WasmType) {
+        instructions.add(ReferenceNullInstruction(type))
+    }
+
     override fun visitTableInitInstruction(segmentIndex: UInt, tableIndex: UInt) {
         instructions.add(TableInitInstruction(segmentIndex, tableIndex))
     }

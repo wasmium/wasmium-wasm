@@ -257,4 +257,14 @@ public interface ExpressionVisitor {
     public fun visitTableCopyInstruction(targetTableIndex: UInt, sourceTableIndex: UInt)
 
     public fun visitElementDropInstruction(segmentIndex: UInt)
+
+    public fun visitAtomicFenceInstruction(reserved: Boolean)
+
+    public fun visitReferenceEqualInstruction()
+
+    public fun visitReferenceFunctionInstruction(functionIndex: UInt)
+
+    public fun visitReferenceIsNullInstruction()
+
+    public fun visitReferenceNullInstruction(type: WasmType)
 }

@@ -507,4 +507,24 @@ public open class ExpressionAdapter(protected val delegate: ExpressionVisitor? =
     public override fun visitElementDropInstruction(segmentIndex: UInt) {
         delegate?.visitElementDropInstruction(segmentIndex)
     }
+
+    override fun visitAtomicFenceInstruction(reserved: Boolean) {
+        delegate?.visitAtomicFenceInstruction(reserved)
+    }
+
+    override fun visitReferenceEqualInstruction() {
+        delegate?.visitReferenceEqualInstruction()
+    }
+
+    override fun visitReferenceFunctionInstruction(functionIndex: UInt) {
+        delegate?.visitReferenceFunctionInstruction(functionIndex)
+    }
+
+    override fun visitReferenceIsNullInstruction() {
+        delegate?.visitReferenceIsNullInstruction()
+    }
+
+    override fun visitReferenceNullInstruction(type: WasmType) {
+        delegate?.visitReferenceNullInstruction(type)
+    }
 }

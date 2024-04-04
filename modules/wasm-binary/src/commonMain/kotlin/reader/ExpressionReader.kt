@@ -747,7 +747,7 @@ public class ExpressionReader(
                 I64_EXTEND16_S,
                 I64_EXTEND32_S -> {
                     if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid opcode: ${opcode.code} not enabled.")
+                        throw ParserException("Invalid $opcode code not enabled.")
                     }
 
                     expressionVisitor.visitExtendInstruction(opcode)
@@ -762,7 +762,7 @@ public class ExpressionReader(
                 I64_TRUNC_S_SAT_F64,
                 I64_TRUNC_U_SAT_F64 -> {
                     if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
+                        throw ParserException("Invalid $opcode code: SIMD support not enabled.")
                     }
 
                     expressionVisitor.visitTruncateInstruction(opcode)
@@ -770,7 +770,7 @@ public class ExpressionReader(
 
                 MEMORY_ATOMIC_NOTIFY -> {
                     if (!context.options.features.isThreadsEnabled) {
-                        throw ParserException("Invalid wake code: threads not enabled.")
+                        throw ParserException("Invalid $opcode code: threads not enabled.")
                     }
 
                     val alignment = source.readVarUInt32()
@@ -782,7 +782,7 @@ public class ExpressionReader(
                 MEMORY_ATOMIC_WAIT32,
                 MEMORY_ATOMIC_WAIT64 -> {
                     if (!context.options.features.isThreadsEnabled) {
-                        throw ParserException("Invalid wake code: threads not enabled.")
+                        throw ParserException("Invalid $opcode code: threads not enabled.")
                     }
 
                     val alignment = source.readVarUInt32()
@@ -799,7 +799,7 @@ public class ExpressionReader(
                 I64_ATOMIC_LOAD16_U,
                 I64_ATOMIC_LOAD32_U -> {
                     if (!context.options.features.isThreadsEnabled) {
-                        throw ParserException("Invalid wake code: threads not enabled.")
+                        throw ParserException("Invalid $opcode code: threads not enabled.")
                     }
 
                     val alignment = source.readVarUInt32()
@@ -1582,7 +1582,8 @@ public class ExpressionReader(
                         throw ParserException("Invalid ref_null code: reference types not enabled.")
                     }
 
-                    TODO()
+                    val type = source.readType()
+                    expressionVisitor.visitReferenceNullInstruction(type)
                 }
 
                 REF_IS_NULL -> {
@@ -1590,7 +1591,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid ref_is_null code: reference types not enabled.")
                     }
 
-                    TODO()
+                    expressionVisitor.visitReferenceIsNullInstruction()
                 }
 
                 REF_FUNC -> {
@@ -1598,7 +1599,9 @@ public class ExpressionReader(
                         throw ParserException("Invalid ref_func code: reference types not enabled.")
                     }
 
-                    TODO()
+                    val functionIndex = source.readIndex()
+
+                    expressionVisitor.visitReferenceFunctionInstruction(functionIndex)
                 }
 
                 REF_EQ -> {
@@ -1606,7 +1609,7 @@ public class ExpressionReader(
                         throw ParserException("Invalid ref_eq code: reference types not enabled.")
                     }
 
-                    TODO()
+                    expressionVisitor.visitReferenceEqualInstruction()
                 }
 
                 ATOMIC_FENCE -> {
@@ -1614,7 +1617,12 @@ public class ExpressionReader(
                         throw ParserException("Invalid atomic.fence code: threads not enabled.")
                     }
 
-                    TODO()
+                    val reserved = source.readVarUInt32()
+                    if (reserved != 0u) {
+                        throw ParserException("$opcode reserved value must be 0")
+                    }
+
+                    expressionVisitor.visitAtomicFenceInstruction(reserved = false)
                 }
             }
         }
