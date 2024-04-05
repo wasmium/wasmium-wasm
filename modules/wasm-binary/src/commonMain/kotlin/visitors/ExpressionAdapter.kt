@@ -28,7 +28,7 @@ public open class ExpressionAdapter(protected val delegate: ExpressionVisitor? =
         delegate?.visitAtomicWakeInstruction(opcode, alignment, offset)
     }
 
-    public override fun visitBrTableInstruction(targets: Array<UInt>, defaultTarget: UInt) {
+    public override fun visitBrTableInstruction(targets: List<UInt>, defaultTarget: UInt) {
         delegate?.visitBrTableInstruction(targets, defaultTarget)
     }
 
@@ -112,15 +112,15 @@ public open class ExpressionAdapter(protected val delegate: ExpressionVisitor? =
         delegate?.visitNopInstruction()
     }
 
-    public override fun visitIfInstruction(types: Array<WasmType>) {
+    public override fun visitIfInstruction(types: List<WasmType>) {
         delegate?.visitIfInstruction(types)
     }
 
-    public override fun visitLoopInstruction(types: Array<WasmType>) {
+    public override fun visitLoopInstruction(types: List<WasmType>) {
         delegate?.visitLoopInstruction(types)
     }
 
-    public override fun visitBlockInstruction(types: Array<WasmType>) {
+    public override fun visitBlockInstruction(types: List<WasmType>) {
         delegate?.visitBlockInstruction(types)
     }
 
@@ -128,7 +128,7 @@ public open class ExpressionAdapter(protected val delegate: ExpressionVisitor? =
         delegate?.visitElseInstruction()
     }
 
-    public override fun visitTryInstruction(types: Array<WasmType>) {
+    public override fun visitTryInstruction(types: List<WasmType>) {
         delegate?.visitTryInstruction(types)
     }
 

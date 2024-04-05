@@ -8,7 +8,7 @@ import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
-public class ExpressionVerifier(private val delegate: ExpressionVisitor, private val context: VerifierContext) : ExpressionVisitor {
+public open class ExpressionVerifier(private val delegate: ExpressionVisitor, private val context: VerifierContext) : ExpressionVisitor {
     private var done: Boolean = false
     private var numberOfInstructions: UInt = 0u
 
@@ -141,7 +141,7 @@ public class ExpressionVerifier(private val delegate: ExpressionVisitor, private
         delegate.visitAtomicWakeInstruction(opcode, alignment, offset)
     }
 
-    override fun visitBrTableInstruction(targets: Array<UInt>, defaultTarget: UInt) {
+    override fun visitBrTableInstruction(targets: List<UInt>, defaultTarget: UInt) {
         checkEnd()
 
         numberOfInstructions++
@@ -476,7 +476,7 @@ public class ExpressionVerifier(private val delegate: ExpressionVisitor, private
         delegate.visitNopInstruction()
     }
 
-    override fun visitIfInstruction(types: Array<WasmType>) {
+    override fun visitIfInstruction(types: List<WasmType>) {
         checkEnd()
 
         numberOfInstructions++
@@ -484,7 +484,7 @@ public class ExpressionVerifier(private val delegate: ExpressionVisitor, private
         delegate.visitIfInstruction(types)
     }
 
-    override fun visitLoopInstruction(types: Array<WasmType>) {
+    override fun visitLoopInstruction(types: List<WasmType>) {
         checkEnd()
 
         numberOfInstructions++
@@ -492,7 +492,7 @@ public class ExpressionVerifier(private val delegate: ExpressionVisitor, private
         delegate.visitLoopInstruction(types)
     }
 
-    override fun visitBlockInstruction(types: Array<WasmType>) {
+    override fun visitBlockInstruction(types: List<WasmType>) {
         checkEnd()
 
         numberOfInstructions++
@@ -508,7 +508,7 @@ public class ExpressionVerifier(private val delegate: ExpressionVisitor, private
         delegate.visitElseInstruction()
     }
 
-    override fun visitTryInstruction(types: Array<WasmType>) {
+    override fun visitTryInstruction(types: List<WasmType>) {
         checkEnd()
 
         if (!context.options.features.isExceptionHandlingEnabled) {

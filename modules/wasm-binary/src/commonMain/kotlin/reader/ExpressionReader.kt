@@ -12,7 +12,7 @@ public class ExpressionReader(
     private val context: ReaderContext,
 ) {
     public fun readExpression(source: WasmBinaryReader, expressionVisitor: ExpressionVisitor) {
-        var depth = 1u
+        var codeDepth = 1u
 
         while (true) {
             val opcode = source.readOpcode()
@@ -26,9 +26,9 @@ public class ExpressionReader(
                 }
 
                 END -> {
-                    --depth
+                    --codeDepth
 
-                    if (depth <= 0u) {
+                    if (codeDepth <= 0u) {
                         return
                     } else {
                         expressionVisitor.visitEndInstruction()
@@ -41,10 +41,10 @@ public class ExpressionReader(
                         throw ParserException("Expected valid block signature type")
                     }
 
-                    val blockType = if (type != WasmType.NONE) arrayOf(type) else arrayOf(WasmType.NONE)
+                    val blockType = if (type != WasmType.NONE) listOf(type) else listOf(WasmType.NONE)
                     expressionVisitor.visitBlockInstruction(blockType)
 
-                    ++depth
+                    ++codeDepth
                 }
 
                 LOOP -> {
@@ -53,10 +53,10 @@ public class ExpressionReader(
                         throw ParserException("Expected valid block signature type")
                     }
 
-                    val blockType = if (type != WasmType.NONE) arrayOf(type) else arrayOf(WasmType.NONE)
+                    val blockType = if (type != WasmType.NONE) listOf(type) else listOf(WasmType.NONE)
                     expressionVisitor.visitLoopInstruction(blockType)
 
-                    ++depth
+                    ++codeDepth
                 }
 
                 IF -> {
@@ -65,10 +65,10 @@ public class ExpressionReader(
                         throw ParserException("Expected valid block signature type")
                     }
 
-                    val blockType = if (type != WasmType.NONE) arrayOf(type) else arrayOf(WasmType.NONE)
+                    val blockType = if (type != WasmType.NONE) listOf(type) else listOf(WasmType.NONE)
                     expressionVisitor.visitIfInstruction(blockType)
 
-                    ++depth
+                    ++codeDepth
                 }
 
                 ELSE -> {
@@ -81,7 +81,7 @@ public class ExpressionReader(
                         throw ParserException("Expected valid block signature type")
                     }
 
-                    val blockType = if (type != WasmType.NONE) arrayOf(type) else arrayOf(WasmType.NONE)
+                    val blockType = if (type != WasmType.NONE) listOf(type) else listOf(WasmType.NONE)
                     expressionVisitor.visitTryInstruction(blockType)
                 }
 
@@ -117,12 +117,12 @@ public class ExpressionReader(
 
                 BR_TABLE -> {
                     val numberTargets = source.readVarUInt32()
-                    val targets = Array(numberTargets.toInt()) { 0u }
+                    val targets = mutableListOf<UInt>()
 
                     for (targetIndex in 0u until numberTargets) {
                         val depth = source.readIndex()
 
-                        targets[targetIndex.toInt()] = depth
+                        targets.add(depth)
                     }
 
                     val defaultTarget = source.readIndex()

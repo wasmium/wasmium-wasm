@@ -41,7 +41,7 @@ public class ExpressionNode : ExpressionVisitor {
         instructions.add(AtomicWakeInstruction(opcode, alignment, offset))
     }
 
-    public override fun visitBrTableInstruction(targets: Array<UInt>, defaultTarget: UInt) {
+    public override fun visitBrTableInstruction(targets: List<UInt>, defaultTarget: UInt) {
         instructions.add(BrTableInstruction(targets, defaultTarget))
     }
 
@@ -125,15 +125,15 @@ public class ExpressionNode : ExpressionVisitor {
         instructions.add(NopInstruction())
     }
 
-    public override fun visitIfInstruction(types: Array<WasmType>) {
+    public override fun visitIfInstruction(types: List<WasmType>) {
         instructions.add(IfInstruction(types))
     }
 
-    public override fun visitLoopInstruction(types: Array<WasmType>) {
+    public override fun visitLoopInstruction(types: List<WasmType>) {
         instructions.add(LoopInstruction(types))
     }
 
-    public override fun visitBlockInstruction(types: Array<WasmType>) {
+    public override fun visitBlockInstruction(types: List<WasmType>) {
         instructions.add(BlockInstruction(types))
     }
 
@@ -141,7 +141,7 @@ public class ExpressionNode : ExpressionVisitor {
         instructions.add(ElseInstruction())
     }
 
-    public override fun visitTryInstruction(types: Array<WasmType>) {
+    public override fun visitTryInstruction(types: List<WasmType>) {
         instructions.add(TryInstruction(types))
     }
 

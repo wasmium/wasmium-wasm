@@ -55,7 +55,7 @@ public class ExpressionWriter(
         WasmBinaryWriter(instructionsBuffer).writeVarUInt32(offset)
     }
 
-    override fun visitBrTableInstruction(targets: Array<UInt>, defaultTarget: UInt) {
+    override fun visitBrTableInstruction(targets: List<UInt>, defaultTarget: UInt) {
         WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.BR_TABLE)
         WasmBinaryWriter(instructionsBuffer).writeVarUInt32(targets.size.toUInt())
 
@@ -163,7 +163,7 @@ public class ExpressionWriter(
         WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.NOP)
     }
 
-    override fun visitIfInstruction(types: Array<WasmType>) {
+    override fun visitIfInstruction(types: List<WasmType>) {
         WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.IF)
 
         for (type in types) {
@@ -171,7 +171,7 @@ public class ExpressionWriter(
         }
     }
 
-    override fun visitLoopInstruction(types: Array<WasmType>) {
+    override fun visitLoopInstruction(types: List<WasmType>) {
         WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.LOOP)
 
         for (type in types) {
@@ -179,7 +179,7 @@ public class ExpressionWriter(
         }
     }
 
-    override fun visitBlockInstruction(types: Array<WasmType>) {
+    override fun visitBlockInstruction(types: List<WasmType>) {
         WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.BLOCK)
 
         for (type in types) {
@@ -191,7 +191,7 @@ public class ExpressionWriter(
         WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.ELSE)
     }
 
-    override fun visitTryInstruction(types: Array<WasmType>) {
+    override fun visitTryInstruction(types: List<WasmType>) {
         WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.TRY)
 
         for (type in types) {

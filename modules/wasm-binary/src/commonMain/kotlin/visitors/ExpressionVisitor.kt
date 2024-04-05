@@ -18,7 +18,7 @@ public interface ExpressionVisitor {
 
     public fun visitAtomicWakeInstruction(opcode: Opcode, alignment: UInt, offset: UInt)
 
-    public fun visitBrTableInstruction(targets: Array<UInt>, defaultTarget: UInt)
+    public fun visitBrTableInstruction(targets: List<UInt>, defaultTarget: UInt)
 
     public fun visitCompareInstruction(opcode: Opcode)
 
@@ -60,15 +60,15 @@ public interface ExpressionVisitor {
 
     public fun visitNopInstruction()
 
-    public fun visitIfInstruction(types: Array<WasmType>)
+    public fun visitIfInstruction(types: List<WasmType>)
 
-    public fun visitLoopInstruction(types: Array<WasmType>)
+    public fun visitLoopInstruction(types: List<WasmType>)
 
-    public fun visitBlockInstruction(types: Array<WasmType>)
+    public fun visitBlockInstruction(types: List<WasmType>)
 
     public fun visitElseInstruction()
 
-    public fun visitTryInstruction(types: Array<WasmType>)
+    public fun visitTryInstruction(types: List<WasmType>)
 
     public fun visitCatchInstruction()
 
