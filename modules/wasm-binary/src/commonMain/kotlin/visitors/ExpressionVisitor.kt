@@ -267,4 +267,6 @@ public interface ExpressionVisitor {
     public fun visitReferenceIsNullInstruction()
 
     public fun visitReferenceNullInstruction(type: WasmType)
+
+    public fun visitShiftRightInstruction(opcode: Opcode)
 }

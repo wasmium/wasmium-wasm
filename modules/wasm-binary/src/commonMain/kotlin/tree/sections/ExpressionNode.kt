@@ -537,6 +537,10 @@ public class ExpressionNode : ExpressionVisitor {
         instructions.add(ReferenceNullInstruction(type))
     }
 
+    override fun visitShiftRightInstruction(opcode: Opcode) {
+        instructions.add(ShiftRightInstruction(opcode))
+    }
+
     override fun visitTableInitInstruction(segmentIndex: UInt, tableIndex: UInt) {
         instructions.add(TableInitInstruction(segmentIndex, tableIndex))
     }

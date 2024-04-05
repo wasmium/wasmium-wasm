@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalUnsignedTypes::class)
-
 package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.ParserException
@@ -9,6 +7,7 @@ import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
+@OptIn(ExperimentalUnsignedTypes::class)
 public class ExpressionReader(
     private val context: ReaderContext,
 ) {
@@ -77,10 +76,6 @@ public class ExpressionReader(
                 }
 
                 TRY -> {
-                    if (!context.options.features.isExceptionHandlingEnabled) {
-                        throw ParserException("Invalid try code: exceptions not enabled.")
-                    }
-
                     val type = source.readType()
                     if (!type.isInlineType()) {
                         throw ParserException("Expected valid block signature type")
@@ -91,39 +86,20 @@ public class ExpressionReader(
                 }
 
                 CATCH -> {
-                    if (!context.options.features.isExceptionHandlingEnabled) {
-                        throw ParserException("Invalid catch code: exceptions not enabled.")
-                    }
-
                     expressionVisitor.visitCatchInstruction()
                 }
 
                 THROW -> {
-                    if (!context.options.features.isExceptionHandlingEnabled) {
-                        throw ParserException("Invalid throw code: exceptions not enabled.")
-                    }
-
                     val exceptionIndex = source.readIndex()
-                    if (exceptionIndex >= context.numberOfTotalExceptions) {
-                        throw ParserException("invalid call exception index: %$exceptionIndex")
-                    }
 
                     expressionVisitor.visitThrowInstruction(exceptionIndex)
                 }
 
                 RETHROW -> {
-                    if (!context.options.features.isExceptionHandlingEnabled) {
-                        throw ParserException("Invalid rethrow code: exceptions not enabled.")
-                    }
-
                     expressionVisitor.visitRethrowInstruction()
                 }
 
                 THROW_REF -> {
-                    if (!context.options.features.isExceptionHandlingEnabled) {
-                        throw ParserException("Invalid catch code: exceptions not enabled.")
-                    }
-
                     expressionVisitor.visitThrowRefInstruction()
                 }
 
@@ -159,20 +135,13 @@ public class ExpressionReader(
                 }
 
                 CALL -> {
-                    val funcIndex = source.readIndex()
+                    val functionIndex = source.readIndex()
 
-                    if (funcIndex >= context.numberOfTotalFunctions) {
-                        throw ParserException("Invalid call function index: %$funcIndex")
-                    }
-
-                    expressionVisitor.visitCallInstruction(funcIndex)
+                    expressionVisitor.visitCallInstruction(functionIndex)
                 }
 
                 CALL_INDIRECT -> {
                     val signatureIndex = source.readIndex()
-                    if (signatureIndex >= context.numberOfSignatures) {
-                        throw ParserException("Invalid call_indirect signature index")
-                    }
 
                     val reserved = source.readVarUInt32()
                     if (reserved != 0u) {
@@ -258,15 +227,16 @@ public class ExpressionReader(
                 MEMORY_SIZE -> {
                     val reserved = source.readVarUInt1()
                     if (reserved != 0u) {
-                        throw ParserException("MemorySize reserved value must be 0.")
+                        throw ParserException("$opcode reserved value must be 0")
                     }
+
                     expressionVisitor.visitMemorySizeInstruction(reserved = false)
                 }
 
                 MEMORY_GROW -> {
                     val reserved = source.readVarUInt1()
                     if (reserved != 0u) {
-                        throw ParserException("MemoryGrow reserved value must be 0")
+                        throw ParserException("$opcode reserved value must be 0")
                     }
 
                     expressionVisitor.visitMemoryGrowInstruction(reserved = false)
@@ -296,394 +266,191 @@ public class ExpressionReader(
                     expressionVisitor.visitConstFloat64Instruction(value)
                 }
 
-                I32_EQZ -> {
-                    expressionVisitor.visitEqualZeroInstruction(opcode)
-                }
-
-                I32_EQ -> {
-                    expressionVisitor.visitEqualInstruction(opcode)
-                }
-
-                I32_NE -> {
-                    expressionVisitor.visitNotEqualInstruction(opcode)
-                }
-
-                I32_LT_S -> {
-                    expressionVisitor.visitLessThanInstruction(opcode)
-                }
-
-                I32_LE_S -> {
-                    expressionVisitor.visitLessEqualInstruction(opcode)
-                }
-
-                I32_LT_U -> {
-                    expressionVisitor.visitLessThanInstruction(opcode)
-                }
-
-                I32_LE_U -> {
-                    expressionVisitor.visitLessEqualInstruction(opcode)
-                }
-
-                I32_GT_S -> {
-                    expressionVisitor.visitGreaterThanInstruction(opcode)
-                }
-
-                I32_GE_S -> {
-                    expressionVisitor.visitGreaterEqualInstruction(opcode)
-                }
-
-                I32_GT_U -> {
-                    expressionVisitor.visitGreaterThanInstruction(opcode)
-                }
-
-                I32_GE_U -> {
-                    expressionVisitor.visitGreaterEqualInstruction(opcode)
-                }
-
+                I32_EQZ,
                 I64_EQZ -> {
                     expressionVisitor.visitEqualZeroInstruction(opcode)
                 }
 
-                I64_EQ -> {
-                    expressionVisitor.visitEqualInstruction(opcode)
-                }
-
-                I64_NE -> {
-                    expressionVisitor.visitNotEqualInstruction(opcode)
-                }
-
-                I64_LT_S -> {
-                    expressionVisitor.visitLessThanInstruction(opcode)
-                }
-
-                I64_LE_S -> {
-                    expressionVisitor.visitLessEqualInstruction(opcode)
-                }
-
+                F64_LT,
+                I32_LT_S,
+                I32_LT_U,
+                F32_LT,
+                I64_LT_S,
                 I64_LT_U -> {
                     expressionVisitor.visitLessThanInstruction(opcode)
                 }
 
-                I64_LE_U -> {
-                    expressionVisitor.visitLessEqualInstruction(opcode)
-                }
-
-                I64_GT_S -> {
-                    expressionVisitor.visitGreaterThanInstruction(opcode)
-                }
-
-                I64_GE_S -> {
-                    expressionVisitor.visitGreaterEqualInstruction(opcode)
-                }
-
-                I64_GT_U -> {
-                    expressionVisitor.visitGreaterThanInstruction(opcode)
-                }
-
-                I64_GE_U -> {
-                    expressionVisitor.visitGreaterEqualInstruction(opcode)
-                }
-
-                F32_EQ -> {
-                    expressionVisitor.visitEqualInstruction(opcode)
-                }
-
-                F32_NE -> {
-                    expressionVisitor.visitNotEqualInstruction(opcode)
-                }
-
-                F32_LT -> {
-                    expressionVisitor.visitLessThanInstruction(opcode)
-                }
-
-                F32_LE -> {
-                    expressionVisitor.visitLessEqualInstruction(opcode)
-                }
-
-                F32_GT -> {
-                    expressionVisitor.visitGreaterThanInstruction(opcode)
-                }
-
-                F32_GE -> {
-                    expressionVisitor.visitGreaterEqualInstruction(opcode)
-                }
-
+                I32_EQ,
+                I64_EQ,
+                F32_EQ,
                 F64_EQ -> {
                     expressionVisitor.visitEqualInstruction(opcode)
                 }
 
+                I32_NE,
+                I64_NE,
+                F32_NE,
                 F64_NE -> {
                     expressionVisitor.visitNotEqualInstruction(opcode)
                 }
 
-                F64_LT -> {
-                    expressionVisitor.visitLessThanInstruction(opcode)
-                }
-
+                I32_LE_S,
+                I32_LE_U,
+                I64_LE_S,
+                I64_LE_U,
+                F32_LE,
                 F64_LE -> {
                     expressionVisitor.visitLessEqualInstruction(opcode)
                 }
 
+                I32_GT_S,
+                I32_GT_U,
+                I64_GT_S,
+                I64_GT_U,
+                F32_GT,
                 F64_GT -> {
                     expressionVisitor.visitGreaterThanInstruction(opcode)
                 }
 
+                I32_GE_S,
+                I32_GE_U,
+                I64_GE_S,
+                I64_GE_U,
+                F32_GE,
                 F64_GE -> {
-                    expressionVisitor.visitCompareInstruction(opcode)
+                    expressionVisitor.visitGreaterEqualInstruction(opcode)
                 }
 
-                I32_CLZ -> {
-                    expressionVisitor.visitCountLeadingZerosInstruction(opcode)
-                }
-
-                I32_CTZ -> {
-                    expressionVisitor.visitCountTrailingZerosInstruction(opcode)
-                }
-
-                I32_POPCNT -> {
-                    expressionVisitor.visitPopulationCountInstruction(opcode)
-                }
-
-                I32_ADD -> {
-                    expressionVisitor.visitAddInstruction(opcode)
-                }
-
-                I32_SUB -> {
-                    expressionVisitor.visitSubtractInstruction(opcode)
-                }
-
-                I32_MUL -> {
-                    expressionVisitor.visitMultiplyInstruction(opcode)
-                }
-
-                I32_DIV_S -> {
-                    expressionVisitor.visitDivideInstruction(opcode)
-                }
-
-                I32_DIV_U -> {
-                    expressionVisitor.visitDivideInstruction(opcode)
-                }
-
-                I32_REM_S -> {
-                    expressionVisitor.visitRemainderInstruction(opcode)
-                }
-
-                I32_REM_U -> {
-                    expressionVisitor.visitRemainderInstruction(opcode)
-                }
-
-                I32_AND -> {
-                    expressionVisitor.visitAndInstruction(opcode)
-                }
-
-                I32_OR -> {
-                    expressionVisitor.visitOrInstruction(opcode)
-                }
-
-                I32_XOR -> {
-                    expressionVisitor.visitXorInstruction(opcode)
-                }
-
-                I32_SHL -> {
-                    expressionVisitor.visitShiftLeftInstruction(opcode)
-                }
-
-                I32_SHR_U -> {
-                    expressionVisitor.visitShiftLeftInstruction(opcode)
-                }
-
-                I32_SHR_S -> {
-                    expressionVisitor.visitShiftLeftInstruction(opcode)
-                }
-
-                I32_ROTL -> {
-                    expressionVisitor.visitRotateLeftInstruction(opcode)
-                }
-
-                I32_ROTR -> {
-                    expressionVisitor.visitRotateRightInstruction(opcode)
-                }
-
+                I32_CLZ,
                 I64_CLZ -> {
                     expressionVisitor.visitCountLeadingZerosInstruction(opcode)
                 }
 
+                I32_CTZ,
                 I64_CTZ -> {
                     expressionVisitor.visitCountTrailingZerosInstruction(opcode)
                 }
 
+                I32_POPCNT,
                 I64_POPCNT -> {
                     expressionVisitor.visitPopulationCountInstruction(opcode)
                 }
 
-                I64_ADD -> {
-                    expressionVisitor.visitAddInstruction(opcode)
-                }
-
-                I64_SUB -> {
-                    expressionVisitor.visitSubtractInstruction(opcode)
-                }
-
-                I64_MUL -> {
-                    expressionVisitor.visitMultiplyInstruction(opcode)
-                }
-
-                I64_DIV_S -> {
-                    expressionVisitor.visitDivideInstruction(opcode)
-                }
-
-                I64_DIV_U -> {
-                    expressionVisitor.visitDivideInstruction(opcode)
-                }
-
-                I64_REM_S -> {
-                    expressionVisitor.visitRemainderInstruction(opcode)
-                }
-
-                I64_REM_U -> {
-                    expressionVisitor.visitRemainderInstruction(opcode)
-                }
-
-                I64_AND -> {
-                    expressionVisitor.visitAndInstruction(opcode)
-                }
-
-                I64_OR -> {
-                    expressionVisitor.visitOrInstruction(opcode)
-                }
-
-                I64_XOR -> {
-                    expressionVisitor.visitXorInstruction(opcode)
-                }
-
-                I64_SHL -> {
-                    expressionVisitor.visitShiftLeftInstruction(opcode)
-                }
-
-                I64_SHR_U -> {
-                    expressionVisitor.visitShiftLeftInstruction(opcode)
-                }
-
-                I64_SHR_S -> {
-                    expressionVisitor.visitShiftLeftInstruction(opcode)
-                }
-
-                I64_ROTL -> {
-                    expressionVisitor.visitRotateLeftInstruction(opcode)
-                }
-
-                I64_ROTR -> {
-                    expressionVisitor.visitRotateRightInstruction(opcode)
-                }
-
-                F32_ABS -> {
-                    expressionVisitor.visitAbsoluteInstruction(opcode)
-                }
-
-                F32_NEG -> {
-                    expressionVisitor.visitNegativeInstruction(opcode)
-                }
-
-                F32_CEIL -> {
-                    expressionVisitor.visitCeilingInstruction(opcode)
-                }
-
-                F32_FLOOR -> {
-                    expressionVisitor.visitFloorInstruction(opcode)
-                }
-
-                F32_TRUNC -> {
-                    expressionVisitor.visitTruncateInstruction(opcode)
-                }
-
-                F32_NEAREST -> {
-                    expressionVisitor.visitNearestInstruction(opcode)
-                }
-
-                F32_SQRT -> {
-                    expressionVisitor.visitSqrtInstruction(opcode)
-                }
-
-                F32_ADD -> {
-                    expressionVisitor.visitAddInstruction(opcode)
-                }
-
-                F32_SUB -> {
-                    expressionVisitor.visitSubtractInstruction(opcode)
-                }
-
-                F32_MUL -> {
-                    expressionVisitor.visitMultiplyInstruction(opcode)
-                }
-
-                F32_DIV -> {
-                    expressionVisitor.visitDivideInstruction(opcode)
-                }
-
-                F32_MIN -> {
-                    expressionVisitor.visitMinInstruction(opcode)
-                }
-
-                F32_MAX -> {
-                    expressionVisitor.visitMaxInstruction(opcode)
-                }
-
-                F32_COPYSIGN -> {
-                    expressionVisitor.visitCopySignInstruction(opcode)
-                }
-
-                F64_ABS -> {
-                    expressionVisitor.visitAbsoluteInstruction(opcode)
-                }
-
-                F64_NEG -> {
-                    expressionVisitor.visitNegativeInstruction(opcode)
-                }
-
-                F64_CEIL -> {
-                    expressionVisitor.visitCeilingInstruction(opcode)
-                }
-
-                F64_FLOOR -> {
-                    expressionVisitor.visitFloorInstruction(opcode)
-                }
-
-                F64_TRUNC -> {
-                    expressionVisitor.visitTruncateInstruction(opcode)
-                }
-
-                F64_NEAREST -> {
-                    expressionVisitor.visitNearestInstruction(opcode)
-                }
-
-                F64_SQRT -> {
-                    expressionVisitor.visitSqrtInstruction(opcode)
-                }
-
-                F64_ADD -> {
-                    expressionVisitor.visitAddInstruction(opcode)
-                }
-
+                I32_SUB,
+                I64_SUB,
+                F32_SUB,
                 F64_SUB -> {
                     expressionVisitor.visitSubtractInstruction(opcode)
                 }
 
+                F32_DIV,
+                I32_DIV_S,
+                I32_DIV_U,
+                F64_DIV,
+                I64_DIV_S,
+                I64_DIV_U -> {
+                    expressionVisitor.visitDivideInstruction(opcode)
+                }
+
+                I32_REM_S,
+                I32_REM_U,
+                I64_REM_S,
+                I64_REM_U -> {
+                    expressionVisitor.visitRemainderInstruction(opcode)
+                }
+
+                I32_AND,
+                I64_AND -> {
+                    expressionVisitor.visitAndInstruction(opcode)
+                }
+
+                I32_OR,
+                I64_OR -> {
+                    expressionVisitor.visitOrInstruction(opcode)
+                }
+
+                I32_XOR,
+                I64_XOR -> {
+                    expressionVisitor.visitXorInstruction(opcode)
+                }
+
+                I32_SHR_S,
+                I32_SHR_U,
+                I64_SHR_U,
+                I64_SHR_S -> {
+                    expressionVisitor.visitShiftRightInstruction(opcode)
+                }
+
+                I32_SHL,
+                I64_SHL -> {
+                    expressionVisitor.visitShiftLeftInstruction(opcode)
+                }
+
+                I32_ROTL,
+                I64_ROTL -> {
+                    expressionVisitor.visitRotateLeftInstruction(opcode)
+                }
+
+                I32_ROTR,
+                I64_ROTR -> {
+                    expressionVisitor.visitRotateRightInstruction(opcode)
+                }
+
+                F32_ABS,
+                F64_ABS -> {
+                    expressionVisitor.visitAbsoluteInstruction(opcode)
+                }
+
+                F32_NEG,
+                F64_NEG -> {
+                    expressionVisitor.visitNegativeInstruction(opcode)
+                }
+
+                F32_CEIL,
+                F64_CEIL -> {
+                    expressionVisitor.visitCeilingInstruction(opcode)
+                }
+
+                F32_FLOOR,
+                F64_FLOOR -> {
+                    expressionVisitor.visitFloorInstruction(opcode)
+                }
+
+                F32_NEAREST,
+                F64_NEAREST -> {
+                    expressionVisitor.visitNearestInstruction(opcode)
+                }
+
+                F32_SQRT,
+                F64_SQRT -> {
+                    expressionVisitor.visitSqrtInstruction(opcode)
+                }
+
+                I32_ADD,
+                I64_ADD,
+                F32_ADD,
+                F64_ADD -> {
+                    expressionVisitor.visitAddInstruction(opcode)
+                }
+
+                I32_MUL,
+                I64_MUL,
+                F32_MUL,
                 F64_MUL -> {
                     expressionVisitor.visitMultiplyInstruction(opcode)
                 }
 
-                F64_DIV -> {
-                    expressionVisitor.visitDivideInstruction(opcode)
-                }
-
+                F32_MIN,
                 F64_MIN -> {
                     expressionVisitor.visitMinInstruction(opcode)
                 }
 
+                F32_MAX,
                 F64_MAX -> {
                     expressionVisitor.visitMaxInstruction(opcode)
                 }
 
+                F32_COPYSIGN,
                 F64_COPYSIGN -> {
                     expressionVisitor.visitCopySignInstruction(opcode)
                 }
@@ -692,41 +459,40 @@ public class ExpressionReader(
                     expressionVisitor.visitWrapInstruction(opcode)
                 }
 
+                F32_TRUNC,
+                F64_TRUNC,
                 I32_TRUNC_SF32,
                 I32_TRUNC_UF32,
                 I32_TRUNC_SF64,
-                I32_TRUNC_UF64 -> {
-                    expressionVisitor.visitTruncateInstruction(opcode)
-                }
-
-                I64_EXTEND_SI32,
-                I64_EXTEND_UI32 -> {
-                    expressionVisitor.visitExtendInstruction(opcode)
-                }
-
+                I32_TRUNC_UF64,
                 I64_TRUNC_SF32,
                 I64_TRUNC_UF32,
                 I64_TRUNC_SF64,
-                I64_TRUNC_UF64 -> {
+                I64_TRUNC_UF64,
+                I32_TRUNC_S_SAT_F32,
+                I32_TRUNC_U_SAT_F32,
+                I32_TRUNC_S_SAT_F64,
+                I32_TRUNC_U_SAT_F64,
+                I64_TRUNC_S_SAT_F32,
+                I64_TRUNC_U_SAT_F32,
+                I64_TRUNC_S_SAT_F64,
+                I64_TRUNC_U_SAT_F64 -> {
                     expressionVisitor.visitTruncateInstruction(opcode)
                 }
 
                 F32_CONVERT_SI32,
                 F32_CONVERT_UI32,
                 F32_CONVERT_SI64,
-                F32_CONVERT_UI64 -> {
-                    expressionVisitor.visitConvertInstruction(opcode)
-                }
-
-                F32_DEMOTE_F64 -> {
-                    expressionVisitor.visitDemoteInstruction(opcode)
-                }
-
+                F32_CONVERT_UI64,
                 F64_CONVERT_SI32,
                 F64_CONVERT_UI32,
                 F64_CONVERT_SI64,
                 F64_CONVERT_UI64 -> {
                     expressionVisitor.visitConvertInstruction(opcode)
+                }
+
+                F32_DEMOTE_F64 -> {
+                    expressionVisitor.visitDemoteInstruction(opcode)
                 }
 
                 F64_PROMOTE_F32 -> {
@@ -744,34 +510,13 @@ public class ExpressionReader(
                 I32_EXTEND16_S,
                 I64_EXTEND8_S,
                 I64_EXTEND16_S,
-                I64_EXTEND32_S -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid $opcode code not enabled.")
-                    }
-
+                I64_EXTEND32_S,
+                I64_EXTEND_SI32,
+                I64_EXTEND_UI32 -> {
                     expressionVisitor.visitExtendInstruction(opcode)
                 }
 
-                I32_TRUNC_S_SAT_F32,
-                I32_TRUNC_U_SAT_F32,
-                I32_TRUNC_S_SAT_F64,
-                I32_TRUNC_U_SAT_F64,
-                I64_TRUNC_S_SAT_F32,
-                I64_TRUNC_U_SAT_F32,
-                I64_TRUNC_S_SAT_F64,
-                I64_TRUNC_U_SAT_F64 -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid $opcode code: SIMD support not enabled.")
-                    }
-
-                    expressionVisitor.visitTruncateInstruction(opcode)
-                }
-
                 MEMORY_ATOMIC_NOTIFY -> {
-                    if (!context.options.features.isThreadsEnabled) {
-                        throw ParserException("Invalid $opcode code: threads not enabled.")
-                    }
-
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
@@ -780,10 +525,6 @@ public class ExpressionReader(
 
                 MEMORY_ATOMIC_WAIT32,
                 MEMORY_ATOMIC_WAIT64 -> {
-                    if (!context.options.features.isThreadsEnabled) {
-                        throw ParserException("Invalid $opcode code: threads not enabled.")
-                    }
-
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
@@ -797,10 +538,6 @@ public class ExpressionReader(
                 I64_ATOMIC_LOAD8_U,
                 I64_ATOMIC_LOAD16_U,
                 I64_ATOMIC_LOAD32_U -> {
-                    if (!context.options.features.isThreadsEnabled) {
-                        throw ParserException("Invalid $opcode code: threads not enabled.")
-                    }
-
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
@@ -814,10 +551,6 @@ public class ExpressionReader(
                 I64_ATOMIC_STORE8,
                 I64_ATOMIC_STORE16,
                 I64_ATOMIC_STORE32 -> {
-                    if (!context.options.features.isThreadsEnabled) {
-                        throw ParserException("Invalid wake code: threads not enabled.")
-                    }
-
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
@@ -831,10 +564,6 @@ public class ExpressionReader(
                 I64_ATOMIC_RMW8_U_ADD,
                 I64_ATOMIC_RMW16_U_ADD,
                 I64_ATOMIC_RMW32_U_ADD -> {
-                    if (!context.options.features.isThreadsEnabled) {
-                        throw ParserException("Invalid wake code: threads not enabled.")
-                    }
-
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
@@ -848,10 +577,6 @@ public class ExpressionReader(
                 I64_ATOMIC_RMW8_U_SUB,
                 I64_ATOMIC_RMW16_U_SUB,
                 I64_ATOMIC_RMW32_U_SUB -> {
-                    if (!context.options.features.isThreadsEnabled) {
-                        throw ParserException("Invalid wake code: threads not enabled.")
-                    }
-
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
@@ -865,10 +590,6 @@ public class ExpressionReader(
                 I64_ATOMIC_RMW8_U_AND,
                 I64_ATOMIC_RMW16_U_AND,
                 I64_ATOMIC_RMW32_U_AND -> {
-                    if (!context.options.features.isThreadsEnabled) {
-                        throw ParserException("Invalid wake code: threads not enabled.")
-                    }
-
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
@@ -882,10 +603,6 @@ public class ExpressionReader(
                 I64_ATOMIC_RMW8_U_OR,
                 I64_ATOMIC_RMW16_U_OR,
                 I64_ATOMIC_RMW32_U_OR -> {
-                    if (!context.options.features.isThreadsEnabled) {
-                        throw ParserException("Invalid wake code: threads not enabled.")
-                    }
-
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
@@ -899,10 +616,6 @@ public class ExpressionReader(
                 I64_ATOMIC_RMW8_U_XOR,
                 I64_ATOMIC_RMW16_U_XOR,
                 I64_ATOMIC_RMW32_U_XOR -> {
-                    if (!context.options.features.isThreadsEnabled) {
-                        throw ParserException("Invalid wake code: threads not enabled.")
-                    }
-
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
@@ -916,10 +629,6 @@ public class ExpressionReader(
                 I64_ATOMIC_RMW8_U_XCHG,
                 I64_ATOMIC_RMW16_U_XCHG,
                 I64_ATOMIC_RMW32_U_XCHG -> {
-                    if (!context.options.features.isThreadsEnabled) {
-                        throw ParserException("Invalid wake code: threads not enabled.")
-                    }
-
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
@@ -933,10 +642,6 @@ public class ExpressionReader(
                 I64_ATOMIC_RMW8_U_CMPXCHG,
                 I64_ATOMIC_RMW16_U_CMPXCHG,
                 I64_ATOMIC_RMW32_U_CMPXCHG -> {
-                    if (!context.options.features.isThreadsEnabled) {
-                        throw ParserException("Invalid wake code: threads not enabled.")
-                    }
-
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
@@ -944,20 +649,12 @@ public class ExpressionReader(
                 }
 
                 V128_CONST -> {
-                    if (!context.options.features.isSIMDEnabled) {
-                        throw ParserException("Invalid V128Value code: SIMD support not enabled.")
-                    }
-
                     val value: V128Value = source.readV128()
 
                     expressionVisitor.visitSimdConstInstruction(value)
                 }
 
                 V128_LOAD -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid V128Value code: SIMD support not enabled.")
-                    }
-
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
@@ -965,10 +662,6 @@ public class ExpressionReader(
                 }
 
                 V128_STORE -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid V128Value code: SIMD support not enabled.")
-                    }
-
                     val alignment = source.readVarUInt32()
                     val offset = source.readVarUInt32()
 
@@ -981,10 +674,6 @@ public class ExpressionReader(
                 I64X2_SPLAT,
                 F32X4_SPLAT,
                 F64X2_SPLAT -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid V128Value code: SIMD support not enabled.")
-                    }
-
                     val value = source.readVarUInt32()
 
                     expressionVisitor.visitSimdSplatInstruction(opcode, value)
@@ -998,11 +687,8 @@ public class ExpressionReader(
                 I64X2_EXTRACT_LANE,
                 F32X4_EXTRACT_LANE,
                 F64X2_EXTRACT_LANE -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid V128Value code: SIMD support not enabled.")
-                    }
-
                     val index = source.readIndex()
+
                     expressionVisitor.visitSimdExtractLaneInstruction(opcode, index)
                 }
 
@@ -1012,19 +698,12 @@ public class ExpressionReader(
                 I64X2_REPLACE_LANE,
                 F32X4_REPLACE_LANE,
                 F64X2_REPLACE_LANE -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid V128Value code: SIMD support not enabled.")
-                    }
-
                     val index = source.readIndex()
+
                     expressionVisitor.visitSimdReplaceLaneInstruction(opcode, index)
                 }
 
                 V8X16_SHUFFLE -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid V128Value code: SIMD support not enabled.")
-                    }
-
                     val lanesIndex = UIntArray(16) { 0u }
 
                     for (i in 0u until 16u) {
@@ -1034,57 +713,10 @@ public class ExpressionReader(
                     expressionVisitor.visitSimdShuffleInstruction(opcode, V128Value(lanesIndex))
                 }
 
-                I8X16_ADD,
-                I16X8_ADD,
-                I32X4_ADD,
-                I64X2_ADD -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
-                    expressionVisitor.visitSimdAddInstruction(opcode)
-                }
-
-                I8X16_SUB,
-                I16X8_SUB,
-                I32X4_SUB,
-                I64X2_SUB -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
-                    expressionVisitor.visitSimdSubtractInstruction(opcode)
-                }
-
-                I8X16_MUL,
-                I16X8_MUL,
-                I32X4_MUL -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
-                    expressionVisitor.visitSimdMultiplyInstruction(opcode)
-                }
-
-                I8X16_NEG,
-                I16X8_NEG,
-                I32X4_NEG,
-                I64X2_NEG -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
-                    expressionVisitor.visitSimdNegativeInstruction(opcode)
-                }
-
                 I8X16_ADD_SATURATE_S,
                 I8X16_ADD_SATURATE_U,
                 I16X8_ADD_SATURATE_S,
                 I16X8_ADD_SATURATE_U -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdAddSaturateInstruction(opcode)
                 }
 
@@ -1092,10 +724,6 @@ public class ExpressionReader(
                 I8X16_SUB_SATURATE_U,
                 I16X8_SUB_SATURATE_S,
                 I16X8_SUB_SATURATE_U -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdSubtractSaturateInstruction(opcode)
                 }
 
@@ -1111,50 +739,26 @@ public class ExpressionReader(
                 I32X4_SHL_U,
                 I64X2_SHL_S,
                 I64X2_SHL_U -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdShiftLeftInstruction(opcode)
                 }
 
                 V128_AND -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdAndInstruction(opcode)
                 }
 
                 V128_OR -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdOrInstruction(opcode)
                 }
 
                 V128_XOR -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdXorInstruction(opcode)
                 }
 
                 V128_NOT -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid V128Value code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdNotInstruction(opcode)
                 }
 
                 V128_BITSELECT -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid V128Value code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdBitSelectInstruction(opcode)
                 }
 
@@ -1166,10 +770,6 @@ public class ExpressionReader(
                 I16X8_ALL_TRUE,
                 I32X4_ALL_TRUE,
                 I64X2_ALL_TRUE -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdAllTrueInstruction(opcode)
                 }
 
@@ -1178,10 +778,6 @@ public class ExpressionReader(
                 I32X4_EQ,
                 F32X4_EQ,
                 F64X2_EQ -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdEqualInstruction(opcode)
                 }
 
@@ -1190,10 +786,6 @@ public class ExpressionReader(
                 I32X4_NE,
                 F32X4_NE,
                 F64X2_NE -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdNotEqualInstruction(opcode)
                 }
 
@@ -1205,10 +797,6 @@ public class ExpressionReader(
                 I32X4_LT_U,
                 F32X4_LT,
                 F64X2_LT -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdLessThanInstruction(opcode)
                 }
 
@@ -1220,10 +808,6 @@ public class ExpressionReader(
                 I32X4_LE_U,
                 F32X4_LE,
                 F64X2_LE -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdLessEqualInstruction(opcode)
                 }
 
@@ -1235,10 +819,6 @@ public class ExpressionReader(
                 I32X4_GT_U,
                 F32X4_GT,
                 F64X2_GT -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdGreaterThanInstruction(opcode)
                 }
 
@@ -1250,91 +830,66 @@ public class ExpressionReader(
                 I32X4_GE_U,
                 F32X4_GE,
                 F64X2_GE -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdGreaterEqualInstruction(opcode)
                 }
 
+                I8X16_NEG,
+                I16X8_NEG,
+                I32X4_NEG,
+                I64X2_NEG,
                 F32X4_NEG,
                 F64X2_NEG -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdNegativeInstruction(opcode)
                 }
 
                 F32X4_ABS,
                 F64X2_ABS -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdAbsInstruction(opcode)
                 }
 
                 F32X4_MIN,
                 F64X2_MIN -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdMinInstruction(opcode)
                 }
 
                 F32X4_MAX,
                 F64X2_MAX -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdMaxInstruction(opcode)
                 }
 
+                I8X16_ADD,
+                I16X8_ADD,
+                I32X4_ADD,
+                I64X2_ADD,
                 F32X4_ADD,
                 F64X2_ADD -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdAddInstruction(opcode)
                 }
 
+                I8X16_SUB,
+                I16X8_SUB,
+                I32X4_SUB,
+                I64X2_SUB,
                 F32X4_SUB,
                 F64X2_SUB -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdSubtractInstruction(opcode)
                 }
 
                 F32X4_DIV,
                 F64X2_DIV -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdDivideInstruction(opcode)
                 }
 
+                I8X16_MUL,
+                I16X8_MUL,
+                I32X4_MUL,
                 F32X4_MUL,
                 F64X2_MUL -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdMultiplyInstruction(opcode)
                 }
 
                 F32X4_SQRT,
                 F64X2_SQRT -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdSqrtInstruction(opcode)
                 }
 
@@ -1342,10 +897,6 @@ public class ExpressionReader(
                 F32X4_CONVERT_U_I32X4,
                 F64X2_CONVERT_S_I64X2,
                 F64X2_CONVERT_U_I64X2 -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdConvertInstruction(opcode)
                 }
 
@@ -1353,28 +904,16 @@ public class ExpressionReader(
                 I32X4_TRUNC_U_F32X4_SAT,
                 I64X2_TRUNC_S_F64X2_SAT,
                 I64X2_TRUNC_U_F64X2_SAT -> {
-                    if (!opcode.isEnabled(context.options.features)) {
-                        throw ParserException("Invalid SIMD code: SIMD support not enabled.")
-                    }
-
                     expressionVisitor.visitSimdTruncateInstruction(opcode)
                 }
 
                 MEMORY_FILL -> {
-                    if (!context.options.features.isBulkMemoryEnabled) {
-                        throw ParserException("Invalid memory.fill code: bulk memory not enabled.")
-                    }
-
                     val memoryIndex = source.readVarUInt32()
 
                     expressionVisitor.visitMemoryFillInstruction(memoryIndex)
                 }
 
                 MEMORY_COPY -> {
-                    if (!context.options.features.isBulkMemoryEnabled) {
-                        throw ParserException("Invalid memory.copy code: bulk memory not enabled.")
-                    }
-
                     val targetIndex = source.readVarUInt32()
                     val sourceIndex = source.readVarUInt32()
 
@@ -1382,10 +921,6 @@ public class ExpressionReader(
                 }
 
                 MEMORY_INIT -> {
-                    if (!context.options.features.isBulkMemoryEnabled) {
-                        throw ParserException("Invalid memory.init code: bulk memory not enabled.")
-                    }
-
                     val segmentIndex = source.readVarUInt32()
                     val memoryIndex = source.readVarUInt32()
 
@@ -1393,10 +928,6 @@ public class ExpressionReader(
                 }
 
                 TABLE_INIT -> {
-                    if (!context.options.features.isBulkMemoryEnabled) {
-                        throw ParserException("Invalid table.init code: bulk memory not enabled.")
-                    }
-
                     val segmentIndex = source.readVarUInt32()
                     val tableIndex = source.readVarUInt32()
 
@@ -1404,44 +935,25 @@ public class ExpressionReader(
                 }
 
                 DATA_DROP -> {
-                    if (!context.options.features.isBulkMemoryEnabled) {
-                        throw ParserException("Invalid data.drop code: bulk memory not enabled.")
-                    }
-
                     val segmentIndex = source.readVarUInt32()
 
                     expressionVisitor.visitDataDropInstruction(segmentIndex)
                 }
 
                 ELEMENT_DROP -> {
-                    if (!context.options.features.isBulkMemoryEnabled) {
-                        throw ParserException("Invalid elem.drop code: bulk memory not enabled.")
-                    }
-
                     val segmentIndex = source.readVarUInt32()
 
                     expressionVisitor.visitElementDropInstruction(segmentIndex)
                 }
 
                 TABLE_SIZE -> {
-                    if (!context.options.features.isBulkMemoryEnabled) {
-                        throw ParserException("Invalid table.size code: bulk memory not enabled.")
-                    }
-
                     val tableIndex = source.readVarUInt32()
-                    // TODO check table index
 
                     expressionVisitor.visitTableSizeInstruction(tableIndex)
                 }
 
                 TABLE_GROW -> {
-                    if (!context.options.features.isBulkMemoryEnabled) {
-                        throw ParserException("Invalid table.grow code: bulk memory not enabled.")
-                    }
-
                     val tableIndex = source.readVarUInt32()
-                    // TODO check table index
-
                     val value = source.readVarUInt32()
                     val delta = source.readVarUInt32()
 
@@ -1449,25 +961,14 @@ public class ExpressionReader(
                 }
 
                 TABLE_FILL -> {
-                    if (!context.options.features.isBulkMemoryEnabled) {
-                        throw ParserException("Invalid table.fill code: bulk memory not enabled.")
-                    }
-
                     val tableIndex = source.readVarUInt32()
-                    // TODO check table index
 
                     expressionVisitor.visitTableFillInstruction(tableIndex)
                 }
 
                 TABLE_COPY -> {
-                    if (!context.options.features.isBulkMemoryEnabled) {
-                        throw ParserException("Invalid table.copy code: bulk memory not enabled.")
-                    }
-
                     val targetTableIndex = source.readVarUInt32()
-                    // TODO check table index
                     val sourceTableIndex = source.readVarUInt32()
-                    // TODO check table index
 
                     expressionVisitor.visitTableCopyInstruction(targetTableIndex, sourceTableIndex)
                 }
@@ -1577,45 +1078,26 @@ public class ExpressionReader(
                 }
 
                 REF_NULL -> {
-                    if (!context.options.features.isReferenceTypesEnabled) {
-                        throw ParserException("Invalid ref_null code: reference types not enabled.")
-                    }
-
                     val type = source.readType()
+
                     expressionVisitor.visitReferenceNullInstruction(type)
                 }
 
                 REF_IS_NULL -> {
-                    if (!context.options.features.isReferenceTypesEnabled) {
-                        throw ParserException("Invalid ref_is_null code: reference types not enabled.")
-                    }
-
                     expressionVisitor.visitReferenceIsNullInstruction()
                 }
 
                 REF_FUNC -> {
-                    if (!context.options.features.isReferenceTypesEnabled) {
-                        throw ParserException("Invalid ref_func code: reference types not enabled.")
-                    }
-
                     val functionIndex = source.readIndex()
 
                     expressionVisitor.visitReferenceFunctionInstruction(functionIndex)
                 }
 
                 REF_EQ -> {
-                    if (!context.options.features.isReferenceTypesEnabled) {
-                        throw ParserException("Invalid ref_eq code: reference types not enabled.")
-                    }
-
                     expressionVisitor.visitReferenceEqualInstruction()
                 }
 
                 ATOMIC_FENCE -> {
-                    if (!context.options.features.isThreadsEnabled) {
-                        throw ParserException("Invalid atomic.fence code: threads not enabled.")
-                    }
-
                     val reserved = source.readVarUInt32()
                     if (reserved != 0u) {
                         throw ParserException("$opcode reserved value must be 0")

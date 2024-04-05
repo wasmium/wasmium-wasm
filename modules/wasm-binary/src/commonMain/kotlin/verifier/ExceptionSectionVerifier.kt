@@ -6,7 +6,6 @@ import org.wasmium.wasm.binary.visitors.ExceptionSectionVisitor
 
 public class ExceptionSectionVerifier(private val delegate: ExceptionSectionVisitor, private val context: VerifierContext) : ExceptionSectionVisitor {
     private var done: Boolean = false
-    private var numberOfExceptions: UInt = 0u
 
     override fun visitExceptionType(types: List<WasmType>) {
         checkEnd()
@@ -14,7 +13,7 @@ public class ExceptionSectionVerifier(private val delegate: ExceptionSectionVisi
         if (types.size.toUInt() > WasmBinary.MAX_EXCEPTION_TYPES) {
             throw VerifierException("Number of exception types ${types.size} exceed the maximum of ${WasmBinary.MAX_EXCEPTION_TYPES}")
         }
-        numberOfExceptions++
+        context.numberOfExceptions++
 
         delegate.visitExceptionType(types)
     }
@@ -22,11 +21,9 @@ public class ExceptionSectionVerifier(private val delegate: ExceptionSectionVisi
     override fun visitEnd() {
         checkEnd()
 
-        if (this.numberOfExceptions > WasmBinary.MAX_EXCEPTIONS) {
-            throw VerifierException("Number of exceptions $numberOfExceptions exceed the maximum of ${WasmBinary.MAX_EXCEPTIONS}")
+        if (context.numberOfExceptions > WasmBinary.MAX_EXCEPTIONS) {
+            throw VerifierException("Number of exceptions ${context.numberOfExceptions} exceed the maximum of ${WasmBinary.MAX_EXCEPTIONS}")
         }
-
-        context.numberOfExceptions = numberOfExceptions
 
         done = true
         delegate.visitEnd()

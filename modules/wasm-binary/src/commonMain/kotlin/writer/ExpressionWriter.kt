@@ -640,4 +640,8 @@ public class ExpressionWriter(
         WasmBinaryWriter(instructionsBuffer).writeOpcode(Opcode.REF_NULL)
         WasmBinaryWriter(instructionsBuffer).writeType(type)
     }
+
+    override fun visitShiftRightInstruction(opcode: Opcode) {
+        WasmBinaryWriter(instructionsBuffer).writeOpcode(opcode)
+    }
 }

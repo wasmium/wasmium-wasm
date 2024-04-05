@@ -527,4 +527,8 @@ public open class ExpressionAdapter(protected val delegate: ExpressionVisitor? =
     override fun visitReferenceNullInstruction(type: WasmType) {
         delegate?.visitReferenceNullInstruction(type)
     }
+
+    override fun visitShiftRightInstruction(opcode: Opcode) {
+        delegate?.visitShiftRightInstruction(opcode)
+    }
 }
