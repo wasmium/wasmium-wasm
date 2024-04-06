@@ -1,6 +1,7 @@
 package org.wasmium.wasm.binary.verifier
 
-import org.wasmium.wasm.binary.tree.sections.TypeSignatureNode
+import org.wasmium.wasm.binary.tree.sections.GlobalType
+import org.wasmium.wasm.binary.tree.sections.TypeSignature
 
 public class VerifierContext(
     public val options: VerifierOptions,
@@ -55,14 +56,14 @@ public class VerifierContext(
     public var dataSegmentCount: UInt = 0u
 
     /** List of type signatures. */
-    public val signatures: MutableList<TypeSignatureNode> = mutableListOf()
+    public val signatures: MutableList<TypeSignature> = mutableListOf()
 
     /** List of functions signature indexes */
     public val functions: MutableList<UInt> = mutableListOf()
 
     public val exportIndexes: MutableList<UInt> = mutableListOf()
 
-    public val mutableGlobals: MutableList<Boolean> = mutableListOf()
+    public val globals: MutableList<GlobalType> = mutableListOf()
 
     public val numberOfTotalFunctions: UInt get() = numberOfFunctionImports + numberOfFunctions
 

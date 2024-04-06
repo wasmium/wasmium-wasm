@@ -21,25 +21,25 @@ public class ImportSectionNode : SectionNode(SectionKind.IMPORT), ImportSectionV
     }
 
     public override fun visitGlobal(moduleName: String, fieldName: String, type: WasmType, mutable: Boolean) {
-        val globalType = GlobalTypeNode(type, mutable)
+        val globalType = GlobalType(type, mutable)
 
         imports.add(GlobalImportNode(moduleName, fieldName, globalType))
     }
 
     public override fun visitTable(moduleName: String, fieldName: String, elementType: WasmType, limits: ResizableLimits) {
-        val tableType = TableTypeNode(elementType, limits)
+        val tableType = TableType(elementType, limits)
 
         imports.add(TableImportNode(moduleName, fieldName, tableType))
     }
 
     public override fun visitMemory(moduleName: String, fieldName: String, limits: ResizableLimits) {
-        val memoryType = MemoryTypeNode(limits)
+        val memoryType = MemoryType(limits)
 
         imports.add(MemoryImportNode(moduleName, fieldName, memoryType))
     }
 
     public override fun visitException(moduleName: String, fieldName: String, exceptionTypes: List<WasmType>) {
-        val exceptionType = ExceptionTypeNode(exceptionTypes)
+        val exceptionType = ExceptionType(exceptionTypes)
 
         imports.add(ExceptionImportNode(moduleName, fieldName, exceptionType))
     }

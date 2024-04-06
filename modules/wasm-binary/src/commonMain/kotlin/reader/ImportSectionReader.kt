@@ -2,6 +2,7 @@ package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinaryReader
+import org.wasmium.wasm.binary.tree.ExternalKind
 import org.wasmium.wasm.binary.tree.ExternalKind.EXCEPTION
 import org.wasmium.wasm.binary.tree.ExternalKind.FUNCTION
 import org.wasmium.wasm.binary.tree.ExternalKind.GLOBAL
@@ -82,6 +83,10 @@ public class ImportSectionReader(
 
                     context.numberOfExceptionImports++
                 }
+
+                ExternalKind.MODULE -> TODO()
+                ExternalKind.INSTANCE -> TODO()
+                ExternalKind.TYPE -> TODO()
             }
         }
 

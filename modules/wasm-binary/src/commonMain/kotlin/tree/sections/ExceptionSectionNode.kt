@@ -5,7 +5,7 @@ import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.ExceptionSectionVisitor
 
 public class ExceptionSectionNode : CustomSectionNode(SectionName.EXCEPTION.sectionName), ExceptionSectionVisitor {
-    public val exceptionTypes: MutableList<ExceptionTypeNode> = mutableListOf()
+    public val exceptionTypes: MutableList<ExceptionType> = mutableListOf()
 
     public fun accept(exceptionSectionVisitor: ExceptionSectionVisitor) {
         for (exceptionType in exceptionTypes) {
@@ -16,7 +16,7 @@ public class ExceptionSectionNode : CustomSectionNode(SectionName.EXCEPTION.sect
     }
 
     public override fun visitExceptionType(types: List<WasmType>) {
-        exceptionTypes.add(ExceptionTypeNode(types))
+        exceptionTypes.add(ExceptionType(types))
     }
 
     public override fun visitEnd() {

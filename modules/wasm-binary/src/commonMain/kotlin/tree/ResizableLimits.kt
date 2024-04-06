@@ -12,6 +12,6 @@ public class ResizableLimits(
     public val flags: UInt,
 ) {
     public fun isShared(): Boolean {
-        return (flags and LimitFlags.IS_SHARED.flags) != 0.toUInt()
+        return (flags and LimitFlags.IS_SHARED.flag) != 0.toUInt()
     }
 }

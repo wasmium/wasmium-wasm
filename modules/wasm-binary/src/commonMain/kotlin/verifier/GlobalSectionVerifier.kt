@@ -2,6 +2,7 @@ package org.wasmium.wasm.binary.verifier
 
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.tree.WasmType
+import org.wasmium.wasm.binary.tree.sections.GlobalType
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
 
@@ -13,7 +14,7 @@ public class GlobalSectionVerifier(private val delegate: GlobalSectionVisitor, p
 
         context.numberOfGlobals++
 
-        context.mutableGlobals.add(mutable)
+        context.globals.add(GlobalType(type, mutable))
 
         return ExpressionVerifier(delegate.visitGlobalVariable(type, mutable), context)
     }

@@ -1,6 +1,6 @@
 package org.wasmium.wasm.binary.tree
 
-public enum class LimitFlags(public val flags: UInt) {
+public enum class LimitFlags(public val flag: UInt) {
     /** Empty flags. */
     NONE(0u),
 
@@ -13,6 +13,6 @@ public enum class LimitFlags(public val flags: UInt) {
     ;
 
     public companion object {
-        public fun fromLimitFlags(flags: UInt): LimitFlags = values().find { it.flags == flags } ?: NONE
+        public fun fromLimitFlags(flags: UInt): LimitFlags = values().find { it.flag == flags } ?: NONE
     }
 }

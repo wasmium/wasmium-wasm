@@ -6,7 +6,7 @@ import org.wasmium.wasm.binary.visitors.CodeSectionVisitor
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
 public class CodeSectionNode : SectionNode(SectionKind.CODE), CodeSectionVisitor {
-    public val codes: MutableList<CodeNode> = mutableListOf()
+    public val codes: MutableList<CodeType> = mutableListOf()
 
     public fun accept(codeSectionVisitor: CodeSectionVisitor) {
         for (code in codes) {
@@ -19,7 +19,7 @@ public class CodeSectionNode : SectionNode(SectionKind.CODE), CodeSectionVisitor
 
     public override fun visitCode(locals: List<LocalVariable>): ExpressionVisitor {
         val expressionNode = ExpressionNode()
-        codes.add(CodeNode(locals, expressionNode))
+        codes.add(CodeType(locals, expressionNode))
 
         return expressionNode
     }

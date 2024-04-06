@@ -57,7 +57,7 @@ public class ExportSectionVerifier(private val delegate: ExportSectionVisitor, p
                     throw ParserException("Invalid export global index: %$itemIndex")
                 }
 
-                if (context.mutableGlobals[itemIndex.toInt()]) {
+                if (context.globals.getOrNull(itemIndex.toInt()) == null) {
                     throw VerifierException("Invalid export global of mutable index: %$itemIndex")
                 }
             }
@@ -66,6 +66,10 @@ public class ExportSectionVerifier(private val delegate: ExportSectionVisitor, p
                 // validate at the end of the visitModule
                 context.exportIndexes.add(itemIndex)
             }
+
+            ExternalKind.MODULE -> TODO()
+            ExternalKind.INSTANCE -> TODO()
+            ExternalKind.TYPE -> TODO()
         }
 
         numberOfExports++

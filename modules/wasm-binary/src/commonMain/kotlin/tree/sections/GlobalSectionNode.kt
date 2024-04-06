@@ -18,7 +18,7 @@ public class GlobalSectionNode : SectionNode(SectionKind.GLOBAL), GlobalSectionV
     }
 
     public override fun visitGlobalVariable(type: WasmType, mutable: Boolean): ExpressionVisitor {
-        val globalVariable = GlobalTypeNode(type, mutable)
+        val globalVariable = GlobalType(type, mutable)
         val expressionNode = ExpressionNode()
 
         globals.add(GlobalVariableNode(globalVariable, expressionNode))

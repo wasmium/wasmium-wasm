@@ -1,9 +1,7 @@
 package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.ResizableLimits
-import org.wasmium.wasm.binary.tree.WasmType
 
-public class TableTypeNode(
-    public val elementType: WasmType,
+public class MemoryType(
     public val limits: ResizableLimits,
 )

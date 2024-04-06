@@ -8,7 +8,7 @@ import org.wasmium.wasm.binary.visitors.RelocationSectionVisitor
 public class RelocationSectionNode : CustomSectionNode(SectionName.RELOCATION.sectionName), RelocationSectionVisitor {
     public var kind: SectionKind? = null
     public var sectionName: String? = null
-    public val relocations: MutableList<RelocationNode> = mutableListOf()
+    public val relocations: MutableList<RelocationType> = mutableListOf()
 
     public fun accept(relocationSectionVisitor: RelocationSectionVisitor) {
         for (relocation in relocations) {
@@ -26,7 +26,7 @@ public class RelocationSectionNode : CustomSectionNode(SectionName.RELOCATION.se
     }
 
     public override fun visitRelocation(relocationKind: RelocationKind, offset: UInt, index: UInt, addend: Int?) {
-        relocations.add(RelocationNode(relocationKind, offset, index, addend))
+        relocations.add(RelocationType(relocationKind, offset, index, addend))
     }
 
     public override fun visitEnd() {

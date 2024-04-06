@@ -62,8 +62,6 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
 
     public fun readVarUInt7(): UInt = (reader.readByte() and 0x7F).toUInt().also { consume(1u) }
 
-    public fun readVarInt7(): Int = readVarInt32()
-
     public fun readVarUInt32(): UInt = readVarUIntX(5)
 
     private fun readVarUIntX(maxCount: Int): UInt {
@@ -184,9 +182,9 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
 
     public fun readResizableLimits(): ResizableLimits {
         val flags = readVarUInt32()
-        val hasMaximum = (flags and LimitFlags.HAS_MAX.flags) != 0u
         val initialPages = readVarUInt32()
 
+        val hasMaximum = (flags and LimitFlags.HAS_MAX.flag) != 0u
         return if (hasMaximum) {
             val maximum = readVarUInt32()
 
