@@ -12,7 +12,7 @@ public class ExpressionReader(
     private val context: ReaderContext,
 ) {
     public fun readExpression(source: WasmBinaryReader, expressionVisitor: ExpressionVisitor) {
-        var codeDepth = 1u
+        var blockDepth = 1u
 
         while (true) {
             val opcode = source.readOpcode()
@@ -26,9 +26,9 @@ public class ExpressionReader(
                 }
 
                 END -> {
-                    --codeDepth
+                    --blockDepth
 
-                    if (codeDepth <= 0u) {
+                    if (blockDepth <= 0u) {
                         return
                     } else {
                         expressionVisitor.visitEndInstruction()
@@ -44,7 +44,7 @@ public class ExpressionReader(
                     val blockType = if (type != WasmType.NONE) listOf(type) else listOf(WasmType.NONE)
                     expressionVisitor.visitBlockInstruction(blockType)
 
-                    ++codeDepth
+                    ++blockDepth
                 }
 
                 LOOP -> {
@@ -56,7 +56,7 @@ public class ExpressionReader(
                     val blockType = if (type != WasmType.NONE) listOf(type) else listOf(WasmType.NONE)
                     expressionVisitor.visitLoopInstruction(blockType)
 
-                    ++codeDepth
+                    ++blockDepth
                 }
 
                 IF -> {
@@ -68,7 +68,7 @@ public class ExpressionReader(
                     val blockType = if (type != WasmType.NONE) listOf(type) else listOf(WasmType.NONE)
                     expressionVisitor.visitIfInstruction(blockType)
 
-                    ++codeDepth
+                    ++blockDepth
                 }
 
                 ELSE -> {
