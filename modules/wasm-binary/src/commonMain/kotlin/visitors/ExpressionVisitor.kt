@@ -86,7 +86,7 @@ public interface ExpressionVisitor {
 
     public fun visitCallInstruction(functionIndex: UInt)
 
-    public fun visitCallIndirectInstruction(signatureIndex: UInt, reserved: Boolean)
+    public fun visitCallIndirectInstruction(typeIndex: UInt, reserved: Boolean)
 
     public fun visitDropInstruction()
 

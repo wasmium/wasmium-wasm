@@ -78,8 +78,8 @@ public class ImportSectionReader(
                         throw ParserException("Invalid import exception kind: exceptions not enabled.")
                     }
 
-                    val signatures = readExceptionType(source)
-                    importVisitor.visitException(moduleName, fieldName, signatures)
+                    val types = readExceptionType(source)
+                    importVisitor.visitException(moduleName, fieldName, types)
 
                     context.numberOfExceptionImports++
                 }

@@ -37,7 +37,7 @@ public class ElementSegmentNode : ElementSegmentVisitor {
             elementSegmentVisitor.visitElementIndices(elementIndices)
         } else if (initializers.isNotEmpty()) {
             for (initializer in initializers) {
-                val expressionVisitor = elementSegmentVisitor.visitexpression()
+                val expressionVisitor = elementSegmentVisitor.visitExpression()
                 initializer.accept(expressionVisitor)
             }
         }
@@ -65,7 +65,7 @@ public class ElementSegmentNode : ElementSegmentVisitor {
         this.type = type
     }
 
-    override fun visitexpression(): ExpressionVisitor {
+    override fun visitExpression(): ExpressionVisitor {
         val initializer = ExpressionNode()
 
         initializers.add(initializer)

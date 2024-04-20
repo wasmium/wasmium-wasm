@@ -19,7 +19,7 @@ public class TypeSectionVerifier(private val delegate: TypeSectionVisitor, priva
             throw ParserException("Number of function results ${results.size.toUInt()} exceed the maximum of ${WasmBinary.MAX_FUNCTION_RESULTS}")
         }
 
-        context.numberOfSignatures++
+        context.numberOfTypes++
 
         delegate.visitType(parameters, results)
     }
@@ -27,8 +27,8 @@ public class TypeSectionVerifier(private val delegate: TypeSectionVisitor, priva
     override fun visitEnd() {
         checkEnd()
 
-        if (context.numberOfSignatures > WasmBinary.MAX_TYPES) {
-            throw VerifierException("Number of types ${context.numberOfSignatures} exceed the maximum of ${WasmBinary.MAX_TYPES}");
+        if (context.numberOfTypes > WasmBinary.MAX_TYPES) {
+            throw VerifierException("Number of types ${context.numberOfTypes} exceed the maximum of ${WasmBinary.MAX_TYPES}");
         }
 
         done = true

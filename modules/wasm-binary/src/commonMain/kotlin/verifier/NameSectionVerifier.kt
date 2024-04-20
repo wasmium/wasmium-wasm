@@ -118,7 +118,7 @@ public class NameSectionVerifier(private val delegate: NameSectionVisitor, priva
         checkEnd()
 
         for ((typeIndex, _) in names) {
-            if (typeIndex >= context.numberOfSignatures) {
+            if (typeIndex >= context.numberOfTypes) {
                 context.messages.add("warning: Type index out of bounds in name section, type subsection at index %$typeIndex")
             }
         }

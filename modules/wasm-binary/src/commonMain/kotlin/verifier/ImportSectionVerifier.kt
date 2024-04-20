@@ -13,7 +13,7 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor, p
     override fun visitFunction(moduleName: String, fieldName: String, typeIndex: UInt) {
         checkEnd()
 
-        if (typeIndex >= context.numberOfSignatures) {
+        if (typeIndex >= context.numberOfTypes) {
             throw ParserException("Invalid import function index $typeIndex")
         }
 

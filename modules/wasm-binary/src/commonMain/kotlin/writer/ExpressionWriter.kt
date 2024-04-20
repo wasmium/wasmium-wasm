@@ -238,9 +238,9 @@ public class ExpressionWriter(
         writeIndex(functionIndex)
     }
 
-    override fun visitCallIndirectInstruction(signatureIndex: UInt, reserved: Boolean): Unit = writer.run {
+    override fun visitCallIndirectInstruction(typeIndex: UInt, reserved: Boolean): Unit = writer.run {
         writeOpcode(Opcode.CALL_INDIRECT)
-        writeIndex(signatureIndex)
+        writeIndex(typeIndex)
         writeVarUInt32(0u)
     }
 

@@ -44,7 +44,7 @@ public class ElementSegmentWriter(
         this.type = type
     }
 
-    public override fun visitexpression(): ExpressionVisitor {
+    public override fun visitExpression(): ExpressionVisitor {
         elementType = elementType or ELEMENT_EXPRESSIONS.toUInt()
 
         numberOfExpressions++

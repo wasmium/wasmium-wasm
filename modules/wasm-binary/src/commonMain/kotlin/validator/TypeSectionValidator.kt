@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.validator
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.tree.WasmType
-import org.wasmium.wasm.binary.tree.sections.TypeSignature
+import org.wasmium.wasm.binary.tree.sections.FunctionType
 import org.wasmium.wasm.binary.visitors.TypeSectionVisitor
 
 public class TypeSectionValidator(private val delegate: TypeSectionVisitor, private val context: ValidatorContext) : TypeSectionVisitor {
@@ -10,7 +10,7 @@ public class TypeSectionValidator(private val delegate: TypeSectionVisitor, priv
         checkValueTypes(parameters)
         checkValueTypes(results)
 
-        context.signatures.add(TypeSignature(parameters, results))
+        context.types.add(FunctionType(parameters, results))
 
         delegate.visitType(parameters, results)
     }

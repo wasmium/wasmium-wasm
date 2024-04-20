@@ -12,7 +12,7 @@ public interface ElementSegmentVisitor {
 
     public fun visitType(type: WasmType)
 
-    public fun visitexpression(): ExpressionVisitor
+    public fun visitExpression(): ExpressionVisitor
 
     public fun visitEnd()
 }

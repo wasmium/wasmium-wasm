@@ -5,6 +5,7 @@ import org.wasmium.wasm.binary.visitors.DataSegmentVisitor
 
 public class DataSectionValidator(private val delegate: DataSectionVisitor, private val context: ValidatorContext) : DataSectionVisitor {
     override fun visitDataSegment(): DataSegmentVisitor {
+
         return delegate.visitDataSegment()
     }
 

@@ -7,7 +7,7 @@ import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.TypeSectionVisitor
 
 public class TypeSectionWriter(private val context: WriterContext) : TypeSectionVisitor {
-    private var numberOfSignatures: UInt = 0u
+    private var numberOfTypes: UInt = 0u
     private var body = ByteBuffer()
 
     public override fun visitType(parameters: List<WasmType>, results: List<WasmType>) {
@@ -23,14 +23,14 @@ public class TypeSectionWriter(private val context: WriterContext) : TypeSection
             WasmBinaryWriter(body).writeType(result)
         }
 
-        numberOfSignatures++
+        numberOfTypes++
     }
 
     public override fun visitEnd() {
         val buffer = ByteBuffer()
         val payload = WasmBinaryWriter(buffer)
 
-        payload.writeVarUInt32(numberOfSignatures)
+        payload.writeVarUInt32(numberOfTypes)
         payload.writeByteArray(body.toByteArray())
 
         context.writer.writeSection(SectionKind.TYPE, context.options.isCanonical, buffer.toByteArray())

@@ -14,8 +14,8 @@ public class FunctionSectionNode : SectionNode(SectionKind.FUNCTION), FunctionSe
         functionSectionVisitor.visitEnd()
     }
 
-    public override fun visitFunction(signatureIndex: UInt) {
-        types.add(signatureIndex)
+    public override fun visitFunction(typeIndex: UInt) {
+        types.add(typeIndex)
     }
 
     public override fun visitEnd() {

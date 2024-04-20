@@ -3,546 +3,534 @@ package org.wasmium.wasm.binary.validator
 import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
-import org.wasmium.wasm.binary.verifier.VerifierException
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
-public class ConstantExpressionValidator(private val context: ValidatorContext) : ExpressionVisitor {
-
-    private fun notConstant() {
-        throw VerifierException("Expression is not constant")
-    }
-
+public class ExpressionValidator(private val delegate: ExpressionVisitor, private val context: ValidatorContext) : ExpressionVisitor {
     override fun visitEnd() {
-        // empty
+        delegate.visitEnd()
     }
 
     override fun visitAtomicLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        notConstant()
+        delegate.visitAtomicLoadInstruction(opcode, alignment, offset)
     }
 
     override fun visitAtomicStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        notConstant()
+        delegate.visitAtomicStoreInstruction(opcode, alignment, offset)
     }
 
     override fun visitAtomicRmwCompareExchangeInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        notConstant()
+        delegate.visitAtomicRmwCompareExchangeInstruction(opcode, alignment, offset)
     }
 
     override fun visitAtomicWaitInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        notConstant()
+        delegate.visitAtomicWaitInstruction(opcode, alignment, offset)
     }
 
     override fun visitAtomicWakeInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        notConstant()
+        delegate.visitAtomicWakeInstruction(opcode, alignment, offset)
     }
 
     override fun visitBrTableInstruction(targets: List<UInt>, defaultTarget: UInt) {
-        notConstant()
+        delegate.visitBrTableInstruction(targets, defaultTarget)
     }
 
     override fun visitCompareInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitCompareInstruction(opcode)
     }
 
     override fun visitConvertInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitConvertInstruction(opcode)
     }
 
     override fun visitEndInstruction() {
-        // constant
+        delegate.visitEndInstruction()
     }
 
     override fun visitConstFloat32Instruction(value: Float) {
-        // constant
+        delegate.visitConstFloat32Instruction(value)
     }
 
     override fun visitConstFloat64Instruction(value: Double) {
-        // constant
+        delegate.visitConstFloat64Instruction(value)
     }
 
     override fun visitConstInt32Instruction(value: Int) {
-        // constant
+        delegate.visitConstInt32Instruction(value)
     }
 
     override fun visitConstInt64Instruction(value: Long) {
-        // constant
+        delegate.visitConstInt64Instruction(value)
     }
 
     override fun visitSimdConstInstruction(value: V128Value) {
-        // constant
+        delegate.visitSimdConstInstruction(value)
     }
 
     override fun visitSimdShuffleInstruction(opcode: Opcode, value: V128Value) {
-        notConstant()
+        delegate.visitSimdShuffleInstruction(opcode, value)
     }
 
     override fun visitLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        notConstant()
+        delegate.visitLoadInstruction(opcode, alignment, offset)
     }
 
     override fun visitSimdLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        notConstant()
+        delegate.visitSimdLoadInstruction(opcode, alignment, offset)
     }
 
     override fun visitStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        notConstant()
+        delegate.visitStoreInstruction(opcode, alignment, offset)
     }
 
     override fun visitSimdStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        notConstant()
+        delegate.visitSimdStoreInstruction(opcode, alignment, offset)
     }
 
     override fun visitWrapInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitWrapInstruction(opcode)
     }
 
     override fun visitExtendInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitExtendInstruction(opcode)
     }
 
     override fun visitDemoteInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitDemoteInstruction(opcode)
     }
 
     override fun visitPromoteInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitPromoteInstruction(opcode)
     }
 
     override fun visitReinterpretInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitReinterpretInstruction(opcode)
     }
 
     override fun visitUnreachableInstruction() {
-        notConstant()
+        delegate.visitUnreachableInstruction()
     }
 
     override fun visitNopInstruction() {
-        notConstant()
+        delegate.visitNopInstruction()
     }
 
     override fun visitIfInstruction(types: List<WasmType>) {
-        notConstant()
+        delegate.visitIfInstruction(types)
     }
 
     override fun visitLoopInstruction(types: List<WasmType>) {
-        notConstant()
+        delegate.visitLoopInstruction(types)
     }
 
     override fun visitBlockInstruction(types: List<WasmType>) {
-        notConstant()
+        delegate.visitBlockInstruction(types)
     }
 
     override fun visitElseInstruction() {
-        notConstant()
+        delegate.visitElseInstruction()
     }
 
     override fun visitTryInstruction(types: List<WasmType>) {
-        notConstant()
+        delegate.visitTryInstruction(types)
     }
 
     override fun visitCatchInstruction() {
-        notConstant()
+        delegate.visitCatchInstruction()
     }
 
     override fun visitThrowRefInstruction() {
-        notConstant()
+        delegate.visitThrowRefInstruction()
     }
 
     override fun visitThrowInstruction(exceptionIndex: UInt) {
-        notConstant()
+        delegate.visitThrowInstruction(exceptionIndex)
     }
 
     override fun visitRethrowInstruction() {
-        notConstant()
+        delegate.visitRethrowInstruction()
     }
 
     override fun visitBrInstruction(depth: UInt) {
-        notConstant()
+        delegate.visitBrInstruction(depth)
     }
 
     override fun visitBrIfInstruction(depth: UInt) {
-        notConstant()
+        delegate.visitBrIfInstruction(depth)
     }
 
     override fun visitReturnInstruction() {
-        notConstant()
+        delegate.visitReturnInstruction()
     }
 
     override fun visitCallInstruction(functionIndex: UInt) {
-        notConstant()
+        delegate.visitCallInstruction(functionIndex)
     }
 
     override fun visitCallIndirectInstruction(typeIndex: UInt, reserved: Boolean) {
-        notConstant()
+        delegate.visitCallIndirectInstruction(typeIndex, reserved)
     }
 
     override fun visitDropInstruction() {
-        notConstant()
+        delegate.visitDropInstruction()
     }
 
     override fun visitSelectInstruction() {
-        notConstant()
+        delegate.visitSelectInstruction()
     }
 
     override fun visitGetGlobalInstruction(globalIndex: UInt) {
-        val globalType = context.globals.getOrElse(globalIndex.toInt()) {
-            throw VerifierException("Global index $globalIndex is out of bounds")
-        }
-
-        if (globalType.isMutable) {
-            notConstant()
-        }
+        delegate.visitGetGlobalInstruction(globalIndex)
     }
 
     override fun visitSetLocalInstruction(localIndex: UInt) {
-        notConstant()
+        delegate.visitSetLocalInstruction(localIndex)
     }
 
     override fun visitTeeLocalInstruction(localIndex: UInt) {
-        notConstant()
+        delegate.visitTeeLocalInstruction(localIndex)
     }
 
     override fun visitGetLocalInstruction(localIndex: UInt) {
-        notConstant()
+        delegate.visitGetLocalInstruction(localIndex)
     }
 
     override fun visitSetGlobalInstruction(globalIndex: UInt) {
-        notConstant()
+        delegate.visitSetGlobalInstruction(globalIndex)
     }
 
     override fun visitMemorySizeInstruction(reserved: Boolean) {
-        notConstant()
+        delegate.visitMemorySizeInstruction(reserved)
     }
 
     override fun visitMemoryGrowInstruction(reserved: Boolean) {
-        notConstant()
+        delegate.visitMemoryGrowInstruction(reserved)
     }
 
     override fun visitEqualZeroInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitEqualZeroInstruction(opcode)
     }
 
     override fun visitEqualInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitEqualInstruction(opcode)
     }
 
     override fun visitNotEqualInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitNotEqualInstruction(opcode)
     }
 
     override fun visitLessThanInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitLessThanInstruction(opcode)
     }
 
     override fun visitLessEqualInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitLessEqualInstruction(opcode)
     }
 
     override fun visitGreaterThanInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitGreaterThanInstruction(opcode)
     }
 
     override fun visitGreaterEqualInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitGreaterEqualInstruction(opcode)
     }
 
     override fun visitCountLeadingZerosInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitCountLeadingZerosInstruction(opcode)
     }
 
     override fun visitCountTrailingZerosInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitCountTrailingZerosInstruction(opcode)
     }
 
     override fun visitPopulationCountInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitPopulationCountInstruction(opcode)
     }
 
     override fun visitAddInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitAddInstruction(opcode)
     }
 
     override fun visitSubtractInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSubtractInstruction(opcode)
     }
 
     override fun visitMultiplyInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitMultiplyInstruction(opcode)
     }
 
     override fun visitDivideInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitDivideInstruction(opcode)
     }
 
     override fun visitRemainderInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitRemainderInstruction(opcode)
     }
 
     override fun visitAndInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitAndInstruction(opcode)
     }
 
     override fun visitOrInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitOrInstruction(opcode)
     }
 
     override fun visitSimdXorInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdXorInstruction(opcode)
     }
 
     override fun visitShiftLeftInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitShiftLeftInstruction(opcode)
     }
 
     override fun visitRotateLeftInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitRotateLeftInstruction(opcode)
     }
 
     override fun visitRotateRightInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitRotateRightInstruction(opcode)
     }
 
     override fun visitAbsoluteInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitAbsoluteInstruction(opcode)
     }
 
     override fun visitNegativeInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitNegativeInstruction(opcode)
     }
 
     override fun visitCeilingInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitCeilingInstruction(opcode)
     }
 
     override fun visitFloorInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitFloorInstruction(opcode)
     }
 
     override fun visitTruncateInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitTruncateInstruction(opcode)
     }
 
     override fun visitNearestInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitNearestInstruction(opcode)
     }
 
     override fun visitSqrtInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSqrtInstruction(opcode)
     }
 
     override fun visitMinInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitMinInstruction(opcode)
     }
 
     override fun visitMaxInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitMaxInstruction(opcode)
     }
 
     override fun visitAtomicRmwAddInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        notConstant()
+        delegate.visitAtomicRmwAddInstruction(opcode, alignment, offset)
     }
 
     override fun visitAtomicRmwSubtractInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        notConstant()
+        delegate.visitAtomicRmwSubtractInstruction(opcode, alignment, offset)
     }
 
     override fun visitAtomicRmwAndInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        notConstant()
+        delegate.visitAtomicRmwAndInstruction(opcode, alignment, offset)
     }
 
     override fun visitAtomicRmwOrInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        notConstant()
+        delegate.visitAtomicRmwOrInstruction(opcode, alignment, offset)
     }
 
     override fun visitAtomicRmwXorInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        notConstant()
+        delegate.visitAtomicRmwXorInstruction(opcode, alignment, offset)
     }
 
     override fun visitAtomicRmwExchangeInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        notConstant()
+        delegate.visitAtomicRmwExchangeInstruction(opcode, alignment, offset)
     }
 
     override fun visitSimdSplatInstruction(opcode: Opcode, value: UInt) {
-        notConstant()
+        delegate.visitSimdSplatInstruction(opcode, value)
     }
 
     override fun visitSimdExtractLaneInstruction(opcode: Opcode, index: UInt) {
-        notConstant()
+        delegate.visitSimdExtractLaneInstruction(opcode, index)
     }
 
     override fun visitSimdReplaceLaneInstruction(opcode: Opcode, index: UInt) {
-        notConstant()
+        delegate.visitSimdReplaceLaneInstruction(opcode, index)
     }
 
     override fun visitSimdAddInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdAddInstruction(opcode)
     }
 
     override fun visitSimdSubtractInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdSubtractInstruction(opcode)
     }
 
     override fun visitSimdMultiplyInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdMultiplyInstruction(opcode)
     }
 
     override fun visitSimdNegativeInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdNegativeInstruction(opcode)
     }
 
     override fun visitSimdAddSaturateInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdAddSaturateInstruction(opcode)
     }
 
     override fun visitSimdSubtractSaturateInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdSubtractSaturateInstruction(opcode)
     }
 
     override fun visitSimdShiftLeftInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdShiftLeftInstruction(opcode)
     }
 
     override fun visitSimdAndInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdAndInstruction(opcode)
     }
 
     override fun visitSimdOrInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdOrInstruction(opcode)
     }
 
     override fun visitSimdNotInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdNotInstruction(opcode)
     }
 
     override fun visitSimdBitSelectInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdBitSelectInstruction(opcode)
     }
 
     override fun visitSimdAllTrueInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdAllTrueInstruction(opcode)
     }
 
     override fun visitSimdEqualInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdEqualInstruction(opcode)
     }
 
     override fun visitSimdNotEqualInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdNotEqualInstruction(opcode)
     }
 
     override fun visitSimdLessThanInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdLessThanInstruction(opcode)
     }
 
     override fun visitSimdLessEqualInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdLessEqualInstruction(opcode)
     }
 
     override fun visitSimdGreaterThanInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdGreaterThanInstruction(opcode)
     }
 
     override fun visitSimdGreaterEqualInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdGreaterEqualInstruction(opcode)
     }
 
     override fun visitSimdMinInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdMinInstruction(opcode)
     }
 
     override fun visitSimdMaxInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdMaxInstruction(opcode)
     }
 
     override fun visitSimdDivideInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdDivideInstruction(opcode)
     }
 
     override fun visitSimdSqrtInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdSqrtInstruction(opcode)
     }
 
     override fun visitSimdConvertInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdConvertInstruction(opcode)
     }
 
     override fun visitSimdTruncateInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdTruncateInstruction(opcode)
     }
 
     override fun visitCopySignInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitCopySignInstruction(opcode)
     }
 
     override fun visitXorInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitXorInstruction(opcode)
     }
 
     override fun visitSimdAbsInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitSimdAbsInstruction(opcode)
     }
 
     override fun visitMemoryFillInstruction(memoryIndex: UInt) {
-        notConstant()
+        delegate.visitMemoryFillInstruction(memoryIndex)
     }
 
     override fun visitMemoryCopyInstruction(targetIndex: UInt, sourceIndex: UInt) {
-        notConstant()
+        delegate.visitMemoryCopyInstruction(targetIndex, sourceIndex)
     }
 
     override fun visitMemoryInitInstruction(memoryIndex: UInt, segmentIndex: UInt) {
-        notConstant()
+        delegate.visitMemoryInitInstruction(memoryIndex, segmentIndex)
     }
 
     override fun visitTableInitInstruction(segmentIndex: UInt, tableIndex: UInt) {
-        notConstant()
+        delegate.visitTableInitInstruction(segmentIndex, tableIndex)
     }
 
     override fun visitDataDropInstruction(segmentIndex: UInt) {
-        notConstant()
+        delegate.visitDataDropInstruction(segmentIndex)
     }
 
     override fun visitTableSizeInstruction(tableIndex: UInt) {
-        notConstant()
+        delegate.visitTableSizeInstruction(tableIndex)
     }
 
     override fun visitTableGrowInstruction(tableIndex: UInt, value: UInt, delta: UInt) {
-        notConstant()
+        delegate.visitTableGrowInstruction(tableIndex, value, delta)
     }
 
     override fun visitTableFillInstruction(tableIndex: UInt) {
-        notConstant()
+        delegate.visitTableFillInstruction(tableIndex)
     }
 
     override fun visitTableCopyInstruction(targetTableIndex: UInt, sourceTableIndex: UInt) {
-        notConstant()
+        delegate.visitTableCopyInstruction(targetTableIndex, sourceTableIndex)
     }
 
     override fun visitElementDropInstruction(segmentIndex: UInt) {
-        notConstant()
+        delegate.visitElementDropInstruction(segmentIndex)
     }
 
     override fun visitAtomicFenceInstruction(reserved: Boolean) {
-        notConstant()
+        delegate.visitAtomicFenceInstruction(reserved)
     }
 
     override fun visitReferenceEqualInstruction() {
-        // constant
+        delegate.visitReferenceEqualInstruction()
     }
 
     override fun visitReferenceFunctionInstruction(functionIndex: UInt) {
-        // constant
+        delegate.visitReferenceFunctionInstruction(functionIndex)
     }
 
     override fun visitReferenceIsNullInstruction() {
-        // constant
+        delegate.visitReferenceIsNullInstruction()
     }
 
     override fun visitReferenceNullInstruction(type: WasmType) {
-        // constant
+        delegate.visitReferenceNullInstruction(type)
     }
 
     override fun visitShiftRightInstruction(opcode: Opcode) {
-        notConstant()
+        delegate.visitShiftRightInstruction(opcode)
     }
 }

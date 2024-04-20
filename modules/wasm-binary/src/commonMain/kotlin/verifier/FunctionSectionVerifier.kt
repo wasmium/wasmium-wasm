@@ -8,16 +8,16 @@ public class FunctionSectionVerifier(private val delegate: FunctionSectionVisito
     private var done: Boolean = false
     private var numberOfFunctions: UInt = 0u
 
-    override fun visitFunction(signatureIndex: UInt) {
+    override fun visitFunction(typeIndex: UInt) {
         checkEnd()
 
-        if (signatureIndex >= context.numberOfSignatures) {
-            throw ParserException("Invalid function signature index: %$signatureIndex")
+        if (typeIndex >= context.numberOfTypes) {
+            throw ParserException("Invalid function signature index: %$typeIndex")
         }
 
         numberOfFunctions++
 
-        delegate.visitFunction(signatureIndex)
+        delegate.visitFunction(typeIndex)
     }
 
     override fun visitEnd() {

@@ -164,8 +164,8 @@ public open class ExpressionAdapter(protected val delegate: ExpressionVisitor? =
         delegate?.visitCallInstruction(functionIndex)
     }
 
-    public override fun visitCallIndirectInstruction(signatureIndex: UInt, reserved: Boolean) {
-        delegate?.visitCallIndirectInstruction(signatureIndex, reserved)
+    public override fun visitCallIndirectInstruction(typeIndex: UInt, reserved: Boolean) {
+        delegate?.visitCallIndirectInstruction(typeIndex, reserved)
     }
 
     public override fun visitDropInstruction() {

@@ -608,10 +608,10 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
         delegate.visitCallInstruction(functionIndex)
     }
 
-    override fun visitCallIndirectInstruction(signatureIndex: UInt, reserved: Boolean) {
+    override fun visitCallIndirectInstruction(typeIndex: UInt, reserved: Boolean) {
         checkEnd()
 
-        if (signatureIndex >= context.numberOfSignatures) {
+        if (typeIndex >= context.numberOfTypes) {
             throw ParserException("Invalid call_indirect signature index")
         }
 
@@ -621,7 +621,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitCallIndirectInstruction(signatureIndex, reserved)
+        delegate.visitCallIndirectInstruction(typeIndex, reserved)
     }
 
     override fun visitDropInstruction() {

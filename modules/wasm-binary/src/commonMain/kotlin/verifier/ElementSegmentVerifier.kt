@@ -32,7 +32,7 @@ public class ElementSegmentVerifier(private val delegate: ElementSegmentVisitor,
             throw ParserException("Table elements must refer to table 0.")
         }
 
-        return ExpressionVerifier(delegate.visitexpression(), context)
+        return ExpressionVerifier(delegate.visitExpression(), context)
     }
 
     override fun visitType(type: WasmType) {
@@ -45,10 +45,10 @@ public class ElementSegmentVerifier(private val delegate: ElementSegmentVisitor,
         delegate.visitType(type)
     }
 
-    override fun visitexpression(): ExpressionVisitor {
+    override fun visitExpression(): ExpressionVisitor {
         checkEnd()
 
-        return ExpressionVerifier(delegate.visitexpression(), context)
+        return ExpressionVerifier(delegate.visitExpression(), context)
     }
 
     override fun visitEnd() {

@@ -9,10 +9,10 @@ public class TypeSectionReader(
     private val context: ReaderContext,
 ) {
     public fun readTypeSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
-        context.numberOfSignatures = source.readVarUInt32()
+        context.numberOfTypes = source.readVarUInt32()
 
         val typeVisitor = visitor.visitTypeSection()
-        for (signatureIndex in 0u until context.numberOfSignatures) {
+        for (typeIndex in 0u until context.numberOfTypes) {
             val form = source.readType()
             if (form != WasmType.FUNC) {
                 throw ParserException("Invalid signature form with type: $form")
@@ -42,7 +42,7 @@ public class TypeSectionReader(
                     throw ParserException("Function with multi-value result not allowed.")
                 }
 
-                for (typeIndex in 0 until resultCount.toInt()) {
+                for (index in 0 until resultCount.toInt()) {
                     val type = source.readType()
 
                     if (!type.isValueType()) {

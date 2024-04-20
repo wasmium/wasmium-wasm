@@ -141,14 +141,14 @@ public class ExpressionReader(
                 }
 
                 CALL_INDIRECT -> {
-                    val signatureIndex = source.readIndex()
+                    val typeIndex = source.readIndex()
 
                     val reserved = source.readVarUInt32()
                     if (reserved != 0u) {
                         throw ParserException("Call_indirect reserved value must be 0")
                     }
 
-                    expressionVisitor.visitCallIndirectInstruction(signatureIndex, reserved = false)
+                    expressionVisitor.visitCallIndirectInstruction(typeIndex, reserved = false)
                 }
 
                 DROP -> {

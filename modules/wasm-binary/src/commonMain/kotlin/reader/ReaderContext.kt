@@ -19,7 +19,7 @@ public class ReaderContext(
     public var numberOfExceptionImports: UInt = 0u
 
     /** Total number of signatures. */
-    public var numberOfSignatures: UInt = 0u
+    public var numberOfTypes: UInt = 0u
 
     /** Total number of tables. */
     public var numberOfTables: UInt = 0u

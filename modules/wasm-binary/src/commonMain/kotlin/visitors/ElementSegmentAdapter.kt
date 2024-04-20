@@ -12,7 +12,7 @@ public open class ElementSegmentAdapter(protected val delegate: ElementSegmentVi
 
     override fun visitType(type: WasmType): Unit = delegate?.visitType(type) ?: Unit
 
-    public override fun visitexpression(): ExpressionVisitor = delegate?.visitexpression() ?: ExpressionAdapter()
+    public override fun visitExpression(): ExpressionVisitor = delegate?.visitExpression() ?: ExpressionAdapter()
 
     public override fun visitEnd(): Unit = delegate?.visitEnd() ?: Unit
 }

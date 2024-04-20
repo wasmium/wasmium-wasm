@@ -6,7 +6,7 @@ import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
 public class CodeSectionValidator(private val delegate: CodeSectionVisitor, private val context: ValidatorContext) : CodeSectionVisitor {
     override fun visitCode(locals: List<LocalVariable>): ExpressionVisitor {
-        return delegate.visitCode(locals)
+        return ExpressionValidator(delegate.visitCode(locals), context)
     }
 
     override fun visitEnd() {

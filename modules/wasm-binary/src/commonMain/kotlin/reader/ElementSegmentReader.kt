@@ -44,7 +44,7 @@ public class ElementSegmentReader(
 
             val initLength = source.readVarUInt32()
             (0u until initLength).forEach { _ ->
-                val expressionVisitor = elementSegmentVisitor.visitexpression()
+                val expressionVisitor = elementSegmentVisitor.visitExpression()
                 expressionReader.readExpression(source, expressionVisitor)
                 expressionVisitor.visitEnd()
             }

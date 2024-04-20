@@ -177,8 +177,8 @@ public class ExpressionNode : ExpressionVisitor {
         instructions.add(CallInstruction(functionIndex))
     }
 
-    public override fun visitCallIndirectInstruction(signatureIndex: UInt, reserved: Boolean) {
-        instructions.add(CallIndirectInstruction(signatureIndex, reserved))
+    public override fun visitCallIndirectInstruction(typeIndex: UInt, reserved: Boolean) {
+        instructions.add(CallIndirectInstruction(typeIndex, reserved))
     }
 
     public override fun visitDropInstruction() {
