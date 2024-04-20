@@ -6,7 +6,7 @@ import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 
-public class ImportSectionVerifier(private val delegate: ImportSectionVisitor, private val context: VerifierContext) : ImportSectionVisitor {
+public class ImportSectionVerifier(private val delegate: ImportSectionVisitor? = null, private val context: VerifierContext) : ImportSectionVisitor {
     private var done: Boolean = false
     private var numberOfImports: UInt = 0u
 
@@ -20,7 +20,7 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor, p
         numberOfImports++
         context.numberOfFunctionImports++
 
-        delegate.visitFunction(moduleName, fieldName, typeIndex)
+        delegate?.visitFunction(moduleName, fieldName, typeIndex)
     }
 
     override fun visitGlobal(moduleName: String, fieldName: String, type: WasmType, mutable: Boolean) {
@@ -29,7 +29,7 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor, p
         numberOfImports++
         context.numberOfGlobalImports++
 
-        delegate.visitGlobal(moduleName, fieldName, type, mutable)
+        delegate?.visitGlobal(moduleName, fieldName, type, mutable)
     }
 
     override fun visitTable(moduleName: String, fieldName: String, elementType: WasmType, limits: ResizableLimits) {
@@ -38,7 +38,7 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor, p
         numberOfImports++
         context.numberOfTableImports++
 
-        delegate.visitTable(moduleName, fieldName, elementType, limits)
+        delegate?.visitTable(moduleName, fieldName, elementType, limits)
     }
 
     override fun visitMemory(moduleName: String, fieldName: String, limits: ResizableLimits) {
@@ -47,7 +47,7 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor, p
         numberOfImports++
         context.numberOfMemoryImports++
 
-        delegate.visitMemory(moduleName, fieldName, limits)
+        delegate?.visitMemory(moduleName, fieldName, limits)
     }
 
     override fun visitException(moduleName: String, fieldName: String, exceptionTypes: List<WasmType>) {
@@ -60,7 +60,7 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor, p
         numberOfImports++
         context.numberOfExceptionImports++
 
-        delegate.visitException(moduleName, fieldName, exceptionTypes)
+        delegate?.visitException(moduleName, fieldName, exceptionTypes)
     }
 
     override fun visitEnd() {
@@ -71,7 +71,7 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor, p
         }
 
         done = true
-        delegate.visitEnd()
+        delegate?.visitEnd()
     }
 
     private fun checkEnd() {

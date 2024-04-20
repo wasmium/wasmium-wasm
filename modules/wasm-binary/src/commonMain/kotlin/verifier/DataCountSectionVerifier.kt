@@ -4,7 +4,7 @@ import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.visitors.DataCountSectionVisitor
 
 public class DataCountSectionVerifier(
-    private val delegate: DataCountSectionVisitor,
+    private val delegate: DataCountSectionVisitor? = null,
     private val context: VerifierContext,
     private val dataSegmentCount: UInt
 ) : DataCountSectionVisitor {
@@ -20,7 +20,7 @@ public class DataCountSectionVerifier(
         context.dataSegmentCount = dataSegmentCount
 
         done = true
-        delegate.visitEnd()
+        delegate?.visitEnd()
     }
 
     private fun checkEnd() {

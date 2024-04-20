@@ -8,7 +8,7 @@ import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
-public open class ExpressionVerifier(private val delegate: ExpressionVisitor, private val context: VerifierContext) : ExpressionVisitor {
+public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = null, private val context: VerifierContext) : ExpressionVisitor {
     private var done: Boolean = false
     private var numberOfInstructions: UInt = 0u
 
@@ -37,7 +37,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitAtomicLoadInstruction(opcode, alignment, offset)
+        delegate?.visitAtomicLoadInstruction(opcode, alignment, offset)
     }
 
     override fun visitAtomicStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
@@ -65,7 +65,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitAtomicStoreInstruction(opcode, alignment, offset)
+        delegate?.visitAtomicStoreInstruction(opcode, alignment, offset)
     }
 
     override fun visitAtomicRmwCompareExchangeInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
@@ -93,7 +93,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitAtomicRmwCompareExchangeInstruction(opcode, alignment, offset)
+        delegate?.visitAtomicRmwCompareExchangeInstruction(opcode, alignment, offset)
     }
 
     override fun visitAtomicWaitInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
@@ -116,7 +116,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitAtomicWaitInstruction(opcode, alignment, offset)
+        delegate?.visitAtomicWaitInstruction(opcode, alignment, offset)
     }
 
     override fun visitAtomicWakeInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
@@ -138,7 +138,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitAtomicWakeInstruction(opcode, alignment, offset)
+        delegate?.visitAtomicWakeInstruction(opcode, alignment, offset)
     }
 
     override fun visitBrTableInstruction(targets: List<UInt>, defaultTarget: UInt) {
@@ -146,7 +146,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitBrTableInstruction(targets, defaultTarget)
+        delegate?.visitBrTableInstruction(targets, defaultTarget)
     }
 
     override fun visitCompareInstruction(opcode: Opcode) {
@@ -154,7 +154,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitCompareInstruction(opcode)
+        delegate?.visitCompareInstruction(opcode)
     }
 
     override fun visitConvertInstruction(opcode: Opcode) {
@@ -179,7 +179,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitConvertInstruction(opcode)
+        delegate?.visitConvertInstruction(opcode)
     }
 
     override fun visitEndInstruction() {
@@ -187,7 +187,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitEndInstruction()
+        delegate?.visitEndInstruction()
     }
 
     override fun visitConstFloat32Instruction(value: Float) {
@@ -195,7 +195,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitConstFloat32Instruction(value)
+        delegate?.visitConstFloat32Instruction(value)
     }
 
     override fun visitConstFloat64Instruction(value: Double) {
@@ -203,7 +203,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitConstFloat64Instruction(value)
+        delegate?.visitConstFloat64Instruction(value)
     }
 
     override fun visitConstInt32Instruction(value: Int) {
@@ -211,7 +211,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitConstInt32Instruction(value)
+        delegate?.visitConstInt32Instruction(value)
     }
 
     override fun visitConstInt64Instruction(value: Long) {
@@ -219,7 +219,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitConstInt64Instruction(value)
+        delegate?.visitConstInt64Instruction(value)
     }
 
     override fun visitSimdConstInstruction(value: V128Value) {
@@ -231,7 +231,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdConstInstruction(value)
+        delegate?.visitSimdConstInstruction(value)
     }
 
     override fun visitSimdShuffleInstruction(opcode: Opcode, value: V128Value) {
@@ -253,7 +253,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdShuffleInstruction(opcode, value)
+        delegate?.visitSimdShuffleInstruction(opcode, value)
     }
 
     override fun visitLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
@@ -284,7 +284,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitLoadInstruction(opcode, alignment, offset)
+        delegate?.visitLoadInstruction(opcode, alignment, offset)
     }
 
     override fun visitSimdLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
@@ -306,7 +306,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdLoadInstruction(opcode, alignment, offset)
+        delegate?.visitSimdLoadInstruction(opcode, alignment, offset)
     }
 
     override fun visitStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
@@ -332,7 +332,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitStoreInstruction(opcode, alignment, offset)
+        delegate?.visitStoreInstruction(opcode, alignment, offset)
     }
 
     override fun visitSimdStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
@@ -354,7 +354,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdStoreInstruction(opcode, alignment, offset)
+        delegate?.visitSimdStoreInstruction(opcode, alignment, offset)
     }
 
     override fun visitWrapInstruction(opcode: Opcode) {
@@ -372,7 +372,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitWrapInstruction(opcode)
+        delegate?.visitWrapInstruction(opcode)
     }
 
     override fun visitExtendInstruction(opcode: Opcode) {
@@ -400,7 +400,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitExtendInstruction(opcode)
+        delegate?.visitExtendInstruction(opcode)
     }
 
     override fun visitDemoteInstruction(opcode: Opcode) {
@@ -418,7 +418,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitDemoteInstruction(opcode)
+        delegate?.visitDemoteInstruction(opcode)
     }
 
     override fun visitPromoteInstruction(opcode: Opcode) {
@@ -436,7 +436,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitPromoteInstruction(opcode)
+        delegate?.visitPromoteInstruction(opcode)
     }
 
     override fun visitReinterpretInstruction(opcode: Opcode) {
@@ -457,7 +457,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitReinterpretInstruction(opcode)
+        delegate?.visitReinterpretInstruction(opcode)
     }
 
     override fun visitUnreachableInstruction() {
@@ -465,7 +465,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitUnreachableInstruction()
+        delegate?.visitUnreachableInstruction()
     }
 
     override fun visitNopInstruction() {
@@ -473,7 +473,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitNopInstruction()
+        delegate?.visitNopInstruction()
     }
 
     override fun visitIfInstruction(types: List<WasmType>) {
@@ -481,7 +481,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitIfInstruction(types)
+        delegate?.visitIfInstruction(types)
     }
 
     override fun visitLoopInstruction(types: List<WasmType>) {
@@ -489,7 +489,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitLoopInstruction(types)
+        delegate?.visitLoopInstruction(types)
     }
 
     override fun visitBlockInstruction(types: List<WasmType>) {
@@ -497,7 +497,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitBlockInstruction(types)
+        delegate?.visitBlockInstruction(types)
     }
 
     override fun visitElseInstruction() {
@@ -505,7 +505,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitElseInstruction()
+        delegate?.visitElseInstruction()
     }
 
     override fun visitTryInstruction(types: List<WasmType>) {
@@ -517,7 +517,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitTryInstruction(types)
+        delegate?.visitTryInstruction(types)
     }
 
     override fun visitCatchInstruction() {
@@ -529,7 +529,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitCatchInstruction()
+        delegate?.visitCatchInstruction()
     }
 
     override fun visitThrowRefInstruction() {
@@ -541,7 +541,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitThrowRefInstruction()
+        delegate?.visitThrowRefInstruction()
     }
 
     override fun visitThrowInstruction(exceptionIndex: UInt) {
@@ -557,7 +557,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitThrowInstruction(exceptionIndex)
+        delegate?.visitThrowInstruction(exceptionIndex)
     }
 
     override fun visitRethrowInstruction() {
@@ -569,7 +569,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitRethrowInstruction()
+        delegate?.visitRethrowInstruction()
     }
 
     override fun visitBrInstruction(depth: UInt) {
@@ -577,7 +577,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitBrInstruction(depth)
+        delegate?.visitBrInstruction(depth)
     }
 
     override fun visitBrIfInstruction(depth: UInt) {
@@ -585,7 +585,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitBrIfInstruction(depth)
+        delegate?.visitBrIfInstruction(depth)
     }
 
     override fun visitReturnInstruction() {
@@ -593,7 +593,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitReturnInstruction()
+        delegate?.visitReturnInstruction()
     }
 
     override fun visitCallInstruction(functionIndex: UInt) {
@@ -605,7 +605,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitCallInstruction(functionIndex)
+        delegate?.visitCallInstruction(functionIndex)
     }
 
     override fun visitCallIndirectInstruction(typeIndex: UInt, reserved: Boolean) {
@@ -621,7 +621,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitCallIndirectInstruction(typeIndex, reserved)
+        delegate?.visitCallIndirectInstruction(typeIndex, reserved)
     }
 
     override fun visitDropInstruction() {
@@ -629,7 +629,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitDropInstruction()
+        delegate?.visitDropInstruction()
     }
 
     override fun visitSelectInstruction() {
@@ -637,7 +637,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSelectInstruction()
+        delegate?.visitSelectInstruction()
     }
 
     override fun visitGetGlobalInstruction(globalIndex: UInt) {
@@ -649,7 +649,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitGetGlobalInstruction(globalIndex)
+        delegate?.visitGetGlobalInstruction(globalIndex)
     }
 
     override fun visitSetLocalInstruction(localIndex: UInt) {
@@ -657,7 +657,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSetLocalInstruction(localIndex)
+        delegate?.visitSetLocalInstruction(localIndex)
     }
 
     override fun visitTeeLocalInstruction(localIndex: UInt) {
@@ -665,7 +665,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitTeeLocalInstruction(localIndex)
+        delegate?.visitTeeLocalInstruction(localIndex)
     }
 
     override fun visitGetLocalInstruction(localIndex: UInt) {
@@ -673,7 +673,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitGetLocalInstruction(localIndex)
+        delegate?.visitGetLocalInstruction(localIndex)
     }
 
     override fun visitSetGlobalInstruction(globalIndex: UInt) {
@@ -685,7 +685,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSetGlobalInstruction(globalIndex)
+        delegate?.visitSetGlobalInstruction(globalIndex)
     }
 
     override fun visitMemorySizeInstruction(reserved: Boolean) {
@@ -697,7 +697,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitMemorySizeInstruction(reserved)
+        delegate?.visitMemorySizeInstruction(reserved)
     }
 
     override fun visitMemoryGrowInstruction(reserved: Boolean) {
@@ -709,13 +709,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitMemoryGrowInstruction(reserved)
+        delegate?.visitMemoryGrowInstruction(reserved)
     }
 
     override fun visitEqualZeroInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode) {
+        when (opcode) {
             I32_EQZ,
             I64_EQZ -> {
                 // valid
@@ -728,13 +728,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitEqualZeroInstruction(opcode)
+        delegate?.visitEqualZeroInstruction(opcode)
     }
 
     override fun visitEqualInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             I32_EQ,
             I64_EQ,
             F32_EQ,
@@ -749,13 +749,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitEqualInstruction(opcode)
+        delegate?.visitEqualInstruction(opcode)
     }
 
     override fun visitNotEqualInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             I32_NE,
             I64_NE,
             F32_NE,
@@ -769,13 +769,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
         }
         numberOfInstructions++
 
-        delegate.visitNotEqualInstruction(opcode)
+        delegate?.visitNotEqualInstruction(opcode)
     }
 
     override fun visitLessThanInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode) {
+        when (opcode) {
             F64_LT,
             I32_LT_S,
             I32_LT_U,
@@ -792,13 +792,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitLessThanInstruction(opcode)
+        delegate?.visitLessThanInstruction(opcode)
     }
 
     override fun visitLessEqualInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             I32_LE_S,
             I32_LE_U,
             I64_LE_S,
@@ -815,13 +815,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitLessEqualInstruction(opcode)
+        delegate?.visitLessEqualInstruction(opcode)
     }
 
     override fun visitGreaterThanInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             I32_GT_S,
             I32_GT_U,
             I64_GT_S,
@@ -838,13 +838,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitGreaterThanInstruction(opcode)
+        delegate?.visitGreaterThanInstruction(opcode)
     }
 
     override fun visitGreaterEqualInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             I32_GE_S,
             I32_GE_U,
             I64_GE_S,
@@ -861,13 +861,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitGreaterEqualInstruction(opcode)
+        delegate?.visitGreaterEqualInstruction(opcode)
     }
 
     override fun visitCountLeadingZerosInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             I32_CLZ,
             I64_CLZ -> {
                 // valid
@@ -880,13 +880,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitCountLeadingZerosInstruction(opcode)
+        delegate?.visitCountLeadingZerosInstruction(opcode)
     }
 
     override fun visitCountTrailingZerosInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             I32_CTZ,
             I64_CTZ -> {
                 // valid
@@ -899,13 +899,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitCountTrailingZerosInstruction(opcode)
+        delegate?.visitCountTrailingZerosInstruction(opcode)
     }
 
     override fun visitPopulationCountInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             I32_POPCNT,
             I64_POPCNT -> {
                 // valid
@@ -918,13 +918,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitPopulationCountInstruction(opcode)
+        delegate?.visitPopulationCountInstruction(opcode)
     }
 
     override fun visitAddInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             I32_ADD,
             I64_ADD,
             F32_ADD,
@@ -939,13 +939,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitAddInstruction(opcode)
+        delegate?.visitAddInstruction(opcode)
     }
 
     override fun visitSubtractInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             I32_SUB,
             I64_SUB,
             F32_SUB,
@@ -960,13 +960,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSubtractInstruction(opcode)
+        delegate?.visitSubtractInstruction(opcode)
     }
 
     override fun visitMultiplyInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             I32_MUL,
             I64_MUL,
             F32_MUL,
@@ -981,7 +981,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitMultiplyInstruction(opcode)
+        delegate?.visitMultiplyInstruction(opcode)
     }
 
     override fun visitDivideInstruction(opcode: Opcode) {
@@ -1004,7 +1004,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitDivideInstruction(opcode)
+        delegate?.visitDivideInstruction(opcode)
     }
 
     override fun visitRemainderInstruction(opcode: Opcode) {
@@ -1025,13 +1025,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitRemainderInstruction(opcode)
+        delegate?.visitRemainderInstruction(opcode)
     }
 
     override fun visitAndInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             I32_AND,
             I64_AND -> {
                 // valid
@@ -1044,13 +1044,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitAndInstruction(opcode)
+        delegate?.visitAndInstruction(opcode)
     }
 
     override fun visitOrInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             I32_OR,
             I64_OR -> {
                 // valid
@@ -1063,7 +1063,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitOrInstruction(opcode)
+        delegate?.visitOrInstruction(opcode)
     }
 
     override fun visitSimdXorInstruction(opcode: Opcode) {
@@ -1075,13 +1075,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdXorInstruction(opcode)
+        delegate?.visitSimdXorInstruction(opcode)
     }
 
     override fun visitShiftLeftInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             I32_SHL,
             I64_SHL -> {
                 // valid
@@ -1094,13 +1094,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitShiftLeftInstruction(opcode)
+        delegate?.visitShiftLeftInstruction(opcode)
     }
 
     override fun visitRotateLeftInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             I32_ROTL,
             I64_ROTL -> {
                 // valid
@@ -1113,13 +1113,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitRotateLeftInstruction(opcode)
+        delegate?.visitRotateLeftInstruction(opcode)
     }
 
     override fun visitRotateRightInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             I32_ROTR,
             I64_ROTR -> {
                 // valid
@@ -1132,13 +1132,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitRotateRightInstruction(opcode)
+        delegate?.visitRotateRightInstruction(opcode)
     }
 
     override fun visitAbsoluteInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             F32_ABS,
             F64_ABS -> {
                 // valid
@@ -1151,13 +1151,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitAbsoluteInstruction(opcode)
+        delegate?.visitAbsoluteInstruction(opcode)
     }
 
     override fun visitNegativeInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             F32_NEG,
             F64_NEG -> {
                 // valid
@@ -1170,13 +1170,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitNegativeInstruction(opcode)
+        delegate?.visitNegativeInstruction(opcode)
     }
 
     override fun visitCeilingInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             F32_CEIL,
             F64_CEIL -> {
                 // valid
@@ -1189,13 +1189,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitCeilingInstruction(opcode)
+        delegate?.visitCeilingInstruction(opcode)
     }
 
     override fun visitFloorInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             F32_FLOOR,
             F64_FLOOR -> {
                 // valid
@@ -1208,7 +1208,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitFloorInstruction(opcode)
+        delegate?.visitFloorInstruction(opcode)
     }
 
     override fun visitTruncateInstruction(opcode: Opcode) {
@@ -1218,7 +1218,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
             throw ParserException("Invalid $opcode code: SIMD support not enabled.")
         }
 
-        when(opcode){
+        when (opcode) {
             F32_TRUNC,
             F64_TRUNC,
             I32_TRUNC_SF32,
@@ -1247,13 +1247,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitTruncateInstruction(opcode)
+        delegate?.visitTruncateInstruction(opcode)
     }
 
     override fun visitNearestInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             F32_NEAREST,
             F64_NEAREST -> {
                 // valid
@@ -1266,13 +1266,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitNearestInstruction(opcode)
+        delegate?.visitNearestInstruction(opcode)
     }
 
     override fun visitSqrtInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             F32_SQRT,
             F64_SQRT -> {
                 // valid
@@ -1285,13 +1285,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSqrtInstruction(opcode)
+        delegate?.visitSqrtInstruction(opcode)
     }
 
     override fun visitMinInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             F32_MIN,
             F64_MIN -> {
                 // valid
@@ -1304,13 +1304,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitMinInstruction(opcode)
+        delegate?.visitMinInstruction(opcode)
     }
 
     override fun visitMaxInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             F32_MAX,
             F64_MAX -> {
                 // valid
@@ -1323,7 +1323,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitMaxInstruction(opcode)
+        delegate?.visitMaxInstruction(opcode)
     }
 
     override fun visitAtomicRmwAddInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
@@ -1333,7 +1333,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
             throw ParserException("Invalid $opcode code: threads not enabled.")
         }
 
-        when(opcode){
+        when (opcode) {
             I32_ATOMIC_RMW_ADD,
             I64_ATOMIC_RMW_ADD,
             I32_ATOMIC_RMW8_U_ADD,
@@ -1351,7 +1351,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitAtomicRmwAddInstruction(opcode, alignment, offset)
+        delegate?.visitAtomicRmwAddInstruction(opcode, alignment, offset)
     }
 
     override fun visitAtomicRmwSubtractInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
@@ -1361,7 +1361,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
             throw ParserException("Invalid $opcode code: threads not enabled.")
         }
 
-        when(opcode){
+        when (opcode) {
             I32_ATOMIC_RMW_SUB,
             I64_ATOMIC_RMW_SUB,
             I32_ATOMIC_RMW8_U_SUB,
@@ -1378,7 +1378,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
         }
         numberOfInstructions++
 
-        delegate.visitAtomicRmwSubtractInstruction(opcode, alignment, offset)
+        delegate?.visitAtomicRmwSubtractInstruction(opcode, alignment, offset)
     }
 
     override fun visitAtomicRmwAndInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
@@ -1388,7 +1388,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
             throw ParserException("Invalid $opcode code: threads not enabled.")
         }
 
-        when(opcode){
+        when (opcode) {
             I32_ATOMIC_RMW_AND,
             I64_ATOMIC_RMW_AND,
             I32_ATOMIC_RMW8_U_AND,
@@ -1405,7 +1405,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
         }
         numberOfInstructions++
 
-        delegate.visitAtomicRmwAndInstruction(opcode, alignment, offset)
+        delegate?.visitAtomicRmwAndInstruction(opcode, alignment, offset)
     }
 
     override fun visitAtomicRmwOrInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
@@ -1415,7 +1415,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
             throw ParserException("Invalid $opcode code: threads not enabled.")
         }
 
-        when(opcode){
+        when (opcode) {
             I32_ATOMIC_RMW_OR,
             I64_ATOMIC_RMW_OR,
             I32_ATOMIC_RMW8_U_OR,
@@ -1433,7 +1433,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitAtomicRmwOrInstruction(opcode, alignment, offset)
+        delegate?.visitAtomicRmwOrInstruction(opcode, alignment, offset)
     }
 
     override fun visitAtomicRmwXorInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
@@ -1443,7 +1443,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
             throw ParserException("Invalid $opcode code: threads not enabled.")
         }
 
-        when(opcode){
+        when (opcode) {
             I32_ATOMIC_RMW_XOR,
             I64_ATOMIC_RMW_XOR,
             I32_ATOMIC_RMW8_U_XOR,
@@ -1461,7 +1461,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitAtomicRmwXorInstruction(opcode, alignment, offset)
+        delegate?.visitAtomicRmwXorInstruction(opcode, alignment, offset)
     }
 
     override fun visitAtomicRmwExchangeInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
@@ -1471,7 +1471,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
             throw ParserException("Invalid $opcode code: threads not enabled.")
         }
 
-        when(opcode){
+        when (opcode) {
             I32_ATOMIC_RMW_XCHG,
             I64_ATOMIC_RMW_XCHG,
             I32_ATOMIC_RMW8_U_XCHG,
@@ -1489,7 +1489,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitAtomicRmwExchangeInstruction(opcode, alignment, offset)
+        delegate?.visitAtomicRmwExchangeInstruction(opcode, alignment, offset)
     }
 
     override fun visitSimdSplatInstruction(opcode: Opcode, value: UInt) {
@@ -1516,7 +1516,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdSplatInstruction(opcode, value)
+        delegate?.visitSimdSplatInstruction(opcode, value)
     }
 
     override fun visitSimdExtractLaneInstruction(opcode: Opcode, index: UInt) {
@@ -1545,7 +1545,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdExtractLaneInstruction(opcode, index)
+        delegate?.visitSimdExtractLaneInstruction(opcode, index)
     }
 
     override fun visitSimdReplaceLaneInstruction(opcode: Opcode, index: UInt) {
@@ -1572,7 +1572,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdReplaceLaneInstruction(opcode, index)
+        delegate?.visitSimdReplaceLaneInstruction(opcode, index)
     }
 
     override fun visitSimdAddInstruction(opcode: Opcode) {
@@ -1599,7 +1599,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdAddInstruction(opcode)
+        delegate?.visitSimdAddInstruction(opcode)
     }
 
     override fun visitSimdSubtractInstruction(opcode: Opcode) {
@@ -1626,7 +1626,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdSubtractInstruction(opcode)
+        delegate?.visitSimdSubtractInstruction(opcode)
     }
 
     override fun visitSimdMultiplyInstruction(opcode: Opcode) {
@@ -1652,7 +1652,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdMultiplyInstruction(opcode)
+        delegate?.visitSimdMultiplyInstruction(opcode)
     }
 
     override fun visitSimdNegativeInstruction(opcode: Opcode) {
@@ -1679,7 +1679,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdNegativeInstruction(opcode)
+        delegate?.visitSimdNegativeInstruction(opcode)
     }
 
     override fun visitSimdAddSaturateInstruction(opcode: Opcode) {
@@ -1704,7 +1704,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdAddSaturateInstruction(opcode)
+        delegate?.visitSimdAddSaturateInstruction(opcode)
     }
 
     override fun visitSimdSubtractSaturateInstruction(opcode: Opcode) {
@@ -1729,7 +1729,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdSubtractSaturateInstruction(opcode)
+        delegate?.visitSimdSubtractSaturateInstruction(opcode)
     }
 
     override fun visitSimdShiftLeftInstruction(opcode: Opcode) {
@@ -1762,7 +1762,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdShiftLeftInstruction(opcode)
+        delegate?.visitSimdShiftLeftInstruction(opcode)
     }
 
     override fun visitSimdAndInstruction(opcode: Opcode) {
@@ -1784,7 +1784,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdAndInstruction(opcode)
+        delegate?.visitSimdAndInstruction(opcode)
     }
 
     override fun visitSimdOrInstruction(opcode: Opcode) {
@@ -1806,7 +1806,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdOrInstruction(opcode)
+        delegate?.visitSimdOrInstruction(opcode)
     }
 
     override fun visitSimdNotInstruction(opcode: Opcode) {
@@ -1828,7 +1828,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdNotInstruction(opcode)
+        delegate?.visitSimdNotInstruction(opcode)
     }
 
     override fun visitSimdBitSelectInstruction(opcode: Opcode) {
@@ -1850,7 +1850,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdBitSelectInstruction(opcode)
+        delegate?.visitSimdBitSelectInstruction(opcode)
     }
 
     override fun visitSimdAllTrueInstruction(opcode: Opcode) {
@@ -1879,7 +1879,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdAllTrueInstruction(opcode)
+        delegate?.visitSimdAllTrueInstruction(opcode)
     }
 
     override fun visitSimdEqualInstruction(opcode: Opcode) {
@@ -1905,7 +1905,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdEqualInstruction(opcode)
+        delegate?.visitSimdEqualInstruction(opcode)
     }
 
     override fun visitSimdNotEqualInstruction(opcode: Opcode) {
@@ -1931,7 +1931,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdNotEqualInstruction(opcode)
+        delegate?.visitSimdNotEqualInstruction(opcode)
     }
 
     override fun visitSimdLessThanInstruction(opcode: Opcode) {
@@ -1960,7 +1960,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdLessThanInstruction(opcode)
+        delegate?.visitSimdLessThanInstruction(opcode)
     }
 
     override fun visitSimdLessEqualInstruction(opcode: Opcode) {
@@ -1989,7 +1989,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdLessEqualInstruction(opcode)
+        delegate?.visitSimdLessEqualInstruction(opcode)
     }
 
     override fun visitSimdGreaterThanInstruction(opcode: Opcode) {
@@ -2018,7 +2018,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdGreaterThanInstruction(opcode)
+        delegate?.visitSimdGreaterThanInstruction(opcode)
     }
 
     override fun visitSimdGreaterEqualInstruction(opcode: Opcode) {
@@ -2047,7 +2047,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdGreaterEqualInstruction(opcode)
+        delegate?.visitSimdGreaterEqualInstruction(opcode)
     }
 
     override fun visitSimdMinInstruction(opcode: Opcode) {
@@ -2070,7 +2070,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdMinInstruction(opcode)
+        delegate?.visitSimdMinInstruction(opcode)
     }
 
     override fun visitSimdMaxInstruction(opcode: Opcode) {
@@ -2093,7 +2093,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdMaxInstruction(opcode)
+        delegate?.visitSimdMaxInstruction(opcode)
     }
 
     override fun visitSimdDivideInstruction(opcode: Opcode) {
@@ -2116,7 +2116,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdDivideInstruction(opcode)
+        delegate?.visitSimdDivideInstruction(opcode)
     }
 
     override fun visitSimdSqrtInstruction(opcode: Opcode) {
@@ -2139,7 +2139,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdSqrtInstruction(opcode)
+        delegate?.visitSimdSqrtInstruction(opcode)
     }
 
     override fun visitSimdConvertInstruction(opcode: Opcode) {
@@ -2164,7 +2164,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdConvertInstruction(opcode)
+        delegate?.visitSimdConvertInstruction(opcode)
     }
 
     override fun visitSimdTruncateInstruction(opcode: Opcode) {
@@ -2189,13 +2189,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdTruncateInstruction(opcode)
+        delegate?.visitSimdTruncateInstruction(opcode)
     }
 
     override fun visitCopySignInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             F32_COPYSIGN,
             F64_COPYSIGN -> {
                 // valid
@@ -2208,13 +2208,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitCopySignInstruction(opcode)
+        delegate?.visitCopySignInstruction(opcode)
     }
 
     override fun visitXorInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             I32_XOR,
             I64_XOR -> {
                 // valid
@@ -2227,7 +2227,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitXorInstruction(opcode)
+        delegate?.visitXorInstruction(opcode)
     }
 
     override fun visitSimdAbsInstruction(opcode: Opcode) {
@@ -2250,7 +2250,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitSimdAbsInstruction(opcode)
+        delegate?.visitSimdAbsInstruction(opcode)
     }
 
     override fun visitMemoryFillInstruction(memoryIndex: UInt) {
@@ -2262,7 +2262,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitMemoryFillInstruction(memoryIndex)
+        delegate?.visitMemoryFillInstruction(memoryIndex)
     }
 
     override fun visitMemoryCopyInstruction(targetIndex: UInt, sourceIndex: UInt) {
@@ -2274,7 +2274,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitMemoryCopyInstruction(targetIndex, sourceIndex)
+        delegate?.visitMemoryCopyInstruction(targetIndex, sourceIndex)
     }
 
     override fun visitMemoryInitInstruction(memoryIndex: UInt, segmentIndex: UInt) {
@@ -2286,7 +2286,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitMemoryInitInstruction(memoryIndex, segmentIndex)
+        delegate?.visitMemoryInitInstruction(memoryIndex, segmentIndex)
     }
 
     override fun visitTableInitInstruction(segmentIndex: UInt, tableIndex: UInt) {
@@ -2298,7 +2298,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitTableInitInstruction(segmentIndex, tableIndex)
+        delegate?.visitTableInitInstruction(segmentIndex, tableIndex)
     }
 
     override fun visitDataDropInstruction(segmentIndex: UInt) {
@@ -2310,7 +2310,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitDataDropInstruction(segmentIndex)
+        delegate?.visitDataDropInstruction(segmentIndex)
     }
 
     override fun visitTableSizeInstruction(tableIndex: UInt) {
@@ -2322,7 +2322,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitTableSizeInstruction(tableIndex)
+        delegate?.visitTableSizeInstruction(tableIndex)
     }
 
     override fun visitTableGrowInstruction(tableIndex: UInt, value: UInt, delta: UInt) {
@@ -2334,7 +2334,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitTableGrowInstruction(tableIndex, value, delta)
+        delegate?.visitTableGrowInstruction(tableIndex, value, delta)
     }
 
     override fun visitTableFillInstruction(tableIndex: UInt) {
@@ -2346,7 +2346,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitTableFillInstruction(tableIndex)
+        delegate?.visitTableFillInstruction(tableIndex)
     }
 
     override fun visitTableCopyInstruction(targetTableIndex: UInt, sourceTableIndex: UInt) {
@@ -2358,7 +2358,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitTableCopyInstruction(targetTableIndex, sourceTableIndex)
+        delegate?.visitTableCopyInstruction(targetTableIndex, sourceTableIndex)
     }
 
     override fun visitElementDropInstruction(segmentIndex: UInt) {
@@ -2370,7 +2370,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitElementDropInstruction(segmentIndex)
+        delegate?.visitElementDropInstruction(segmentIndex)
     }
 
     override fun visitAtomicFenceInstruction(reserved: Boolean) {
@@ -2386,7 +2386,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitAtomicFenceInstruction(reserved)
+        delegate?.visitAtomicFenceInstruction(reserved)
     }
 
     override fun visitReferenceEqualInstruction() {
@@ -2399,7 +2399,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitReferenceEqualInstruction()
+        delegate?.visitReferenceEqualInstruction()
     }
 
     override fun visitReferenceFunctionInstruction(functionIndex: UInt) {
@@ -2411,7 +2411,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitReferenceFunctionInstruction(functionIndex)
+        delegate?.visitReferenceFunctionInstruction(functionIndex)
     }
 
     override fun visitReferenceIsNullInstruction() {
@@ -2423,7 +2423,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitReferenceIsNullInstruction()
+        delegate?.visitReferenceIsNullInstruction()
     }
 
     override fun visitReferenceNullInstruction(type: WasmType) {
@@ -2435,13 +2435,13 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitReferenceNullInstruction(type)
+        delegate?.visitReferenceNullInstruction(type)
     }
 
     override fun visitShiftRightInstruction(opcode: Opcode) {
         checkEnd()
 
-        when(opcode){
+        when (opcode) {
             I32_SHR_S,
             I32_SHR_U,
             I64_SHR_S,
@@ -2456,7 +2456,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
 
         numberOfInstructions++
 
-        delegate.visitShiftRightInstruction(opcode)
+        delegate?.visitShiftRightInstruction(opcode)
     }
 
     override fun visitEnd() {
@@ -2467,7 +2467,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
         }
 
         done = true
-        delegate.visitEnd()
+        delegate?.visitEnd()
     }
 
 

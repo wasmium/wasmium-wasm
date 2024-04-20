@@ -6,7 +6,7 @@ import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.TableSectionVisitor
 
-public class TableSectionVerifier(private val delegate: TableSectionVisitor, private val context: VerifierContext) : TableSectionVisitor {
+public class TableSectionVerifier(private val delegate: TableSectionVisitor? = null, private val context: VerifierContext) : TableSectionVisitor {
     private var done: Boolean = false
     private var numberOfTables: UInt = 0u
 
@@ -25,7 +25,7 @@ public class TableSectionVerifier(private val delegate: TableSectionVisitor, pri
 
         numberOfTables++
 
-        delegate.visitTable(elementType, limits)
+        delegate?.visitTable(elementType, limits)
     }
 
     override fun visitEnd() {
@@ -38,7 +38,7 @@ public class TableSectionVerifier(private val delegate: TableSectionVisitor, pri
         context.numberOfTables = numberOfTables
 
         done = true
-        delegate.visitEnd()
+        delegate?.visitEnd()
     }
 
     private fun checkEnd() {

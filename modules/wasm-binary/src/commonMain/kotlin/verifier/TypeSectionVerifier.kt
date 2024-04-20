@@ -5,7 +5,7 @@ import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.TypeSectionVisitor
 
-public class TypeSectionVerifier(private val delegate: TypeSectionVisitor, private val context: VerifierContext) : TypeSectionVisitor {
+public class TypeSectionVerifier(private val delegate: TypeSectionVisitor? = null, private val context: VerifierContext) : TypeSectionVisitor {
     private var done: Boolean = false
 
     override fun visitType(parameters: List<WasmType>, results: List<WasmType>) {
@@ -21,7 +21,7 @@ public class TypeSectionVerifier(private val delegate: TypeSectionVisitor, priva
 
         context.numberOfTypes++
 
-        delegate.visitType(parameters, results)
+        delegate?.visitType(parameters, results)
     }
 
     override fun visitEnd() {
@@ -32,7 +32,7 @@ public class TypeSectionVerifier(private val delegate: TypeSectionVisitor, priva
         }
 
         done = true
-        delegate.visitEnd()
+        delegate?.visitEnd()
     }
 
     private fun checkEnd() {

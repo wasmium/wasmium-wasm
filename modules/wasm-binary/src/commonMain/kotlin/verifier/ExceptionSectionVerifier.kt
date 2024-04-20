@@ -4,7 +4,7 @@ import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.ExceptionSectionVisitor
 
-public class ExceptionSectionVerifier(private val delegate: ExceptionSectionVisitor, private val context: VerifierContext) : ExceptionSectionVisitor {
+public class ExceptionSectionVerifier(private val delegate: ExceptionSectionVisitor? = null, private val context: VerifierContext) : ExceptionSectionVisitor {
     private var done: Boolean = false
 
     override fun visitExceptionType(types: List<WasmType>) {
@@ -15,7 +15,7 @@ public class ExceptionSectionVerifier(private val delegate: ExceptionSectionVisi
         }
         context.numberOfExceptions++
 
-        delegate.visitExceptionType(types)
+        delegate?.visitExceptionType(types)
     }
 
     override fun visitEnd() {
@@ -26,7 +26,7 @@ public class ExceptionSectionVerifier(private val delegate: ExceptionSectionVisi
         }
 
         done = true
-        delegate.visitEnd()
+        delegate?.visitEnd()
     }
 
     private fun checkEnd() {

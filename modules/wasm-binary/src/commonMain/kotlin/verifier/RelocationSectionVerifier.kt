@@ -5,7 +5,7 @@ import org.wasmium.wasm.binary.tree.RelocationKind
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.visitors.RelocationSectionVisitor
 
-public class RelocationSectionVerifier(private val delegate: RelocationSectionVisitor, private val context: VerifierContext) : RelocationSectionVisitor {
+public class RelocationSectionVerifier(private val delegate: RelocationSectionVisitor? = null, private val context: VerifierContext) : RelocationSectionVisitor {
     private var done: Boolean = false
     private var numberOfRelocations: UInt = 0u
 
@@ -14,13 +14,13 @@ public class RelocationSectionVerifier(private val delegate: RelocationSectionVi
 
         numberOfRelocations++
 
-        delegate.visitRelocation(relocationKind, offset, index, addend)
+        delegate?.visitRelocation(relocationKind, offset, index, addend)
     }
 
     override fun visitSection(sectionKind: SectionKind, sectionName: String) {
         checkEnd()
 
-        delegate.visitSection(sectionKind, sectionName)
+        delegate?.visitSection(sectionKind, sectionName)
     }
 
     override fun visitEnd() {
@@ -33,7 +33,7 @@ public class RelocationSectionVerifier(private val delegate: RelocationSectionVi
         context.numberOfRelocations = numberOfRelocations
 
         done = true
-        delegate.visitEnd()
+        delegate?.visitEnd()
     }
 
     private fun checkEnd() {

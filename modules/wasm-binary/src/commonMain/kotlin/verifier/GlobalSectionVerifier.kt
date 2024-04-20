@@ -6,7 +6,7 @@ import org.wasmium.wasm.binary.tree.sections.GlobalType
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
 
-public class GlobalSectionVerifier(private val delegate: GlobalSectionVisitor, private val context: VerifierContext) : GlobalSectionVisitor {
+public class GlobalSectionVerifier(private val delegate: GlobalSectionVisitor? = null, private val context: VerifierContext) : GlobalSectionVisitor {
     private var done: Boolean = false
 
     override fun visitGlobalVariable(type: WasmType, mutable: Boolean): ExpressionVisitor {
@@ -14,7 +14,7 @@ public class GlobalSectionVerifier(private val delegate: GlobalSectionVisitor, p
 
         context.numberOfGlobals++
 
-        return ExpressionVerifier(delegate.visitGlobalVariable(type, mutable), context)
+        return ExpressionVerifier(delegate?.visitGlobalVariable(type, mutable), context)
     }
 
     override fun visitEnd() {
@@ -25,7 +25,7 @@ public class GlobalSectionVerifier(private val delegate: GlobalSectionVisitor, p
         }
 
         done = true
-        delegate.visitEnd()
+        delegate?.visitEnd()
     }
 
     private fun checkEnd() {

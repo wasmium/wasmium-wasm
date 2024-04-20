@@ -21,7 +21,7 @@ import org.wasmium.wasm.binary.visitors.TableSectionVisitor
 import org.wasmium.wasm.binary.visitors.TypeSectionVisitor
 import org.wasmium.wasm.binary.visitors.UnknownSectionVisitor
 
-public class ModuleVerifier(private val delegate: ModuleVisitor, private val options: VerifierOptions) : ModuleVisitor {
+public class ModuleVerifier(private val delegate: ModuleVisitor? = null, private val options: VerifierOptions) : ModuleVisitor {
     private val context = VerifierContext(options)
     private var started = false
     private var done = false
@@ -32,7 +32,7 @@ public class ModuleVerifier(private val delegate: ModuleVisitor, private val opt
 
         started = true
 
-        delegate.visitHeader(version)
+        delegate?.visitHeader(version)
     }
 
     override fun visitTypeSection(): TypeSectionVisitor {
@@ -41,7 +41,7 @@ public class ModuleVerifier(private val delegate: ModuleVisitor, private val opt
 
         numberOfSections++
 
-        return TypeSectionVerifier(delegate.visitTypeSection(), context)
+        return TypeSectionVerifier(delegate?.visitTypeSection(), context)
     }
 
     override fun visitFunctionSection(): FunctionSectionVisitor {
@@ -50,7 +50,7 @@ public class ModuleVerifier(private val delegate: ModuleVisitor, private val opt
 
         numberOfSections++
 
-        return FunctionSectionVerifier(delegate.visitFunctionSection(), context)
+        return FunctionSectionVerifier(delegate?.visitFunctionSection(), context)
     }
 
     override fun visitStartSection(functionIndex: UInt): StartSectionVisitor {
@@ -59,7 +59,7 @@ public class ModuleVerifier(private val delegate: ModuleVisitor, private val opt
 
         numberOfSections++
 
-        return StartSectionVerifier(delegate.visitStartSection(functionIndex), context, functionIndex)
+        return StartSectionVerifier(delegate?.visitStartSection(functionIndex), context, functionIndex)
     }
 
     override fun visitImportSection(): ImportSectionVisitor {
@@ -68,7 +68,7 @@ public class ModuleVerifier(private val delegate: ModuleVisitor, private val opt
 
         numberOfSections++
 
-        return ImportSectionVerifier(delegate.visitImportSection(), context)
+        return ImportSectionVerifier(delegate?.visitImportSection(), context)
     }
 
     override fun visitExportSection(): ExportSectionVisitor {
@@ -77,7 +77,7 @@ public class ModuleVerifier(private val delegate: ModuleVisitor, private val opt
 
         numberOfSections++
 
-        return ExportSectionVerifier(delegate.visitExportSection(), context)
+        return ExportSectionVerifier(delegate?.visitExportSection(), context)
     }
 
     override fun visitTableSection(): TableSectionVisitor {
@@ -86,7 +86,7 @@ public class ModuleVerifier(private val delegate: ModuleVisitor, private val opt
 
         numberOfSections++
 
-        return TableSectionVerifier(delegate.visitTableSection(), context)
+        return TableSectionVerifier(delegate?.visitTableSection(), context)
     }
 
     override fun visitElementSection(): ElementSectionVisitor {
@@ -95,7 +95,7 @@ public class ModuleVerifier(private val delegate: ModuleVisitor, private val opt
 
         numberOfSections++
 
-        return ElementSectionVerifier(delegate.visitElementSection(), context)
+        return ElementSectionVerifier(delegate?.visitElementSection(), context)
     }
 
     override fun visitGlobalSection(): GlobalSectionVisitor {
@@ -104,7 +104,7 @@ public class ModuleVerifier(private val delegate: ModuleVisitor, private val opt
 
         numberOfSections++
 
-        return GlobalSectionVerifier(delegate.visitGlobalSection(), context)
+        return GlobalSectionVerifier(delegate?.visitGlobalSection(), context)
     }
 
     override fun visitCodeSection(): CodeSectionVisitor {
@@ -113,7 +113,7 @@ public class ModuleVerifier(private val delegate: ModuleVisitor, private val opt
 
         numberOfSections++
 
-        return CodeSectionVerifier(delegate.visitCodeSection(), context)
+        return CodeSectionVerifier(delegate?.visitCodeSection(), context)
     }
 
     override fun visitMemorySection(): MemorySectionVisitor {
@@ -122,7 +122,7 @@ public class ModuleVerifier(private val delegate: ModuleVisitor, private val opt
 
         numberOfSections++
 
-        return MemorySectionVerifier(delegate.visitMemorySection(), context)
+        return MemorySectionVerifier(delegate?.visitMemorySection(), context)
     }
 
     override fun visitDataSection(): DataSectionVisitor {
@@ -131,7 +131,7 @@ public class ModuleVerifier(private val delegate: ModuleVisitor, private val opt
 
         numberOfSections++
 
-        return DataSectionVerifier(delegate.visitDataSection(), context)
+        return DataSectionVerifier(delegate?.visitDataSection(), context)
     }
 
     override fun visitExceptionSection(): ExceptionSectionVisitor {
@@ -140,7 +140,7 @@ public class ModuleVerifier(private val delegate: ModuleVisitor, private val opt
 
         numberOfSections++
 
-        return ExceptionSectionVerifier(delegate.visitExceptionSection(), context)
+        return ExceptionSectionVerifier(delegate?.visitExceptionSection(), context)
     }
 
     override fun visitRelocationSection(): RelocationSectionVisitor {
@@ -149,7 +149,7 @@ public class ModuleVerifier(private val delegate: ModuleVisitor, private val opt
 
         numberOfSections++
 
-        return RelocationSectionVerifier(delegate.visitRelocationSection(), context)
+        return RelocationSectionVerifier(delegate?.visitRelocationSection(), context)
     }
 
     override fun visitUnknownSection(name: String, content: ByteArray): UnknownSectionVisitor {
@@ -158,7 +158,7 @@ public class ModuleVerifier(private val delegate: ModuleVisitor, private val opt
 
         numberOfSections++
 
-        return UnknownSectionVerifier(delegate.visitUnknownSection(name, content), context)
+        return UnknownSectionVerifier(delegate?.visitUnknownSection(name, content), context)
     }
 
     override fun visitLinkingSection(): LinkingSectionVisitor {
@@ -167,7 +167,7 @@ public class ModuleVerifier(private val delegate: ModuleVisitor, private val opt
 
         numberOfSections++
 
-        return LinkingSectionVerifier(delegate.visitLinkingSection(), context)
+        return LinkingSectionVerifier(delegate?.visitLinkingSection(), context)
     }
 
     override fun visitNameSection(): NameSectionVisitor {
@@ -176,7 +176,7 @@ public class ModuleVerifier(private val delegate: ModuleVisitor, private val opt
 
         numberOfSections++
 
-        return NameSectionVerifier(delegate.visitNameSection(), context)
+        return NameSectionVerifier(delegate?.visitNameSection(), context)
     }
 
     override fun visitDataCountSection(dataCount: UInt): DataCountSectionVisitor {
@@ -185,7 +185,7 @@ public class ModuleVerifier(private val delegate: ModuleVisitor, private val opt
 
         numberOfSections++
 
-        return DataCountSectionVerifier(delegate.visitDataCountSection(dataCount), context, dataCount)
+        return DataCountSectionVerifier(delegate?.visitDataCountSection(dataCount), context, dataCount)
     }
 
     override fun visitSourceMapSection(sourceMap: String): SourceMapSectionVisitor {
@@ -194,7 +194,7 @@ public class ModuleVerifier(private val delegate: ModuleVisitor, private val opt
 
         numberOfSections++
 
-        return SourceMapSectionVerifier(delegate.visitSourceMapSection(sourceMap), context)
+        return SourceMapSectionVerifier(delegate?.visitSourceMapSection(sourceMap), context)
     }
 
     override fun visitEnd() {
@@ -213,7 +213,7 @@ public class ModuleVerifier(private val delegate: ModuleVisitor, private val opt
         }
 
         done = true
-        delegate.visitEnd()
+        delegate?.visitEnd()
     }
 
     private fun checkStarted() {

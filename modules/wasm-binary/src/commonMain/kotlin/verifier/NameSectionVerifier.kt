@@ -4,7 +4,7 @@ import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.tree.IndexName
 import org.wasmium.wasm.binary.visitors.NameSectionVisitor
 
-public class NameSectionVerifier(private val delegate: NameSectionVisitor, private val context: VerifierContext) : NameSectionVisitor {
+public class NameSectionVerifier(private val delegate: NameSectionVisitor? = null, private val context: VerifierContext) : NameSectionVisitor {
     private var done: Boolean = false
     private var numberOfNames: UInt = 0u
 
@@ -13,7 +13,7 @@ public class NameSectionVerifier(private val delegate: NameSectionVisitor, priva
 
         numberOfNames++
 
-        delegate.visitModuleName(name)
+        delegate?.visitModuleName(name)
     }
 
     override fun visitFunctionNames(names: List<IndexName>) {
@@ -27,7 +27,7 @@ public class NameSectionVerifier(private val delegate: NameSectionVisitor, priva
 
         numberOfNames++
 
-        delegate.visitFunctionNames(names)
+        delegate?.visitFunctionNames(names)
     }
 
     override fun visitGlobalNames(names: List<IndexName>) {
@@ -41,7 +41,7 @@ public class NameSectionVerifier(private val delegate: NameSectionVisitor, priva
 
         numberOfNames++
 
-        delegate.visitGlobalNames(names)
+        delegate?.visitGlobalNames(names)
     }
 
     override fun visitTagNames(names: List<IndexName>) {
@@ -55,7 +55,7 @@ public class NameSectionVerifier(private val delegate: NameSectionVisitor, priva
 
         numberOfNames++
 
-        delegate.visitTagNames(names)
+        delegate?.visitTagNames(names)
     }
 
     override fun visitTableNames(names: List<IndexName>) {
@@ -69,7 +69,7 @@ public class NameSectionVerifier(private val delegate: NameSectionVisitor, priva
 
         numberOfNames++
 
-        delegate.visitTableNames(names)
+        delegate?.visitTableNames(names)
     }
 
     override fun visitMemoryNames(names: List<IndexName>) {
@@ -83,7 +83,7 @@ public class NameSectionVerifier(private val delegate: NameSectionVisitor, priva
 
         numberOfNames++
 
-        delegate.visitMemoryNames(names)
+        delegate?.visitMemoryNames(names)
     }
 
     override fun visitElementNames(names: List<IndexName>) {
@@ -97,7 +97,7 @@ public class NameSectionVerifier(private val delegate: NameSectionVisitor, priva
 
         numberOfNames++
 
-        delegate.visitElementNames(names)
+        delegate?.visitElementNames(names)
     }
 
     override fun visitDataNames(names: List<IndexName>) {
@@ -111,7 +111,7 @@ public class NameSectionVerifier(private val delegate: NameSectionVisitor, priva
 
         numberOfNames++
 
-        delegate.visitDataNames(names)
+        delegate?.visitDataNames(names)
     }
 
     override fun visitTypeNames(names: List<IndexName>) {
@@ -125,7 +125,7 @@ public class NameSectionVerifier(private val delegate: NameSectionVisitor, priva
 
         numberOfNames++
 
-        delegate.visitTypeNames(names)
+        delegate?.visitTypeNames(names)
     }
 
     override fun visitLocalNames(functionIndex: UInt, names: List<IndexName>) {
@@ -143,7 +143,7 @@ public class NameSectionVerifier(private val delegate: NameSectionVisitor, priva
 
         numberOfNames++
 
-        delegate.visitLocalNames(functionIndex, names)
+        delegate?.visitLocalNames(functionIndex, names)
     }
 
     override fun visitLabelNames(functionIndex: UInt, names: List<IndexName>) {
@@ -161,7 +161,7 @@ public class NameSectionVerifier(private val delegate: NameSectionVisitor, priva
 
         numberOfNames++
 
-        delegate.visitLabelNames(functionIndex, names)
+        delegate?.visitLabelNames(functionIndex, names)
     }
 
     override fun visitFieldNames(functionIndex: UInt, names: List<IndexName>) {
@@ -179,7 +179,7 @@ public class NameSectionVerifier(private val delegate: NameSectionVisitor, priva
 
         numberOfNames++
 
-        delegate.visitFieldNames(functionIndex, names)
+        delegate?.visitFieldNames(functionIndex, names)
     }
 
     override fun visitEnd() {
@@ -190,7 +190,7 @@ public class NameSectionVerifier(private val delegate: NameSectionVisitor, priva
         }
 
         done = true
-        delegate.visitEnd()
+        delegate?.visitEnd()
     }
 
     private fun checkEnd() {

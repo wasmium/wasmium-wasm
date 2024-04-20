@@ -4,7 +4,7 @@ import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.visitors.FunctionSectionVisitor
 
-public class FunctionSectionVerifier(private val delegate: FunctionSectionVisitor, private val context: VerifierContext) : FunctionSectionVisitor {
+public class FunctionSectionVerifier(private val delegate: FunctionSectionVisitor? = null, private val context: VerifierContext) : FunctionSectionVisitor {
     private var done: Boolean = false
     private var numberOfFunctions: UInt = 0u
 
@@ -17,7 +17,7 @@ public class FunctionSectionVerifier(private val delegate: FunctionSectionVisito
 
         numberOfFunctions++
 
-        delegate.visitFunction(typeIndex)
+        delegate?.visitFunction(typeIndex)
     }
 
     override fun visitEnd() {
@@ -30,7 +30,7 @@ public class FunctionSectionVerifier(private val delegate: FunctionSectionVisito
         context.numberOfFunctions = numberOfFunctions
 
         done = true
-        delegate.visitEnd()
+        delegate?.visitEnd()
     }
 
     private fun checkEnd() {

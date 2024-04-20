@@ -5,7 +5,7 @@ import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.visitors.MemorySectionVisitor
 
-public class MemorySectionVerifier(private val delegate: MemorySectionVisitor, private val context: VerifierContext) : MemorySectionVisitor {
+public class MemorySectionVerifier(private val delegate: MemorySectionVisitor? = null, private val context: VerifierContext) : MemorySectionVisitor {
     private var done: Boolean = false
     private var numberOfMemories: UInt = 0u
 
@@ -24,7 +24,7 @@ public class MemorySectionVerifier(private val delegate: MemorySectionVisitor, p
 
         numberOfMemories++
 
-        delegate.visitMemory(limits)
+        delegate?.visitMemory(limits)
     }
 
     override fun visitEnd() {
@@ -41,7 +41,7 @@ public class MemorySectionVerifier(private val delegate: MemorySectionVisitor, p
         context.numberOfMemories = numberOfMemories
 
         done = true
-        delegate.visitEnd()
+        delegate?.visitEnd()
     }
 
     private fun checkEnd() {

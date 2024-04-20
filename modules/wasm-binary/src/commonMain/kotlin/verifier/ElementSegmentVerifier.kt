@@ -6,7 +6,7 @@ import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.ElementSegmentVisitor
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
-public class ElementSegmentVerifier(private val delegate: ElementSegmentVisitor, private val context: VerifierContext) : ElementSegmentVisitor {
+public class ElementSegmentVerifier(private val delegate: ElementSegmentVisitor? = null, private val context: VerifierContext) : ElementSegmentVisitor {
     private var done: Boolean = false
 
     override fun visitElementIndices(elementIndices: List<UInt>) {
@@ -16,13 +16,13 @@ public class ElementSegmentVerifier(private val delegate: ElementSegmentVisitor,
             throw ParserException("Number of element indices ${elementIndices.size} exceed the maximum of $MAX_ELEMENT_SEGMENT_FUNCTION_INDEXES")
         }
 
-        delegate.visitElementIndices(elementIndices)
+        delegate?.visitElementIndices(elementIndices)
     }
 
     override fun visitNonActiveMode(passive: Boolean) {
         checkEnd()
 
-        delegate.visitNonActiveMode(passive)
+        delegate?.visitNonActiveMode(passive)
     }
 
     override fun visitActiveMode(tableIndex: UInt): ExpressionVisitor {
@@ -32,7 +32,7 @@ public class ElementSegmentVerifier(private val delegate: ElementSegmentVisitor,
             throw ParserException("Table elements must refer to table 0.")
         }
 
-        return ExpressionVerifier(delegate.visitExpression(), context)
+        return ExpressionVerifier(delegate?.visitExpression(), context)
     }
 
     override fun visitType(type: WasmType) {
@@ -42,20 +42,20 @@ public class ElementSegmentVerifier(private val delegate: ElementSegmentVisitor,
             throw ParserException("Invalid element kind $type")
         }
 
-        delegate.visitType(type)
+        delegate?.visitType(type)
     }
 
     override fun visitExpression(): ExpressionVisitor {
         checkEnd()
 
-        return ExpressionVerifier(delegate.visitExpression(), context)
+        return ExpressionVerifier(delegate?.visitExpression(), context)
     }
 
     override fun visitEnd() {
         checkEnd()
 
         done = true
-        delegate.visitEnd()
+        delegate?.visitEnd()
     }
 
     private fun checkEnd() {

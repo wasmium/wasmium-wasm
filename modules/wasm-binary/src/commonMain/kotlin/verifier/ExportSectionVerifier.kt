@@ -10,7 +10,7 @@ import org.wasmium.wasm.binary.tree.ExternalKind.MEMORY
 import org.wasmium.wasm.binary.tree.ExternalKind.TABLE
 import org.wasmium.wasm.binary.visitors.ExportSectionVisitor
 
-public class ExportSectionVerifier(private val delegate: ExportSectionVisitor, private val context: VerifierContext) : ExportSectionVisitor {
+public class ExportSectionVerifier(private val delegate: ExportSectionVisitor? = null, private val context: VerifierContext) : ExportSectionVisitor {
     private var done: Boolean = false
     private var numberOfExports = 0u
 
@@ -69,7 +69,7 @@ public class ExportSectionVerifier(private val delegate: ExportSectionVisitor, p
 
         numberOfExports++
 
-        delegate.visitExport(name, externalKind, itemIndex)
+        delegate?.visitExport(name, externalKind, itemIndex)
     }
 
     override fun visitEnd() {
@@ -80,7 +80,7 @@ public class ExportSectionVerifier(private val delegate: ExportSectionVisitor, p
         }
 
         done = true
-        delegate.visitEnd()
+        delegate?.visitEnd()
     }
 
     private fun checkEnd() {

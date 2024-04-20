@@ -4,7 +4,7 @@ import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.visitors.StartSectionVisitor
 
 public class StartSectionVerifier(
-    private val delegate: StartSectionVisitor,
+    private val delegate: StartSectionVisitor? = null,
     private val context: VerifierContext,
     private val functionIndex: UInt,
 ) : StartSectionVisitor {
@@ -18,7 +18,7 @@ public class StartSectionVerifier(
         }
 
         done = true
-        delegate.visitEnd()
+        delegate?.visitEnd()
     }
 
     private fun checkEnd() {

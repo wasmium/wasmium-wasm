@@ -4,14 +4,14 @@ import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.tree.sections.MemoryType
 import org.wasmium.wasm.binary.visitors.MemorySectionVisitor
 
-public class MemorySectionValidator(private val delegate: MemorySectionVisitor, private val context: ValidatorContext) : MemorySectionVisitor {
+public class MemorySectionValidator(private val delegate: MemorySectionVisitor? = null, private val context: ValidatorContext) : MemorySectionVisitor {
     override fun visitMemory(limits: ResizableLimits) {
         context.memories.add(MemoryType(limits))
 
-        delegate.visitMemory(limits)
+        delegate?.visitMemory(limits)
     }
 
     override fun visitEnd() {
-        delegate.visitEnd()
+        delegate?.visitEnd()
     }
 }

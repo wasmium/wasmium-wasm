@@ -5,7 +5,7 @@ import org.wasmium.wasm.binary.tree.LocalVariable
 import org.wasmium.wasm.binary.visitors.CodeSectionVisitor
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
-public class CodeSectionVerifier(private val delegate: CodeSectionVisitor, private val context: VerifierContext) : CodeSectionVisitor {
+public class CodeSectionVerifier(private val delegate: CodeSectionVisitor? = null, private val context: VerifierContext) : CodeSectionVisitor {
     private var done: Boolean = false
     private var numberOfCodes: UInt = 0u
     private var totalNumberOfLocals: UInt = 0u
@@ -21,7 +21,7 @@ public class CodeSectionVerifier(private val delegate: CodeSectionVisitor, priva
         numberOfCodes++
         totalNumberOfLocals += numberOfLocals
 
-        return ExpressionVerifier(delegate.visitCode(locals), context)
+        return ExpressionVerifier(delegate?.visitCode(locals), context)
     }
 
     override fun visitEnd() {
@@ -40,7 +40,7 @@ public class CodeSectionVerifier(private val delegate: CodeSectionVisitor, priva
         }
 
         done = true
-        delegate.visitEnd()
+        delegate?.visitEnd()
     }
 
     private fun checkEnd() {

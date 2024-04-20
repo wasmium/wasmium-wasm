@@ -4,28 +4,28 @@ import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.ElementSegmentVisitor
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
-public class ElementSegmentValidator(private val delegate: ElementSegmentVisitor, private val context: ValidatorContext) : ElementSegmentVisitor {
+public class ElementSegmentValidator(private val delegate: ElementSegmentVisitor? = null, private val context: ValidatorContext) : ElementSegmentVisitor {
     override fun visitElementIndices(elementIndices: List<UInt>) {
-        delegate.visitElementIndices(elementIndices)
+        delegate?.visitElementIndices(elementIndices)
     }
 
     override fun visitNonActiveMode(passive: Boolean) {
-        delegate.visitNonActiveMode(passive)
+        delegate?.visitNonActiveMode(passive)
     }
 
     override fun visitActiveMode(tableIndex: UInt): ExpressionVisitor {
-        return delegate.visitActiveMode(tableIndex)
+        return ExpressionValidator(delegate?.visitActiveMode(tableIndex), context)
     }
 
     override fun visitType(type: WasmType) {
-        delegate.visitType(type)
+        delegate?.visitType(type)
     }
 
     override fun visitExpression(): ExpressionVisitor {
-        return delegate.visitExpression()
+        return ExpressionValidator(delegate?.visitExpression(), context)
     }
 
     override fun visitEnd() {
-        delegate.visitEnd()
+        delegate?.visitEnd()
     }
 }

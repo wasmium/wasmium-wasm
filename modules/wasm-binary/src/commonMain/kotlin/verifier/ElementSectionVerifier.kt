@@ -4,7 +4,7 @@ import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.visitors.ElementSectionVisitor
 import org.wasmium.wasm.binary.visitors.ElementSegmentVisitor
 
-public class ElementSectionVerifier(private val delegate: ElementSectionVisitor, private val context: VerifierContext) : ElementSectionVisitor {
+public class ElementSectionVerifier(private val delegate: ElementSectionVisitor? = null, private val context: VerifierContext) : ElementSectionVisitor {
     private var done: Boolean = false
     private var numberOfElementSegments: UInt = 0u
 
@@ -13,7 +13,7 @@ public class ElementSectionVerifier(private val delegate: ElementSectionVisitor,
 
         numberOfElementSegments++
 
-        return ElementSegmentVerifier(delegate.visitElementSegment(), context)
+        return ElementSegmentVerifier(delegate?.visitElementSegment(), context)
     }
 
     override fun visitEnd() {
@@ -26,7 +26,7 @@ public class ElementSectionVerifier(private val delegate: ElementSectionVisitor,
         context.numberOfElements = numberOfElementSegments
 
         done = true
-        delegate.visitEnd()
+        delegate?.visitEnd()
     }
 
     private fun checkEnd() {

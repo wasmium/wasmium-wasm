@@ -5,18 +5,18 @@ import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.sections.FunctionType
 import org.wasmium.wasm.binary.visitors.TypeSectionVisitor
 
-public class TypeSectionValidator(private val delegate: TypeSectionVisitor, private val context: ValidatorContext) : TypeSectionVisitor {
+public class TypeSectionValidator(private val delegate: TypeSectionVisitor? = null, private val context: ValidatorContext) : TypeSectionVisitor {
     override fun visitType(parameters: List<WasmType>, results: List<WasmType>) {
         checkValueTypes(parameters)
         checkValueTypes(results)
 
         context.types.add(FunctionType(parameters, results))
 
-        delegate.visitType(parameters, results)
+        delegate?.visitType(parameters, results)
     }
 
     override fun visitEnd() {
-        delegate.visitEnd()
+        delegate?.visitEnd()
     }
 
     private fun checkValueTypes(types: List<WasmType>) {

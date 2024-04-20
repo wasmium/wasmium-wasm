@@ -4,7 +4,7 @@ import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.visitors.DataSectionVisitor
 import org.wasmium.wasm.binary.visitors.DataSegmentVisitor
 
-public class DataSectionVerifier(private val delegate: DataSectionVisitor, private val context: VerifierContext) : DataSectionVisitor {
+public class DataSectionVerifier(private val delegate: DataSectionVisitor? = null, private val context: VerifierContext) : DataSectionVisitor {
     private var done: Boolean = false
 
     override fun visitDataSegment(): DataSegmentVisitor {
@@ -12,7 +12,7 @@ public class DataSectionVerifier(private val delegate: DataSectionVisitor, priva
 
         context.numberOfDataSegments++
 
-        return DataSegmentVerifier(delegate.visitDataSegment(), context)
+        return DataSegmentVerifier(delegate?.visitDataSegment(), context)
     }
 
     override fun visitEnd() {
@@ -27,7 +27,7 @@ public class DataSectionVerifier(private val delegate: DataSectionVisitor, priva
         }
 
         done = true
-        delegate.visitEnd()
+        delegate?.visitEnd()
     }
 
     private fun checkEnd() {
