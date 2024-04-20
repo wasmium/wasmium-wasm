@@ -22,9 +22,9 @@ import org.wasmium.wasm.binary.visitors.TypeSectionVisitor
 import org.wasmium.wasm.binary.visitors.UnknownSectionVisitor
 
 public class ModuleVerifier(private val delegate: ModuleVisitor, private val options: VerifierOptions) : ModuleVisitor {
-    private val context: VerifierContext = VerifierContext(options)
-    private var started: Boolean = false
-    private var done: Boolean = false
+    private val context = VerifierContext(options)
+    private var started = false
+    private var done = false
     private var numberOfSections = 0u
 
     override fun visitHeader(version: UInt) {

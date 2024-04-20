@@ -186,7 +186,7 @@ public class ConstantExpressionValidator(private val context: VerifierContext) :
     }
 
     override fun visitGetGlobalInstruction(globalIndex: UInt) {
-        val globalType = context.globals.getOrElse(globalIndex.toInt()){
+        val globalType = context.globals.getOrElse(globalIndex.toInt()) {
             throw VerifierException("Global index $globalIndex is out of bounds")
         }
 
@@ -528,15 +528,15 @@ public class ConstantExpressionValidator(private val context: VerifierContext) :
     }
 
     override fun visitReferenceEqualInstruction() {
-        notConstant()
+        // constant
     }
 
     override fun visitReferenceFunctionInstruction(functionIndex: UInt) {
-        notConstant()
+        // constant
     }
 
     override fun visitReferenceIsNullInstruction() {
-        notConstant()
+        // constant
     }
 
     override fun visitReferenceNullInstruction(type: WasmType) {
