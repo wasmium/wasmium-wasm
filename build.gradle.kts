@@ -5,10 +5,12 @@ import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnLockMismatchReport
 import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnRootExtension
 
 plugins {
-    id("io.gitlab.arturbosch.detekt")
-    id("org.jetbrains.dokka")
-
-    id("build-wrapper-plugin")
+    id(buildCatalog.plugins.kotlin.multiplatform.get().pluginId) apply false
+    alias(buildCatalog.plugins.kotlinx.kover) apply false
+    alias(buildCatalog.plugins.detekt)
+    alias(buildCatalog.plugins.kotlin.dokka)
+    alias(buildCatalog.plugins.kotlinx.bcv)
+    id("build-project-default")
 }
 
 allprojects {
