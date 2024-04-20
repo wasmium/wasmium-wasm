@@ -1,7 +1,6 @@
 package org.wasmium.wasm.binary.verifier
 
 import org.wasmium.wasm.binary.ParserException
-import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.StartSectionVisitor
 
 public class StartSectionVerifier(
@@ -16,22 +15,6 @@ public class StartSectionVerifier(
 
         if (functionIndex >= context.numberOfTotalFunctions) {
             throw ParserException("Invalid start function index: %$functionIndex")
-        }
-
-        val signatureIndex = context.functions.getOrElse(functionIndex.toInt()) {
-            throw VerifierException("Start function index is greater than the number of functions")
-        }
-
-        val signature = context.signatures.getOrElse(signatureIndex.toInt()) {
-            throw VerifierException("Invalid signature index is greater than the number of type signatures")
-        }
-
-        if (signature.parameters.isNotEmpty()) {
-            throw VerifierException("Start function can't have arguments")
-        }
-
-        if (signature.results.isNotEmpty() && (signature.results.size == 1) && (signature.results.first() == WasmType.NONE)) {
-            throw VerifierException("Start function can't return a value")
         }
 
         done = true

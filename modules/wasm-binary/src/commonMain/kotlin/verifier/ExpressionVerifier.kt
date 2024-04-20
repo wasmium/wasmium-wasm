@@ -603,8 +603,6 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
             throw ParserException("Invalid call function index: %$functionIndex")
         }
 
-        context.functions.getOrNull(functionIndex.toInt()) ?: throw VerifierException("Invalid function index $functionIndex")
-
         numberOfInstructions++
 
         delegate.visitCallInstruction(functionIndex)
@@ -616,8 +614,6 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor, pr
         if (signatureIndex >= context.numberOfSignatures) {
             throw ParserException("Invalid call_indirect signature index")
         }
-
-        context.signatures.getOrNull(signatureIndex.toInt()) ?: throw VerifierException("Invalid signature index $signatureIndex")
 
         if (reserved) {
             throw VerifierException("Invalid reserved value $reserved")

@@ -29,7 +29,7 @@ public class ModuleValidator(private val delegate: ModuleVisitor, private val op
 
     override fun visitFunctionSection(): FunctionSectionVisitor = FunctionSectionValidator(delegate.visitFunctionSection(), context)
 
-    override fun visitStartSection(functionIndex: UInt): StartSectionVisitor = StartSectionValidator(delegate.visitStartSection(functionIndex), context)
+    override fun visitStartSection(functionIndex: UInt): StartSectionVisitor = StartSectionValidator(delegate.visitStartSection(functionIndex), context, functionIndex)
 
     override fun visitImportSection(): ImportSectionVisitor = ImportSectionValidator(delegate.visitImportSection(), context)
 

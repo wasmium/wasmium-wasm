@@ -14,8 +14,6 @@ public class GlobalSectionVerifier(private val delegate: GlobalSectionVisitor, p
 
         context.numberOfGlobals++
 
-        context.globals.add(GlobalType(type, mutable))
-
         return ExpressionVerifier(delegate.visitGlobalVariable(type, mutable), context)
     }
 

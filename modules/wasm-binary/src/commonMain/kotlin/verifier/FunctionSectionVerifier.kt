@@ -15,8 +15,6 @@ public class FunctionSectionVerifier(private val delegate: FunctionSectionVisito
             throw ParserException("Invalid function signature index: %$signatureIndex")
         }
 
-        context.functions.add(signatureIndex)
-
         numberOfFunctions++
 
         delegate.visitFunction(signatureIndex)

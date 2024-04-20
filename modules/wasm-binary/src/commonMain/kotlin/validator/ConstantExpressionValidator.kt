@@ -7,7 +7,7 @@ import org.wasmium.wasm.binary.verifier.VerifierContext
 import org.wasmium.wasm.binary.verifier.VerifierException
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
-public class ConstantExpressionValidator(private val context: VerifierContext) : ExpressionVisitor {
+public class ConstantExpressionValidator(private val context: ValidatorContext) : ExpressionVisitor {
 
     private fun notConstant() {
         throw VerifierException("Expression is not constant")

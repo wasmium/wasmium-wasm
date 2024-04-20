@@ -13,13 +13,9 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor, p
     override fun visitFunction(moduleName: String, fieldName: String, typeIndex: UInt) {
         checkEnd()
 
-        val numberOfTypes = context.signatures.size.toUInt()
-        if (typeIndex >= numberOfTypes) {
+        if (typeIndex >= context.numberOfSignatures) {
             throw ParserException("Invalid import function index $typeIndex")
         }
-
-        val functionIndex = context.functions.size.toUInt()
-        context.functions.add(functionIndex)
 
         numberOfImports++
         context.numberOfFunctionImports++
