@@ -4,9 +4,7 @@ import org.wasmium.wasm.binary.tree.WasmType
 
 public open class GlobalSectionAdapter(protected val delegate: GlobalSectionVisitor? = null) : GlobalSectionVisitor {
 
-    public override fun visitGlobalVariable(type: WasmType, mutable: Boolean): ExpressionVisitor =
-        delegate?.visitGlobalVariable(type, mutable) ?: ExpressionAdapter()
+    override fun visitGlobalVariable(type: WasmType, mutable: Boolean): ExpressionVisitor = ExpressionAdapter(delegate?.visitGlobalVariable(type, mutable))
 
-    public override fun visitEnd(): Unit = delegate?.visitEnd() ?: Unit
+    override fun visitEnd(): Unit = delegate?.visitEnd() ?: Unit
 }
-

@@ -8,11 +8,11 @@ public open class ElementSegmentAdapter(protected val delegate: ElementSegmentVi
 
     override fun visitNonActiveMode(passive: Boolean): Unit = delegate?.visitNonActiveMode(passive) ?: Unit
 
-    override fun visitActiveMode(tableIndex: UInt): ExpressionVisitor = delegate?.visitActiveMode(tableIndex) ?: ExpressionAdapter()
+    override fun visitActiveMode(tableIndex: UInt): ExpressionVisitor = ExpressionAdapter(delegate?.visitActiveMode(tableIndex))
 
     override fun visitType(type: WasmType): Unit = delegate?.visitType(type) ?: Unit
 
-    public override fun visitExpression(): ExpressionVisitor = delegate?.visitExpression() ?: ExpressionAdapter()
+    override fun visitExpression(): ExpressionVisitor = ExpressionAdapter(delegate?.visitExpression())
 
-    public override fun visitEnd(): Unit = delegate?.visitEnd() ?: Unit
+    override fun visitEnd(): Unit = delegate?.visitEnd() ?: Unit
 }

@@ -4,15 +4,15 @@ import org.wasmium.wasm.binary.tree.IndexName
 
 public open class NameSectionAdapter(protected val delegate: NameSectionVisitor? = null) : NameSectionVisitor {
 
-    public override fun visitModuleName(name: String): Unit = delegate?.visitModuleName(name) ?: Unit
+    override fun visitModuleName(name: String): Unit = delegate?.visitModuleName(name) ?: Unit
 
-    public override fun visitLocalNames(functionIndex: UInt, names: List<IndexName>): Unit = delegate?.visitLocalNames(functionIndex, names) ?: Unit
+    override fun visitLocalNames(functionIndex: UInt, names: List<IndexName>): Unit = delegate?.visitLocalNames(functionIndex, names) ?: Unit
 
     override fun visitLabelNames(functionIndex: UInt, names: List<IndexName>): Unit = delegate?.visitLabelNames(functionIndex, names) ?: Unit
 
     override fun visitFieldNames(functionIndex: UInt, names: List<IndexName>): Unit = delegate?.visitFieldNames(functionIndex, names) ?: Unit
 
-    public override fun visitFunctionNames(names: List<IndexName>): Unit = delegate?.visitFunctionNames(names) ?: Unit
+    override fun visitFunctionNames(names: List<IndexName>): Unit = delegate?.visitFunctionNames(names) ?: Unit
 
     override fun visitGlobalNames(names: List<IndexName>): Unit = delegate?.visitGlobalNames(names) ?: Unit
 
@@ -28,5 +28,5 @@ public open class NameSectionAdapter(protected val delegate: NameSectionVisitor?
 
     override fun visitTypeNames(names: List<IndexName>): Unit = delegate?.visitTypeNames(names) ?: Unit
 
-    public override fun visitEnd(): Unit = delegate?.visitEnd() ?: Unit
+    override fun visitEnd(): Unit = delegate?.visitEnd() ?: Unit
 }

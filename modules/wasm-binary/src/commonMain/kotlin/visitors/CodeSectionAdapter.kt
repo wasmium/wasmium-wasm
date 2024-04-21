@@ -4,7 +4,7 @@ import org.wasmium.wasm.binary.tree.LocalVariable
 
 public open class CodeSectionAdapter(protected val delegate: CodeSectionVisitor? = null) : CodeSectionVisitor {
 
-    public override fun visitCode(locals: List<LocalVariable>): ExpressionVisitor = delegate?.visitCode(locals) ?: ExpressionAdapter()
+    override fun visitCode(locals: List<LocalVariable>): ExpressionVisitor =  ExpressionAdapter(delegate?.visitCode(locals))
 
-    public override fun visitEnd(): Unit = delegate?.visitEnd() ?: Unit
+    override fun visitEnd(): Unit = delegate?.visitEnd() ?: Unit
 }
