@@ -8,9 +8,10 @@ import org.wasmium.wasm.binary.visitors.FunctionSectionVisitor
 public class FunctionSectionWriter(private val context: WriterContext) : FunctionSectionVisitor {
     private var numberOfFunctions = 0u
     private val body = ByteBuffer()
+    private val writer = WasmBinaryWriter(body)
 
     public override fun visitFunction(typeIndex: UInt) {
-        WasmBinaryWriter(body).writeIndex(typeIndex)
+        writer.writeIndex(typeIndex)
 
         numberOfFunctions++
     }

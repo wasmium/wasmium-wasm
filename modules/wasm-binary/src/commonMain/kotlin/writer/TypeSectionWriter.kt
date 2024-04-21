@@ -9,18 +9,19 @@ import org.wasmium.wasm.binary.visitors.TypeSectionVisitor
 public class TypeSectionWriter(private val context: WriterContext) : TypeSectionVisitor {
     private var numberOfTypes: UInt = 0u
     private var body = ByteBuffer()
+    private val writer = WasmBinaryWriter(body)
 
     public override fun visitType(parameters: List<WasmType>, results: List<WasmType>) {
-        WasmBinaryWriter(body).writeType(WasmType.FUNC)
+        writer.writeType(WasmType.FUNC)
 
-        WasmBinaryWriter(body).writeVarUInt32(parameters.size.toUInt())
+        writer.writeVarUInt32(parameters.size.toUInt())
         for (parameter in parameters) {
-            WasmBinaryWriter(body).writeType(parameter)
+            writer.writeType(parameter)
         }
 
-        WasmBinaryWriter(body).writeVarUInt1(results.size.toUInt())
+        writer.writeVarUInt1(results.size.toUInt())
         for (result in results) {
-            WasmBinaryWriter(body).writeType(result)
+            writer.writeType(result)
         }
 
         numberOfTypes++

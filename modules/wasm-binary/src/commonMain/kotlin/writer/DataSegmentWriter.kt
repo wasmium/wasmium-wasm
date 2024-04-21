@@ -9,20 +9,21 @@ public class DataSegmentWriter(
     private val context: WriterContext,
     private val body: ByteBuffer
 ) : DataSegmentVisitor {
-    private val dataSegmentBuffer: ByteBuffer = ByteBuffer()
+    private val buffer: ByteBuffer = ByteBuffer()
+    private val writer = WasmBinaryWriter(buffer)
 
     public override fun visitActive(memoryIndex: UInt): ExpressionVisitor {
-        WasmBinaryWriter(dataSegmentBuffer).writeVarUInt32(memoryIndex)
+        writer.writeVarUInt32(memoryIndex)
 
-        return ExpressionWriter(context, dataSegmentBuffer)
+        return ExpressionWriter(context, buffer)
     }
 
     public override fun visitData(data: ByteArray) {
-        WasmBinaryWriter(dataSegmentBuffer).writeVarUInt32(data.size.toUInt())
-        WasmBinaryWriter(dataSegmentBuffer).writeByteArray(data)
+        writer.writeVarUInt32(data.size.toUInt())
+        writer.writeByteArray(data)
     }
 
     public override fun visitEnd() {
-        WasmBinaryWriter(body).writeByteArray(dataSegmentBuffer.toByteArray())
+        WasmBinaryWriter(body).writeByteArray(buffer.toByteArray())
     }
 }

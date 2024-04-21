@@ -10,11 +10,12 @@ import org.wasmium.wasm.binary.visitors.ExceptionSectionVisitor
 public class ExceptionSectionWriter(private val context: WriterContext) : ExceptionSectionVisitor {
     private var numberOfExceptions = 0u
     private val body = ByteBuffer()
+    private val writer = WasmBinaryWriter(body)
 
     public override fun visitExceptionType(types: List<WasmType>) {
-        WasmBinaryWriter(body).writeVarUInt32(types.size.toUInt())
+        writer.writeVarUInt32(types.size.toUInt())
         for (type in types) {
-            WasmBinaryWriter(body).writeType(type)
+            writer.writeType(type)
         }
 
         numberOfExceptions++

@@ -10,6 +10,7 @@ import org.wasmium.wasm.binary.visitors.LinkingSectionVisitor
 public class LinkingSectionWriter(private val context: WriterContext) : LinkingSectionVisitor {
     private var numberOfLinks = 0u
     private val body = ByteBuffer()
+    private val writer = WasmBinaryWriter(body)
 
     public override fun visitSymbol(symbolType: LinkingSymbolType, flags: UInt) {
         // TODO

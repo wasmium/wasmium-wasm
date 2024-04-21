@@ -10,11 +10,11 @@ public class DataCountSectionWriter(
     private val dataCount: UInt,
 ) : DataCountSectionAdapter() {
     public override fun visitEnd() {
-        val sectionBuffer = ByteBuffer()
-        val payload = WasmBinaryWriter(sectionBuffer)
+        val buffer = ByteBuffer()
+        val payload = WasmBinaryWriter(buffer)
 
         payload.writeVarUInt32(dataCount)
 
-        context.writer.writeSection(SectionKind.DATA_COUNT, context.options.isCanonical, sectionBuffer.toByteArray())
+        context.writer.writeSection(SectionKind.DATA_COUNT, context.options.isCanonical, buffer.toByteArray())
     }
 }

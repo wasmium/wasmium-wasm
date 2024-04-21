@@ -21,6 +21,8 @@ public class ElementSegmentWriter(
     private var type: WasmType? = null
     private var elementIndices: List<UInt> = mutableListOf()
     private var offsetBody = ByteBuffer()
+    private val buffer = ByteBuffer()
+    private val writer = WasmBinaryWriter(buffer)
 
     public override fun visitNonActiveMode(passive: Boolean) {
         elementType = elementType or ELEMENT_PASSIVE_OR_DECLARATIVE.toUInt()
@@ -57,32 +59,34 @@ public class ElementSegmentWriter(
     }
 
     public override fun visitEnd() {
-        WasmBinaryWriter(body).writeVarUInt32(elementType)
+        writer.writeVarUInt32(elementType)
 
         if ((elementType and ELEMENT_PASSIVE_OR_DECLARATIVE.toUInt()) == 0u) {
             if ((elementType and ELEMENT_TABLE_INDEX.toUInt()) != 0u) {
-                WasmBinaryWriter(body).writeIndex(tableIndex!!)
+                writer.writeIndex(tableIndex!!)
             }
 
-            WasmBinaryWriter(body).writeByteArray(offsetBody.toByteArray())
+            writer.writeByteArray(offsetBody.toByteArray())
         }
 
         if ((elementType and ELEMENT_EXPRESSIONS.toUInt()) != 0u) {
             if ((elementType and 0b011u) != 0u) {
-                WasmBinaryWriter(body).writeType(type!!)
+                writer.writeType(type!!)
             }
 
-            WasmBinaryWriter(body).writeVarUInt32(numberOfExpressions)
-            WasmBinaryWriter(body).writeByteArray(expressionsBody.toByteArray())
+            writer.writeVarUInt32(numberOfExpressions)
+            writer.writeByteArray(expressionsBody.toByteArray())
         } else {
             if ((elementType and 0b011u) != 0u) {
-                WasmBinaryWriter(body).writeVarUInt32(ElementKind.FUNCTION_REF.elementKindId)
+                writer.writeVarUInt32(ElementKind.FUNCTION_REF.elementKindId)
             }
 
-            WasmBinaryWriter(body).writeVarUInt32(elementIndices.size.toUInt())
+            writer.writeVarUInt32(elementIndices.size.toUInt())
             for (index in elementIndices) {
-                WasmBinaryWriter(body).writeVarUInt32(index)
+                writer.writeVarUInt32(index)
             }
         }
+
+        WasmBinaryWriter(body).writeByteArray(buffer.toByteArray())
     }
 }

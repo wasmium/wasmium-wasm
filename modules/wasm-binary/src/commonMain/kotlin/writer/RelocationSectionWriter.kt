@@ -10,6 +10,7 @@ import org.wasmium.wasm.binary.visitors.RelocationSectionVisitor
 public class RelocationSectionWriter(private val context: WriterContext) : RelocationSectionVisitor {
     private var numberOfRelocations = 0u
     private val body = ByteBuffer()
+    private val writer = WasmBinaryWriter(body)
 
     public override fun visitSection(sectionKind: SectionKind, sectionName: String) {
         // TODO

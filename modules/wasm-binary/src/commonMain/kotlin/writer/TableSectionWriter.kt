@@ -10,10 +10,11 @@ import org.wasmium.wasm.binary.visitors.TableSectionVisitor
 public class TableSectionWriter(private val context: WriterContext) : TableSectionVisitor {
     private var numberOfTables: UInt = 0u
     private var body = ByteBuffer()
+    private val writer = WasmBinaryWriter(body)
 
     public override fun visitTable(elementType: WasmType, limits: ResizableLimits) {
-        WasmBinaryWriter(body).writeType(elementType)
-        WasmBinaryWriter(body).writeResizableLimits(limits)
+        writer.writeType(elementType)
+        writer.writeResizableLimits(limits)
 
         numberOfTables++
     }

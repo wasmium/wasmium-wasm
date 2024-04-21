@@ -9,11 +9,12 @@ import org.wasmium.wasm.binary.visitors.ExportSectionVisitor
 public class ExportSectionWriter(private val context: WriterContext) : ExportSectionVisitor {
     private var numberOfExports = 0u
     private val body = ByteBuffer()
+    private val writer = WasmBinaryWriter(body)
 
     public override fun visitExport(name: String, externalKind: ExternalKind, itemIndex: UInt) {
-        WasmBinaryWriter(body).writeString(name)
-        WasmBinaryWriter(body).writeExternalKind(externalKind)
-        WasmBinaryWriter(body).writeIndex(itemIndex)
+        writer.writeString(name)
+        writer.writeExternalKind(externalKind)
+        writer.writeIndex(itemIndex)
 
         numberOfExports++
     }

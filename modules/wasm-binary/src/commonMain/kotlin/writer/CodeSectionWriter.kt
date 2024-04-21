@@ -15,16 +15,16 @@ public class CodeSectionWriter(private val context: WriterContext) : CodeSection
         numberOfCodes++
 
         val buffer = ByteBuffer()
+        val writer = WasmBinaryWriter(buffer)
         codes.add(buffer)
 
-        WasmBinaryWriter(buffer).writeVarUInt32(locals.size.toUInt())
+        writer.writeVarUInt32(locals.size.toUInt())
         for (local in locals) {
-            WasmBinaryWriter(buffer).writeVarUInt32(local.count)
-            WasmBinaryWriter(buffer).writeType(local.type)
+            writer.writeVarUInt32(local.count)
+            writer.writeType(local.type)
         }
 
-        val expressionWriter = ExpressionWriter(context, buffer)
-        return expressionWriter
+        return ExpressionWriter(context, buffer)
     }
 
     public override fun visitEnd() {

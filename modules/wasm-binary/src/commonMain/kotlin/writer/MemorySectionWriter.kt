@@ -9,9 +9,10 @@ import org.wasmium.wasm.binary.visitors.MemorySectionVisitor
 public class MemorySectionWriter(private val context: WriterContext) : MemorySectionVisitor {
     private var numberOfMemories = 0u
     private val body = ByteBuffer()
+    private val writer = WasmBinaryWriter(body)
 
     public override fun visitMemory(limits: ResizableLimits) {
-        WasmBinaryWriter(body).writeResizableLimits(limits)
+        writer.writeResizableLimits(limits)
 
         numberOfMemories++
     }

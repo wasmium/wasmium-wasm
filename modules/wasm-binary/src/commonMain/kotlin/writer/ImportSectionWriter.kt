@@ -11,53 +11,54 @@ import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 public class ImportSectionWriter(private val context: WriterContext) : ImportSectionVisitor {
     private var numberOfImports = 0u
     private val body = ByteBuffer()
+    private val writer = WasmBinaryWriter(body)
 
     public override fun visitFunction(moduleName: String, fieldName: String, typeIndex: UInt) {
-        WasmBinaryWriter(body).writeString(moduleName)
-        WasmBinaryWriter(body).writeString(fieldName)
-        WasmBinaryWriter(body).writeExternalKind(ExternalKind.FUNCTION)
-        WasmBinaryWriter(body).writeIndex(typeIndex)
+        writer.writeString(moduleName)
+        writer.writeString(fieldName)
+        writer.writeExternalKind(ExternalKind.FUNCTION)
+        writer.writeIndex(typeIndex)
 
         numberOfImports++
     }
 
     public override fun visitGlobal(moduleName: String, fieldName: String, type: WasmType, mutable: Boolean) {
-        WasmBinaryWriter(body).writeString(moduleName)
-        WasmBinaryWriter(body).writeString(fieldName)
-        WasmBinaryWriter(body).writeExternalKind(ExternalKind.GLOBAL)
-        WasmBinaryWriter(body).writeType(type)
-        WasmBinaryWriter(body).writeVarUInt1(if (mutable) 1u else 0u)
+        writer.writeString(moduleName)
+        writer.writeString(fieldName)
+        writer.writeExternalKind(ExternalKind.GLOBAL)
+        writer.writeType(type)
+        writer.writeVarUInt1(if (mutable) 1u else 0u)
 
         numberOfImports++
     }
 
     public override fun visitTable(moduleName: String, fieldName: String, elementType: WasmType, limits: ResizableLimits) {
-        WasmBinaryWriter(body).writeString(moduleName)
-        WasmBinaryWriter(body).writeString(fieldName)
-        WasmBinaryWriter(body).writeExternalKind(ExternalKind.TABLE)
-        WasmBinaryWriter(body).writeType(elementType)
-        WasmBinaryWriter(body).writeResizableLimits(limits)
+        writer.writeString(moduleName)
+        writer.writeString(fieldName)
+        writer.writeExternalKind(ExternalKind.TABLE)
+        writer.writeType(elementType)
+        writer.writeResizableLimits(limits)
 
         numberOfImports++
     }
 
     public override fun visitMemory(moduleName: String, fieldName: String, limits: ResizableLimits) {
-        WasmBinaryWriter(body).writeString(moduleName)
-        WasmBinaryWriter(body).writeString(fieldName)
-        WasmBinaryWriter(body).writeExternalKind(ExternalKind.MEMORY)
-        WasmBinaryWriter(body).writeResizableLimits(limits)
+        writer.writeString(moduleName)
+        writer.writeString(fieldName)
+        writer.writeExternalKind(ExternalKind.MEMORY)
+        writer.writeResizableLimits(limits)
 
         numberOfImports++
     }
 
     public override fun visitException(moduleName: String, fieldName: String, exceptionTypes: List<WasmType>) {
-        WasmBinaryWriter(body).writeString(moduleName)
-        WasmBinaryWriter(body).writeString(fieldName)
-        WasmBinaryWriter(body).writeExternalKind(ExternalKind.EXCEPTION)
-        WasmBinaryWriter(body).writeVarUInt32(exceptionTypes.size.toUInt())
+        writer.writeString(moduleName)
+        writer.writeString(fieldName)
+        writer.writeExternalKind(ExternalKind.EXCEPTION)
+        writer.writeVarUInt32(exceptionTypes.size.toUInt())
 
         for (wasmType in exceptionTypes) {
-            WasmBinaryWriter(body).writeType(wasmType)
+            writer.writeType(wasmType)
         }
 
         numberOfImports++
