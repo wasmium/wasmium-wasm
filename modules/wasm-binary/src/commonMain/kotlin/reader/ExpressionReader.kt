@@ -26,12 +26,12 @@ public class ExpressionReader(
                 }
 
                 END -> {
+                    expressionVisitor.visitEndInstruction()
+
                     --blockDepth
 
                     if (blockDepth <= 0u) {
                         return
-                    } else {
-                        expressionVisitor.visitEndInstruction()
                     }
                 }
 

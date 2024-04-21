@@ -21,7 +21,7 @@ public class NameSectionWriter(
         WasmBinaryWriter(buffer).writeString(name)
 
         // write body size
-        payload.writeVarUInt32(buffer.length.toUInt(), context.options.isCanonical)
+        payload.writeVarUInt32(buffer.length.toUInt())
         // write body
         payload.writeByteArray(buffer.toByteArray())
     }
@@ -40,12 +40,12 @@ public class NameSectionWriter(
             WasmBinaryWriter(localsBuffer).writeString(name.name)
         }
         // write locals size
-        WasmBinaryWriter(buffer).writeVarUInt32(localsBuffer.length.toUInt(), context.options.isCanonical)
+        WasmBinaryWriter(buffer).writeVarUInt32(localsBuffer.length.toUInt())
         // write locals body
         WasmBinaryWriter(buffer).writeByteArray(localsBuffer.toByteArray())
 
         // write body size
-        payload.writeVarUInt32(buffer.length.toUInt(), context.options.isCanonical)
+        payload.writeVarUInt32(buffer.length.toUInt())
         // write body
         payload.writeByteArray(buffer.toByteArray())
     }
@@ -64,12 +64,12 @@ public class NameSectionWriter(
             WasmBinaryWriter(localsBuffer).writeString(name.name)
         }
         // write locals size
-        WasmBinaryWriter(buffer).writeVarUInt32(localsBuffer.length.toUInt(), context.options.isCanonical)
+        WasmBinaryWriter(buffer).writeVarUInt32(localsBuffer.length.toUInt())
         // write locals body
         WasmBinaryWriter(buffer).writeByteArray(localsBuffer.toByteArray())
 
         // write body size
-        payload.writeVarUInt32(buffer.length.toUInt(), context.options.isCanonical)
+        payload.writeVarUInt32(buffer.length.toUInt())
         // write body
         payload.writeByteArray(buffer.toByteArray())
     }
@@ -88,12 +88,12 @@ public class NameSectionWriter(
             WasmBinaryWriter(localsBuffer).writeString(name.name)
         }
         // write locals size
-        WasmBinaryWriter(buffer).writeVarUInt32(localsBuffer.length.toUInt(), context.options.isCanonical)
+        WasmBinaryWriter(buffer).writeVarUInt32(localsBuffer.length.toUInt())
         // write locals body
         WasmBinaryWriter(buffer).writeByteArray(localsBuffer.toByteArray())
 
         // write body size
-        payload.writeVarUInt32(buffer.length.toUInt(), context.options.isCanonical)
+        payload.writeVarUInt32(buffer.length.toUInt())
         // write body
         payload.writeByteArray(buffer.toByteArray())
     }
@@ -103,125 +103,149 @@ public class NameSectionWriter(
         payload.writeNameKind(NameKind.FUNCTION)
 
         val buffer = ByteBuffer()
+        val writer = WasmBinaryWriter(buffer)
+        writer.writeVarUInt32(names.size.toUInt())
+
         for (name in names) {
-            WasmBinaryWriter(buffer).writeIndex(name.index)
-            WasmBinaryWriter(buffer).writeString(name.name)
+            writer.writeIndex(name.index)
+            writer.writeString(name.name)
         }
 
         // write body size
-        payload.writeVarUInt32(buffer.length.toUInt(), context.options.isCanonical)
+        payload.writeVarUInt32(buffer.length.toUInt())
         // write body
         payload.writeByteArray(buffer.toByteArray())
     }
 
     override fun visitGlobalNames(names: List<IndexName>) {
         val payload = WasmBinaryWriter(body)
-        payload.writeNameKind(NameKind.GLOBAL)
+        payload.writeNameKind(NameKind.FUNCTION)
 
         val buffer = ByteBuffer()
+        val writer = WasmBinaryWriter(buffer)
+        writer.writeVarUInt32(names.size.toUInt())
+
         for (name in names) {
-            WasmBinaryWriter(buffer).writeIndex(name.index)
-            WasmBinaryWriter(buffer).writeString(name.name)
+            writer.writeIndex(name.index)
+            writer.writeString(name.name)
         }
 
         // write body size
-        payload.writeVarUInt32(buffer.length.toUInt(), context.options.isCanonical)
+        payload.writeVarUInt32(buffer.length.toUInt())
         // write body
         payload.writeByteArray(buffer.toByteArray())
     }
 
     override fun visitTagNames(names: List<IndexName>) {
         val payload = WasmBinaryWriter(body)
-        payload.writeNameKind(NameKind.TAG)
+        payload.writeNameKind(NameKind.FUNCTION)
 
         val buffer = ByteBuffer()
+        val writer = WasmBinaryWriter(buffer)
+        writer.writeVarUInt32(names.size.toUInt())
+
         for (name in names) {
-            WasmBinaryWriter(buffer).writeIndex(name.index)
-            WasmBinaryWriter(buffer).writeString(name.name)
+            writer.writeIndex(name.index)
+            writer.writeString(name.name)
         }
 
         // write body size
-        payload.writeVarUInt32(buffer.length.toUInt(), context.options.isCanonical)
+        payload.writeVarUInt32(buffer.length.toUInt())
         // write body
         payload.writeByteArray(buffer.toByteArray())
     }
 
     override fun visitTableNames(names: List<IndexName>) {
         val payload = WasmBinaryWriter(body)
-        payload.writeNameKind(NameKind.TABLE)
+        payload.writeNameKind(NameKind.FUNCTION)
 
         val buffer = ByteBuffer()
+        val writer = WasmBinaryWriter(buffer)
+        writer.writeVarUInt32(names.size.toUInt())
+
         for (name in names) {
-            WasmBinaryWriter(buffer).writeIndex(name.index)
-            WasmBinaryWriter(buffer).writeString(name.name)
+            writer.writeIndex(name.index)
+            writer.writeString(name.name)
         }
 
         // write body size
-        payload.writeVarUInt32(buffer.length.toUInt(), context.options.isCanonical)
+        payload.writeVarUInt32(buffer.length.toUInt())
         // write body
         payload.writeByteArray(buffer.toByteArray())
     }
 
     override fun visitMemoryNames(names: List<IndexName>) {
         val payload = WasmBinaryWriter(body)
-        payload.writeNameKind(NameKind.MEMORY)
+        payload.writeNameKind(NameKind.FUNCTION)
 
         val buffer = ByteBuffer()
+        val writer = WasmBinaryWriter(buffer)
+        writer.writeVarUInt32(names.size.toUInt())
+
         for (name in names) {
-            WasmBinaryWriter(buffer).writeIndex(name.index)
-            WasmBinaryWriter(buffer).writeString(name.name)
+            writer.writeIndex(name.index)
+            writer.writeString(name.name)
         }
 
         // write body size
-        payload.writeVarUInt32(buffer.length.toUInt(), context.options.isCanonical)
+        payload.writeVarUInt32(buffer.length.toUInt())
         // write body
         payload.writeByteArray(buffer.toByteArray())
     }
 
     override fun visitElementNames(names: List<IndexName>) {
         val payload = WasmBinaryWriter(body)
-        payload.writeNameKind(NameKind.ELEMENT)
+        payload.writeNameKind(NameKind.FUNCTION)
 
         val buffer = ByteBuffer()
+        val writer = WasmBinaryWriter(buffer)
+        writer.writeVarUInt32(names.size.toUInt())
+
         for (name in names) {
-            WasmBinaryWriter(buffer).writeIndex(name.index)
-            WasmBinaryWriter(buffer).writeString(name.name)
+            writer.writeIndex(name.index)
+            writer.writeString(name.name)
         }
 
         // write body size
-        payload.writeVarUInt32(buffer.length.toUInt(), context.options.isCanonical)
+        payload.writeVarUInt32(buffer.length.toUInt())
         // write body
         payload.writeByteArray(buffer.toByteArray())
     }
 
     override fun visitDataNames(names: List<IndexName>) {
         val payload = WasmBinaryWriter(body)
-        payload.writeNameKind(NameKind.DATA)
+        payload.writeNameKind(NameKind.FUNCTION)
 
         val buffer = ByteBuffer()
+        val writer = WasmBinaryWriter(buffer)
+        writer.writeVarUInt32(names.size.toUInt())
+
         for (name in names) {
-            WasmBinaryWriter(buffer).writeIndex(name.index)
-            WasmBinaryWriter(buffer).writeString(name.name)
+            writer.writeIndex(name.index)
+            writer.writeString(name.name)
         }
 
         // write body size
-        payload.writeVarUInt32(buffer.length.toUInt(), context.options.isCanonical)
+        payload.writeVarUInt32(buffer.length.toUInt())
         // write body
         payload.writeByteArray(buffer.toByteArray())
     }
 
     override fun visitTypeNames(names: List<IndexName>) {
         val payload = WasmBinaryWriter(body)
-        payload.writeNameKind(NameKind.TYPE)
+        payload.writeNameKind(NameKind.FUNCTION)
 
         val buffer = ByteBuffer()
+        val writer = WasmBinaryWriter(buffer)
+        writer.writeVarUInt32(names.size.toUInt())
+
         for (name in names) {
-            WasmBinaryWriter(buffer).writeIndex(name.index)
-            WasmBinaryWriter(buffer).writeString(name.name)
+            writer.writeIndex(name.index)
+            writer.writeString(name.name)
         }
 
         // write body size
-        payload.writeVarUInt32(buffer.length.toUInt(), context.options.isCanonical)
+        payload.writeVarUInt32(buffer.length.toUInt())
         // write body
         payload.writeByteArray(buffer.toByteArray())
     }

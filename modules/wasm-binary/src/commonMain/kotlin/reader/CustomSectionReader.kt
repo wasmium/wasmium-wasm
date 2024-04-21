@@ -112,7 +112,7 @@ public class CustomSectionReader(
 
                     val names = mutableListOf<IndexName>()
                     for (function in 0u until numberOfFunctionNames) {
-                        val index = source.readVarUInt32()
+                        val index = source.readIndex()
 
                         if ((lastIndex != null) && index < lastIndex) {
                             context.messages.add("warning: Index out of order in name section, $nameKind section at index %$index")
@@ -200,7 +200,7 @@ public class CustomSectionReader(
                         }
 
                         val nameType = source.readString()
-                        // TODO
+                        TODO()
                         // nameSectionVisitor.visitTypeName(nameTypeIndex, nameType)
 
                         lastNameTypeIndex = nameTypeIndex

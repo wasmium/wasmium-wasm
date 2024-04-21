@@ -96,6 +96,7 @@ public object WasmBinary {
     public const val ELEMENT_TABLE_INDEX: Int = 1 shl 1
     public const val ELEMENT_EXPRESSIONS: Int = 1 shl 2
 
+    public const val DATA_ACTIVE: Int = 0
     public const val DATA_PASSIVE: Int = 1
     public const val DATA_EXPLICIT: Int = 1 shl 1
 

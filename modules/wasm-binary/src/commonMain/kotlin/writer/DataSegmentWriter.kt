@@ -1,6 +1,7 @@
 package org.wasmium.wasm.binary.writer
 
 import org.wasmium.wasm.binary.ByteBuffer
+import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.visitors.DataSegmentVisitor
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
@@ -11,9 +12,17 @@ public class DataSegmentWriter(
 ) : DataSegmentVisitor {
     private val buffer: ByteBuffer = ByteBuffer()
     private val writer = WasmBinaryWriter(buffer)
+    private var active: Boolean = false
 
     public override fun visitActive(memoryIndex: UInt): ExpressionVisitor {
-        writer.writeVarUInt32(memoryIndex)
+        active = true
+
+        if(memoryIndex == 0u) {
+            writer.writeVarUInt32(WasmBinary.DATA_ACTIVE.toUInt())
+        } else {
+            writer.writeVarUInt32(WasmBinary.DATA_EXPLICIT.toUInt())
+            writer.writeVarUInt32(memoryIndex)
+        }
 
         return ExpressionWriter(context, buffer)
     }
@@ -24,6 +33,10 @@ public class DataSegmentWriter(
     }
 
     public override fun visitEnd() {
+        if (!active) {
+            WasmBinaryWriter(body).writeVarUInt32(WasmBinary.DATA_PASSIVE.toUInt())
+        }
+
         WasmBinaryWriter(body).writeByteArray(buffer.toByteArray())
     }
 }

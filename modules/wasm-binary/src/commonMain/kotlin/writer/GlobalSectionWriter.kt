@@ -16,7 +16,9 @@ public class GlobalSectionWriter(private val context: WriterContext) : GlobalSec
         numberOfGlobalVariables++
 
         writer.writeType(type)
-        writer.writeVarUInt1(if (mutable) 1u else 0u)
+
+        val value = if (mutable) 1u else 0u
+        writer.writeVarUInt1(value)
 
         return ExpressionWriter(context, body)
     }
