@@ -2,6 +2,7 @@
 
 package org.wasmium.wasm.binary
 
+import org.wasmium.wasm.binary.tree.BlockType
 import org.wasmium.wasm.binary.tree.ExternalKind
 import org.wasmium.wasm.binary.tree.LimitFlags
 import org.wasmium.wasm.binary.tree.LinkingKind
@@ -264,6 +265,16 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         }
 
         return V128Value(value)
+    }
+
+    public fun readBlockType(): BlockType {
+        val value = readVarInt32()
+
+        return if (value < 0) {
+            BlockType(BlockType.BlockTypeKind.VALUE_TYPE, value)
+        } else {
+            BlockType(BlockType.BlockTypeKind.FUNCTION_TYPE, value)
+        }
     }
 }
 

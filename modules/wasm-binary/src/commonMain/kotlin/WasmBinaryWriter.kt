@@ -2,6 +2,7 @@
 
 package org.wasmium.wasm.binary
 
+import org.wasmium.wasm.binary.tree.BlockType
 import org.wasmium.wasm.binary.tree.ExternalKind
 import org.wasmium.wasm.binary.tree.LinkingKind
 import org.wasmium.wasm.binary.tree.NameKind
@@ -206,6 +207,10 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
         } while (reminder != 0u)
 
         return count
+    }
+
+    public fun writeBlockType(blockType: BlockType) {
+        writeVarInt32(blockType.value)
     }
 
     public fun writeByteArray(byteArray: ByteArray): Unit = writer.writeTo(byteArray, 0, byteArray.size)

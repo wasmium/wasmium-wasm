@@ -2,6 +2,7 @@ package org.wasmium.wasm.binary.writer
 
 import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinaryWriter
+import org.wasmium.wasm.binary.tree.BlockType
 import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
@@ -167,40 +168,32 @@ public class ExpressionWriter(
         writer.writeOpcode(Opcode.NOP)
     }
 
-    override fun visitIfInstruction(types: List<WasmType>): Unit = writer.run {
+    override fun visitIfInstruction(blockType: BlockType): Unit = writer.run {
         writeOpcode(Opcode.IF)
 
-        for (type in types) {
-            writeType(type)
-        }
+        writeBlockType(blockType)
     }
 
-    override fun visitLoopInstruction(types: List<WasmType>): Unit = writer.run {
+    override fun visitLoopInstruction(blockType: BlockType): Unit = writer.run {
         writeOpcode(Opcode.LOOP)
 
-        for (type in types) {
-            writeType(type)
-        }
+        writeBlockType(blockType)
     }
 
-    override fun visitBlockInstruction(types: List<WasmType>): Unit = writer.run {
+    override fun visitBlockInstruction(blockType: BlockType): Unit = writer.run {
         writeOpcode(Opcode.BLOCK)
 
-        for (type in types) {
-            writeType(type)
-        }
+        writeBlockType(blockType)
     }
 
     override fun visitElseInstruction() {
         writer.writeOpcode(Opcode.ELSE)
     }
 
-    override fun visitTryInstruction(types: List<WasmType>): Unit = writer.run {
+    override fun visitTryInstruction(blockType: BlockType): Unit = writer.run {
         writeOpcode(Opcode.TRY)
 
-        for (type in types) {
-            writeType(type)
-        }
+        writeBlockType(blockType)
     }
 
     override fun visitCatchInstruction() {

@@ -52,22 +52,22 @@ public enum class WasmType(public val wasmTypeId: UInt) {
     // end
     ;
 
-    public fun isValueType(): Boolean = when (this) {
+    public fun isNumber(): Boolean = when (this) {
         I32,
         I64,
         F32,
-        F64,
-        V128 -> true
+        F64 -> true
 
         else -> false
     }
 
-    public fun isElementType(): Boolean = when (this) {
-        FUNC_REF -> true
+    public fun isValueType(): Boolean = isNumber() || isReferenceType() || this == WasmType.V128
+
+    public fun isReferenceType(): Boolean = when (this) {
+        FUNC_REF,
+        EXTERN_REF -> true
         else -> false
     }
-
-    public fun isInlineType(): Boolean = isValueType() || this == NONE
 
     public companion object {
         public fun fromWasmTypeId(wasmTypeId: UInt): WasmType? = values().firstOrNull { it.wasmTypeId == wasmTypeId }

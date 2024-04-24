@@ -1,5 +1,6 @@
 package org.wasmium.wasm.binary.visitors
 
+import org.wasmium.wasm.binary.tree.BlockType
 import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
@@ -60,15 +61,15 @@ public interface ExpressionVisitor {
 
     public fun visitNopInstruction()
 
-    public fun visitIfInstruction(types: List<WasmType>)
+    public fun visitIfInstruction(blockType: BlockType)
 
-    public fun visitLoopInstruction(types: List<WasmType>)
+    public fun visitLoopInstruction(blockType: BlockType)
 
-    public fun visitBlockInstruction(types: List<WasmType>)
+    public fun visitBlockInstruction(blockType: BlockType)
 
     public fun visitElseInstruction()
 
-    public fun visitTryInstruction(types: List<WasmType>)
+    public fun visitTryInstruction(blockType: BlockType)
 
     public fun visitCatchInstruction()
 

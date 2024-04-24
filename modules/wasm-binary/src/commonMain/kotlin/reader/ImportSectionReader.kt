@@ -35,8 +35,8 @@ public class ImportSectionReader(
                 TABLE -> {
                     val elementType = source.readType()
 
-                    if (!elementType.isElementType()) {
-                        throw ParserException("Imported table type is not AnyFunc.")
+                    if (!elementType.isReferenceType()) {
+                        throw ParserException("Imported table type is not a reference type.")
                     }
 
                     val limits = source.readResizableLimits()

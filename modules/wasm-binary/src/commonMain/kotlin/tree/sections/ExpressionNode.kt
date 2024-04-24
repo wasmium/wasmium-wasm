@@ -1,5 +1,6 @@
 package org.wasmium.wasm.binary.tree.sections
 
+import org.wasmium.wasm.binary.tree.BlockType
 import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
@@ -125,24 +126,24 @@ public class ExpressionNode : ExpressionVisitor {
         instructions.add(NopInstruction())
     }
 
-    public override fun visitIfInstruction(types: List<WasmType>) {
-        instructions.add(IfInstruction(types))
+    public override fun visitIfInstruction(blockType: BlockType) {
+        instructions.add(IfInstruction(blockType))
     }
 
-    public override fun visitLoopInstruction(types: List<WasmType>) {
-        instructions.add(LoopInstruction(types))
+    public override fun visitLoopInstruction(blockType: BlockType) {
+        instructions.add(LoopInstruction(blockType))
     }
 
-    public override fun visitBlockInstruction(types: List<WasmType>) {
-        instructions.add(BlockInstruction(types))
+    public override fun visitBlockInstruction(blockType: BlockType) {
+        instructions.add(BlockInstruction(blockType))
     }
 
     public override fun visitElseInstruction() {
         instructions.add(ElseInstruction())
     }
 
-    public override fun visitTryInstruction(types: List<WasmType>) {
-        instructions.add(TryInstruction(types))
+    public override fun visitTryInstruction(blockType: BlockType) {
+        instructions.add(TryInstruction(blockType))
     }
 
     public override fun visitCatchInstruction() {

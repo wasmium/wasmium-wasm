@@ -36,36 +36,24 @@ public class ExpressionReader(
                 }
 
                 BLOCK -> {
-                    val type = source.readType()
-                    if (!type.isInlineType()) {
-                        throw ParserException("Expected valid block signature type")
-                    }
+                    val blockType = source.readBlockType()
 
-                    val blockType = if (type != WasmType.NONE) listOf(type) else listOf(WasmType.NONE)
                     expressionVisitor.visitBlockInstruction(blockType)
 
                     ++blockDepth
                 }
 
                 LOOP -> {
-                    val type = source.readType()
-                    if (!type.isInlineType()) {
-                        throw ParserException("Expected valid block signature type")
-                    }
+                    val blockType = source.readBlockType()
 
-                    val blockType = if (type != WasmType.NONE) listOf(type) else listOf(WasmType.NONE)
                     expressionVisitor.visitLoopInstruction(blockType)
 
                     ++blockDepth
                 }
 
                 IF -> {
-                    val type = source.readType()
-                    if (!type.isInlineType()) {
-                        throw ParserException("Expected valid block signature type")
-                    }
+                    val blockType = source.readBlockType()
 
-                    val blockType = if (type != WasmType.NONE) listOf(type) else listOf(WasmType.NONE)
                     expressionVisitor.visitIfInstruction(blockType)
 
                     ++blockDepth
@@ -76,12 +64,8 @@ public class ExpressionReader(
                 }
 
                 TRY -> {
-                    val type = source.readType()
-                    if (!type.isInlineType()) {
-                        throw ParserException("Expected valid block signature type")
-                    }
+                    val blockType = source.readBlockType()
 
-                    val blockType = if (type != WasmType.NONE) listOf(type) else listOf(WasmType.NONE)
                     expressionVisitor.visitTryInstruction(blockType)
                 }
 

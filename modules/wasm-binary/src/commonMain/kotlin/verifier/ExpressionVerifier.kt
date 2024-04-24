@@ -2,6 +2,7 @@ package org.wasmium.wasm.binary.verifier
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
+import org.wasmium.wasm.binary.tree.BlockType
 import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.Opcode.*
 import org.wasmium.wasm.binary.tree.V128Value
@@ -476,28 +477,28 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
         delegate?.visitNopInstruction()
     }
 
-    override fun visitIfInstruction(types: List<WasmType>) {
+    override fun visitIfInstruction(blockType: BlockType) {
         checkEnd()
 
         numberOfInstructions++
 
-        delegate?.visitIfInstruction(types)
+        delegate?.visitIfInstruction(blockType)
     }
 
-    override fun visitLoopInstruction(types: List<WasmType>) {
+    override fun visitLoopInstruction(blockType: BlockType) {
         checkEnd()
 
         numberOfInstructions++
 
-        delegate?.visitLoopInstruction(types)
+        delegate?.visitLoopInstruction(blockType)
     }
 
-    override fun visitBlockInstruction(types: List<WasmType>) {
+    override fun visitBlockInstruction(blockType: BlockType) {
         checkEnd()
 
         numberOfInstructions++
 
-        delegate?.visitBlockInstruction(types)
+        delegate?.visitBlockInstruction(blockType)
     }
 
     override fun visitElseInstruction() {
@@ -508,7 +509,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
         delegate?.visitElseInstruction()
     }
 
-    override fun visitTryInstruction(types: List<WasmType>) {
+    override fun visitTryInstruction(blockType: BlockType) {
         checkEnd()
 
         if (!context.options.features.isExceptionHandlingEnabled) {
@@ -517,7 +518,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
 
         numberOfInstructions++
 
-        delegate?.visitTryInstruction(types)
+        delegate?.visitTryInstruction(blockType)
     }
 
     override fun visitCatchInstruction() {

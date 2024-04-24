@@ -1,5 +1,6 @@
 package org.wasmium.wasm.binary.visitors
 
+import org.wasmium.wasm.binary.tree.BlockType
 import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
@@ -112,24 +113,24 @@ public open class ExpressionAdapter(protected val delegate: ExpressionVisitor? =
         delegate?.visitNopInstruction()
     }
 
-    override fun visitIfInstruction(types: List<WasmType>) {
-        delegate?.visitIfInstruction(types)
+    override fun visitIfInstruction(blockType: BlockType) {
+        delegate?.visitIfInstruction(blockType)
     }
 
-    override fun visitLoopInstruction(types: List<WasmType>) {
-        delegate?.visitLoopInstruction(types)
+    override fun visitLoopInstruction(blockType: BlockType) {
+        delegate?.visitLoopInstruction(blockType)
     }
 
-    override fun visitBlockInstruction(types: List<WasmType>) {
-        delegate?.visitBlockInstruction(types)
+    override fun visitBlockInstruction(blockType: BlockType) {
+        delegate?.visitBlockInstruction(blockType)
     }
 
     override fun visitElseInstruction() {
         delegate?.visitElseInstruction()
     }
 
-    override fun visitTryInstruction(types: List<WasmType>) {
-        delegate?.visitTryInstruction(types)
+    override fun visitTryInstruction(blockType: BlockType) {
+        delegate?.visitTryInstruction(blockType)
     }
 
     override fun visitCatchInstruction() {
