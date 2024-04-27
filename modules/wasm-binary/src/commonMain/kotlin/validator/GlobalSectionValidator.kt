@@ -9,7 +9,8 @@ public class GlobalSectionValidator(private val delegate: GlobalSectionVisitor? 
     override fun visitGlobalVariable(type: WasmType, mutable: Boolean): ExpressionVisitor {
         context.globals.add(GlobalType(type, mutable))
 
-        return ExpressionValidator(delegate?.visitGlobalVariable(type, mutable), context)
+        val localContext = context.createLocalContext(listOf(type), emptyList())
+        return ConstantExpressionValidator(ExpressionValidator(delegate?.visitGlobalVariable(type, mutable), localContext, listOf(type)), context)
     }
 
     override fun visitEnd() {

@@ -33,10 +33,6 @@ public open class ExpressionAdapter(protected val delegate: ExpressionVisitor? =
         delegate?.visitBrTableInstruction(targets, defaultTarget)
     }
 
-    override fun visitCompareInstruction(opcode: Opcode) {
-        delegate?.visitCompareInstruction(opcode)
-    }
-
     override fun visitConvertInstruction(opcode: Opcode) {
         delegate?.visitConvertInstruction(opcode)
     }

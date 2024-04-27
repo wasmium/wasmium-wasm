@@ -2,6 +2,7 @@ package org.wasmium.wasm.binary.validator
 
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.ElementSegmentVisitor
+import org.wasmium.wasm.binary.visitors.ExpressionAdapter
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
 public class ElementSegmentValidator(private val delegate: ElementSegmentVisitor? = null, private val context: ValidatorContext) : ElementSegmentVisitor {
@@ -14,7 +15,7 @@ public class ElementSegmentValidator(private val delegate: ElementSegmentVisitor
     }
 
     override fun visitActiveMode(tableIndex: UInt): ExpressionVisitor {
-        return ExpressionValidator(delegate?.visitActiveMode(tableIndex), context)
+        return ExpressionAdapter(delegate?.visitActiveMode(tableIndex))
     }
 
     override fun visitType(type: WasmType) {
@@ -22,7 +23,7 @@ public class ElementSegmentValidator(private val delegate: ElementSegmentVisitor
     }
 
     override fun visitExpression(): ExpressionVisitor {
-        return ExpressionValidator(delegate?.visitExpression(), context)
+        return ExpressionAdapter(delegate?.visitExpression())
     }
 
     override fun visitEnd() {

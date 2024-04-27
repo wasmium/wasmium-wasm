@@ -71,10 +71,6 @@ public class ExpressionWriter(
         writeIndex(defaultTarget)
     }
 
-    override fun visitCompareInstruction(opcode: Opcode) {
-        writer.writeOpcode(opcode)
-    }
-
     override fun visitConvertInstruction(opcode: Opcode) {
         writer.writeOpcode(opcode)
     }

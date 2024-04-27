@@ -4,7 +4,9 @@ import org.wasmium.wasm.binary.visitors.FunctionSectionVisitor
 
 public class FunctionSectionValidator(private val delegate: FunctionSectionVisitor? = null, private val context: ValidatorContext) : FunctionSectionVisitor {
     override fun visitFunction(typeIndex: UInt) {
-        context.functions.add(context.resultType(typeIndex))
+        val functionType = context.types[typeIndex.toInt()]
+
+        context.functions.add(functionType)
 
         delegate?.visitFunction(typeIndex)
     }
@@ -12,5 +14,4 @@ public class FunctionSectionValidator(private val delegate: FunctionSectionVisit
     override fun visitEnd() {
         delegate?.visitEnd()
     }
-
 }

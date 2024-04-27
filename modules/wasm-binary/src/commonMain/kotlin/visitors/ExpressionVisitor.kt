@@ -21,8 +21,6 @@ public interface ExpressionVisitor {
 
     public fun visitBrTableInstruction(targets: List<UInt>, defaultTarget: UInt)
 
-    public fun visitCompareInstruction(opcode: Opcode)
-
     public fun visitConvertInstruction(opcode: Opcode)
 
     public fun visitEndInstruction()

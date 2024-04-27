@@ -86,9 +86,9 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         return result.also { consume(count.toUInt()) }
     }
 
-    public fun readVarInt32(): Int {
+    public fun readVarInt32(initial: Long = 0): Int {
         val maxCount = 5
-        var result = 0L
+        var result = initial
         var current: Int
         var count = 0
         do {
@@ -267,13 +267,19 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         return V128Value(value)
     }
 
+    /**
+     * The block type can be 0x40, a value-type or 32 integer index
+     */
     public fun readBlockType(): BlockType {
-        val value = readVarInt32()
+        val value = readUInt8()
+        val valueType = WasmType.fromWasmTypeId(value)
 
-        return if (value < 0) {
-            BlockType(BlockType.BlockTypeKind.VALUE_TYPE, value)
+        return if (valueType != null) {
+            return BlockType(BlockType.BlockTypeKind.VALUE_TYPE, value.toInt())
         } else {
-            BlockType(BlockType.BlockTypeKind.FUNCTION_TYPE, value)
+            val index = readVarInt32(value.toLong())
+
+            return BlockType(BlockType.BlockTypeKind.FUNCTION_TYPE, index)
         }
     }
 }

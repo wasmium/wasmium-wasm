@@ -1,19 +1,20 @@
 package org.wasmium.wasm.binary.validator
 
+import org.wasmium.wasm.binary.tree.BlockType
 import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.verifier.VerifierException
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
-public class ConstantExpressionValidator(private val context: ValidatorContext) : ExpressionVisitor {
+public class ConstantExpressionValidator(private val delegate: ExpressionVisitor? = null, private val context: ValidatorContext) : ExpressionVisitor {
 
     private fun notConstant() {
         throw VerifierException("Expression is not constant")
     }
 
     override fun visitEnd() {
-        // empty
+        delegate?.visitEnd()
     }
 
     override fun visitAtomicLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
@@ -40,36 +41,32 @@ public class ConstantExpressionValidator(private val context: ValidatorContext) 
         notConstant()
     }
 
-    override fun visitCompareInstruction(opcode: Opcode) {
-        notConstant()
-    }
-
     override fun visitConvertInstruction(opcode: Opcode) {
         notConstant()
     }
 
     override fun visitEndInstruction() {
-        // constant
+        delegate?.visitEndInstruction()
     }
 
     override fun visitConstFloat32Instruction(value: Float) {
-        // constant
+        delegate?.visitConstFloat32Instruction(value)
     }
 
     override fun visitConstFloat64Instruction(value: Double) {
-        // constant
+        delegate?.visitConstFloat64Instruction(value)
     }
 
     override fun visitConstInt32Instruction(value: Int) {
-        // constant
+        delegate?.visitConstInt32Instruction(value)
     }
 
     override fun visitConstInt64Instruction(value: Long) {
-        // constant
+        delegate?.visitConstInt64Instruction(value)
     }
 
     override fun visitSimdConstInstruction(value: V128Value) {
-        // constant
+        delegate?.visitSimdConstInstruction(value)
     }
 
     override fun visitSimdShuffleInstruction(opcode: Opcode, value: V128Value) {
@@ -120,15 +117,15 @@ public class ConstantExpressionValidator(private val context: ValidatorContext) 
         notConstant()
     }
 
-    override fun visitIfInstruction(types: List<WasmType>) {
+    override fun visitIfInstruction(blockType: BlockType) {
         notConstant()
     }
 
-    override fun visitLoopInstruction(types: List<WasmType>) {
+    override fun visitLoopInstruction(blockType: BlockType) {
         notConstant()
     }
 
-    override fun visitBlockInstruction(types: List<WasmType>) {
+    override fun visitBlockInstruction(blockType: BlockType) {
         notConstant()
     }
 
@@ -136,7 +133,7 @@ public class ConstantExpressionValidator(private val context: ValidatorContext) 
         notConstant()
     }
 
-    override fun visitTryInstruction(types: List<WasmType>) {
+    override fun visitTryInstruction(blockType: BlockType) {
         notConstant()
     }
 
@@ -185,13 +182,13 @@ public class ConstantExpressionValidator(private val context: ValidatorContext) 
     }
 
     override fun visitGetGlobalInstruction(globalIndex: UInt) {
-        val globalType = context.globals.getOrElse(globalIndex.toInt()) {
-            throw VerifierException("Global index $globalIndex is out of bounds")
-        }
+        val globalType = context.globals[globalIndex.toInt()]
 
         if (globalType.isMutable) {
             notConstant()
         }
+
+        delegate?.visitGetGlobalInstruction(globalIndex)
     }
 
     override fun visitSetLocalInstruction(localIndex: UInt) {
@@ -527,19 +524,19 @@ public class ConstantExpressionValidator(private val context: ValidatorContext) 
     }
 
     override fun visitReferenceEqualInstruction() {
-        // constant
+        notConstant()
     }
 
     override fun visitReferenceFunctionInstruction(functionIndex: UInt) {
-        // constant
+        delegate?.visitReferenceFunctionInstruction(functionIndex)
     }
 
     override fun visitReferenceIsNullInstruction() {
-        // constant
+        notConstant()
     }
 
     override fun visitReferenceNullInstruction(type: WasmType) {
-        // constant
+        delegate?.visitReferenceNullInstruction(type)
     }
 
     override fun visitShiftRightInstruction(opcode: Opcode) {

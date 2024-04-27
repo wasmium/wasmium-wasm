@@ -150,26 +150,18 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
         delegate?.visitBrTableInstruction(targets, defaultTarget)
     }
 
-    override fun visitCompareInstruction(opcode: Opcode) {
-        checkEnd()
-
-        numberOfInstructions++
-
-        delegate?.visitCompareInstruction(opcode)
-    }
-
     override fun visitConvertInstruction(opcode: Opcode) {
         checkEnd()
 
         when (opcode) {
-            F32_CONVERT_SI32,
-            F32_CONVERT_UI32,
-            F32_CONVERT_SI64,
-            F32_CONVERT_UI64,
-            F64_CONVERT_SI32,
-            F64_CONVERT_UI32,
-            F64_CONVERT_SI64,
-            F64_CONVERT_UI64 -> {
+            F32_CONVERT_S_I32,
+            F32_CONVERT_U_I32,
+            F32_CONVERT_S_I64,
+            F32_CONVERT_U_I64,
+            F64_CONVERT_S_I32,
+            F64_CONVERT_U_I32,
+            F64_CONVERT_S_I64,
+            F64_CONVERT_U_I64 -> {
                 // valid
             }
 
@@ -389,8 +381,8 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
             I64_EXTEND8_S,
             I64_EXTEND16_S,
             I64_EXTEND32_S,
-            I64_EXTEND_SI32,
-            I64_EXTEND_UI32 -> {
+            I64_EXTEND_S_I32,
+            I64_EXTEND_U_I32 -> {
                 // valid
             }
 
@@ -1222,14 +1214,14 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
         when (opcode) {
             F32_TRUNC,
             F64_TRUNC,
-            I32_TRUNC_SF32,
-            I32_TRUNC_UF32,
-            I32_TRUNC_SF64,
-            I32_TRUNC_UF64,
-            I64_TRUNC_SF32,
-            I64_TRUNC_UF32,
-            I64_TRUNC_SF64,
-            I64_TRUNC_UF64,
+            I32_TRUNC_S_F32,
+            I32_TRUNC_U_F32,
+            I32_TRUNC_S_F64,
+            I32_TRUNC_U_F64,
+            I64_TRUNC_S_F32,
+            I64_TRUNC_U_F32,
+            I64_TRUNC_S_F64,
+            I64_TRUNC_U_F64,
             I32_TRUNC_S_SAT_F32,
             I32_TRUNC_U_SAT_F32,
             I32_TRUNC_S_SAT_F64,

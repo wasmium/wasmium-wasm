@@ -46,10 +46,6 @@ public class ExpressionNode : ExpressionVisitor {
         instructions.add(BrTableInstruction(targets, defaultTarget))
     }
 
-    public override fun visitCompareInstruction(opcode: Opcode) {
-        instructions.add(CompareInstruction(opcode))
-    }
-
     public override fun visitConvertInstruction(opcode: Opcode) {
         instructions.add(ConvertInstruction(opcode))
     }
