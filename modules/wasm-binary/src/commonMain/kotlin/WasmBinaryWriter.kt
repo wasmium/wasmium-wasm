@@ -14,6 +14,10 @@ import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import kotlin.experimental.or
 
+private const val LOW_7_BITS: Byte = 0x7F
+private const val CONTINUATION_BIT = 0x80
+private const val SIGN_BIT: Byte = 0x40
+
 public class WasmBinaryWriter(public val writer: BinaryWriter) {
 
     public fun writeUInt8(value: UInt): Unit = writer.writeByte(value.toByte())
@@ -37,13 +41,13 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
     }
 
     public fun writeVarUInt7(value: UInt) {
-        val b = (value and 0x7Fu)
+        val b = (value and LOW_7_BITS.toUInt())
 
         writer.writeByte(b.toByte())
     }
 
     public fun writeVarUInt7(value: Int) {
-        val b = (value and 0x7F)
+        val b = (value and LOW_7_BITS.toInt())
 
         writer.writeByte(b.toByte())
     }
@@ -57,10 +61,10 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
     }
 
     public fun writeFixedVarUInt32(value: UInt): Int {
-        writer.writeByte(((value and 0x7fu).toInt() or 0x80).toByte())
-        writer.writeByte((((value shr 7) and 0x7fu).toByte().toInt() or 0x80).toByte())
-        writer.writeByte((((value shr 14) and 0x7fu).toByte().toInt() or 0x80).toByte())
-        writer.writeByte((((value shr 21) and 0x7fu).toByte().toInt() or 0x80).toByte())
+        writer.writeByte(((value and LOW_7_BITS.toUInt()).toInt() or CONTINUATION_BIT).toByte())
+        writer.writeByte((((value shr 7) and LOW_7_BITS.toUInt()).toByte().toInt() or CONTINUATION_BIT).toByte())
+        writer.writeByte((((value shr 14) and LOW_7_BITS.toUInt()).toByte().toInt() or CONTINUATION_BIT).toByte())
+        writer.writeByte((((value shr 21) and LOW_7_BITS.toUInt()).toByte().toInt() or CONTINUATION_BIT).toByte())
         writer.writeByte(((value shr 28).toByte().toInt() and 0x0f).toByte())
 
         // write 5 bytes
@@ -71,11 +75,11 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
         var remaining = value
         var count = 0
         do {
-            var byte = (remaining and 0x7fu).toByte()
+            var byte = (remaining and LOW_7_BITS.toUInt()).toByte()
             remaining = remaining shr 7
 
             if (remaining != 0u) {
-                byte = byte or 0x80.toByte()
+                byte = byte or CONTINUATION_BIT.toByte()
             }
 
             writer.writeByte(byte)
@@ -90,13 +94,13 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
         var count = 0
         var hasMore = true
         while (hasMore) {
-            var byte = reminder and 0x7F
+            var byte = reminder and LOW_7_BITS.toInt()
             reminder = reminder shr 7
 
-            if ((reminder == 0 && ((byte and 0x40) == 0)) || (reminder == -1 && ((byte and 0x40) == 0x40))) {
+            if ((reminder == 0 && ((byte and SIGN_BIT.toInt()) == 0)) || (reminder == -1 && ((byte and SIGN_BIT.toInt()) == SIGN_BIT.toInt()))) {
                 hasMore = false
             } else {
-                byte = (byte or 0x80)
+                byte = (byte or CONTINUATION_BIT)
             }
 
             writer.writeByte(byte.toByte())
@@ -104,7 +108,7 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
         }
 
         while (isCanonical && count < padding) {
-            writer.writeByte(0x80.toByte())
+            writer.writeByte(CONTINUATION_BIT.toByte())
             count++
         }
 
@@ -116,13 +120,13 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
         var count = 0
         var hasMore = true
         while (hasMore) {
-            var byte = (reminder and 0x7F)
+            var byte = (reminder and LOW_7_BITS.toLong())
             reminder = reminder ushr 7
 
-            if ((reminder == 0L && ((byte and 0x40L) == 0L)) || (reminder == -1L && ((byte and 0x40L) == 0x40L))) {
+            if ((reminder == 0L && ((byte and SIGN_BIT.toLong()) == 0L)) || (reminder == -1L && ((byte and SIGN_BIT.toLong()) == SIGN_BIT.toLong()))) {
                 hasMore = false
             } else {
-                byte = (byte or 0x80)
+                byte = (byte or CONTINUATION_BIT.toLong())
             }
 
             writer.writeByte(byte.toByte())

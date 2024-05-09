@@ -16,6 +16,10 @@ import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import kotlin.experimental.and
 
+private const val LOW_7_BITS: Byte = 0x7F
+private const val CONTINUATION_BIT = 0x80
+private const val SIGN_BIT: Byte = 0x40
+
 public class WasmBinaryReader(protected val reader: BinaryReader) {
     /** Current position in the source */
     public var position: UInt = 0u
@@ -61,7 +65,7 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
 
     public fun readVarUInt1(): UInt = (reader.readByte() and 0b1).toUInt().also { consume(1u) }
 
-    public fun readVarUInt7(): UInt = (reader.readByte() and 0x7F).toUInt().also { consume(1u) }
+    public fun readVarUInt7(): UInt = (reader.readByte() and LOW_7_BITS).toUInt().also { consume(1u) }
 
     public fun readVarUInt32(): UInt = readVarUIntX(5)
 
@@ -71,11 +75,11 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         var count = 0
         do {
             current = reader.readByte().toInt() and 0xff
-            result = result or ((current and 0x7f).toLong() shl (count * 7)).toUInt()
+            result = result or ((current and LOW_7_BITS.toInt()).toLong() shl (count * 7)).toUInt()
             count++
-        } while (current and 0x80 == 0x80 && count <= maxCount)
+        } while (current and CONTINUATION_BIT == CONTINUATION_BIT && count <= maxCount)
 
-        if (current and 0x80 == 0x80) {
+        if (current and CONTINUATION_BIT == CONTINUATION_BIT) {
             throw ParserException("Overflow: Number too large")
         }
 
@@ -93,11 +97,11 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         var count = 0
         do {
             current = reader.readByte().toInt() and 0xff
-            result = result or ((current.toLong() and 0x7f) shl (count * 7))
+            result = result or ((current.toLong() and LOW_7_BITS.toLong()) shl (count * 7))
             count++
-        } while (current and 0x80 == 0x80 && count <= maxCount)
+        } while (current and CONTINUATION_BIT == CONTINUATION_BIT && count <= maxCount)
 
-        if (current and 0x80 == 0x80) {
+        if (current and CONTINUATION_BIT == CONTINUATION_BIT) {
             throw ParserException("Overflow: Number too large")
         }
 
@@ -106,7 +110,7 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         }
 
         // sign extend if appropriate
-        if ((current and 0x40) != 0) {
+        if ((current and SIGN_BIT.toInt()) != 0) {
             result = result or (-(1 shl (count * 7))).toUnsignedLong()
         }
 
@@ -120,11 +124,11 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         var count = 0
         do {
             current = reader.readByte().toInt() and 0xff
-            result = result or ((current.toLong() and 0x7f) shl (count * 7))
+            result = result or ((current.toLong() and LOW_7_BITS.toLong()) shl (count * 7))
             count++
-        } while (current and 0x80 == 0x80 && count <= maxCount)
+        } while (current and CONTINUATION_BIT == CONTINUATION_BIT && count <= maxCount)
 
-        if (current and 0x80 == 0x80) {
+        if (current and CONTINUATION_BIT == CONTINUATION_BIT) {
             throw ParserException("Overflow: Number too large")
         }
 
@@ -134,7 +138,7 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
 
         // sign extend if appropriate
         val size = 64
-        if (count * 7 < size && (current and 0x40) != 0) {
+        if (count * 7 < size && (current and SIGN_BIT.toInt()) != 0) {
             result = result or (-(1 shl (count * 7))).toUnsignedLong()
         }
 
