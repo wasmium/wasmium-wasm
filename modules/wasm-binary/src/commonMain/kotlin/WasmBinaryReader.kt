@@ -94,7 +94,7 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         val maxCount = 5
         var result = initial
         var current: Int
-        var count = 0
+        var count = if (initial != 0L) 1 else 0
         do {
             current = reader.readByte().toInt() and 0xff
             result = result or ((current.toLong() and LOW_7_BITS.toLong()) shl (count * 7))
