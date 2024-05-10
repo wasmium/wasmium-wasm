@@ -214,7 +214,11 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
     }
 
     public fun writeBlockType(blockType: BlockType) {
-        writeVarInt32(blockType.value)
+        writeUInt8(blockType.value.toUInt())
+
+        if (blockType.isFunctionType()) {
+            writeVarInt32(blockType.value)
+        }
     }
 
     public fun writeByteArray(byteArray: ByteArray): Unit = writer.writeTo(byteArray, 0, byteArray.size)
