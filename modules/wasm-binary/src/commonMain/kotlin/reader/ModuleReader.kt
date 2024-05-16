@@ -17,7 +17,6 @@ import org.wasmium.wasm.binary.tree.SectionKind.MEMORY
 import org.wasmium.wasm.binary.tree.SectionKind.START
 import org.wasmium.wasm.binary.tree.SectionKind.TABLE
 import org.wasmium.wasm.binary.tree.SectionKind.TYPE
-import org.wasmium.wasm.binary.tree.WasmVersion
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 public class ModuleReader(
@@ -45,18 +44,7 @@ public class ModuleReader(
             throw ParserException("Expecting module size of at least: $minSize")
         }
 
-        // read magic
-        val magic = source.readUInt32()
-        if (magic != WasmBinary.MAGIC_NUMBER) {
-            throw ParserException("Module does not start with: $magic")
-        }
-
-        // read version
-        val version = source.readUInt32()
-        if ((version <= 0u) || (version > WasmVersion.V1.version)) {
-            throw ParserException("Unsupported version number: $version")
-        }
-        visitor.visitHeader(version)
+        readHeader(source, visitor)
 
         // current section
         var section: SectionKind
@@ -130,5 +118,21 @@ public class ModuleReader(
         }
 
         return ReaderResult.Success(context.messages)
+    }
+
+    private fun readHeader(source: WasmBinaryReader, visitor: ModuleVisitor) {
+        // read magic
+        val magic = source.readUInt32()
+        if (magic != WasmBinary.Meta.MAGIC_NUMBER) {
+            throw ParserException("Module does not start with: $magic")
+        }
+
+        // read version
+        val version = source.readUInt32()
+        if (version != WasmBinary.Meta.VERSION_1 && version != WasmBinary.Meta.VERSION_2) {
+            throw ParserException("Unsupported version number: $version")
+        }
+
+        visitor.visitHeader(version)
     }
 }

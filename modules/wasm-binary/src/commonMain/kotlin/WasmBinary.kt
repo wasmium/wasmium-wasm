@@ -1,8 +1,17 @@
 package org.wasmium.wasm.binary
 
 public object WasmBinary {
-    /** WASM file magic number. */
-    public const val MAGIC_NUMBER: UInt = 0x6d736100u
+
+    public object Meta {
+        /** WASM file magic number. */
+        public const val MAGIC_NUMBER: UInt = 0x6d736100u
+
+        /** WASM file version 1. */
+        public const val VERSION_1: UInt = 0x01u
+
+        /** WASM file version 2. */
+        public const val VERSION_2: UInt = 0x02u
+    }
 
     /** Size of one linear memory page in bytes. This is fixed at 64KiB (64 * 2^10). */
     public const val PAGE_SIZE_BYTES: UInt = 65536u
