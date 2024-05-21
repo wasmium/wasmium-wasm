@@ -3,6 +3,7 @@ package org.wasmium.wasm.binary.reader
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinaryReader
 import org.wasmium.wasm.binary.tree.ExternalKind.FUNCTION
+import org.wasmium.wasm.binary.tree.ExternalKind.TAG
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 public class ExportSectionReader(
@@ -25,6 +26,12 @@ public class ExportSectionReader(
                 FUNCTION -> {
                     if (!context.options.features.isExceptionHandlingEnabled) {
                         throw ParserException("Invalid export exception kind: exceptions not enabled.")
+                    }
+                }
+
+                TAG -> {
+                    if (!context.options.features.isExceptionHandlingEnabled) {
+                        throw ParserException("Invalid import exception kind: exceptions not enabled.")
                     }
                 }
 

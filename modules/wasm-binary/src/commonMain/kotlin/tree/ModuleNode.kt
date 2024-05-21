@@ -12,8 +12,8 @@ import org.wasmium.wasm.binary.tree.SectionKind.IMPORT
 import org.wasmium.wasm.binary.tree.SectionKind.MEMORY
 import org.wasmium.wasm.binary.tree.SectionKind.START
 import org.wasmium.wasm.binary.tree.SectionKind.TABLE
+import org.wasmium.wasm.binary.tree.SectionKind.TAG
 import org.wasmium.wasm.binary.tree.SectionKind.TYPE
-import org.wasmium.wasm.binary.tree.SectionName.EXCEPTION
 import org.wasmium.wasm.binary.tree.SectionName.LINKING
 import org.wasmium.wasm.binary.tree.SectionName.NAME
 import org.wasmium.wasm.binary.tree.SectionName.RELOCATION
@@ -23,7 +23,6 @@ import org.wasmium.wasm.binary.tree.sections.CustomSectionNode
 import org.wasmium.wasm.binary.tree.sections.DataCountSectionNode
 import org.wasmium.wasm.binary.tree.sections.DataSectionNode
 import org.wasmium.wasm.binary.tree.sections.ElementSectionNode
-import org.wasmium.wasm.binary.tree.sections.ExceptionSectionNode
 import org.wasmium.wasm.binary.tree.sections.ExportSectionNode
 import org.wasmium.wasm.binary.tree.sections.FunctionSectionNode
 import org.wasmium.wasm.binary.tree.sections.GlobalSectionNode
@@ -36,13 +35,13 @@ import org.wasmium.wasm.binary.tree.sections.SectionNode
 import org.wasmium.wasm.binary.tree.sections.SourceMapSectionNode
 import org.wasmium.wasm.binary.tree.sections.StartSectionNode
 import org.wasmium.wasm.binary.tree.sections.TableSectionNode
+import org.wasmium.wasm.binary.tree.sections.TagSectionNode
 import org.wasmium.wasm.binary.tree.sections.TypeSectionNode
 import org.wasmium.wasm.binary.tree.sections.UnknownSectionNode
 import org.wasmium.wasm.binary.visitors.CodeSectionVisitor
 import org.wasmium.wasm.binary.visitors.DataCountSectionVisitor
 import org.wasmium.wasm.binary.visitors.DataSectionVisitor
 import org.wasmium.wasm.binary.visitors.ElementSectionVisitor
-import org.wasmium.wasm.binary.visitors.ExceptionSectionVisitor
 import org.wasmium.wasm.binary.visitors.ExportSectionVisitor
 import org.wasmium.wasm.binary.visitors.FunctionSectionVisitor
 import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
@@ -55,6 +54,7 @@ import org.wasmium.wasm.binary.visitors.RelocationSectionVisitor
 import org.wasmium.wasm.binary.visitors.SourceMapSectionVisitor
 import org.wasmium.wasm.binary.visitors.StartSectionVisitor
 import org.wasmium.wasm.binary.visitors.TableSectionVisitor
+import org.wasmium.wasm.binary.visitors.TagSectionVisitor
 import org.wasmium.wasm.binary.visitors.TypeSectionVisitor
 import org.wasmium.wasm.binary.visitors.UnknownSectionVisitor
 
@@ -72,14 +72,6 @@ public class ModuleNode : ModuleVisitor {
                     val customSection = section as CustomSectionNode
 
                     when (customSection.name) {
-                        EXCEPTION.sectionName -> {
-                            val exceptionSection = customSection as ExceptionSectionNode
-
-                            visitor.visitExceptionSection()?.let {
-                                exceptionSection.accept(it)
-                            }
-                        }
-
                         RELOCATION.sectionName -> {
                             val relocationSection = customSection as RelocationSectionNode
 
@@ -133,7 +125,7 @@ public class ModuleNode : ModuleVisitor {
                 IMPORT -> {
                     val importSection = section as ImportSectionNode
 
-                    val importSectionVisitor = visitor.visitImportSection()?.let {
+                    visitor.visitImportSection().let {
                         importSection.accept(it)
                     }
                 }
@@ -141,7 +133,7 @@ public class ModuleNode : ModuleVisitor {
                 FUNCTION -> {
                     val functionSection = section as FunctionSectionNode
 
-                    visitor.visitFunctionSection()?.let {
+                    visitor.visitFunctionSection().let {
                         functionSection.accept(it)
                     }
                 }
@@ -149,7 +141,7 @@ public class ModuleNode : ModuleVisitor {
                 TABLE -> {
                     val tableSection = section as TableSectionNode
 
-                    visitor.visitTableSection()?.let {
+                    visitor.visitTableSection().let {
                         tableSection.accept(it)
                     }
                 }
@@ -157,7 +149,7 @@ public class ModuleNode : ModuleVisitor {
                 MEMORY -> {
                     val memorySection = section as MemorySectionNode
 
-                    visitor.visitMemorySection()?.let {
+                    visitor.visitMemorySection().let {
                         memorySection.accept(it)
                     }
                 }
@@ -165,7 +157,7 @@ public class ModuleNode : ModuleVisitor {
                 GLOBAL -> {
                     val globalSection = section as GlobalSectionNode
 
-                    visitor.visitGlobalSection()?.let {
+                    visitor.visitGlobalSection().let {
                         globalSection.accept(it)
                     }
                 }
@@ -173,7 +165,7 @@ public class ModuleNode : ModuleVisitor {
                 EXPORT -> {
                     val exportSection = section as ExportSectionNode
 
-                    visitor.visitExportSection()?.let {
+                    visitor.visitExportSection().let {
                         exportSection.accept(it)
                     }
                 }
@@ -181,7 +173,7 @@ public class ModuleNode : ModuleVisitor {
                 START -> {
                     val startSection = section as StartSectionNode
 
-                    visitor.visitStartSection(startSection.functionIndex)?.let {
+                    visitor.visitStartSection(startSection.functionIndex).let {
                         startSection.accept(it)
                     }
                 }
@@ -189,7 +181,7 @@ public class ModuleNode : ModuleVisitor {
                 ELEMENT -> {
                     val elementSection = section as ElementSectionNode
 
-                    visitor.visitElementSection()?.let {
+                    visitor.visitElementSection().let {
                         elementSection.accept(it)
                     }
                 }
@@ -197,7 +189,7 @@ public class ModuleNode : ModuleVisitor {
                 DATA_COUNT -> {
                     val dataCountSection = section as DataCountSectionNode
 
-                    visitor.visitDataCountSection(dataCountSection.dataCount) ?.let {
+                    visitor.visitDataCountSection(dataCountSection.dataCount) .let {
                         dataCountSection.accept(it)
                     }
                 }
@@ -205,7 +197,7 @@ public class ModuleNode : ModuleVisitor {
                 CODE -> {
                     val codeSection = section as CodeSectionNode
 
-                    visitor.visitCodeSection()?.let {
+                    visitor.visitCodeSection().let {
                         codeSection.accept(it)
                     }
                 }
@@ -213,8 +205,16 @@ public class ModuleNode : ModuleVisitor {
                 DATA -> {
                     val dataSection = section as DataSectionNode
 
-                    visitor.visitDataSection()?.let {
+                    visitor.visitDataSection().let {
                         dataSection.accept(it)
+                    }
+                }
+
+                TAG -> {
+                    val tagSection = section as TagSectionNode
+
+                    visitor.visitTagSection().let {
+                        tagSection.accept(it)
                     }
                 }
             }
@@ -311,11 +311,11 @@ public class ModuleNode : ModuleVisitor {
         return unknownCustomSection
     }
 
-    public override fun visitExceptionSection(): ExceptionSectionVisitor {
-        val exceptionSection = ExceptionSectionNode()
-        sections.add(exceptionSection)
+    public override fun visitTagSection(): TagSectionVisitor {
+        val tagSection = TagSectionNode()
+        sections.add(tagSection)
 
-        return exceptionSection
+        return tagSection
     }
 
     public override fun visitRelocationSection(): RelocationSectionVisitor {

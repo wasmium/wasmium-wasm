@@ -15,6 +15,7 @@ import org.wasmium.wasm.binary.tree.WasmType.I32
 import org.wasmium.wasm.binary.tree.WasmType.I64
 import org.wasmium.wasm.binary.tree.WasmType.NONE
 import org.wasmium.wasm.binary.tree.WasmType.V128
+import org.wasmium.wasm.binary.tree.instructions.TryCatchImmediate
 import org.wasmium.wasm.binary.tree.sections.FunctionType
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
@@ -26,10 +27,6 @@ private class ControlFrame(
     var unreachable: Boolean = false,
 )
 
-public object Indention {
-    public var level: Int = 0
-}
-
 public class ExpressionValidator(
     private val delegate: ExpressionVisitor? = null,
     private val context: LocalContext,
@@ -40,13 +37,11 @@ public class ExpressionValidator(
     private val controlStack = mutableListOf<ControlFrame>()
 
     init {
-        println("New expression ------------ Locals (${context.locals.size}), () -> (${resultTypes.joinToString(", ") { it.toString() }})")
         pushControl(END, emptyList(), resultTypes)
     }
 
     private fun pushValue(type: WasmType) {
         valueStack.add(type)
-        println("${"".padEnd(Indention.level)} ${"\tStack push".padEnd(20)} [${this.valueStack.joinToString(", ") { it.toString() }}]")
     }
 
     private fun popValue(): WasmType {
@@ -60,9 +55,7 @@ public class ExpressionValidator(
             }
         }
 
-        return valueStack.removeLast().also {
-            println("${"".padEnd(Indention.level)} ${"\tStack pop".padEnd(20)} [${valueStack.joinToString(", ") { it.toString() }}]")
-        }
+        return valueStack.removeLast()
     }
 
     private fun popValue(type: WasmType): WasmType {
@@ -107,8 +100,6 @@ public class ExpressionValidator(
             )
         )
         pushValues(startTypes)
-
-        println("${"".padEnd(Indention.level++)} Start Control $opcode  [${valueStack.joinToString(", ") { it.toString() }}]")
     }
 
     private fun popControl(): ControlFrame {
@@ -125,7 +116,6 @@ public class ExpressionValidator(
 
         controlStack.removeLast()
 
-        println("${"".padEnd(Indention.level--)} End Control ${frame.opcode}" + valueStack.joinToString(", ") { it.toString() })
         return frame
     }
 
@@ -587,6 +577,15 @@ public class ExpressionValidator(
         delegate?.visitTryInstruction(blockType)
     }
 
+    override fun visitTryTableInstruction(blockType: BlockType, handlers: List<TryCatchImmediate>) {
+        val functionType = getFunctionType(blockType)
+
+        popValues(functionType.parameters)
+        pushControl(TRY_TABLE, functionType.parameters, functionType.results)
+
+        delegate?.visitTryTableInstruction(blockType, handlers)
+    }
+
     override fun visitCatchInstruction() {
         TODO()
         delegate?.visitCatchInstruction()
@@ -628,13 +627,7 @@ public class ExpressionValidator(
 
     override fun visitCallInstruction(functionIndex: UInt) {
         val functionType = context.functions[functionIndex.toInt()]
-        println(
-            "${"".padEnd(Indention.level)} Signature (call): $functionIndex - (${functionType.parameters.joinToString(", ") { it.toString() }}) -> (${
-                functionType.results.joinToString(
-                    ", "
-                ) { it.toString() }
-            })"
-        )
+
         popValues(functionType.parameters)
         pushValues(functionType.results)
 

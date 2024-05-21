@@ -1,9 +1,9 @@
 package org.wasmium.wasm.binary.validator
 
 import org.wasmium.wasm.binary.tree.ResizableLimits
+import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.sections.CodeType
-import org.wasmium.wasm.binary.tree.sections.ExceptionType
 import org.wasmium.wasm.binary.tree.sections.FunctionType
 import org.wasmium.wasm.binary.tree.sections.GlobalType
 import org.wasmium.wasm.binary.tree.sections.MemoryType
@@ -23,7 +23,7 @@ public class ValidatorContext(
 
     public val memories: MutableList<MemoryType> = mutableListOf()
 
-    public val exceptions: MutableList<ExceptionType> = mutableListOf()
+    public val tags: MutableList<TagType> = mutableListOf()
 
     public val codes: MutableList<CodeType> = mutableListOf()
 
@@ -86,7 +86,7 @@ public class ValidatorContext(
         globals = globals,
         tables = tables,
         memories = memories,
-        exceptions = exceptions,
+        tags = tags,
         codes = codes,
         locals = locals,
         returns = returns,
@@ -99,7 +99,7 @@ public class LocalContext(
     public val globals: List<GlobalType>,
     public val tables: List<TableType>,
     public val memories: List<MemoryType>,
-    public val exceptions: List<ExceptionType>,
+    public val tags: List<TagType>,
     public val codes: List<CodeType>,
 
     public val locals: List<WasmType>,

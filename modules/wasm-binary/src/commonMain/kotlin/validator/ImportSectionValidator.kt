@@ -1,8 +1,8 @@
 package org.wasmium.wasm.binary.validator
 
 import org.wasmium.wasm.binary.tree.ResizableLimits
+import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.WasmType
-import org.wasmium.wasm.binary.tree.sections.ExceptionType
 import org.wasmium.wasm.binary.tree.sections.GlobalType
 import org.wasmium.wasm.binary.tree.sections.MemoryType
 import org.wasmium.wasm.binary.tree.sections.TableType
@@ -43,10 +43,10 @@ public class ImportSectionValidator(private val delegate: ImportSectionVisitor? 
         delegate?.visitMemory(moduleName, fieldName, limits)
     }
 
-    override fun visitException(moduleName: String, fieldName: String, exceptionTypes: List<WasmType>) {
-        context.exceptions.add(ExceptionType(exceptionTypes))
+    override fun visitTag(moduleName: String, fieldName: String, tagType: TagType) {
+        context.tags.add(tagType)
 
-        delegate?.visitException(moduleName, fieldName, exceptionTypes)
+        delegate?.visitTag(moduleName, fieldName, tagType)
     }
 
     override fun visitEnd() {

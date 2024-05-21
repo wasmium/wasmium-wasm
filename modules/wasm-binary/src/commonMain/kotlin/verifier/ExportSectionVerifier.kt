@@ -3,11 +3,11 @@ package org.wasmium.wasm.binary.verifier
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.tree.ExternalKind
-import org.wasmium.wasm.binary.tree.ExternalKind.EXCEPTION
 import org.wasmium.wasm.binary.tree.ExternalKind.FUNCTION
 import org.wasmium.wasm.binary.tree.ExternalKind.GLOBAL
 import org.wasmium.wasm.binary.tree.ExternalKind.MEMORY
 import org.wasmium.wasm.binary.tree.ExternalKind.TABLE
+import org.wasmium.wasm.binary.tree.ExternalKind.TAG
 import org.wasmium.wasm.binary.visitors.ExportSectionVisitor
 
 public class ExportSectionVerifier(private val delegate: ExportSectionVisitor? = null, private val context: VerifierContext) : ExportSectionVisitor {
@@ -58,13 +58,9 @@ public class ExportSectionVerifier(private val delegate: ExportSectionVisitor? =
                 }
             }
 
-            EXCEPTION -> {
+            TAG -> {
                 context.exportIndexes.add(itemIndex)
             }
-
-            ExternalKind.MODULE -> TODO()
-            ExternalKind.INSTANCE -> TODO()
-            ExternalKind.TYPE -> TODO()
         }
 
         numberOfExports++

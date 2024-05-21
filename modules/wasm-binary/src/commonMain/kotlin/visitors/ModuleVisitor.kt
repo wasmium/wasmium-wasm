@@ -25,8 +25,6 @@ public interface ModuleVisitor {
 
     public fun visitDataSection(): DataSectionVisitor
 
-    public fun visitExceptionSection(): ExceptionSectionVisitor
-
     public fun visitRelocationSection(): RelocationSectionVisitor
 
     public fun visitUnknownSection(name: String, content: ByteArray): UnknownSectionVisitor
@@ -37,7 +35,9 @@ public interface ModuleVisitor {
 
     public fun visitDataCountSection(dataCount: UInt): DataCountSectionVisitor
 
-    public fun visitEnd(): Unit
-
     public fun visitSourceMapSection(sourceMap: String): SourceMapSectionVisitor
+
+    public fun visitTagSection(): TagSectionVisitor
+
+    public fun visitEnd(): Unit
 }

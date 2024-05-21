@@ -4,6 +4,7 @@ import org.wasmium.wasm.binary.tree.BlockType
 import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
+import org.wasmium.wasm.binary.tree.instructions.TryCatchImmediate
 import org.wasmium.wasm.binary.verifier.VerifierException
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
@@ -134,6 +135,10 @@ public class ConstantExpressionValidator(private val delegate: ExpressionVisitor
     }
 
     override fun visitTryInstruction(blockType: BlockType) {
+        notConstant()
+    }
+
+    override fun visitTryTableInstruction(blockType: BlockType, handlers: List<TryCatchImmediate>) {
         notConstant()
     }
 

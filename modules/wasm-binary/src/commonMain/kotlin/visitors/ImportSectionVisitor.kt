@@ -1,6 +1,7 @@
 package org.wasmium.wasm.binary.visitors
 
 import org.wasmium.wasm.binary.tree.ResizableLimits
+import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.WasmType
 
 public interface ImportSectionVisitor {
@@ -13,7 +14,7 @@ public interface ImportSectionVisitor {
 
     public fun visitMemory(moduleName: String, fieldName: String, limits: ResizableLimits)
 
-    public fun visitException(moduleName: String, fieldName: String, exceptionTypes: List<WasmType>)
+    public fun visitTag(moduleName: String, fieldName: String, tagType: TagType)
 
     public fun visitEnd()
 }

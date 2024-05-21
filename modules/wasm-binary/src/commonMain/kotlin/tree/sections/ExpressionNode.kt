@@ -142,6 +142,10 @@ public class ExpressionNode : ExpressionVisitor {
         instructions.add(TryInstruction(blockType))
     }
 
+    override fun visitTryTableInstruction(blockType: BlockType, handlers: List<TryCatchImmediate>) {
+        instructions.add(TryTableInstruction(blockType, handlers))
+    }
+
     public override fun visitCatchInstruction() {
         instructions.add(CatchInstruction())
     }

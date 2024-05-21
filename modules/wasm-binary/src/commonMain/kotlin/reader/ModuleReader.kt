@@ -16,6 +16,7 @@ import org.wasmium.wasm.binary.tree.SectionKind.IMPORT
 import org.wasmium.wasm.binary.tree.SectionKind.MEMORY
 import org.wasmium.wasm.binary.tree.SectionKind.START
 import org.wasmium.wasm.binary.tree.SectionKind.TABLE
+import org.wasmium.wasm.binary.tree.SectionKind.TAG
 import org.wasmium.wasm.binary.tree.SectionKind.TYPE
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
@@ -29,26 +30,18 @@ public class ModuleReader(
     private val elementSectionReader: ElementSectionReader = ElementSectionReader(context)
     private val exportSectionReader: ExportSectionReader = ExportSectionReader(context)
     private val functionSectionReader: FunctionSectionReader = FunctionSectionReader(context)
+    private val memorySectionReader: MemorySectionReader = MemorySectionReader(context)
+    private val tagSectionReader: TagSectionReader = TagSectionReader(context)
     private val globalSectionReader: GlobalSectionReader = GlobalSectionReader(context)
     private val importSectionReader: ImportSectionReader = ImportSectionReader(context)
-    private val memorySectionReader: MemorySectionReader = MemorySectionReader(context)
     private val startSectionReader: StartSectionReader = StartSectionReader(context)
     private val tableSectionReader: TableSectionReader = TableSectionReader(context)
     private val typeSectionReader: TypeSectionReader = TypeSectionReader(context)
     private val customSectionReader: CustomSectionReader = CustomSectionReader(context)
 
     public fun readModule(source: WasmBinaryReader, visitor: ModuleVisitor): ReaderResult {
-        // minimum allowed module size
-        val minSize = 8u
-        if (!source.request(minSize)) {
-            throw ParserException("Expecting module size of at least: $minSize")
-        }
-
         readHeader(source, visitor)
 
-        // current section
-        var section: SectionKind
-        // total read sections
         var numberOfSections = 0u
         var lastSection: SectionKind? = null
         while (!source.exhausted()) {
@@ -56,7 +49,8 @@ public class ModuleReader(
                 throw ParserException("Sections size of $numberOfSections exceed the maximum of ${WasmBinary.MAX_SECTIONS}")
             }
 
-            section = source.readSectionKind()
+            // current section
+            val section = source.readSectionKind()
             if (section != CUSTOM) {
                 // not consider CUSTOM section for ordering
                 if (lastSection != null) {
@@ -89,6 +83,7 @@ public class ModuleReader(
                     FUNCTION -> functionSectionReader.readFunctionSection(source, visitor)
                     TABLE -> tableSectionReader.readTableSection(source, visitor)
                     MEMORY -> memorySectionReader.readMemorySection(source, visitor)
+                    TAG -> tagSectionReader.readTagSection(source, visitor)
                     GLOBAL -> globalSectionReader.readGlobalSection(source, visitor)
                     EXPORT -> exportSectionReader.readExportSection(source, visitor)
                     START -> startSectionReader.readStartSection(source, visitor)
@@ -100,7 +95,7 @@ public class ModuleReader(
             }
 
             if (payloadSize != source.position - startPosition) {
-                throw ParserException("Invalid size of section id: $section, expected: $payloadSize, actual: ${source.position - startPosition}")
+                throw ParserException("Invalid size of section id $section, expected $payloadSize, actual ${source.position - startPosition}")
             }
 
             if (context.nameOfSectionConsumed && section != CUSTOM) {
@@ -112,7 +107,6 @@ public class ModuleReader(
 
         visitor.visitEnd()
 
-        // maximum allowed module size
         if (source.position > WasmBinary.MAX_MODULE_SIZE) {
             throw ParserException("Module size of ${source.position} is too large, maximum allowed is ${WasmBinary.MAX_MODULE_SIZE}")
         }
@@ -121,6 +115,12 @@ public class ModuleReader(
     }
 
     private fun readHeader(source: WasmBinaryReader, visitor: ModuleVisitor) {
+        // minimum allowed module size
+        val minSize = 8u
+        if (!source.request(minSize)) {
+            throw ParserException("Expecting module size of at least: $minSize")
+        }
+
         // read magic
         val magic = source.readUInt32()
         if (magic != WasmBinary.Meta.MAGIC_NUMBER) {

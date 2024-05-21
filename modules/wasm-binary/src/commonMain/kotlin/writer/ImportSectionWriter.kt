@@ -5,6 +5,7 @@ import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.ExternalKind
 import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.tree.SectionKind
+import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 
@@ -51,15 +52,11 @@ public class ImportSectionWriter(private val context: WriterContext) : ImportSec
         numberOfImports++
     }
 
-    public override fun visitException(moduleName: String, fieldName: String, exceptionTypes: List<WasmType>) {
+    public override fun visitTag(moduleName: String, fieldName: String, tagType: TagType) {
         writer.writeString(moduleName)
         writer.writeString(fieldName)
-        writer.writeExternalKind(ExternalKind.EXCEPTION)
-        writer.writeVarUInt32(exceptionTypes.size.toUInt())
-
-        for (wasmType in exceptionTypes) {
-            writer.writeType(wasmType)
-        }
+        writer.writeExternalKind(ExternalKind.TAG)
+        writer.writeTagType(tagType)
 
         numberOfImports++
     }

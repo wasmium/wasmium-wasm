@@ -10,6 +10,7 @@ import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.RelocationKind
 import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.tree.SectionKind
+import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import kotlin.experimental.or
@@ -219,6 +220,11 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
         if (blockType.isFunctionType()) {
             writeVarInt32(blockType.value)
         }
+    }
+
+    public fun writeTagType(tagType: TagType){
+        writeUInt8(tagType.attribute.attributeId)
+        writeIndex(tagType.index)
     }
 
     public fun writeByteArray(byteArray: ByteArray): Unit = writer.writeTo(byteArray, 0, byteArray.size)

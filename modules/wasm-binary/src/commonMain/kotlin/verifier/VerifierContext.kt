@@ -16,7 +16,7 @@ public class VerifierContext(
     public var numberOfGlobalImports: UInt = 0u
 
     /** Total number of imported exceptions. */
-    public var numberOfExceptionImports: UInt = 0u
+    public var numberOfTagImports: UInt = 0u
 
     /** Total number of signatures. */
     public var numberOfTypes: UInt = 0u
@@ -39,9 +39,7 @@ public class VerifierContext(
     /** Total number of exports. */
     public var numberOfExports: UInt = 0u
 
-    /** Total number of exceptions. */
-    public var numberOfExceptions: UInt = 0u
-
+    /** Total number of tags. */
     public var numberOfTags: UInt = 0u
 
     public var numberOfElements: UInt = 0u
@@ -62,7 +60,7 @@ public class VerifierContext(
 
     public val numberOfTotalGlobals: UInt get() = numberOfGlobalImports + numberOfGlobals
 
-    public val numberOfTotalExceptions: UInt get() = numberOfExceptionImports + numberOfExceptions
+    public val numberOfTotalExceptions: UInt get() = numberOfTagImports + this.numberOfTags
 
     public val messages: MutableList<String> = mutableListOf()
 }

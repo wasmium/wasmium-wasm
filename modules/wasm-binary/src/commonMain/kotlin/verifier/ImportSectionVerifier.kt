@@ -3,6 +3,7 @@ package org.wasmium.wasm.binary.verifier
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.tree.ResizableLimits
+import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 
@@ -50,17 +51,13 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor? =
         delegate?.visitMemory(moduleName, fieldName, limits)
     }
 
-    override fun visitException(moduleName: String, fieldName: String, exceptionTypes: List<WasmType>) {
+    override fun visitTag(moduleName: String, fieldName: String, tagType: TagType) {
         checkEnd()
 
-        if (exceptionTypes.size.toUInt() > WasmBinary.MAX_EXCEPTION_TYPES) {
-            throw ParserException("Number of exceptions types ${exceptionTypes.size.toUInt()} exceed the maximum of ${WasmBinary.MAX_EXCEPTIONS}")
-        }
-
         numberOfImports++
-        context.numberOfExceptionImports++
+        context.numberOfTagImports++
 
-        delegate?.visitException(moduleName, fieldName, exceptionTypes)
+        delegate?.visitTag(moduleName, fieldName, tagType)
     }
 
     override fun visitEnd() {

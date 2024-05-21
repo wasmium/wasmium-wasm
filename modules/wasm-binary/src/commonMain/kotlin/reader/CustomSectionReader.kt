@@ -7,11 +7,21 @@ import org.wasmium.wasm.binary.tree.IndexName
 import org.wasmium.wasm.binary.tree.LinkingKind
 import org.wasmium.wasm.binary.tree.LinkingSymbolType
 import org.wasmium.wasm.binary.tree.NameKind
-import org.wasmium.wasm.binary.tree.NameKind.*
+import org.wasmium.wasm.binary.tree.NameKind.DATA
+import org.wasmium.wasm.binary.tree.NameKind.ELEMENT
+import org.wasmium.wasm.binary.tree.NameKind.FIELD
+import org.wasmium.wasm.binary.tree.NameKind.FUNCTION
+import org.wasmium.wasm.binary.tree.NameKind.GLOBAL
+import org.wasmium.wasm.binary.tree.NameKind.LABEL
+import org.wasmium.wasm.binary.tree.NameKind.LOCAL
+import org.wasmium.wasm.binary.tree.NameKind.MEMORY
+import org.wasmium.wasm.binary.tree.NameKind.MODULE
+import org.wasmium.wasm.binary.tree.NameKind.TABLE
+import org.wasmium.wasm.binary.tree.NameKind.TAG
+import org.wasmium.wasm.binary.tree.NameKind.TYPE
 import org.wasmium.wasm.binary.tree.RelocationKind
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.SectionName
-import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 public class CustomSectionReader(
@@ -39,14 +49,6 @@ public class CustomSectionReader(
 
             sectionName == SectionName.LINKING.sectionName -> {
                 readLinkingSection(source, visitor)
-            }
-
-            sectionName == SectionName.EXCEPTION.sectionName -> {
-                if (context.options.features.isExceptionHandlingEnabled) {
-                    readExceptionSection(source, visitor)
-                } else {
-                    readUnknownSection(source, visitor, sectionName, startPosition, sectionPayloadSize)
-                }
             }
 
             sectionName == SectionName.SOURCE_MAPPING_URL.sectionName -> {
@@ -344,37 +346,5 @@ public class CustomSectionReader(
         }
 
         relocationVisitor.visitEnd()
-    }
-
-    private fun readExceptionSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
-        context.numberOfExceptions = source.readVarUInt32()
-
-        val exceptionVisitor = visitor.visitExceptionSection()
-        for (index in 0u until context.numberOfExceptions) {
-            val exceptionIndex = context.numberOfExceptionImports + index
-
-            val exceptionType = readExceptionType(source)
-
-            exceptionVisitor.visitExceptionType(exceptionType)
-        }
-
-        exceptionVisitor.visitEnd()
-    }
-
-    private fun readExceptionType(source: WasmBinaryReader): List<WasmType> {
-        val numberExceptionTypes = source.readVarUInt32()
-
-        val exceptionTypes = mutableListOf<WasmType>()
-        for (exceptionIndex in 0u until numberExceptionTypes) {
-            val exceptionType = source.readType()
-
-            if (!exceptionType.isValueType()) {
-                throw ParserException("Invalid exception type: %#$exceptionType")
-            }
-
-            exceptionTypes[exceptionIndex.toInt()] = exceptionType
-        }
-
-        return exceptionTypes
     }
 }

@@ -1,6 +1,5 @@
 package org.wasmium.wasm.binary.validator
 
-import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.tree.LocalVariable
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.CodeSectionVisitor

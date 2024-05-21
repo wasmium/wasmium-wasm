@@ -82,10 +82,10 @@ public object WasmBinary {
     public const val MAX_ELEMENT_SEGMENTS: UInt = 10_000_000u
 
     /** Maximum number of exceptions. */
-    public const val MAX_EXCEPTIONS: UInt = 1_000_000u
+    public const val MAX_TAGS: UInt = 1_000_000u
 
     /** Maximum number of exceptions types. */
-    public const val MAX_EXCEPTION_TYPES: UInt = 1_000_000u
+    public const val MAX_TAG_TYPES: UInt = 1_000_000u
 
     public const val MAX_RELOCATIONS: UInt = 1_000_000u
 

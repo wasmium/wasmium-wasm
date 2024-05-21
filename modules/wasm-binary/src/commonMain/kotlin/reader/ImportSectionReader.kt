@@ -2,13 +2,11 @@ package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinaryReader
-import org.wasmium.wasm.binary.tree.ExternalKind
-import org.wasmium.wasm.binary.tree.ExternalKind.EXCEPTION
 import org.wasmium.wasm.binary.tree.ExternalKind.FUNCTION
 import org.wasmium.wasm.binary.tree.ExternalKind.GLOBAL
 import org.wasmium.wasm.binary.tree.ExternalKind.MEMORY
 import org.wasmium.wasm.binary.tree.ExternalKind.TABLE
-import org.wasmium.wasm.binary.tree.WasmType
+import org.wasmium.wasm.binary.tree.ExternalKind.TAG
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 public class ImportSectionReader(
@@ -73,40 +71,19 @@ public class ImportSectionReader(
                     context.numberOfGlobalImports++
                 }
 
-                EXCEPTION -> {
+                TAG -> {
                     if (!context.options.features.isExceptionHandlingEnabled) {
                         throw ParserException("Invalid import exception kind: exceptions not enabled.")
                     }
 
-                    val types = readExceptionType(source)
-                    importVisitor.visitException(moduleName, fieldName, types)
+                    val tagType = source.readTagType()
+                    importVisitor.visitTag(moduleName, fieldName, tagType)
 
-                    context.numberOfExceptionImports++
+                    context.numberOfTagImports++
                 }
-
-                ExternalKind.MODULE -> TODO()
-                ExternalKind.INSTANCE -> TODO()
-                ExternalKind.TYPE -> TODO()
             }
         }
 
         importVisitor.visitEnd()
-    }
-
-    private fun readExceptionType(source: WasmBinaryReader): List<WasmType> {
-        val numberOfExceptionTypes = source.readVarUInt32()
-
-        val exceptionTypes = mutableListOf<WasmType>()
-        for (exceptionIndex in 0u until numberOfExceptionTypes) {
-            val exceptionType = source.readType()
-
-            if (!exceptionType.isValueType()) {
-                throw ParserException("Invalid exception type: %#$exceptionType")
-            }
-
-            exceptionTypes.add(exceptionType)
-        }
-
-        return exceptionTypes
     }
 }

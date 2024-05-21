@@ -6,7 +6,6 @@ import org.wasmium.wasm.binary.visitors.CodeSectionVisitor
 import org.wasmium.wasm.binary.visitors.DataCountSectionVisitor
 import org.wasmium.wasm.binary.visitors.DataSectionVisitor
 import org.wasmium.wasm.binary.visitors.ElementSectionVisitor
-import org.wasmium.wasm.binary.visitors.ExceptionSectionVisitor
 import org.wasmium.wasm.binary.visitors.ExportSectionVisitor
 import org.wasmium.wasm.binary.visitors.FunctionSectionVisitor
 import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
@@ -19,6 +18,7 @@ import org.wasmium.wasm.binary.visitors.RelocationSectionVisitor
 import org.wasmium.wasm.binary.visitors.SourceMapSectionVisitor
 import org.wasmium.wasm.binary.visitors.StartSectionVisitor
 import org.wasmium.wasm.binary.visitors.TableSectionVisitor
+import org.wasmium.wasm.binary.visitors.TagSectionVisitor
 import org.wasmium.wasm.binary.visitors.TypeSectionVisitor
 import org.wasmium.wasm.binary.visitors.UnknownSectionVisitor
 
@@ -27,7 +27,7 @@ public class ModuleWriter(
 ) : ModuleVisitor {
 
     public override fun visitHeader(version: UInt) {
-        context.writer.writeUInt32(WasmBinary.MAGIC_NUMBER)
+        context.writer.writeUInt32(WasmBinary.Meta.MAGIC_NUMBER)
         context.writer.writeUInt32(version)
     }
 
@@ -75,10 +75,6 @@ public class ModuleWriter(
         return DataSectionWriter(context)
     }
 
-    public override fun visitExceptionSection(): ExceptionSectionVisitor {
-        return ExceptionSectionWriter(context)
-    }
-
     public override fun visitRelocationSection(): RelocationSectionVisitor {
         return RelocationSectionWriter(context)
     }
@@ -101,6 +97,10 @@ public class ModuleWriter(
 
     public override fun visitSourceMapSection(sourceMap: String): SourceMapSectionVisitor {
         return SourceMapSectionWriter(context, sourceMap)
+    }
+
+    override fun visitTagSection(): TagSectionVisitor {
+        return TagSectionWriter(context)
     }
 
     public override fun visitEnd() {

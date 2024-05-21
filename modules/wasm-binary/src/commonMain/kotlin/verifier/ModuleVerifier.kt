@@ -5,7 +5,6 @@ import org.wasmium.wasm.binary.visitors.CodeSectionVisitor
 import org.wasmium.wasm.binary.visitors.DataCountSectionVisitor
 import org.wasmium.wasm.binary.visitors.DataSectionVisitor
 import org.wasmium.wasm.binary.visitors.ElementSectionVisitor
-import org.wasmium.wasm.binary.visitors.ExceptionSectionVisitor
 import org.wasmium.wasm.binary.visitors.ExportSectionVisitor
 import org.wasmium.wasm.binary.visitors.FunctionSectionVisitor
 import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
@@ -18,6 +17,7 @@ import org.wasmium.wasm.binary.visitors.RelocationSectionVisitor
 import org.wasmium.wasm.binary.visitors.SourceMapSectionVisitor
 import org.wasmium.wasm.binary.visitors.StartSectionVisitor
 import org.wasmium.wasm.binary.visitors.TableSectionVisitor
+import org.wasmium.wasm.binary.visitors.TagSectionVisitor
 import org.wasmium.wasm.binary.visitors.TypeSectionVisitor
 import org.wasmium.wasm.binary.visitors.UnknownSectionVisitor
 
@@ -134,15 +134,6 @@ public class ModuleVerifier(private val delegate: ModuleVisitor? = null, private
         return DataSectionVerifier(delegate?.visitDataSection(), context)
     }
 
-    override fun visitExceptionSection(): ExceptionSectionVisitor {
-        checkStarted()
-        checkEnd()
-
-        numberOfSections++
-
-        return ExceptionSectionVerifier(delegate?.visitExceptionSection(), context)
-    }
-
     override fun visitRelocationSection(): RelocationSectionVisitor {
         checkStarted()
         checkEnd()
@@ -197,19 +188,21 @@ public class ModuleVerifier(private val delegate: ModuleVisitor? = null, private
         return SourceMapSectionVerifier(delegate?.visitSourceMapSection(sourceMap), context)
     }
 
+    override fun visitTagSection(): TagSectionVisitor {
+        checkStarted()
+        checkEnd()
+
+        numberOfSections++
+
+        return TagSectionVerifier(delegate?.visitTagSection(), context)
+    }
+
     override fun visitEnd() {
         checkStarted()
         checkEnd()
 
         if (numberOfSections > WasmBinary.MAX_SECTIONS) {
             throw VerifierException("Number of sections $numberOfSections exceed the maximum of ${WasmBinary.MAX_SECTIONS}")
-        }
-
-        // only at the module end, can check if exceptions index are valid, exceptions section comes later
-        for (exportIndex in context.exportIndexes) {
-            if (exportIndex >= context.numberOfExceptions) {
-                throw VerifierException("Export of exception index not in scope: $exportIndex")
-            }
         }
 
         done = true

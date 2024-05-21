@@ -13,9 +13,6 @@ public enum class SectionName(public val sectionName: String) {
     /** Name of the custom section "linking" */
     LINKING("linking"),
 
-    /** Name of the custom section "exception" */
-    EXCEPTION("exception"),
-
     /** Name of the custom section "sourceMappingURL" */
     SOURCE_MAPPING_URL("sourceMappingURL"),
     // end

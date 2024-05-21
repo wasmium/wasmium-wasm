@@ -26,8 +26,6 @@ public open class ModuleAdapter(protected val delegate: ModuleVisitor? = null) :
 
     override fun visitDataSection(): DataSectionVisitor = DataSectionAdapter(delegate?.visitDataSection())
 
-    override fun visitExceptionSection(): ExceptionSectionVisitor = ExceptionSectionAdapter(delegate?.visitExceptionSection())
-
     override fun visitRelocationSection(): RelocationSectionVisitor = RelocationSectionAdapter(delegate?.visitRelocationSection())
 
     override fun visitUnknownSection(name: String, content: ByteArray): UnknownSectionVisitor = UnknownSectionAdapter(delegate?.visitUnknownSection(name, content))
@@ -39,6 +37,8 @@ public open class ModuleAdapter(protected val delegate: ModuleVisitor? = null) :
     override fun visitDataCountSection(dataCount: UInt): DataCountSectionVisitor = DataCountSectionAdapter(delegate?.visitDataCountSection(dataCount))
 
     override fun visitSourceMapSection(sourceMap: String): SourceMapSectionVisitor = SourceMapSectionAdapter(delegate?.visitSourceMapSection(sourceMap))
+
+    override fun visitTagSection(): TagSectionVisitor = TagSectionAdapter(delegate?.visitTagSection())
 
     override fun visitEnd(): Unit = delegate?.visitEnd() ?: Unit
 }

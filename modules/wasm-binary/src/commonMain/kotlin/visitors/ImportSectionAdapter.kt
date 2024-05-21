@@ -1,6 +1,7 @@
 package org.wasmium.wasm.binary.visitors
 
 import org.wasmium.wasm.binary.tree.ResizableLimits
+import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.WasmType
 
 public open class ImportSectionAdapter(protected val delegate: ImportSectionVisitor? = null) : ImportSectionVisitor {
@@ -15,8 +16,7 @@ public open class ImportSectionAdapter(protected val delegate: ImportSectionVisi
 
     override fun visitMemory(moduleName: String, fieldName: String, limits: ResizableLimits): Unit = delegate?.visitMemory(moduleName, fieldName, limits) ?: Unit
 
-    override fun visitException(moduleName: String, fieldName: String, exceptionTypes: List<WasmType>): Unit =
-        delegate?.visitException(moduleName, fieldName, exceptionTypes) ?: Unit
+    override fun visitTag(moduleName: String, fieldName: String, tagType: TagType): Unit = delegate?.visitTag(moduleName, fieldName, tagType) ?: Unit
 
     override fun visitEnd(): Unit = delegate?.visitEnd() ?: Unit
 }

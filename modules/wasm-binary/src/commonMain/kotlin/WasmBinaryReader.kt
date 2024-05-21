@@ -12,6 +12,7 @@ import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.RelocationKind
 import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.tree.SectionKind
+import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import kotlin.experimental.and
@@ -285,6 +286,15 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
 
             return BlockType(BlockType.BlockTypeKind.FUNCTION_TYPE, index)
         }
+    }
+
+    public fun readTagType(): TagType {
+        val tagAttributeId = readUInt8()
+        val tagAttribute = TagType.TagAttribute.fromTagAttributeId(tagAttributeId) ?: throw ParserException("Invalid tag attribute $tagAttributeId")
+
+        val tagIndex = readIndex()
+
+        return TagType(tagAttribute, tagIndex)
     }
 }
 

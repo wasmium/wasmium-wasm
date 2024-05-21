@@ -7,6 +7,7 @@ import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.Opcode.*
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
+import org.wasmium.wasm.binary.tree.instructions.TryCatchImmediate
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
 public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = null, private val context: VerifierContext) : ExpressionVisitor {
@@ -511,6 +512,18 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
         numberOfInstructions++
 
         delegate?.visitTryInstruction(blockType)
+    }
+
+    override fun visitTryTableInstruction(blockType: BlockType, handlers: List<TryCatchImmediate>) {
+        checkEnd()
+
+        if (!context.options.features.isExceptionHandlingEnabled) {
+            throw ParserException("Invalid try code: exceptions not enabled.")
+        }
+
+        numberOfInstructions++
+
+        delegate?.visitTryTableInstruction(blockType, handlers)
     }
 
     override fun visitCatchInstruction() {

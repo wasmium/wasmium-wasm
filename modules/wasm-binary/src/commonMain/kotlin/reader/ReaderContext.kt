@@ -16,7 +16,7 @@ public class ReaderContext(
     public var numberOfGlobalImports: UInt = 0u
 
     /** Total number of imported exceptions. */
-    public var numberOfExceptionImports: UInt = 0u
+    public var numberOfTagImports: UInt = 0u
 
     /** Total number of signatures. */
     public var numberOfTypes: UInt = 0u
@@ -50,7 +50,7 @@ public class ReaderContext(
 
     public val numberOfTotalGlobals: UInt get() = numberOfGlobalImports + numberOfGlobals
 
-    public val numberOfTotalExceptions: UInt get() = numberOfExceptionImports + numberOfExceptions
+    public val numberOfTotalExceptions: UInt get() = numberOfTagImports + numberOfExceptions
 
     public var nameOfSectionConsumed: Boolean = false
 

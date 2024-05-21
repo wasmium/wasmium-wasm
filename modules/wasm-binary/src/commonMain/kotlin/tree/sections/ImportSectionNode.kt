@@ -2,6 +2,7 @@ package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.tree.SectionKind
+import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 
@@ -38,10 +39,8 @@ public class ImportSectionNode : SectionNode(SectionKind.IMPORT), ImportSectionV
         imports.add(MemoryImportNode(moduleName, fieldName, memoryType))
     }
 
-    public override fun visitException(moduleName: String, fieldName: String, exceptionTypes: List<WasmType>) {
-        val exceptionType = ExceptionType(exceptionTypes)
-
-        imports.add(ExceptionImportNode(moduleName, fieldName, exceptionType))
+    public override fun visitTag(moduleName: String, fieldName: String, tagType: TagType) {
+        imports.add(TagImportNode(moduleName, fieldName, tagType))
     }
 
     public override fun visitEnd() {

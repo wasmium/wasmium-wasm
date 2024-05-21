@@ -5,10 +5,7 @@ public enum class ExternalKind(public val externalKindId: UInt) {
     TABLE(1u),
     MEMORY(2u),
     GLOBAL(3u),
-    EXCEPTION(4u),
-    MODULE(5u),
-    INSTANCE(6u),
-    TYPE(7u),
+    TAG(4u),
     // end
     ;
 

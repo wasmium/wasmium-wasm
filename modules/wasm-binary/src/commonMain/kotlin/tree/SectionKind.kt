@@ -19,6 +19,9 @@ public enum class SectionKind(public val sectionKindId: UInt) {
     /** Memory section. */
     MEMORY(5u),
 
+    /** Tag section. */
+    TAG(13u),
+
     /** Global section. */
     GLOBAL(6u),
 

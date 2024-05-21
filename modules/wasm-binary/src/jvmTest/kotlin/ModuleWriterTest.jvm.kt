@@ -5,19 +5,6 @@ import kotlinx.io.asSource
 import kotlinx.io.buffered
 import org.wasmium.wasm.binary.reader.ModuleReader
 import org.wasmium.wasm.binary.reader.ReaderOptions
-import org.wasmium.wasm.binary.tree.SectionKind.CODE
-import org.wasmium.wasm.binary.tree.SectionKind.CUSTOM
-import org.wasmium.wasm.binary.tree.SectionKind.DATA
-import org.wasmium.wasm.binary.tree.SectionKind.DATA_COUNT
-import org.wasmium.wasm.binary.tree.SectionKind.ELEMENT
-import org.wasmium.wasm.binary.tree.SectionKind.EXPORT
-import org.wasmium.wasm.binary.tree.SectionKind.FUNCTION
-import org.wasmium.wasm.binary.tree.SectionKind.GLOBAL
-import org.wasmium.wasm.binary.tree.SectionKind.IMPORT
-import org.wasmium.wasm.binary.tree.SectionKind.MEMORY
-import org.wasmium.wasm.binary.tree.SectionKind.START
-import org.wasmium.wasm.binary.tree.SectionKind.TABLE
-import org.wasmium.wasm.binary.tree.SectionKind.TYPE
 import org.wasmium.wasm.binary.writer.ModuleWriter
 import org.wasmium.wasm.binary.writer.WriterContext
 import org.wasmium.wasm.binary.writer.WriterOptions
@@ -26,7 +13,6 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
-import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class ModuleWriterTest {
