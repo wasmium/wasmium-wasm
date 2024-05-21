@@ -2,7 +2,7 @@
 
 <p style="text-align: center;">
     <a href="https://kotlinlang.org">
-        <img alt="Kotlin Version" src="https://img.shields.io/badge/kotlin-1.9.23-blue.svg?logo=kotlin">
+        <img alt="Kotlin Version" src="https://img.shields.io/badge/kotlin-2.0.0-blue.svg?logo=kotlin">
     </a>
     <a href="https://github.com/wasmium/wasmium-wasm-binary/blob/main/LICENSE">
         <img alt="License" src="https://img.shields.io/github/license/wasmium/wasmium-wasm-binary" />
