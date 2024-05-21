@@ -23,6 +23,6 @@ public class ElementSectionWriter(private val context: WriterContext) : ElementS
         payload.writeVarUInt32(numberOfElements)
         payload.writeByteArray(body.toByteArray())
 
-        context.writer.writeSection(SectionKind.ELEMENT, context.options.isCanonical, buffer.toByteArray())
+        context.writer.writeSection(SectionKind.ELEMENT, buffer.toByteArray())
     }
 }

@@ -30,6 +30,6 @@ public class GlobalSectionWriter(private val context: WriterContext) : GlobalSec
         payload.writeVarUInt32(numberOfGlobalVariables)
         payload.writeByteArray(body.toByteArray())
 
-        context.writer.writeSection(SectionKind.GLOBAL, context.options.isCanonical, buffer.toByteArray())
+        context.writer.writeSection(SectionKind.GLOBAL, buffer.toByteArray())
     }
 }

@@ -15,6 +15,6 @@ public class DataCountSectionWriter(
 
         payload.writeVarUInt32(dataCount)
 
-        context.writer.writeSection(SectionKind.DATA_COUNT, context.options.isCanonical, buffer.toByteArray())
+        context.writer.writeSection(SectionKind.DATA_COUNT, buffer.toByteArray())
     }
 }

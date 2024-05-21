@@ -15,6 +15,6 @@ public class StartSectionWriter(
 
         payload.writeIndex(functionIndex)
 
-        context.writer.writeSection(SectionKind.START, context.options.isCanonical, buffer.toByteArray())
+        context.writer.writeSection(SectionKind.START, buffer.toByteArray())
     }
 }

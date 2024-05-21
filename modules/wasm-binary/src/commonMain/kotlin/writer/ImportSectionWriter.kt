@@ -68,6 +68,6 @@ public class ImportSectionWriter(private val context: WriterContext) : ImportSec
         payload.writeVarUInt32(numberOfImports)
         payload.writeByteArray(body.toByteArray())
 
-        context.writer.writeSection(SectionKind.IMPORT, context.options.isCanonical, buffer.toByteArray())
+        context.writer.writeSection(SectionKind.IMPORT, buffer.toByteArray())
     }
 }

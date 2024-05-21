@@ -23,6 +23,6 @@ public class DataSectionWriter(private val context: WriterContext) : DataSection
         payload.writeVarUInt32(numberOfSegments)
         payload.writeByteArray(body.toByteArray())
 
-        context.writer.writeSection(SectionKind.DATA, context.options.isCanonical, buffer.toByteArray())
+        context.writer.writeSection(SectionKind.DATA, buffer.toByteArray())
     }
 }

@@ -24,6 +24,6 @@ public class TagSectionWriter(private val context: WriterContext) : TagSectionVi
         payload.writeVarUInt32(numberOfTags)
         payload.writeByteArray(body.toByteArray())
 
-        context.writer.writeSection(SectionKind.TYPE, context.options.isCanonical, buffer.toByteArray())
+        context.writer.writeSection(SectionKind.TYPE, buffer.toByteArray())
     }
 }

@@ -257,6 +257,6 @@ public class NameSectionWriter(
         payload.writeString(SectionName.NAME.sectionName)
         payload.writeByteArray(body.toByteArray())
 
-        context.writer.writeSection(SectionKind.CUSTOM, context.options.isCanonical, buffer.toByteArray())
+        context.writer.writeSection(SectionKind.CUSTOM, buffer.toByteArray())
     }
 }

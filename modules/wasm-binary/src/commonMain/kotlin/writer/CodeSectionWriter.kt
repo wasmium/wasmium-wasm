@@ -35,10 +35,10 @@ public class CodeSectionWriter(private val context: WriterContext) : CodeSection
         for (code in codes) {
             val bytes = code.toByteArray()
 
-            payload.writeVarUInt32(bytes.size.toUInt(), context.options.isCanonical)
+            payload.writeVarUInt32(bytes.size.toUInt())
             payload.writeByteArray(bytes)
         }
 
-        context.writer.writeSection(SectionKind.CODE, context.options.isCanonical, buffer.toByteArray())
+        context.writer.writeSection(SectionKind.CODE, buffer.toByteArray())
     }
 }

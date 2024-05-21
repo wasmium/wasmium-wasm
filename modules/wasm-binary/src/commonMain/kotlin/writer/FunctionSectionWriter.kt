@@ -23,6 +23,6 @@ public class FunctionSectionWriter(private val context: WriterContext) : Functio
         payload.writeVarUInt32(numberOfFunctions)
         payload.writeByteArray(body.toByteArray())
 
-        context.writer.writeSection(SectionKind.FUNCTION, context.options.isCanonical, buffer.toByteArray())
+        context.writer.writeSection(SectionKind.FUNCTION, buffer.toByteArray())
     }
 }

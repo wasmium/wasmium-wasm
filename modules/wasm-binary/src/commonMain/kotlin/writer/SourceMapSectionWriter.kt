@@ -17,6 +17,6 @@ public class SourceMapSectionWriter(
         payload.writeString(SectionName.SOURCE_MAPPING_URL.sectionName)
         payload.writeString(url)
 
-        context.writer.writeSection(SectionKind.CUSTOM, context.options.isCanonical, buffer.toByteArray())
+        context.writer.writeSection(SectionKind.CUSTOM, buffer.toByteArray())
     }
 }

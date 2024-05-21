@@ -29,6 +29,6 @@ public class RelocationSectionWriter(private val context: WriterContext) : Reloc
         payload.writeVarUInt32(numberOfRelocations)
         payload.writeByteArray(body.toByteArray())
 
-        context.writer.writeSection(SectionKind.CUSTOM, context.options.isCanonical, buffer.toByteArray())
+        context.writer.writeSection(SectionKind.CUSTOM, buffer.toByteArray())
     }
 }

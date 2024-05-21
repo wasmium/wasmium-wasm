@@ -26,6 +26,6 @@ public class TableSectionWriter(private val context: WriterContext) : TableSecti
         payload.writeVarUInt32(numberOfTables)
         payload.writeByteArray(body.toByteArray())
 
-        context.writer.writeSection(SectionKind.TABLE, context.options.isCanonical, buffer.toByteArray())
+        context.writer.writeSection(SectionKind.TABLE, buffer.toByteArray())
     }
 }

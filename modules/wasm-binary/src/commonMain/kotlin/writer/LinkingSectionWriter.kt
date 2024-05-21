@@ -63,6 +63,6 @@ public class LinkingSectionWriter(private val context: WriterContext) : LinkingS
         payload.writeVarUInt32(numberOfLinks)
         payload.writeByteArray(body.toByteArray())
 
-        context.writer.writeSection(SectionKind.CUSTOM, context.options.isCanonical, buffer.toByteArray())
+        context.writer.writeSection(SectionKind.CUSTOM, buffer.toByteArray())
     }
 }

@@ -24,6 +24,6 @@ public class MemorySectionWriter(private val context: WriterContext) : MemorySec
         payload.writeVarUInt32(numberOfMemories)
         payload.writeByteArray(body.toByteArray())
 
-        context.writer.writeSection(SectionKind.MEMORY, context.options.isCanonical, buffer.toByteArray())
+        context.writer.writeSection(SectionKind.MEMORY, buffer.toByteArray())
     }
 }

@@ -231,10 +231,10 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
 
     private fun writeByteArray(byteArray: ByteArray, offset: Int, length: Int) = writer.writeTo(byteArray, offset, length)
 
-    public fun writeSection(sectionKind: SectionKind, canonical: Boolean, data: ByteArray) {
+    public fun writeSection(sectionKind: SectionKind, data: ByteArray) {
         writeSectionKind(sectionKind)
 
-        writeVarUInt32(data.size.toUInt(), canonical)
+        writeVarUInt32(data.size.toUInt())
         writeByteArray(data, 0, data.size)
     }
 }

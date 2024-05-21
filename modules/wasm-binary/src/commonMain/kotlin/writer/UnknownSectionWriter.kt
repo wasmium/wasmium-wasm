@@ -17,6 +17,6 @@ public class UnknownSectionWriter(
         payload.writeString(name)
         payload.writeByteArray(content)
 
-        context.writer.writeSection(SectionKind.CUSTOM, context.options.isCanonical, buffer.toByteArray())
+        context.writer.writeSection(SectionKind.CUSTOM, buffer.toByteArray())
     }
 }

@@ -26,6 +26,6 @@ public class ExportSectionWriter(private val context: WriterContext) : ExportSec
         payload.writeVarUInt32(numberOfExports)
         payload.writeByteArray(body.toByteArray())
 
-        context.writer.writeSection(SectionKind.EXPORT, context.options.isCanonical, buffer.toByteArray())
+        context.writer.writeSection(SectionKind.EXPORT, buffer.toByteArray())
     }
 }
