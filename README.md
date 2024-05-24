@@ -21,7 +21,7 @@ WASM binary reader and writer.
  
 ## Compatibility
 
-* Kotlin 1.9.23 or later
+* Kotlin 2.0.0 or later
 
 ## Contributions
 
