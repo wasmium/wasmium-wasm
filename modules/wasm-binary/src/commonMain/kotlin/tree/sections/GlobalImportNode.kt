@@ -1,6 +1,7 @@
 package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.ExternalKind
+import org.wasmium.wasm.binary.tree.GlobalType
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 
 public class GlobalImportNode(
@@ -9,6 +10,6 @@ public class GlobalImportNode(
     public val globalType: GlobalType,
 ) : ImportNode(module, name, ExternalKind.GLOBAL) {
     override fun accept(importSectionVisitor: ImportSectionVisitor) {
-        importSectionVisitor.visitGlobal(module, name, globalType.contentType, globalType.isMutable)
+        importSectionVisitor.visitGlobal(module, name, globalType.contentType, globalType.mutability)
     }
 }

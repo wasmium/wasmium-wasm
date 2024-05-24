@@ -14,9 +14,9 @@ public class GlobalVariableReader(
             throw ParserException("Invalid global type: %#$contentType")
         }
 
-        val mutable = source.readVarUInt1() == 1u
+        val mutability = source.readMutability()
 
-        val expressionVisitor = globalVisitor.visitGlobalVariable(contentType, mutable)
+        val expressionVisitor = globalVisitor.visitGlobalVariable(contentType, mutability)
         expressionReader.readExpression(source, expressionVisitor)
         expressionVisitor.visitEnd()
     }

@@ -15,6 +15,7 @@ import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
+import org.wasmium.wasm.binary.tree.GlobalType.Mutability
 import kotlin.experimental.and
 
 private const val LOW_7_BITS: Byte = 0x7F
@@ -296,6 +297,8 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
 
         return TagType(tagAttribute, tagIndex)
     }
+
+    public fun readMutability(): Mutability = if (readVarUInt1() == 0u) Mutability.IMMUTABLE else Mutability.MUTABLE
 }
 
 public fun Int.reverseBytes(): Int {

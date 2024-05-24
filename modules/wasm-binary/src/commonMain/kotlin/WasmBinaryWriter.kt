@@ -13,6 +13,7 @@ import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
+import org.wasmium.wasm.binary.tree.GlobalType.Mutability
 import kotlin.experimental.or
 
 private const val LOW_7_BITS: Byte = 0x7F
@@ -222,7 +223,7 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
         }
     }
 
-    public fun writeTagType(tagType: TagType){
+    public fun writeTagType(tagType: TagType) {
         writeUInt8(tagType.attribute.attributeId)
         writeIndex(tagType.index)
     }
@@ -237,4 +238,7 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
         writeVarUInt32(data.size.toUInt())
         writeByteArray(data, 0, data.size)
     }
+
+    public fun writeMutability(mutability: Mutability): Unit = writeVarUInt1(if (mutability == Mutability.IMMUTABLE) 0u else 1u)
+
 }

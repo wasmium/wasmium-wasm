@@ -5,7 +5,8 @@ import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.sections.CodeType
 import org.wasmium.wasm.binary.tree.sections.FunctionType
-import org.wasmium.wasm.binary.tree.sections.GlobalType
+import org.wasmium.wasm.binary.tree.GlobalType
+import org.wasmium.wasm.binary.tree.GlobalType.*
 import org.wasmium.wasm.binary.tree.sections.MemoryType
 import org.wasmium.wasm.binary.tree.sections.TableType
 
@@ -59,7 +60,7 @@ public class ValidatorContext(
         checkResizableLimit(limits, 1u shl 16, "Memory size must not exceed 65536 pages (4GiB)")
     }
 
-    public fun checkGlobalType(contentType: WasmType, isMutable: Boolean) {
+    public fun checkGlobalType(contentType: WasmType, mutability: Mutability) {
         if (!contentType.isValueType()) {
             throw ValidatorException("Global type must be a value type")
         }

@@ -7,6 +7,7 @@ import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.WasmType
+import org.wasmium.wasm.binary.tree.GlobalType.*
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 
 public class ImportSectionWriter(private val context: WriterContext) : ImportSectionVisitor {
@@ -23,12 +24,12 @@ public class ImportSectionWriter(private val context: WriterContext) : ImportSec
         numberOfImports++
     }
 
-    public override fun visitGlobal(moduleName: String, fieldName: String, type: WasmType, mutable: Boolean) {
+    public override fun visitGlobal(moduleName: String, fieldName: String, type: WasmType, mutability: Mutability) {
         writer.writeString(moduleName)
         writer.writeString(fieldName)
         writer.writeExternalKind(ExternalKind.GLOBAL)
         writer.writeType(type)
-        writer.writeVarUInt1(if (mutable) 1u else 0u)
+        writer.writeMutability(mutability)
 
         numberOfImports++
     }

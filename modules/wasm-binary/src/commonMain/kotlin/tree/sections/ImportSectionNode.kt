@@ -1,9 +1,11 @@
 package org.wasmium.wasm.binary.tree.sections
 
+import org.wasmium.wasm.binary.tree.GlobalType
 import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.WasmType
+import org.wasmium.wasm.binary.tree.GlobalType.*
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 
 public class ImportSectionNode : SectionNode(SectionKind.IMPORT), ImportSectionVisitor {
@@ -21,8 +23,8 @@ public class ImportSectionNode : SectionNode(SectionKind.IMPORT), ImportSectionV
         imports.add(FunctionImportNode(moduleName, fieldName, typeIndex))
     }
 
-    public override fun visitGlobal(moduleName: String, fieldName: String, type: WasmType, mutable: Boolean) {
-        val globalType = GlobalType(type, mutable)
+    public override fun visitGlobal(moduleName: String, fieldName: String, type: WasmType, mutability: Mutability) {
+        val globalType = GlobalType(type, mutability)
 
         imports.add(GlobalImportNode(moduleName, fieldName, globalType))
     }

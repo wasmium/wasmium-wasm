@@ -4,6 +4,7 @@ import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.WasmType
+import org.wasmium.wasm.binary.tree.GlobalType.*
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
 
@@ -12,13 +13,12 @@ public class GlobalSectionWriter(private val context: WriterContext) : GlobalSec
     private var body = ByteBuffer()
     private val writer = WasmBinaryWriter(body)
 
-    public override fun visitGlobalVariable(type: WasmType, mutable: Boolean): ExpressionVisitor {
+    public override fun visitGlobalVariable(type: WasmType, mutability: Mutability): ExpressionVisitor {
         numberOfGlobalVariables++
 
         writer.writeType(type)
 
-        val value = if (mutable) 1u else 0u
-        writer.writeVarUInt1(value)
+        writer.writeMutability(mutability)
 
         return ExpressionWriter(context, body)
     }

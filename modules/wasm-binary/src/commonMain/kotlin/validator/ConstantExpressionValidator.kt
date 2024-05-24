@@ -5,6 +5,7 @@ import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.instructions.TryCatchArgument
+import org.wasmium.wasm.binary.tree.GlobalType.*
 import org.wasmium.wasm.binary.verifier.VerifierException
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
@@ -189,7 +190,7 @@ public class ConstantExpressionValidator(private val delegate: ExpressionVisitor
     override fun visitGetGlobalInstruction(globalIndex: UInt) {
         val globalType = context.globals[globalIndex.toInt()]
 
-        if (globalType.isMutable) {
+        if (globalType.mutability == Mutability.MUTABLE) {
             notConstant()
         }
 

@@ -7,6 +7,8 @@ import org.wasmium.wasm.binary.tree.ExternalKind.GLOBAL
 import org.wasmium.wasm.binary.tree.ExternalKind.MEMORY
 import org.wasmium.wasm.binary.tree.ExternalKind.TABLE
 import org.wasmium.wasm.binary.tree.ExternalKind.TAG
+import org.wasmium.wasm.binary.tree.GlobalType.Mutability.IMMUTABLE
+import org.wasmium.wasm.binary.tree.GlobalType.Mutability.MUTABLE
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 public class ImportSectionReader(
@@ -61,12 +63,12 @@ public class ImportSectionReader(
                         throw ParserException("Invalid global type: %#$globalType")
                     }
 
-                    val mutable = source.readVarUInt1() == 1u
-                    if (mutable) {
+                    val mutable = if (source.readVarUInt1() == 0u) IMMUTABLE else MUTABLE
+                    if (mutable == MUTABLE) {
                         throw ParserException("Import mutate globals are not allowed")
                     }
 
-                    importVisitor.visitGlobal(moduleName, fieldName, globalType, false)
+                    importVisitor.visitGlobal(moduleName, fieldName, globalType, mutable)
 
                     context.numberOfGlobalImports++
                 }

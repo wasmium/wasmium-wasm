@@ -5,6 +5,7 @@ import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.WasmType
+import org.wasmium.wasm.binary.tree.GlobalType
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 
 public class ImportSectionVerifier(private val delegate: ImportSectionVisitor? = null, private val context: VerifierContext) : ImportSectionVisitor {
@@ -24,13 +25,13 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor? =
         delegate?.visitFunction(moduleName, fieldName, typeIndex)
     }
 
-    override fun visitGlobal(moduleName: String, fieldName: String, type: WasmType, mutable: Boolean) {
+    override fun visitGlobal(moduleName: String, fieldName: String, type: WasmType, mutability: GlobalType.Mutability) {
         checkEnd()
 
         numberOfImports++
         context.numberOfGlobalImports++
 
-        delegate?.visitGlobal(moduleName, fieldName, type, mutable)
+        delegate?.visitGlobal(moduleName, fieldName, type, mutability)
     }
 
     override fun visitTable(moduleName: String, fieldName: String, elementType: WasmType, limits: ResizableLimits) {
