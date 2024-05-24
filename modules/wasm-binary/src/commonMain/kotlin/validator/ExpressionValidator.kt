@@ -519,7 +519,9 @@ public class ExpressionValidator(
             }
 
             FUNCTION_TYPE -> {
-                val functionType = context.types[blockType.value]
+                val functionType = context.types.getOrElse(blockType.value){
+                    throw ValidatorException("Invalid type index: ${blockType.value}")
+                }
 
                 inputs.addAll(functionType.parameters)
                 outputs.addAll(functionType.results)
@@ -626,7 +628,9 @@ public class ExpressionValidator(
     }
 
     override fun visitCallInstruction(functionIndex: UInt) {
-        val functionType = context.functions[functionIndex.toInt()]
+        val functionType = context.functions.getOrElse(functionIndex.toInt()){
+            throw ValidatorException("Invalid function index: $functionIndex")
+        }
 
         popValues(functionType.parameters)
         pushValues(functionType.results)
@@ -635,13 +639,17 @@ public class ExpressionValidator(
     }
 
     override fun visitCallIndirectInstruction(typeIndex: UInt, reserved: Boolean) {
-        val tableType = context.tables[0]
+        val tableType = context.tables.getOrElse(0){
+            throw ValidatorException("Invalid table index: 0")
+        }
 
         if (tableType.elementType != FUNC_REF) {
             throw ValidatorException("Invalid table element type: ${tableType.elementType}")
         }
 
-        val functionType = context.types[typeIndex.toInt()]
+        val functionType = context.types.getOrElse(typeIndex.toInt()){
+            throw ValidatorException("Invalid type index: $typeIndex")
+        }
 
         popValue(I32)
         popValues(functionType.parameters)
@@ -658,38 +666,45 @@ public class ExpressionValidator(
 
     override fun visitSelectInstruction() {
         popValue(I32)
-        val value1 = popValue()
-        val value2 = popValue()
+        val type1 = popValue()
+        val type2 = popValue()
 
-        if (!value1.isNumber() || !value2.isNumber()) {
-            throw ValidatorException("Expected select arguments to be numbers, found $value1 and $value2")
+        if (!type1.isNumber() || !type2.isNumber()) {
+            throw ValidatorException("Expected select arguments to be numbers, found $type1 and $type2")
         }
 
-        if (value1 != value2) {
-            throw ValidatorException("Expected select arguments to be of the same type, found $value1 and $value2")
+        if (type1 != type2) {
+            throw ValidatorException("Expected select arguments to be of the same type, found $type1 and $type2")
         }
 
-        pushValue(value1)
+        pushValue(type1)
 
         delegate?.visitSelectInstruction()
     }
 
     override fun visitGetGlobalInstruction(globalIndex: UInt) {
-        val globalType = context.globals[globalIndex.toInt()]
+        val globalType = context.globals.getOrElse(globalIndex.toInt()){
+            throw ValidatorException("Invalid global index: $globalIndex")
+        }
+
         pushValue(globalType.contentType)
 
         delegate?.visitGetGlobalInstruction(globalIndex)
     }
 
     override fun visitSetGlobalInstruction(globalIndex: UInt) {
-        val globalType = context.globals[globalIndex.toInt()]
+        val globalType = context.globals.getOrElse(globalIndex.toInt()){
+            throw ValidatorException("Invalid global index: $globalIndex")
+        }
         popValue(globalType.contentType)
 
         delegate?.visitSetGlobalInstruction(globalIndex)
     }
 
     override fun visitSetLocalInstruction(localIndex: UInt) {
-        val localType = context.locals[localIndex.toInt()]
+        val localType = context.locals.getOrElse(localIndex.toInt()){
+            throw ValidatorException("Invalid local index: $localIndex")
+        }
         popValue(localType)
 
         delegate?.visitSetLocalInstruction(localIndex)
@@ -706,7 +721,10 @@ public class ExpressionValidator(
     }
 
     override fun visitGetLocalInstruction(localIndex: UInt) {
-        val localType = context.locals[localIndex.toInt()]
+        val localType = context.locals.getOrElse(localIndex.toInt()){
+            throw ValidatorException("Invalid local index: $localIndex")
+        }
+
         pushValue(localType)
 
         delegate?.visitGetLocalInstruction(localIndex)

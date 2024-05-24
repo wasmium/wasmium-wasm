@@ -6,6 +6,7 @@ import org.wasmium.wasm.binary.reader.ModuleReader
 import org.wasmium.wasm.binary.reader.ReaderOptions
 import org.wasmium.wasm.binary.validator.ModuleValidator
 import org.wasmium.wasm.binary.validator.ValidatorOptions
+import java.io.File
 import java.io.FileInputStream
 import kotlin.test.Test
 
@@ -13,7 +14,8 @@ class ModuleValidatorTest {
 
     @Test
     fun validWasmValidateSuccess() {
-        val file = "src/jvmTest/resources/hello.wasm"
+        println(File(".").absolutePath)
+        val file = "../../repository/bots.wasm"
 
         FileInputStream(file).use {
             val source = WasmBinaryReader(SourceBinaryReader(it.asSource().buffered()))
