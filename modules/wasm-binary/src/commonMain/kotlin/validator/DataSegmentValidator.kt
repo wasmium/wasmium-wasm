@@ -8,7 +8,7 @@ public class DataSegmentValidator(private val delegate: DataSegmentVisitor? = nu
     override fun visitActive(memoryIndex: UInt): ExpressionVisitor {
         val localContext = context.createLocalContext(emptyList(), emptyList())
 
-        return ExpressionValidator(delegate?.visitActive(memoryIndex), localContext, listOf(WasmType.I32))
+        return ConstantExpressionValidator(ExpressionValidator(delegate?.visitActive(memoryIndex), localContext, listOf(WasmType.I32)), context)
     }
 
     override fun visitData(data: ByteArray) {
