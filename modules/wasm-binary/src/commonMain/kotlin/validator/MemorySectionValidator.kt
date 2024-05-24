@@ -6,6 +6,8 @@ import org.wasmium.wasm.binary.visitors.MemorySectionVisitor
 
 public class MemorySectionValidator(private val delegate: MemorySectionVisitor? = null, private val context: ValidatorContext) : MemorySectionVisitor {
     override fun visitMemory(limits: ResizableLimits) {
+        context.checkMemoryType(limits)
+
         context.memories.add(MemoryType(limits))
 
         delegate?.visitMemory(limits)

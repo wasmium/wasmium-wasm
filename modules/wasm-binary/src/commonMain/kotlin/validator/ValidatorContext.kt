@@ -1,12 +1,12 @@
 package org.wasmium.wasm.binary.validator
 
+import org.wasmium.wasm.binary.tree.GlobalType
+import org.wasmium.wasm.binary.tree.GlobalType.Mutability
 import org.wasmium.wasm.binary.tree.ResizableLimits
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.sections.CodeType
 import org.wasmium.wasm.binary.tree.sections.FunctionType
-import org.wasmium.wasm.binary.tree.GlobalType
-import org.wasmium.wasm.binary.tree.GlobalType.*
 import org.wasmium.wasm.binary.tree.sections.MemoryType
 import org.wasmium.wasm.binary.tree.sections.TableType
 
@@ -49,11 +49,11 @@ public class ValidatorContext(
     }
 
     public fun checkTableType(elementType: WasmType, limits: ResizableLimits) {
-        checkResizableLimit(limits, UInt.MAX_VALUE - 1u, "Table size must be at most 2^32 - 1")
-
         if (!elementType.isReferenceType()) {
             throw ValidatorException("Table element type must be a reference type")
         }
+
+        checkResizableLimit(limits, UInt.MAX_VALUE - 1u, "Table size must be at most 2^32 - 1")
     }
 
     public fun checkMemoryType(limits: ResizableLimits) {
@@ -64,21 +64,6 @@ public class ValidatorContext(
         if (!contentType.isValueType()) {
             throw ValidatorException("Global type must be a value type")
         }
-    }
-
-    public fun checkCode(functionType: FunctionType, codeType: CodeType) {
-        val locals = mutableListOf<WasmType>()
-        locals.addAll(functionType.parameters)
-
-        for (local in codeType.locals) {
-            for (i in 0u until local.count) {
-                locals.add(local.type)
-            }
-        }
-
-        val localContext = createLocalContext(locals, functionType.results)
-        // TODO parameter functionType.results is already in the context
-        codeType.expression.accept(ExpressionValidator(null, localContext, functionType.results))
     }
 
     public fun createLocalContext(locals: List<WasmType>, returns: List<WasmType>): LocalContext = LocalContext(
