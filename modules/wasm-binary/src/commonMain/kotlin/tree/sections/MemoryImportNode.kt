@@ -9,6 +9,6 @@ public class MemoryImportNode(
     public val memoryType: MemoryType,
 ) : ImportNode(module, name, ExternalKind.MEMORY) {
     override fun accept(importSectionVisitor: ImportSectionVisitor) {
-        importSectionVisitor.visitMemory(module, name, memoryType.limits)
+        importSectionVisitor.visitMemory(module, name, memoryType)
     }
 }

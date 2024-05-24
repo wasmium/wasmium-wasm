@@ -1,22 +1,21 @@
 package org.wasmium.wasm.binary.tree.sections
 
-import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.visitors.MemorySectionVisitor
 
 public class MemorySectionNode : SectionNode(SectionKind.MEMORY), MemorySectionVisitor {
-    public val memories: MutableList<MemoryType> = mutableListOf()
+    public val memoryTypes: MutableList<MemoryType> = mutableListOf()
 
     public fun accept(memorySectionVisitor: MemorySectionVisitor) {
-        for (memoryType in memories) {
-            memorySectionVisitor.visitMemory(memoryType.limits)
+        for (memoryType in memoryTypes) {
+            memorySectionVisitor.visitMemory(memoryType)
         }
 
         memorySectionVisitor.visitEnd()
     }
 
-    public override fun visitMemory(limits: MemoryLimits) {
-        memories.add(MemoryType(limits))
+    public override fun visitMemory(memoryType: MemoryType) {
+        memoryTypes.add(memoryType)
     }
 
     public override fun visitEnd() {

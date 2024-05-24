@@ -2,29 +2,29 @@ package org.wasmium.wasm.binary.verifier
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
-import org.wasmium.wasm.binary.tree.MemoryLimits
+import org.wasmium.wasm.binary.tree.sections.MemoryType
 import org.wasmium.wasm.binary.visitors.MemorySectionVisitor
 
 public class MemorySectionVerifier(private val delegate: MemorySectionVisitor? = null, private val context: VerifierContext) : MemorySectionVisitor {
     private var done: Boolean = false
     private var numberOfMemories: UInt = 0u
 
-    override fun visitMemory(limits: MemoryLimits) {
+    override fun visitMemory(memoryType: MemoryType) {
         checkEnd()
 
-        if (limits.initial > WasmBinary.MAX_MEMORY_PAGES) {
+        if (memoryType.limits.initial > WasmBinary.MAX_MEMORY_PAGES) {
             throw ParserException("Invalid initial memory pages")
         }
 
-        if (limits.maximum != null) {
-            if (limits.maximum > WasmBinary.MAX_MEMORY_PAGES) {
+        if (memoryType.limits.maximum != null) {
+            if (memoryType.limits.maximum > WasmBinary.MAX_MEMORY_PAGES) {
                 throw ParserException("Invalid memory max page")
             }
         }
 
         numberOfMemories++
 
-        delegate?.visitMemory(limits)
+        delegate?.visitMemory(memoryType)
     }
 
     override fun visitEnd() {

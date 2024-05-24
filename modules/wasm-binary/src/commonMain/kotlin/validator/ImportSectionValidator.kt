@@ -36,12 +36,12 @@ public class ImportSectionValidator(private val delegate: ImportSectionVisitor? 
         delegate?.visitTable(moduleName, fieldName, elementType, limits)
     }
 
-    override fun visitMemory(moduleName: String, fieldName: String, limits: MemoryLimits) {
-        context.checkMemoryType(limits)
+    override fun visitMemory(moduleName: String, fieldName: String, memoryType: MemoryType) {
+        context.checkMemoryType(memoryType)
 
-        context.memories.add(MemoryType(limits))
+        context.memoryTypes.add(memoryType)
 
-        delegate?.visitMemory(moduleName, fieldName, limits)
+        delegate?.visitMemory(moduleName, fieldName, memoryType)
     }
 
     override fun visitTag(moduleName: String, fieldName: String, tagType: TagType) {

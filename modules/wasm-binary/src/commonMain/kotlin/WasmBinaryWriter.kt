@@ -4,16 +4,17 @@ package org.wasmium.wasm.binary
 
 import org.wasmium.wasm.binary.tree.BlockType
 import org.wasmium.wasm.binary.tree.ExternalKind
+import org.wasmium.wasm.binary.tree.GlobalType.Mutability
 import org.wasmium.wasm.binary.tree.LinkingKind
+import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.NameKind
 import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.RelocationKind
-import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
-import org.wasmium.wasm.binary.tree.GlobalType.Mutability
+import org.wasmium.wasm.binary.tree.sections.MemoryType
 import kotlin.experimental.or
 
 private const val LOW_7_BITS: Byte = 0x7F
@@ -241,4 +242,5 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
 
     public fun writeMutability(mutability: Mutability): Unit = writeVarUInt1(if (mutability == Mutability.IMMUTABLE) 0u else 1u)
 
+    public fun writeMemoryType(memoryType: MemoryType): Unit = writeMemoryLimits(memoryType.limits)
 }

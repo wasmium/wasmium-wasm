@@ -50,8 +50,8 @@ public class ImportSectionReader(
                 }
 
                 MEMORY -> {
-                    val pageLimits = source.readMemoryLimits()
-                    importVisitor.visitMemory(moduleName, fieldName, pageLimits)
+                    val memoryType = source.readMemoryType()
+                    importVisitor.visitMemory(moduleName, fieldName, memoryType)
 
                     context.numberOfMemoryImports++
                 }

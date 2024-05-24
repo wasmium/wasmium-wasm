@@ -6,6 +6,7 @@ import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.GlobalType
+import org.wasmium.wasm.binary.tree.sections.MemoryType
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 
 public class ImportSectionVerifier(private val delegate: ImportSectionVisitor? = null, private val context: VerifierContext) : ImportSectionVisitor {
@@ -43,13 +44,13 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor? =
         delegate?.visitTable(moduleName, fieldName, elementType, limits)
     }
 
-    override fun visitMemory(moduleName: String, fieldName: String, limits: MemoryLimits) {
+    override fun visitMemory(moduleName: String, fieldName: String, memoryType: MemoryType) {
         checkEnd()
 
         numberOfImports++
         context.numberOfMemoryImports++
 
-        delegate?.visitMemory(moduleName, fieldName, limits)
+        delegate?.visitMemory(moduleName, fieldName, memoryType)
     }
 
     override fun visitTag(moduleName: String, fieldName: String, tagType: TagType) {

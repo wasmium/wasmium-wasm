@@ -35,9 +35,7 @@ public class ImportSectionNode : SectionNode(SectionKind.IMPORT), ImportSectionV
         imports.add(TableImportNode(moduleName, fieldName, tableType))
     }
 
-    public override fun visitMemory(moduleName: String, fieldName: String, limits: MemoryLimits) {
-        val memoryType = MemoryType(limits)
-
+    public override fun visitMemory(moduleName: String, fieldName: String, memoryType: MemoryType) {
         imports.add(MemoryImportNode(moduleName, fieldName, memoryType))
     }
 

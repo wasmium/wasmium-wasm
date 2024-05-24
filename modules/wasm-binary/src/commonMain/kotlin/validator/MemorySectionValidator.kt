@@ -1,16 +1,15 @@
 package org.wasmium.wasm.binary.validator
 
-import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.sections.MemoryType
 import org.wasmium.wasm.binary.visitors.MemorySectionVisitor
 
 public class MemorySectionValidator(private val delegate: MemorySectionVisitor? = null, private val context: ValidatorContext) : MemorySectionVisitor {
-    override fun visitMemory(limits: MemoryLimits) {
-        context.checkMemoryType(limits)
+    override fun visitMemory(memoryType: MemoryType) {
+        context.checkMemoryType(memoryType)
 
-        context.memories.add(MemoryType(limits))
+        context.memoryTypes.add(memoryType)
 
-        delegate?.visitMemory(limits)
+        delegate?.visitMemory(memoryType)
     }
 
     override fun visitEnd() {

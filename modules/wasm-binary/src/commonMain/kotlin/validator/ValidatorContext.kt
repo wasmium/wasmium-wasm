@@ -22,7 +22,7 @@ public class ValidatorContext(
 
     public val tables: MutableList<TableType> = mutableListOf()
 
-    public val memories: MutableList<MemoryType> = mutableListOf()
+    public val memoryTypes: MutableList<MemoryType> = mutableListOf()
 
     public val tags: MutableList<TagType> = mutableListOf()
 
@@ -56,8 +56,8 @@ public class ValidatorContext(
         checkMemoryLimits(limits, UInt.MAX_VALUE - 1u, "Table size must be at most 2^32 - 1")
     }
 
-    public fun checkMemoryType(limits: MemoryLimits) {
-        checkMemoryLimits(limits, 1u shl 16, "Memory size must not exceed 65536 pages (4GiB)")
+    public fun checkMemoryType(memoryType: MemoryType) {
+        checkMemoryLimits(memoryType.limits, 1u shl 16, "Memory size must not exceed 65536 pages (4GiB)")
     }
 
     public fun checkGlobalType(contentType: WasmType, mutability: Mutability) {
@@ -71,7 +71,7 @@ public class ValidatorContext(
         functions = functions,
         globals = globals,
         tables = tables,
-        memories = memories,
+        memories = memoryTypes,
         tags = tags,
         codes = codes,
         locals = locals,

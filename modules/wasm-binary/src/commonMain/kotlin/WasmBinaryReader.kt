@@ -16,6 +16,7 @@ import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.GlobalType.Mutability
+import org.wasmium.wasm.binary.tree.sections.MemoryType
 import kotlin.experimental.and
 
 private const val LOW_7_BITS: Byte = 0x7F
@@ -186,6 +187,22 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
     }
 
     public fun readIndex(): UInt = readVarUInt32()
+
+    public fun readMemoryType(): MemoryType {
+        val limits = readMemoryLimits()
+
+        if (limits.isShared() && (limits.maximum == null)) {
+            throw ParserException("Shared memory must have a max size")
+        }
+
+        if (limits.maximum != null) {
+            if (limits.initial > limits.maximum) {
+                throw ParserException("Initial memory size greater than maximum")
+            }
+        }
+
+        return MemoryType(limits)
+    }
 
     public fun readMemoryLimits(): MemoryLimits {
         val flags = readVarUInt32()
