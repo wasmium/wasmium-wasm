@@ -10,7 +10,7 @@ import org.wasmium.wasm.binary.tree.LinkingSymbolType
 import org.wasmium.wasm.binary.tree.NameKind
 import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.RelocationKind
-import org.wasmium.wasm.binary.tree.ResizableLimits
+import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.V128Value
@@ -187,7 +187,7 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
 
     public fun readIndex(): UInt = readVarUInt32()
 
-    public fun readResizableLimits(): ResizableLimits {
+    public fun readMemoryLimits(): MemoryLimits {
         val flags = readVarUInt32()
         val initialPages = readVarUInt32()
 
@@ -195,9 +195,9 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         return if (hasMaximum) {
             val maximum = readVarUInt32()
 
-            ResizableLimits(initial = initialPages, maximum = maximum, flags = flags)
+            MemoryLimits(initial = initialPages, maximum = maximum, flags = flags)
         } else {
-            ResizableLimits(initial = initialPages, flags = flags)
+            MemoryLimits(initial = initialPages, flags = flags)
         }
     }
 

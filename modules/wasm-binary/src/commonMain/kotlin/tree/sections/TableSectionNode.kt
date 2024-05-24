@@ -1,6 +1,6 @@
 package org.wasmium.wasm.binary.tree.sections
 
-import org.wasmium.wasm.binary.tree.ResizableLimits
+import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.TableSectionVisitor
@@ -16,7 +16,7 @@ public class TableSectionNode : SectionNode(SectionKind.TABLE), TableSectionVisi
         tableSectionVisitor.visitEnd()
     }
 
-    public override fun visitTable(elementType: WasmType, limits: ResizableLimits) {
+    public override fun visitTable(elementType: WasmType, limits: MemoryLimits) {
         tables.add(TableType(elementType, limits))
     }
 

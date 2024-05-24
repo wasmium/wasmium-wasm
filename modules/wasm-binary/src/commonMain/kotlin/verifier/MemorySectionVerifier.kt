@@ -2,14 +2,14 @@ package org.wasmium.wasm.binary.verifier
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
-import org.wasmium.wasm.binary.tree.ResizableLimits
+import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.visitors.MemorySectionVisitor
 
 public class MemorySectionVerifier(private val delegate: MemorySectionVisitor? = null, private val context: VerifierContext) : MemorySectionVisitor {
     private var done: Boolean = false
     private var numberOfMemories: UInt = 0u
 
-    override fun visitMemory(limits: ResizableLimits) {
+    override fun visitMemory(limits: MemoryLimits) {
         checkEnd()
 
         if (limits.initial > WasmBinary.MAX_MEMORY_PAGES) {

@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.verifier
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
-import org.wasmium.wasm.binary.tree.ResizableLimits
+import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.TableSectionVisitor
 
@@ -10,7 +10,7 @@ public class TableSectionVerifier(private val delegate: TableSectionVisitor? = n
     private var done: Boolean = false
     private var numberOfTables: UInt = 0u
 
-    public override fun visitTable(elementType: WasmType, limits: ResizableLimits) {
+    public override fun visitTable(elementType: WasmType, limits: MemoryLimits) {
         checkEnd()
 
         if (limits.initial > WasmBinary.MAX_TABLE_PAGES) {

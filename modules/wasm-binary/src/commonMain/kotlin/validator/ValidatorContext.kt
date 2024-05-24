@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.validator
 
 import org.wasmium.wasm.binary.tree.GlobalType
 import org.wasmium.wasm.binary.tree.GlobalType.Mutability
-import org.wasmium.wasm.binary.tree.ResizableLimits
+import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.sections.CodeType
@@ -32,32 +32,32 @@ public class ValidatorContext(
 
     public var numberOfImportFunctions: UInt = 0u
 
-    private fun checkResizableLimit(resizableLimits: ResizableLimits, max: UInt, message: String) {
-        if (resizableLimits.initial > max) {
+    private fun checkMemoryLimits(limits: MemoryLimits, max: UInt, message: String) {
+        if (limits.initial > max) {
             throw ValidatorException("Initial value must not exceed value of $max")
         }
 
-        if (resizableLimits.maximum != null) {
-            if (resizableLimits.maximum < resizableLimits.initial) {
+        if (limits.maximum != null) {
+            if (limits.maximum < limits.initial) {
                 throw ValidatorException("Maximum value must not be less than initial value")
             }
 
-            if (resizableLimits.maximum > max) {
+            if (limits.maximum > max) {
                 throw ValidatorException("Maximum value must not exceed value of $max")
             }
         }
     }
 
-    public fun checkTableType(elementType: WasmType, limits: ResizableLimits) {
+    public fun checkTableType(elementType: WasmType, limits: MemoryLimits) {
         if (!elementType.isReferenceType()) {
             throw ValidatorException("Table element type must be a reference type")
         }
 
-        checkResizableLimit(limits, UInt.MAX_VALUE - 1u, "Table size must be at most 2^32 - 1")
+        checkMemoryLimits(limits, UInt.MAX_VALUE - 1u, "Table size must be at most 2^32 - 1")
     }
 
-    public fun checkMemoryType(limits: ResizableLimits) {
-        checkResizableLimit(limits, 1u shl 16, "Memory size must not exceed 65536 pages (4GiB)")
+    public fun checkMemoryType(limits: MemoryLimits) {
+        checkMemoryLimits(limits, 1u shl 16, "Memory size must not exceed 65536 pages (4GiB)")
     }
 
     public fun checkGlobalType(contentType: WasmType, mutability: Mutability) {

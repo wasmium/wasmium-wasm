@@ -8,7 +8,7 @@ import org.wasmium.wasm.binary.tree.LinkingKind
 import org.wasmium.wasm.binary.tree.NameKind
 import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.RelocationKind
-import org.wasmium.wasm.binary.tree.ResizableLimits
+import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.V128Value
@@ -150,7 +150,7 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
         writeVarUInt32(index)
     }
 
-    public fun writeResizableLimits(limits: ResizableLimits) {
+    public fun writeMemoryLimits(limits: MemoryLimits) {
         writeVarUInt32(limits.flags)
         writeVarUInt32(limits.initial)
 

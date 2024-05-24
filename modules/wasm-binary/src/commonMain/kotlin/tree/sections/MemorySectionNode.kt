@@ -1,6 +1,6 @@
 package org.wasmium.wasm.binary.tree.sections
 
-import org.wasmium.wasm.binary.tree.ResizableLimits
+import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.visitors.MemorySectionVisitor
 
@@ -15,7 +15,7 @@ public class MemorySectionNode : SectionNode(SectionKind.MEMORY), MemorySectionV
         memorySectionVisitor.visitEnd()
     }
 
-    public override fun visitMemory(limits: ResizableLimits) {
+    public override fun visitMemory(limits: MemoryLimits) {
         memories.add(MemoryType(limits))
     }
 

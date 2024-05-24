@@ -39,7 +39,7 @@ public class ImportSectionReader(
                         throw ParserException("Imported table type is not a reference type.")
                     }
 
-                    val limits = source.readResizableLimits()
+                    val limits = source.readMemoryLimits()
                     if (limits.isShared()) {
                         throw ParserException("Tables may not be shared")
                     }
@@ -50,7 +50,7 @@ public class ImportSectionReader(
                 }
 
                 MEMORY -> {
-                    val pageLimits = source.readResizableLimits()
+                    val pageLimits = source.readMemoryLimits()
                     importVisitor.visitMemory(moduleName, fieldName, pageLimits)
 
                     context.numberOfMemoryImports++

@@ -1,7 +1,7 @@
 package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.GlobalType
-import org.wasmium.wasm.binary.tree.ResizableLimits
+import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.WasmType
@@ -29,13 +29,13 @@ public class ImportSectionNode : SectionNode(SectionKind.IMPORT), ImportSectionV
         imports.add(GlobalImportNode(moduleName, fieldName, globalType))
     }
 
-    public override fun visitTable(moduleName: String, fieldName: String, elementType: WasmType, limits: ResizableLimits) {
+    public override fun visitTable(moduleName: String, fieldName: String, elementType: WasmType, limits: MemoryLimits) {
         val tableType = TableType(elementType, limits)
 
         imports.add(TableImportNode(moduleName, fieldName, tableType))
     }
 
-    public override fun visitMemory(moduleName: String, fieldName: String, limits: ResizableLimits) {
+    public override fun visitMemory(moduleName: String, fieldName: String, limits: MemoryLimits) {
         val memoryType = MemoryType(limits)
 
         imports.add(MemoryImportNode(moduleName, fieldName, memoryType))

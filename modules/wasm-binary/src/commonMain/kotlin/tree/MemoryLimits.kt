@@ -3,7 +3,7 @@ package org.wasmium.wasm.binary.tree
 /**
  * Limits of a table or memory.
  */
-public class ResizableLimits(
+public class MemoryLimits(
     /** Initial value */
     public val initial: UInt,
     /** Maximum value */

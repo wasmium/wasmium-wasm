@@ -17,7 +17,7 @@ public class MemorySectionReader(
         for (index in 0u until context.numberOfMemories) {
             val memoryIndex = context.numberOfMemoryImports + index
 
-            val limits = source.readResizableLimits()
+            val limits = source.readMemoryLimits()
 
             if (limits.isShared() && (limits.maximum == null)) {
                 throw ParserException("Shared memory must have a max size")

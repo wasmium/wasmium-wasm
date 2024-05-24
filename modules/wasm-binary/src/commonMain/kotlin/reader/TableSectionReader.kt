@@ -20,7 +20,7 @@ public class TableSectionReader(
                 throw ParserException("Table type is not AnyFunc.")
             }
 
-            val limits = source.readResizableLimits()
+            val limits = source.readMemoryLimits()
             if (limits.isShared()) {
                 throw ParserException("Tables may not be shared.")
             }

@@ -3,7 +3,7 @@ package org.wasmium.wasm.binary.writer
 import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.ExternalKind
-import org.wasmium.wasm.binary.tree.ResizableLimits
+import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.WasmType
@@ -34,21 +34,21 @@ public class ImportSectionWriter(private val context: WriterContext) : ImportSec
         numberOfImports++
     }
 
-    public override fun visitTable(moduleName: String, fieldName: String, elementType: WasmType, limits: ResizableLimits) {
+    public override fun visitTable(moduleName: String, fieldName: String, elementType: WasmType, limits: MemoryLimits) {
         writer.writeString(moduleName)
         writer.writeString(fieldName)
         writer.writeExternalKind(ExternalKind.TABLE)
         writer.writeType(elementType)
-        writer.writeResizableLimits(limits)
+        writer.writeMemoryLimits(limits)
 
         numberOfImports++
     }
 
-    public override fun visitMemory(moduleName: String, fieldName: String, limits: ResizableLimits) {
+    public override fun visitMemory(moduleName: String, fieldName: String, limits: MemoryLimits) {
         writer.writeString(moduleName)
         writer.writeString(fieldName)
         writer.writeExternalKind(ExternalKind.MEMORY)
-        writer.writeResizableLimits(limits)
+        writer.writeMemoryLimits(limits)
 
         numberOfImports++
     }

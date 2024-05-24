@@ -1,6 +1,6 @@
 package org.wasmium.wasm.binary.validator
 
-import org.wasmium.wasm.binary.tree.ResizableLimits
+import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.GlobalType
@@ -28,7 +28,7 @@ public class ImportSectionValidator(private val delegate: ImportSectionVisitor? 
         delegate?.visitGlobal(moduleName, fieldName, type, mutability)
     }
 
-    override fun visitTable(moduleName: String, fieldName: String, elementType: WasmType, limits: ResizableLimits) {
+    override fun visitTable(moduleName: String, fieldName: String, elementType: WasmType, limits: MemoryLimits) {
         context.checkTableType(elementType, limits)
 
         context.tables.add(TableType(elementType, limits))
@@ -36,7 +36,7 @@ public class ImportSectionValidator(private val delegate: ImportSectionVisitor? 
         delegate?.visitTable(moduleName, fieldName, elementType, limits)
     }
 
-    override fun visitMemory(moduleName: String, fieldName: String, limits: ResizableLimits) {
+    override fun visitMemory(moduleName: String, fieldName: String, limits: MemoryLimits) {
         context.checkMemoryType(limits)
 
         context.memories.add(MemoryType(limits))

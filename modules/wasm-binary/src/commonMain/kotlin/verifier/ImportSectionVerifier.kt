@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.verifier
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
-import org.wasmium.wasm.binary.tree.ResizableLimits
+import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.GlobalType
@@ -34,7 +34,7 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor? =
         delegate?.visitGlobal(moduleName, fieldName, type, mutability)
     }
 
-    override fun visitTable(moduleName: String, fieldName: String, elementType: WasmType, limits: ResizableLimits) {
+    override fun visitTable(moduleName: String, fieldName: String, elementType: WasmType, limits: MemoryLimits) {
         checkEnd()
 
         numberOfImports++
@@ -43,7 +43,7 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor? =
         delegate?.visitTable(moduleName, fieldName, elementType, limits)
     }
 
-    override fun visitMemory(moduleName: String, fieldName: String, limits: ResizableLimits) {
+    override fun visitMemory(moduleName: String, fieldName: String, limits: MemoryLimits) {
         checkEnd()
 
         numberOfImports++
