@@ -4,7 +4,7 @@ import org.wasmium.wasm.binary.tree.BlockType
 import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
-import org.wasmium.wasm.binary.tree.instructions.TryCatchImmediate
+import org.wasmium.wasm.binary.tree.instructions.TryCatchArgument
 
 public interface ExpressionVisitor {
 
@@ -70,7 +70,7 @@ public interface ExpressionVisitor {
 
     public fun visitTryInstruction(blockType: BlockType)
 
-    public fun visitTryTableInstruction(blockType: BlockType, handlers: List<TryCatchImmediate>)
+    public fun visitTryTableInstruction(blockType: BlockType, handlers: List<TryCatchArgument>)
 
     public fun visitCatchInstruction()
 

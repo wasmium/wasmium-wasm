@@ -1,6 +1,6 @@
 package org.wasmium.wasm.binary.tree.instructions
 
-public class TryCatchImmediate(
+public class TryCatchArgument(
     public val kind: TryCatchKind,
     public val label: UInt,
     public val tag: UInt?,

@@ -4,8 +4,8 @@ import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinaryReader
 import org.wasmium.wasm.binary.tree.Opcode.*
 import org.wasmium.wasm.binary.tree.V128Value
-import org.wasmium.wasm.binary.tree.instructions.TryCatchImmediate
-import org.wasmium.wasm.binary.tree.instructions.TryCatchImmediate.TryCatchKind
+import org.wasmium.wasm.binary.tree.instructions.TryCatchArgument
+import org.wasmium.wasm.binary.tree.instructions.TryCatchArgument.TryCatchKind
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
 @OptIn(ExperimentalUnsignedTypes::class)
@@ -1046,7 +1046,7 @@ public class ExpressionReader(
                     val blockType = source.readBlockType()
                     val numberOfCatches = source.readVarUInt32()
 
-                    val handlers = mutableListOf<TryCatchImmediate>()
+                    val handlers = mutableListOf<TryCatchArgument>()
                     for(handler in 0u until numberOfCatches) {
                         val opcode = source.readUInt8()
 
@@ -1055,23 +1055,23 @@ public class ExpressionReader(
                                 val tagIndex = source.readVarUInt32()
                                 val labelIndex = source.readVarUInt32()
 
-                                handlers.add(TryCatchImmediate(TryCatchKind.CATCH, tagIndex, labelIndex))
+                                handlers.add(TryCatchArgument(TryCatchKind.CATCH, tagIndex, labelIndex))
                             }
                             TryCatchKind.CATCH_REF.kindId -> {
                                 val tagIndex = source.readVarUInt32()
                                 val labelIndex = source.readVarUInt32()
 
-                                handlers.add(TryCatchImmediate(TryCatchKind.CATCH, tagIndex, labelIndex))
+                                handlers.add(TryCatchArgument(TryCatchKind.CATCH, tagIndex, labelIndex))
                             }
                             TryCatchKind.CATCH_ALL.kindId -> {
                                 val labelIndex = source.readVarUInt32()
 
-                                handlers.add(TryCatchImmediate(TryCatchKind.CATCH, tag  = null, label = labelIndex))
+                                handlers.add(TryCatchArgument(TryCatchKind.CATCH, tag  = null, label = labelIndex))
                             }
                             TryCatchKind.CATCH_ALL_REF.kindId -> {
                                 val labelIndex = source.readVarUInt32()
 
-                                handlers.add(TryCatchImmediate(TryCatchKind.CATCH, tag = null, label = labelIndex))
+                                handlers.add(TryCatchArgument(TryCatchKind.CATCH, tag = null, label = labelIndex))
                             }
                             else -> {
                                 throw ParserException("Invalid try_table handler opcode: $opcode")

@@ -15,7 +15,7 @@ import org.wasmium.wasm.binary.tree.WasmType.I32
 import org.wasmium.wasm.binary.tree.WasmType.I64
 import org.wasmium.wasm.binary.tree.WasmType.NONE
 import org.wasmium.wasm.binary.tree.WasmType.V128
-import org.wasmium.wasm.binary.tree.instructions.TryCatchImmediate
+import org.wasmium.wasm.binary.tree.instructions.TryCatchArgument
 import org.wasmium.wasm.binary.tree.sections.FunctionType
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
@@ -577,7 +577,7 @@ public class ExpressionValidator(
         delegate?.visitTryInstruction(blockType)
     }
 
-    override fun visitTryTableInstruction(blockType: BlockType, handlers: List<TryCatchImmediate>) {
+    override fun visitTryTableInstruction(blockType: BlockType, handlers: List<TryCatchArgument>) {
         val functionType = getFunctionType(blockType)
 
         popValues(functionType.parameters)

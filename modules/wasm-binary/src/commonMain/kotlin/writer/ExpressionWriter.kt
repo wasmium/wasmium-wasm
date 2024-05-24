@@ -6,7 +6,7 @@ import org.wasmium.wasm.binary.tree.BlockType
 import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
-import org.wasmium.wasm.binary.tree.instructions.TryCatchImmediate
+import org.wasmium.wasm.binary.tree.instructions.TryCatchArgument
 import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 
 @OptIn(ExperimentalUnsignedTypes::class)
@@ -193,7 +193,7 @@ public class ExpressionWriter(
         writeBlockType(blockType)
     }
 
-    override fun visitTryTableInstruction(blockType: BlockType, handlers: List<TryCatchImmediate>) {
+    override fun visitTryTableInstruction(blockType: BlockType, handlers: List<TryCatchArgument>) {
         writer.writeBlockType(blockType)
         writer.writeVarUInt32(handlers.size.toUInt())
 

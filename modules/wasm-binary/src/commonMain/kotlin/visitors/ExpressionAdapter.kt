@@ -4,7 +4,7 @@ import org.wasmium.wasm.binary.tree.BlockType
 import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
-import org.wasmium.wasm.binary.tree.instructions.TryCatchImmediate
+import org.wasmium.wasm.binary.tree.instructions.TryCatchArgument
 
 public open class ExpressionAdapter(protected val delegate: ExpressionVisitor? = null) : ExpressionVisitor {
 
@@ -130,7 +130,7 @@ public open class ExpressionAdapter(protected val delegate: ExpressionVisitor? =
         delegate?.visitTryInstruction(blockType)
     }
 
-    override fun visitTryTableInstruction(blockType: BlockType, handlers: List<TryCatchImmediate>){
+    override fun visitTryTableInstruction(blockType: BlockType, handlers: List<TryCatchArgument>){
         delegate?.visitTryTableInstruction(blockType, handlers)
     }
 
