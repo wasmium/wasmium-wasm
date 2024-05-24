@@ -40,7 +40,6 @@ class ModuleWriterTest {
 
                 val writerOptions = WriterOptions {
                     debugNames(true)
-                    canonical(false)
                     features {
                         enableAll()
                     }
@@ -79,7 +78,6 @@ class ModuleWriterTest {
 
                 val writerOptions = WriterOptions {
                     debugNames(true)
-                    canonical(false)
                     features {
                         enableAll()
                     }
@@ -101,7 +99,6 @@ class ModuleWriterTest {
 
                 val writerOptions = WriterOptions {
                     debugNames(true)
-                    canonical(false)
                     features {
                         enableAll()
                     }
