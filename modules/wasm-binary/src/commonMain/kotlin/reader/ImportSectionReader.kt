@@ -25,7 +25,7 @@ public class ImportSectionReader(
             val externalKind = source.readExternalKind()
             when (externalKind) {
                 FUNCTION -> {
-                    val typeIndex = source.readIndex()
+                    val typeIndex = source.readTypeIndex()
 
                     importVisitor.visitFunction(moduleName, fieldName, typeIndex)
 

@@ -6,6 +6,7 @@ import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.GlobalType
+import org.wasmium.wasm.binary.tree.TypeIndex
 import org.wasmium.wasm.binary.tree.sections.MemoryType
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 
@@ -13,10 +14,10 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor? =
     private var done: Boolean = false
     private var numberOfImports: UInt = 0u
 
-    override fun visitFunction(moduleName: String, fieldName: String, typeIndex: UInt) {
+    override fun visitFunction(moduleName: String, fieldName: String, typeIndex: TypeIndex) {
         checkEnd()
 
-        if (typeIndex >= context.numberOfTypes) {
+        if (typeIndex.index >= context.numberOfTypes) {
             throw ParserException("Invalid import function index $typeIndex")
         }
 

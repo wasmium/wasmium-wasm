@@ -9,7 +9,9 @@ public class CodeSectionValidator(private val delegate: CodeSectionVisitor? = nu
     private var numberOfCodes: UInt = 0u
 
     override fun visitCode(locals: List<LocalVariable>): ExpressionVisitor {
-        val functionType = context.functions[context.numberOfImportFunctions.toInt() + numberOfCodes.toInt()]
+        val functionType = context.functions.getOrElse(context.numberOfImportFunctions.toInt() + numberOfCodes.toInt()) {
+            throw IllegalStateException("Function type not found")
+        }
 
         val localInitials = mutableListOf<WasmType>()
         localInitials.addAll(functionType.parameters)

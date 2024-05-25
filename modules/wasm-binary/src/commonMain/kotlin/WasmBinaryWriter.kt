@@ -12,6 +12,7 @@ import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.RelocationKind
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.TagType
+import org.wasmium.wasm.binary.tree.TypeIndex
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.sections.MemoryType
@@ -147,9 +148,11 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
 
     public fun writeType(type: WasmType): Unit = writeVarUInt7(type.wasmTypeId)
 
-    public fun writeIndex(index: UInt): Unit {
+    public fun writeIndex(index: UInt) {
         writeVarUInt32(index)
     }
+
+    public fun writeTypeIndex(typeIndex: TypeIndex): Unit = writeIndex(typeIndex.index)
 
     public fun writeMemoryLimits(limits: MemoryLimits) {
         writeVarUInt32(limits.flags)

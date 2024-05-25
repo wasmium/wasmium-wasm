@@ -1,18 +1,19 @@
 package org.wasmium.wasm.binary.validator
 
+import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.GlobalType
 import org.wasmium.wasm.binary.tree.GlobalType.Mutability
+import org.wasmium.wasm.binary.tree.TypeIndex
 import org.wasmium.wasm.binary.tree.sections.MemoryType
 import org.wasmium.wasm.binary.tree.sections.TableType
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 
 public class ImportSectionValidator(private val delegate: ImportSectionVisitor? = null, private val context: ValidatorContext) : ImportSectionVisitor {
-    override fun visitFunction(moduleName: String, fieldName: String, typeIndex: UInt) {
-        val functionType = context.types[typeIndex.toInt()]
-
+    override fun visitFunction(moduleName: String, fieldName: String, typeIndex: TypeIndex) {
+        val functionType = context.checkFunctionType(typeIndex)
         context.functions.add(functionType)
 
         context.numberOfImportFunctions++

@@ -8,6 +8,7 @@ import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.GlobalType.*
+import org.wasmium.wasm.binary.tree.TypeIndex
 import org.wasmium.wasm.binary.tree.sections.MemoryType
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 
@@ -16,11 +17,11 @@ public class ImportSectionWriter(private val context: WriterContext) : ImportSec
     private val body = ByteBuffer()
     private val writer = WasmBinaryWriter(body)
 
-    public override fun visitFunction(moduleName: String, fieldName: String, typeIndex: UInt) {
+    public override fun visitFunction(moduleName: String, fieldName: String, typeIndex: TypeIndex) {
         writer.writeString(moduleName)
         writer.writeString(fieldName)
         writer.writeExternalKind(ExternalKind.FUNCTION)
-        writer.writeIndex(typeIndex)
+        writer.writeTypeIndex(typeIndex)
 
         numberOfImports++
     }
