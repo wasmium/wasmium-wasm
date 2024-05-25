@@ -16,6 +16,7 @@ import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.GlobalType.Mutability
+import org.wasmium.wasm.binary.tree.TypeIndex
 import org.wasmium.wasm.binary.tree.sections.MemoryType
 import kotlin.experimental.and
 
@@ -187,6 +188,8 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
     }
 
     public fun readIndex(): UInt = readVarUInt32()
+
+    public fun readTypeIndex(): TypeIndex = TypeIndex(readIndex())
 
     public fun readMemoryType(): MemoryType {
         val limits = readMemoryLimits()

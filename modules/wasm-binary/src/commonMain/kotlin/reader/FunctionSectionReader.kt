@@ -11,9 +11,7 @@ public class FunctionSectionReader(
 
         val functionVisitor = visitor.visitFunctionSection()
         for (index in 0u until context.numberOfFunctions) {
-            val functionIndex = context.numberOfFunctionImports + index
-
-            val typeIndex = source.readIndex()
+            val typeIndex = source.readTypeIndex()
 
             functionVisitor.visitFunction(typeIndex)
         }

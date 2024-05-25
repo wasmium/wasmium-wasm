@@ -3,6 +3,7 @@ package org.wasmium.wasm.binary.writer
 import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.SectionKind
+import org.wasmium.wasm.binary.tree.TypeIndex
 import org.wasmium.wasm.binary.visitors.FunctionSectionVisitor
 
 public class FunctionSectionWriter(private val context: WriterContext) : FunctionSectionVisitor {
@@ -10,8 +11,8 @@ public class FunctionSectionWriter(private val context: WriterContext) : Functio
     private val body = ByteBuffer()
     private val writer = WasmBinaryWriter(body)
 
-    public override fun visitFunction(typeIndex: UInt) {
-        writer.writeIndex(typeIndex)
+    public override fun visitFunction(typeIndex: TypeIndex) {
+        writer.writeIndex(typeIndex.index)
 
         numberOfFunctions++
     }
