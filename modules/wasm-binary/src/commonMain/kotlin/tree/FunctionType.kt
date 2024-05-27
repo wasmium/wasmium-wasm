@@ -1,6 +1,4 @@
-package org.wasmium.wasm.binary.tree.sections
-
-import org.wasmium.wasm.binary.tree.WasmType
+package org.wasmium.wasm.binary.tree
 
 public class FunctionType(
     public var parameters: List<WasmType>,
