@@ -10,6 +10,6 @@ public class GlobalImportNode(
     public val globalType: GlobalType,
 ) : ImportNode(module, name, ExternalKind.GLOBAL) {
     override fun accept(importSectionVisitor: ImportSectionVisitor) {
-        importSectionVisitor.visitGlobal(module, name, globalType.contentType, globalType.mutability)
+        importSectionVisitor.visitGlobal(module, name, globalType)
     }
 }

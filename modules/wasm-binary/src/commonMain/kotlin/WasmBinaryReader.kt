@@ -4,19 +4,22 @@ package org.wasmium.wasm.binary
 
 import org.wasmium.wasm.binary.tree.BlockType
 import org.wasmium.wasm.binary.tree.ExternalKind
+import org.wasmium.wasm.binary.tree.GlobalType
+import org.wasmium.wasm.binary.tree.GlobalType.Mutability
+import org.wasmium.wasm.binary.tree.GlobalType.Mutability.IMMUTABLE
+import org.wasmium.wasm.binary.tree.GlobalType.Mutability.MUTABLE
 import org.wasmium.wasm.binary.tree.LimitFlags
 import org.wasmium.wasm.binary.tree.LinkingKind
 import org.wasmium.wasm.binary.tree.LinkingSymbolType
+import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.NameKind
 import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.RelocationKind
-import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.TagType
+import org.wasmium.wasm.binary.tree.TypeIndex
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
-import org.wasmium.wasm.binary.tree.GlobalType.Mutability
-import org.wasmium.wasm.binary.tree.TypeIndex
 import org.wasmium.wasm.binary.tree.sections.MemoryType
 import kotlin.experimental.and
 
@@ -316,6 +319,17 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         val tagIndex = readIndex()
 
         return TagType(tagAttribute, tagIndex)
+    }
+
+    public fun readGlobalType(): GlobalType {
+        val type = readType()
+        if (!type.isValueType()) {
+            throw ParserException("Invalid global type: %#$type")
+        }
+
+        val mutable = if (readVarUInt1() == 0u) IMMUTABLE else MUTABLE
+
+        return GlobalType(type, mutable)
     }
 
     public fun readMutability(): Mutability = if (readVarUInt1() == 0u) Mutability.IMMUTABLE else Mutability.MUTABLE

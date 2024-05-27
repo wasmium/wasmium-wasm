@@ -27,13 +27,13 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor? =
         delegate?.visitFunction(moduleName, fieldName, typeIndex)
     }
 
-    override fun visitGlobal(moduleName: String, fieldName: String, type: WasmType, mutability: GlobalType.Mutability) {
+    override fun visitGlobal(moduleName: String, fieldName: String, globalType: GlobalType) {
         checkEnd()
 
         numberOfImports++
         context.numberOfGlobalImports++
 
-        delegate?.visitGlobal(moduleName, fieldName, type, mutability)
+        delegate?.visitGlobal(moduleName, fieldName, globalType)
     }
 
     override fun visitTable(moduleName: String, fieldName: String, elementType: WasmType, limits: MemoryLimits) {

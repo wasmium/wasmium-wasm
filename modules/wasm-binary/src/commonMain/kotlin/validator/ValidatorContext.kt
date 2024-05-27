@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.validator
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.tree.GlobalType
-import org.wasmium.wasm.binary.tree.GlobalType.Mutability
+import org.wasmium.wasm.binary.tree.GlobalType.Mutability.MUTABLE
 import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.TypeIndex
@@ -62,8 +62,8 @@ public class ValidatorContext(
         checkMemoryLimits(memoryType.limits, 1u shl 16, "Memory size must not exceed 65536 pages (4GiB)")
     }
 
-    public fun checkGlobalType(contentType: WasmType, mutability: Mutability) {
-        if (!contentType.isValueType()) {
+    public fun checkGlobalType(globalType: GlobalType) {
+        if (!globalType.contentType.isValueType()) {
             throw ValidatorException("Global type must be a value type")
         }
     }

@@ -1,11 +1,10 @@
 package org.wasmium.wasm.binary.visitors
 
-import org.wasmium.wasm.binary.tree.WasmType
-import org.wasmium.wasm.binary.tree.GlobalType.Mutability
+import org.wasmium.wasm.binary.tree.GlobalType
 
 public interface GlobalSectionVisitor {
 
-    public fun visitGlobalVariable(type: WasmType, mutability: Mutability): ExpressionVisitor
+    public fun visitGlobalVariable(globalType: GlobalType): ExpressionVisitor
 
     public fun visitEnd()
 }

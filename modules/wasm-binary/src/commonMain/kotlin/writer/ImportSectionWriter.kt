@@ -3,12 +3,12 @@ package org.wasmium.wasm.binary.writer
 import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.ExternalKind
+import org.wasmium.wasm.binary.tree.GlobalType
 import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.TagType
-import org.wasmium.wasm.binary.tree.WasmType
-import org.wasmium.wasm.binary.tree.GlobalType.*
 import org.wasmium.wasm.binary.tree.TypeIndex
+import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.sections.MemoryType
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 
@@ -26,12 +26,11 @@ public class ImportSectionWriter(private val context: WriterContext) : ImportSec
         numberOfImports++
     }
 
-    public override fun visitGlobal(moduleName: String, fieldName: String, type: WasmType, mutability: Mutability) {
+    public override fun visitGlobal(moduleName: String, fieldName: String, globalType: GlobalType) {
         writer.writeString(moduleName)
         writer.writeString(fieldName)
         writer.writeExternalKind(ExternalKind.GLOBAL)
-        writer.writeType(type)
-        writer.writeMutability(mutability)
+        writer.writeGlobalType(globalType)
 
         numberOfImports++
     }

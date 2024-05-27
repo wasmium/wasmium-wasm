@@ -4,6 +4,7 @@ package org.wasmium.wasm.binary
 
 import org.wasmium.wasm.binary.tree.BlockType
 import org.wasmium.wasm.binary.tree.ExternalKind
+import org.wasmium.wasm.binary.tree.GlobalType
 import org.wasmium.wasm.binary.tree.GlobalType.Mutability
 import org.wasmium.wasm.binary.tree.LinkingKind
 import org.wasmium.wasm.binary.tree.MemoryLimits
@@ -143,6 +144,11 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
     public fun writeSectionKind(sectionKind: SectionKind): Unit = writeVarUInt7(sectionKind.sectionKindId)
 
     public fun writeExternalKind(externalKind: ExternalKind): Unit = writeVarUInt7(externalKind.externalKindId)
+
+    public fun writeGlobalType(globalType: GlobalType) {
+        writeType(globalType.contentType)
+        writeMutability(globalType.mutability)
+    }
 
     public fun writeRelocationKind(kind: RelocationKind): Unit = writeVarUInt7(kind.relocationKindId)
 
