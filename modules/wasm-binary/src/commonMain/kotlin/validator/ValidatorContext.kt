@@ -8,7 +8,7 @@ import org.wasmium.wasm.binary.tree.TypeIndex
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.sections.CodeType
 import org.wasmium.wasm.binary.tree.sections.FunctionType
-import org.wasmium.wasm.binary.tree.sections.MemoryType
+import org.wasmium.wasm.binary.tree.MemoryType
 import org.wasmium.wasm.binary.tree.TableType
 
 public class ValidatorContext(

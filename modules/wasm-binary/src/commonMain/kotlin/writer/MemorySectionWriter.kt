@@ -3,7 +3,7 @@ package org.wasmium.wasm.binary.writer
 import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.SectionKind
-import org.wasmium.wasm.binary.tree.sections.MemoryType
+import org.wasmium.wasm.binary.tree.MemoryType
 import org.wasmium.wasm.binary.visitors.MemorySectionVisitor
 
 public class MemorySectionWriter(private val context: WriterContext) : MemorySectionVisitor {

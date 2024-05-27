@@ -1,6 +1,6 @@
 package org.wasmium.wasm.binary.visitors
 
-import org.wasmium.wasm.binary.tree.sections.MemoryType
+import org.wasmium.wasm.binary.tree.MemoryType
 
 public open class MemorySectionAdapter(protected val delegate: MemorySectionVisitor? = null) : MemorySectionVisitor {
 

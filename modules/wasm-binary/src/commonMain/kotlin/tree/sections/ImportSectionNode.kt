@@ -1,6 +1,7 @@
 package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.GlobalType
+import org.wasmium.wasm.binary.tree.MemoryType
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.TableType
 import org.wasmium.wasm.binary.tree.TagType
