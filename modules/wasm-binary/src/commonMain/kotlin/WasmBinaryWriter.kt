@@ -17,6 +17,7 @@ import org.wasmium.wasm.binary.tree.TypeIndex
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.sections.MemoryType
+import org.wasmium.wasm.binary.tree.sections.TableType
 import kotlin.experimental.or
 
 private const val LOW_7_BITS: Byte = 0x7F
@@ -148,6 +149,11 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
     public fun writeGlobalType(globalType: GlobalType) {
         writeType(globalType.contentType)
         writeMutability(globalType.mutability)
+    }
+
+    public fun writeTableType(tableType: TableType) {
+        writeType(tableType.elementType)
+        writeMemoryLimits(tableType.limits)
     }
 
     public fun writeRelocationKind(kind: RelocationKind): Unit = writeVarUInt7(kind.relocationKindId)

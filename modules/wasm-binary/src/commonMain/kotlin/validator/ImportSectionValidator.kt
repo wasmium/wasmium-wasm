@@ -1,10 +1,8 @@
 package org.wasmium.wasm.binary.validator
 
 import org.wasmium.wasm.binary.tree.GlobalType
-import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.TypeIndex
-import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.sections.MemoryType
 import org.wasmium.wasm.binary.tree.sections.TableType
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
@@ -27,12 +25,12 @@ public class ImportSectionValidator(private val delegate: ImportSectionVisitor? 
         delegate?.visitGlobal(moduleName, fieldName, globalType)
     }
 
-    override fun visitTable(moduleName: String, fieldName: String, elementType: WasmType, limits: MemoryLimits) {
-        context.checkTableType(elementType, limits)
+    override fun visitTable(moduleName: String, fieldName: String, tableType: TableType) {
+        context.checkTableType(tableType)
 
-        context.tables.add(TableType(elementType, limits))
+        context.tables.add(tableType)
 
-        delegate?.visitTable(moduleName, fieldName, elementType, limits)
+        delegate?.visitTable(moduleName, fieldName, tableType)
     }
 
     override fun visitMemory(moduleName: String, fieldName: String, memoryType: MemoryType) {

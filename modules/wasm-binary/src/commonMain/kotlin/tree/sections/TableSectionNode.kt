@@ -1,8 +1,6 @@
 package org.wasmium.wasm.binary.tree.sections
 
-import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.SectionKind
-import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitors.TableSectionVisitor
 
 public class TableSectionNode : SectionNode(SectionKind.TABLE), TableSectionVisitor {
@@ -10,14 +8,14 @@ public class TableSectionNode : SectionNode(SectionKind.TABLE), TableSectionVisi
 
     public fun accept(tableSectionVisitor: TableSectionVisitor) {
         for (tableType in tables) {
-            tableSectionVisitor.visitTable(tableType.elementType, tableType.limits)
+            tableSectionVisitor.visitTable(tableType)
         }
 
         tableSectionVisitor.visitEnd()
     }
 
-    public override fun visitTable(elementType: WasmType, limits: MemoryLimits) {
-        tables.add(TableType(elementType, limits))
+    public override fun visitTable(tableType: TableType) {
+        tables.add(tableType)
     }
 
     public override fun visitEnd() {

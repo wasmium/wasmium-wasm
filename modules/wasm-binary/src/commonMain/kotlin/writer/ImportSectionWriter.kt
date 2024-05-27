@@ -10,6 +10,7 @@ import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.TypeIndex
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.sections.MemoryType
+import org.wasmium.wasm.binary.tree.sections.TableType
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 
 public class ImportSectionWriter(private val context: WriterContext) : ImportSectionVisitor {
@@ -35,12 +36,11 @@ public class ImportSectionWriter(private val context: WriterContext) : ImportSec
         numberOfImports++
     }
 
-    public override fun visitTable(moduleName: String, fieldName: String, elementType: WasmType, limits: MemoryLimits) {
+    public override fun visitTable(moduleName: String, fieldName: String, tableType: TableType) {
         writer.writeString(moduleName)
         writer.writeString(fieldName)
         writer.writeExternalKind(ExternalKind.TABLE)
-        writer.writeType(elementType)
-        writer.writeMemoryLimits(limits)
+        writer.writeTableType(tableType)
 
         numberOfImports++
     }

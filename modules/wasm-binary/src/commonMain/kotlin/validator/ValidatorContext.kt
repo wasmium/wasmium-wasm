@@ -2,7 +2,6 @@ package org.wasmium.wasm.binary.validator
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.tree.GlobalType
-import org.wasmium.wasm.binary.tree.GlobalType.Mutability.MUTABLE
 import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.TypeIndex
@@ -50,12 +49,16 @@ public class ValidatorContext(
         }
     }
 
-    public fun checkTableType(elementType: WasmType, limits: MemoryLimits) {
-        if (!elementType.isReferenceType()) {
+    public fun checkTableType(tableType: TableType) {
+        if (!tableType.elementType.isReferenceType()) {
             throw ValidatorException("Table element type must be a reference type")
         }
 
-        checkMemoryLimits(limits, UInt.MAX_VALUE - 1u, "Table size must be at most 2^32 - 1")
+        if (tableType.limits.isShared()) {
+            throw ParserException("Tables may not be shared.")
+        }
+
+        checkMemoryLimits(tableType.limits, UInt.MAX_VALUE - 1u, "Table size must be at most 2^32 - 1")
     }
 
     public fun checkMemoryType(memoryType: MemoryType) {

@@ -1,11 +1,10 @@
 package org.wasmium.wasm.binary.visitors
 
 import org.wasmium.wasm.binary.tree.GlobalType
-import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.TypeIndex
-import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.sections.MemoryType
+import org.wasmium.wasm.binary.tree.sections.TableType
 
 public open class ImportSectionAdapter(protected val delegate: ImportSectionVisitor? = null) : ImportSectionVisitor {
 
@@ -13,8 +12,7 @@ public open class ImportSectionAdapter(protected val delegate: ImportSectionVisi
 
     override fun visitGlobal(moduleName: String, fieldName: String, globalType: GlobalType): Unit = delegate?.visitGlobal(moduleName, fieldName, globalType) ?: Unit
 
-    override fun visitTable(moduleName: String, fieldName: String, elementType: WasmType, limits: MemoryLimits): Unit =
-        delegate?.visitTable(moduleName, fieldName, elementType, limits) ?: Unit
+    override fun visitTable(moduleName: String, fieldName: String, tableType: TableType): Unit = delegate?.visitTable(moduleName, fieldName, tableType) ?: Unit
 
     override fun visitMemory(moduleName: String, fieldName: String, memoryType: MemoryType): Unit = delegate?.visitMemory(moduleName, fieldName, memoryType) ?: Unit
 

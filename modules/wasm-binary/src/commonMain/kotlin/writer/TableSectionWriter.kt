@@ -2,9 +2,8 @@ package org.wasmium.wasm.binary.writer
 
 import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinaryWriter
-import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.SectionKind
-import org.wasmium.wasm.binary.tree.WasmType
+import org.wasmium.wasm.binary.tree.sections.TableType
 import org.wasmium.wasm.binary.visitors.TableSectionVisitor
 
 public class TableSectionWriter(private val context: WriterContext) : TableSectionVisitor {
@@ -12,9 +11,8 @@ public class TableSectionWriter(private val context: WriterContext) : TableSecti
     private var body = ByteBuffer()
     private val writer = WasmBinaryWriter(body)
 
-    public override fun visitTable(elementType: WasmType, limits: MemoryLimits) {
-        writer.writeType(elementType)
-        writer.writeMemoryLimits(limits)
+    public override fun visitTable(tableType: TableType) {
+        writer.writeTableType(tableType)
 
         numberOfTables++
     }

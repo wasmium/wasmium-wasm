@@ -9,6 +9,6 @@ public class TableImportNode(
     public val tableType: TableType,
 ) : ImportNode(module, name, ExternalKind.TABLE) {
     override fun accept(importSectionVisitor: ImportSectionVisitor) {
-        importSectionVisitor.visitTable(module, name, tableType.elementType, tableType.limits)
+        importSectionVisitor.visitTable(module, name, tableType)
     }
 }

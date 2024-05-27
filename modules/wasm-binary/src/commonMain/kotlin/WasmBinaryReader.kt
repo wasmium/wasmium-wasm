@@ -21,6 +21,7 @@ import org.wasmium.wasm.binary.tree.TypeIndex
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.sections.MemoryType
+import org.wasmium.wasm.binary.tree.sections.TableType
 import kotlin.experimental.and
 
 private const val LOW_7_BITS: Byte = 0x7F
@@ -330,6 +331,21 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         val mutable = if (readVarUInt1() == 0u) IMMUTABLE else MUTABLE
 
         return GlobalType(type, mutable)
+    }
+
+    public fun readTableType(): TableType {
+        val elementType = readType()
+
+        if (!elementType.isReferenceType()) {
+            throw ParserException("Imported table type is not a reference type.")
+        }
+
+        val limits = readMemoryLimits()
+        if (limits.isShared()) {
+            throw ParserException("Tables may not be shared")
+        }
+
+        return TableType(elementType, limits)
     }
 
     public fun readMutability(): Mutability = if (readVarUInt1() == 0u) Mutability.IMMUTABLE else Mutability.MUTABLE

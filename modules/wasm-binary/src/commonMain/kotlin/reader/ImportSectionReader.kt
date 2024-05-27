@@ -7,9 +7,6 @@ import org.wasmium.wasm.binary.tree.ExternalKind.GLOBAL
 import org.wasmium.wasm.binary.tree.ExternalKind.MEMORY
 import org.wasmium.wasm.binary.tree.ExternalKind.TABLE
 import org.wasmium.wasm.binary.tree.ExternalKind.TAG
-import org.wasmium.wasm.binary.tree.GlobalType
-import org.wasmium.wasm.binary.tree.GlobalType.Mutability.IMMUTABLE
-import org.wasmium.wasm.binary.tree.GlobalType.Mutability.MUTABLE
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 public class ImportSectionReader(
@@ -34,18 +31,9 @@ public class ImportSectionReader(
                 }
 
                 TABLE -> {
-                    val elementType = source.readType()
+                    val tableType = source.readTableType()
 
-                    if (!elementType.isReferenceType()) {
-                        throw ParserException("Imported table type is not a reference type.")
-                    }
-
-                    val limits = source.readMemoryLimits()
-                    if (limits.isShared()) {
-                        throw ParserException("Tables may not be shared")
-                    }
-
-                    importVisitor.visitTable(moduleName, fieldName, elementType, limits)
+                    importVisitor.visitTable(moduleName, fieldName, tableType)
 
                     context.numberOfTableImports++
                 }

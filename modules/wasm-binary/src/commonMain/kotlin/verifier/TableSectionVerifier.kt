@@ -2,30 +2,29 @@ package org.wasmium.wasm.binary.verifier
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
-import org.wasmium.wasm.binary.tree.MemoryLimits
-import org.wasmium.wasm.binary.tree.WasmType
+import org.wasmium.wasm.binary.tree.sections.TableType
 import org.wasmium.wasm.binary.visitors.TableSectionVisitor
 
 public class TableSectionVerifier(private val delegate: TableSectionVisitor? = null, private val context: VerifierContext) : TableSectionVisitor {
     private var done: Boolean = false
     private var numberOfTables: UInt = 0u
 
-    public override fun visitTable(elementType: WasmType, limits: MemoryLimits) {
+    public override fun visitTable(tableType: TableType) {
         checkEnd()
 
-        if (limits.initial > WasmBinary.MAX_TABLE_PAGES) {
+        if (tableType.limits.initial > WasmBinary.MAX_TABLE_PAGES) {
             throw ParserException("Invalid initial memory pages")
         }
 
-        if (limits.maximum != null) {
-            if (limits.maximum > WasmBinary.MAX_TABLE_PAGES) {
+        if (tableType.limits.maximum != null) {
+            if (tableType.limits.maximum > WasmBinary.MAX_TABLE_PAGES) {
                 throw ParserException("Invalid table max page")
             }
         }
 
         numberOfTables++
 
-        delegate?.visitTable(elementType, limits)
+        delegate?.visitTable(tableType)
     }
 
     override fun visitEnd() {
