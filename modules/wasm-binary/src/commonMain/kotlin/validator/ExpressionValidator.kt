@@ -669,7 +669,7 @@ public class ExpressionValidator(
         val type1 = popValue()
         val type2 = popValue()
 
-        if (!type1.isNumber() || !type2.isNumber()) {
+        if (!type1.isNumberType() || !type2.isNumberType()) {
             throw ValidatorException("Expected select arguments to be numbers, found $type1 and $type2")
         }
 
