@@ -21,7 +21,7 @@ import org.wasmium.wasm.binary.tree.TypeIndex
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.sections.MemoryType
-import org.wasmium.wasm.binary.tree.sections.TableType
+import org.wasmium.wasm.binary.tree.TableType
 import kotlin.experimental.and
 
 private const val LOW_7_BITS: Byte = 0x7F

@@ -4,7 +4,7 @@ import org.wasmium.wasm.binary.tree.GlobalType
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.TypeIndex
 import org.wasmium.wasm.binary.tree.sections.MemoryType
-import org.wasmium.wasm.binary.tree.sections.TableType
+import org.wasmium.wasm.binary.tree.TableType
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 
 public class ImportSectionValidator(private val delegate: ImportSectionVisitor? = null, private val context: ValidatorContext) : ImportSectionVisitor {

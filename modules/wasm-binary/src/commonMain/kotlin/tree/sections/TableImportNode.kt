@@ -1,6 +1,7 @@
 package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.ExternalKind
+import org.wasmium.wasm.binary.tree.TableType
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 
 public class TableImportNode(

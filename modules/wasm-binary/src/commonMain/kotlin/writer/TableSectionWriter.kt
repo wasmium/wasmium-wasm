@@ -3,7 +3,7 @@ package org.wasmium.wasm.binary.writer
 import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.SectionKind
-import org.wasmium.wasm.binary.tree.sections.TableType
+import org.wasmium.wasm.binary.tree.TableType
 import org.wasmium.wasm.binary.visitors.TableSectionVisitor
 
 public class TableSectionWriter(private val context: WriterContext) : TableSectionVisitor {
