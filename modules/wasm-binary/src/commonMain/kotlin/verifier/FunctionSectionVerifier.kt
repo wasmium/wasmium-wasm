@@ -1,24 +1,19 @@
 package org.wasmium.wasm.binary.verifier
 
-import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
-import org.wasmium.wasm.binary.tree.TypeIndex
+import org.wasmium.wasm.binary.tree.FunctionType
 import org.wasmium.wasm.binary.visitors.FunctionSectionVisitor
 
 public class FunctionSectionVerifier(private val delegate: FunctionSectionVisitor? = null, private val context: VerifierContext) : FunctionSectionVisitor {
     private var done: Boolean = false
     private var numberOfFunctions: UInt = 0u
 
-    override fun visitFunction(typeIndex: TypeIndex) {
+    override fun visitFunction(functionType: FunctionType) {
         checkEnd()
-
-        if (typeIndex.index >= context.numberOfTypes) {
-            throw ParserException("Invalid function signature index: %$typeIndex")
-        }
 
         numberOfFunctions++
 
-        delegate?.visitFunction(typeIndex)
+        delegate?.visitFunction(functionType)
     }
 
     override fun visitEnd() {

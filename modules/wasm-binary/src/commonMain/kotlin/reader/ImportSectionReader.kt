@@ -23,10 +23,10 @@ public class ImportSectionReader(
             val externalKind = source.readExternalKind()
             when (externalKind) {
                 FUNCTION -> {
-                    val typeIndex = source.readTypeIndex()
+                    val typeIndex = source.readIndex()
 
-                    val functionType = context.functionTypes.getOrElse(typeIndex.index.toInt()) {
-                        throw ParserException("Invalid type index at ${typeIndex.index}")
+                    val functionType = context.functionTypes.getOrElse(typeIndex.toInt()) {
+                        throw ParserException("Invalid type index at ${typeIndex}")
                     }
 
                     importVisitor.visitFunction(moduleName, fieldName, functionType)

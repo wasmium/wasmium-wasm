@@ -11,9 +11,13 @@ public class FunctionSectionReader(
 
         val functionVisitor = visitor.visitFunctionSection()
         for (index in 0u until context.numberOfFunctions) {
-            val typeIndex = source.readTypeIndex()
+            val typeIndex = source.readIndex()
 
-            functionVisitor.visitFunction(typeIndex)
+            val functionType = context.functionTypes.getOrElse(typeIndex.toInt()){
+                throw IllegalStateException("Function type not found")
+            }
+
+            functionVisitor.visitFunction(functionType)
         }
 
         functionVisitor.visitEnd()

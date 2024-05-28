@@ -1,13 +1,11 @@
 package org.wasmium.wasm.binary.verifier
 
-import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.tree.FunctionType
 import org.wasmium.wasm.binary.tree.GlobalType
-import org.wasmium.wasm.binary.tree.TagType
-import org.wasmium.wasm.binary.tree.TypeIndex
 import org.wasmium.wasm.binary.tree.MemoryType
 import org.wasmium.wasm.binary.tree.TableType
+import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 
 public class ImportSectionVerifier(private val delegate: ImportSectionVisitor? = null, private val context: VerifierContext) : ImportSectionVisitor {

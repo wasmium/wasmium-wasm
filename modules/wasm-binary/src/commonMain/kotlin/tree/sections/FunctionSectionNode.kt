@@ -1,22 +1,22 @@
 package org.wasmium.wasm.binary.tree.sections
 
+import org.wasmium.wasm.binary.tree.FunctionType
 import org.wasmium.wasm.binary.tree.SectionKind
-import org.wasmium.wasm.binary.tree.TypeIndex
 import org.wasmium.wasm.binary.visitors.FunctionSectionVisitor
 
 public class FunctionSectionNode : SectionNode(SectionKind.FUNCTION), FunctionSectionVisitor {
-    public val types: MutableList<TypeIndex> = mutableListOf()
+    public val functionTypes: MutableList<FunctionType> = mutableListOf()
 
     public fun accept(functionSectionVisitor: FunctionSectionVisitor) {
-        for (typeIndex in types) {
-            functionSectionVisitor.visitFunction(typeIndex)
+        for (functionType in functionTypes) {
+            functionSectionVisitor.visitFunction(functionType)
         }
 
         functionSectionVisitor.visitEnd()
     }
 
-    public override fun visitFunction(typeIndex: TypeIndex) {
-        types.add(typeIndex)
+    public override fun visitFunction(functionType: FunctionType) {
+        functionTypes.add(functionType)
     }
 
     public override fun visitEnd() {
