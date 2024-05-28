@@ -1,5 +1,6 @@
 package org.wasmium.wasm.binary.tree.sections
 
+import org.wasmium.wasm.binary.tree.FunctionType
 import org.wasmium.wasm.binary.tree.GlobalType
 import org.wasmium.wasm.binary.tree.MemoryType
 import org.wasmium.wasm.binary.tree.SectionKind
@@ -19,8 +20,8 @@ public class ImportSectionNode : SectionNode(SectionKind.IMPORT), ImportSectionV
         importSectionVisitor.visitEnd()
     }
 
-    public override fun visitFunction(moduleName: String, fieldName: String, typeIndex: TypeIndex) {
-        imports.add(FunctionImportNode(moduleName, fieldName, typeIndex))
+    public override fun visitFunction(moduleName: String, fieldName: String, functionType: FunctionType) {
+        imports.add(FunctionImportNode(moduleName, fieldName, functionType))
     }
 
     public override fun visitGlobal(moduleName: String, fieldName: String, globalType: GlobalType) {

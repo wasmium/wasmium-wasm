@@ -2,6 +2,7 @@ package org.wasmium.wasm.binary.verifier
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
+import org.wasmium.wasm.binary.tree.FunctionType
 import org.wasmium.wasm.binary.tree.GlobalType
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.TypeIndex
@@ -13,17 +14,13 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor? =
     private var done: Boolean = false
     private var numberOfImports: UInt = 0u
 
-    override fun visitFunction(moduleName: String, fieldName: String, typeIndex: TypeIndex) {
+    override fun visitFunction(moduleName: String, fieldName: String, functionType: FunctionType) {
         checkEnd()
-
-        if (typeIndex.index >= context.numberOfTypes) {
-            throw ParserException("Invalid import function index $typeIndex")
-        }
 
         numberOfImports++
         context.numberOfFunctionImports++
 
-        delegate?.visitFunction(moduleName, fieldName, typeIndex)
+        delegate?.visitFunction(moduleName, fieldName, functionType)
     }
 
     override fun visitGlobal(moduleName: String, fieldName: String, globalType: GlobalType) {

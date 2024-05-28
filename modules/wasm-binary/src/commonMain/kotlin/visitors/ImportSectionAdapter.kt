@@ -1,14 +1,14 @@
 package org.wasmium.wasm.binary.visitors
 
+import org.wasmium.wasm.binary.tree.FunctionType
 import org.wasmium.wasm.binary.tree.GlobalType
-import org.wasmium.wasm.binary.tree.TagType
-import org.wasmium.wasm.binary.tree.TypeIndex
 import org.wasmium.wasm.binary.tree.MemoryType
 import org.wasmium.wasm.binary.tree.TableType
+import org.wasmium.wasm.binary.tree.TagType
 
 public open class ImportSectionAdapter(protected val delegate: ImportSectionVisitor? = null) : ImportSectionVisitor {
 
-    override fun visitFunction(moduleName: String, fieldName: String, typeIndex: TypeIndex): Unit = delegate?.visitFunction(moduleName, fieldName, typeIndex) ?: Unit
+    override fun visitFunction(moduleName: String, fieldName: String, functionType: FunctionType): Unit = delegate?.visitFunction(moduleName, fieldName, functionType) ?: Unit
 
     override fun visitGlobal(moduleName: String, fieldName: String, globalType: GlobalType): Unit = delegate?.visitGlobal(moduleName, fieldName, globalType) ?: Unit
 

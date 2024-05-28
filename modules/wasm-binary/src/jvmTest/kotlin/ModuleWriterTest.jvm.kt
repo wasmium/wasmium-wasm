@@ -56,9 +56,9 @@ class ModuleWriterTest {
 
     @Test
     fun validWasmRegenerateSuccess() {
-        val file = "src/jvmTest/resources/hello.wasm"
-        val generatedFile = "src/jvmTest/resources/hello-generated.wasm"
-        val rewriteFile = "src/jvmTest/resources/hello-generated-rewrite.wasm"
+        val file = "../../repository/doom.wasm"
+        val generatedFile = "../../repository/doom-generated.wasm"
+        val rewriteFile = "../../repository/doom-generated-rewrite.wasm"
 
         val readerOptions = ReaderOptions {
             debugNames(true)

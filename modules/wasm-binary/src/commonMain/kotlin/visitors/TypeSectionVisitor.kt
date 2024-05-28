@@ -1,10 +1,10 @@
 package org.wasmium.wasm.binary.visitors
 
-import org.wasmium.wasm.binary.tree.WasmType
+import org.wasmium.wasm.binary.tree.FunctionType
 
 public interface TypeSectionVisitor {
 
-    public fun visitType(parameters: List<WasmType>, results: List<WasmType>)
+    public fun visitType(functionType: FunctionType)
 
     public fun visitEnd()
 }

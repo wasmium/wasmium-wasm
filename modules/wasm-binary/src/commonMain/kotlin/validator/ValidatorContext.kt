@@ -1,15 +1,14 @@
 package org.wasmium.wasm.binary.validator
 
 import org.wasmium.wasm.binary.ParserException
+import org.wasmium.wasm.binary.tree.FunctionType
 import org.wasmium.wasm.binary.tree.GlobalType
 import org.wasmium.wasm.binary.tree.MemoryLimits
-import org.wasmium.wasm.binary.tree.TagType
-import org.wasmium.wasm.binary.tree.TypeIndex
-import org.wasmium.wasm.binary.tree.WasmType
-import org.wasmium.wasm.binary.tree.sections.CodeType
-import org.wasmium.wasm.binary.tree.FunctionType
 import org.wasmium.wasm.binary.tree.MemoryType
 import org.wasmium.wasm.binary.tree.TableType
+import org.wasmium.wasm.binary.tree.TagType
+import org.wasmium.wasm.binary.tree.WasmType
+import org.wasmium.wasm.binary.tree.sections.CodeType
 
 public class ValidatorContext(
     public val options: ValidatorOptions,
@@ -71,9 +70,22 @@ public class ValidatorContext(
         }
     }
 
-    public fun checkFunctionType(typeIndex: TypeIndex): FunctionType {
-        return types.getOrElse(typeIndex.index.toInt()) {
-            throw ParserException("Invalid type index at ${typeIndex.index}")
+    public fun checkFunctionType(functionType: FunctionType): FunctionType {
+        checkValueTypes(functionType.parameters)
+        checkValueTypes(functionType.results)
+
+        if (!options.features.isMultiValueEnabled && (functionType.results.size > 1)) {
+            throw ValidatorException("Function with multi-value result not allowed.")
+        }
+
+        return functionType
+    }
+
+    private fun checkValueTypes(types: List<WasmType>) {
+        for (type in types) {
+            if (!type.isValueType()) {
+                throw ParserException("Type $type is not value type")
+            }
         }
     }
 

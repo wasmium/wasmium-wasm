@@ -4,6 +4,7 @@ package org.wasmium.wasm.binary
 
 import org.wasmium.wasm.binary.tree.BlockType
 import org.wasmium.wasm.binary.tree.ExternalKind
+import org.wasmium.wasm.binary.tree.FunctionType
 import org.wasmium.wasm.binary.tree.GlobalType
 import org.wasmium.wasm.binary.tree.GlobalType.Mutability
 import org.wasmium.wasm.binary.tree.LinkingKind
@@ -164,8 +165,6 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
         writeVarUInt32(index)
     }
 
-    public fun writeTypeIndex(typeIndex: TypeIndex): Unit = writeIndex(typeIndex.index)
-
     public fun writeMemoryLimits(limits: MemoryLimits) {
         writeVarUInt32(limits.flags)
         writeVarUInt32(limits.initial)
@@ -258,4 +257,18 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
     public fun writeMutability(mutability: Mutability): Unit = writeVarUInt1(if (mutability == Mutability.IMMUTABLE) 0u else 1u)
 
     public fun writeMemoryType(memoryType: MemoryType): Unit = writeMemoryLimits(memoryType.limits)
+
+    public fun writeFunctionType(functionType: FunctionType) {
+        writeType(WasmType.FUNC)
+
+        writeVarUInt32(functionType.parameters.size.toUInt())
+        for (parameter in functionType.parameters) {
+            writeType(parameter)
+        }
+
+        writeVarUInt1(functionType.results.size.toUInt())
+        for (result in functionType.results) {
+            writeType(result)
+        }
+    }
 }

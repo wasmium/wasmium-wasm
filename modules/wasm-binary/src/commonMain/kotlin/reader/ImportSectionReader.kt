@@ -25,7 +25,11 @@ public class ImportSectionReader(
                 FUNCTION -> {
                     val typeIndex = source.readTypeIndex()
 
-                    importVisitor.visitFunction(moduleName, fieldName, typeIndex)
+                    val functionType = context.functionTypes.getOrElse(typeIndex.index.toInt()) {
+                        throw ParserException("Invalid type index at ${typeIndex.index}")
+                    }
+
+                    importVisitor.visitFunction(moduleName, fieldName, functionType)
 
                     context.numberOfFunctionImports++
                 }

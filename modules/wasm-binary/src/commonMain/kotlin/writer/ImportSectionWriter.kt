@@ -3,12 +3,12 @@ package org.wasmium.wasm.binary.writer
 import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.ExternalKind
+import org.wasmium.wasm.binary.tree.FunctionType
 import org.wasmium.wasm.binary.tree.GlobalType
-import org.wasmium.wasm.binary.tree.SectionKind
-import org.wasmium.wasm.binary.tree.TagType
-import org.wasmium.wasm.binary.tree.TypeIndex
 import org.wasmium.wasm.binary.tree.MemoryType
+import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.TableType
+import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
 
 public class ImportSectionWriter(private val context: WriterContext) : ImportSectionVisitor {
@@ -16,11 +16,13 @@ public class ImportSectionWriter(private val context: WriterContext) : ImportSec
     private val body = ByteBuffer()
     private val writer = WasmBinaryWriter(body)
 
-    public override fun visitFunction(moduleName: String, fieldName: String, typeIndex: TypeIndex) {
+    public override fun visitFunction(moduleName: String, fieldName: String, functionType: FunctionType) {
         writer.writeString(moduleName)
         writer.writeString(fieldName)
         writer.writeExternalKind(ExternalKind.FUNCTION)
-        writer.writeTypeIndex(typeIndex)
+
+        val typeIndex = context.functionTypes.indexOf(functionType)
+        writer.writeIndex(typeIndex.toUInt())
 
         numberOfImports++
     }

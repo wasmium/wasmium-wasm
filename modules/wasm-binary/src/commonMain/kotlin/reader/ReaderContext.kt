@@ -1,5 +1,7 @@
 package org.wasmium.wasm.binary.reader
 
+import org.wasmium.wasm.binary.tree.FunctionType
+
 public class ReaderContext(
     public val options: ReaderOptions,
 ) {
@@ -53,6 +55,8 @@ public class ReaderContext(
     public val numberOfTotalExceptions: UInt get() = numberOfTagImports + numberOfExceptions
 
     public var nameOfSectionConsumed: Boolean = false
+
+    public val functionTypes: MutableList<FunctionType> = mutableListOf()
 
     public val messages: MutableList<String> = mutableListOf()
 }

@@ -4,6 +4,7 @@ package org.wasmium.wasm.binary
 
 import org.wasmium.wasm.binary.tree.BlockType
 import org.wasmium.wasm.binary.tree.ExternalKind
+import org.wasmium.wasm.binary.tree.FunctionType
 import org.wasmium.wasm.binary.tree.GlobalType
 import org.wasmium.wasm.binary.tree.GlobalType.Mutability
 import org.wasmium.wasm.binary.tree.GlobalType.Mutability.IMMUTABLE
@@ -346,6 +347,46 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         }
 
         return TableType(elementType, limits)
+    }
+
+    public fun readFunctionType(): FunctionType {
+        val form = readType()
+        if (form != WasmType.FUNC) {
+            throw ParserException("Invalid signature form with type: $form")
+        }
+
+        val parameterCount = readVarUInt32()
+
+        val parameters = mutableListOf<WasmType>()
+        for (paramIndex in 0u until parameterCount) {
+            val type = readType()
+
+            if (!type.isValueType()) {
+                throw ParserException("Expected valid param type but got: ${type.name}")
+            }
+
+            parameters.add(type)
+        }
+
+        val resultCount = readVarUInt1()
+        if (resultCount != 0u && resultCount != 1u) {
+            throw ParserException("Result size must be 0 or 1 but got: $resultCount")
+        }
+
+        val resultType = mutableListOf<WasmType>()
+        if (resultCount != 0u) {
+            for (index in 0 until resultCount.toInt()) {
+                val type = readType()
+
+                if (!type.isValueType()) {
+                    throw ParserException("Expected valid param value type but got: ${type.name}")
+                }
+
+                resultType.add(type)
+            }
+        }
+
+        return FunctionType(parameters, resultType)
     }
 
     public fun readMutability(): Mutability = if (readVarUInt1() == 0u) Mutability.IMMUTABLE else Mutability.MUTABLE
