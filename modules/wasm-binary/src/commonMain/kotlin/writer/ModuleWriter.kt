@@ -107,37 +107,6 @@ public class ModuleWriter(
         // empty
     }
 
-    private fun writeRelocationSection(output: WasmBinaryWriter) {
-//        val relocationSection = context.relocationSection
-//        if (relocationSection != null && context.options.isRelocatableEnabled) {
-//            val payload: WasmSink = WasmSink()
-//
-//            payload.writeSectionKind(relocationSection.getKind())
-//            payload.writeString(relocationSection.getSectionName())
-//
-//            for (relocation in relocationSection.getRelocations()) {
-//                payload.writeRelocationKind(relocation.getRelocationKind())
-//
-//                when (relocation.getRelocationKind()) {
-//                    FUNC_INDEX_LEB, TABLE_INDEX_SLEB, TABLE_INDEX_I32, TYPE_INDEX_LEB, GLOBAL_INDEX_LEB -> {
-//                        payload.writeIndex(relocation.getIndex())
-//                        payload.writeIndex(relocation.getOffset())
-//                    }
-//
-//                    MEMORY_ADDRESS_LEB, MEMORY_ADDRESS_SLEB, MEMORY_ADDRESS_I32 -> {
-//                        payload.writeIndex(relocation.getIndex())
-//                        payload.writeIndex(relocation.getOffset())
-//                        payload.writeVarInt32(relocation.getAddend())
-//                    }
-//
-//                    else -> throw java.lang.IllegalStateException("Unsupported relocation kind: " + relocation.getRelocationKind())
-//                }
-//            }
-//
-//            writeSection(output, SectionKind.CUSTOM, Wasm.SECTION_NAME_RELOCATION, payload.getData())
-//        }
-    }
-
     private fun writeLinkingSection(output: WasmBinaryWriter) {
 //        val linkingSection = context.linkingSection
 //        if (linkingSection != null) {

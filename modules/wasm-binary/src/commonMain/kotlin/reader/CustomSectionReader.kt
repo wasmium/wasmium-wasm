@@ -19,9 +19,31 @@ import org.wasmium.wasm.binary.tree.NameKind.MODULE
 import org.wasmium.wasm.binary.tree.NameKind.TABLE
 import org.wasmium.wasm.binary.tree.NameKind.TAG
 import org.wasmium.wasm.binary.tree.NameKind.TYPE
-import org.wasmium.wasm.binary.tree.RelocationKind
+import org.wasmium.wasm.binary.tree.RelocationKind.EVENT_INDEX_LEB
+import org.wasmium.wasm.binary.tree.RelocationKind.FUNCTION_INDEX_I32
+import org.wasmium.wasm.binary.tree.RelocationKind.FUNCTION_INDEX_LEB
+import org.wasmium.wasm.binary.tree.RelocationKind.FUNCTION_OFFSET_I32
+import org.wasmium.wasm.binary.tree.RelocationKind.FUNCTION_OFFSET_I64
+import org.wasmium.wasm.binary.tree.RelocationKind.GLOBAL_INDEX_I32
+import org.wasmium.wasm.binary.tree.RelocationKind.GLOBAL_INDEX_LEB
+import org.wasmium.wasm.binary.tree.RelocationKind.MEMORY_ADDRESS_I32
+import org.wasmium.wasm.binary.tree.RelocationKind.MEMORY_ADDRESS_I64
+import org.wasmium.wasm.binary.tree.RelocationKind.MEMORY_ADDRESS_LEB
+import org.wasmium.wasm.binary.tree.RelocationKind.MEMORY_ADDRESS_LEB64
+import org.wasmium.wasm.binary.tree.RelocationKind.MEMORY_ADDRESS_LOCREL_I32
+import org.wasmium.wasm.binary.tree.RelocationKind.MEMORY_ADDRESS_SLEB
+import org.wasmium.wasm.binary.tree.RelocationKind.MEMORY_ADDRESS_SLEB64
+import org.wasmium.wasm.binary.tree.RelocationKind.SECTION_OFFSET_I32
+import org.wasmium.wasm.binary.tree.RelocationKind.TABLE_INDEX_I32
+import org.wasmium.wasm.binary.tree.RelocationKind.TABLE_INDEX_I64
+import org.wasmium.wasm.binary.tree.RelocationKind.TABLE_INDEX_REL_SLEB64
+import org.wasmium.wasm.binary.tree.RelocationKind.TABLE_INDEX_SLEB
+import org.wasmium.wasm.binary.tree.RelocationKind.TABLE_INDEX_SLEB64
+import org.wasmium.wasm.binary.tree.RelocationKind.TABLE_NUMBER_LEB
+import org.wasmium.wasm.binary.tree.RelocationKind.TYPE_INDEX_LEB
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.SectionName
+import org.wasmium.wasm.binary.tree.sections.RelocationType
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 public class CustomSectionReader(
@@ -312,38 +334,63 @@ public class CustomSectionReader(
     }
 
     private fun readRelocationSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
-        val sectionKind: SectionKind = source.readSectionKind()
+        if (!context.options.features.isLinkingEnabled) {
+            throw ParserException("Invalid relocation section: linking not enabled.")
+        }
+
+        val sectionKind = source.readSectionKind()
 
         var sectionName: String? = null
         if (sectionKind == SectionKind.CUSTOM) {
             sectionName = source.readString()
         }
 
-        val numberRelocations = source.readVarUInt32()
+        val numberOfRelocations = source.readVarUInt32()
 
         val relocationVisitor = visitor.visitRelocationSection()
-        relocationVisitor.visitSection(sectionKind, sectionName!!)
-
-        for (relocationIndex in 0u until numberRelocations) {
+        val relocationTypes = mutableListOf<RelocationType>()
+        for (relocationIndex in 0u until numberOfRelocations) {
             val relocationKind = source.readRelocationKind()
 
             when (relocationKind) {
-                RelocationKind.FUNC_INDEX_LEB, RelocationKind.TABLE_INDEX_SLEB, RelocationKind.TABLE_INDEX_I32, RelocationKind.TYPE_INDEX_LEB, RelocationKind.GLOBAL_INDEX_LEB -> {
+                FUNCTION_INDEX_LEB,
+                TABLE_INDEX_SLEB,
+                TABLE_INDEX_I32,
+                TYPE_INDEX_LEB,
+                GLOBAL_INDEX_LEB,
+                EVENT_INDEX_LEB,
+                GLOBAL_INDEX_I32,
+                TABLE_INDEX_SLEB64,
+                TABLE_INDEX_I64,
+                TABLE_NUMBER_LEB,
+                TABLE_INDEX_REL_SLEB64,
+                FUNCTION_INDEX_I32 -> {
                     val offset = source.readIndex()
                     val index = source.readIndex()
 
-                    relocationVisitor.visitRelocation(relocationKind, offset, index, null)
+                    relocationTypes.add(RelocationType(relocationKind, offset, index, addend = null))
                 }
 
-                RelocationKind.MEMORY_ADDRESS_LEB, RelocationKind.MEMORY_ADDRESS_SLEB, RelocationKind.MEMORY_ADDRESS_I32, RelocationKind.FUNCTION_OFFSET_I32, RelocationKind.SECTION_OFFSET_I32 -> {
+                MEMORY_ADDRESS_LEB,
+                MEMORY_ADDRESS_LEB64,
+                MEMORY_ADDRESS_SLEB,
+                MEMORY_ADDRESS_SLEB64,
+                MEMORY_ADDRESS_I32,
+                MEMORY_ADDRESS_I64,
+                MEMORY_ADDRESS_LOCREL_I32,
+                FUNCTION_OFFSET_I32,
+                FUNCTION_OFFSET_I64,
+                SECTION_OFFSET_I32 -> {
                     val offset = source.readIndex()
                     val index = source.readIndex()
-                    val addend: Int = source.readVarInt32()
+                    val addend = source.readVarInt32()
 
-                    relocationVisitor.visitRelocation(relocationKind, offset, index, addend)
+                    relocationTypes.add(RelocationType(relocationKind, offset, index, addend))
                 }
             }
         }
+
+        relocationVisitor.visitRelocation(sectionKind, sectionName, relocationTypes)
 
         relocationVisitor.visitEnd()
     }

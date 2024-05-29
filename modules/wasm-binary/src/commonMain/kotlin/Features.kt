@@ -136,6 +136,8 @@ public class Features {
     /** Fixed-width SIMD proposal enabled. */
     public var isFixedSIMDEnabled: Boolean = false
 
+    public var isLinkingEnabled: Boolean = false
+
     public fun enableAll() {
         isTailCallsEnabled = true
         isExtendedConstantExpressionsEnabled = true
@@ -182,5 +184,6 @@ public class Features {
         isReferenceTypesEnabled = true
         isBulkMemoryEnabled = true
         isFixedSIMDEnabled = true
+        isLinkingEnabled = true
     }
 }

@@ -1,6 +1,5 @@
 package org.wasmium.wasm.binary.tree.sections
 
-import org.wasmium.wasm.binary.tree.RelocationKind
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.SectionName
 import org.wasmium.wasm.binary.visitors.RelocationSectionVisitor
@@ -12,21 +11,16 @@ public class RelocationSectionNode : CustomSectionNode(SectionName.RELOCATION.se
 
     public fun accept(relocationSectionVisitor: RelocationSectionVisitor) {
         for (relocation in relocations) {
-            relocationSectionVisitor.visitSection(kind!!, sectionName!!)
-
-            relocationSectionVisitor.visitRelocation(relocation.relocationKind, relocation.offset, relocation.index, relocation.addend)
+            relocationSectionVisitor.visitRelocation(kind!!, sectionName!!, relocations)
         }
 
         relocationSectionVisitor.visitEnd()
     }
 
-    public override fun visitSection(sectionKind: SectionKind, sectionName: String) {
+    public override fun visitRelocation(sectionKind: SectionKind, sectionName: String?, relocationTypes: List<RelocationType>) {
         this.kind = sectionKind
         this.sectionName = sectionName
-    }
-
-    public override fun visitRelocation(relocationKind: RelocationKind, offset: UInt, index: UInt, addend: Int?) {
-        relocations.add(RelocationType(relocationKind, offset, index, addend))
+        this.relocations.addAll(relocationTypes)
     }
 
     public override fun visitEnd() {
