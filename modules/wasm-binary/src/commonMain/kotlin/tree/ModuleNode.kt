@@ -348,8 +348,8 @@ public class ModuleNode : ModuleVisitor {
         return dataCountSection
     }
 
-    public override fun visitSourceMapSection(sourceMap: String): SourceMapSectionVisitor {
-        val sourceMapSection = SourceMapSectionNode(sourceMap)
+    public override fun visitSourceMapSection(sourceMapUrl: String): SourceMapSectionVisitor {
+        val sourceMapSection = SourceMapSectionNode(sourceMapUrl)
 
         sections.add(sourceMapSection)
 

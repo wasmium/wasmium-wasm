@@ -35,7 +35,7 @@ public interface ModuleVisitor {
 
     public fun visitDataCountSection(dataCount: UInt): DataCountSectionVisitor
 
-    public fun visitSourceMapSection(sourceMap: String): SourceMapSectionVisitor
+    public fun visitSourceMapSection(sourceMapUrl: String): SourceMapSectionVisitor
 
     public fun visitExternalDebugSection(externalDebugUrl: String): ExternalDebugSectionVisitor
 

@@ -96,8 +96,8 @@ public class ModuleWriter(
         return UnknownSectionWriter(context, name, content)
     }
 
-    public override fun visitSourceMapSection(sourceMap: String): SourceMapSectionVisitor {
-        return SourceMapSectionWriter(context, sourceMap)
+    public override fun visitSourceMapSection(sourceMapUrl: String): SourceMapSectionVisitor {
+        return SourceMapSectionWriter(context, sourceMapUrl)
     }
 
     public override fun visitExternalDebugSection(externalDebugUrl: String): ExternalDebugSectionVisitor {

@@ -180,13 +180,13 @@ public class ModuleVerifier(private val delegate: ModuleVisitor? = null, private
         return DataCountSectionVerifier(delegate?.visitDataCountSection(dataCount), context, dataCount)
     }
 
-    override fun visitSourceMapSection(sourceMap: String): SourceMapSectionVisitor {
+    override fun visitSourceMapSection(sourceMapUrl: String): SourceMapSectionVisitor {
         checkStarted()
         checkEnd()
 
         numberOfSections++
 
-        return SourceMapSectionVerifier(delegate?.visitSourceMapSection(sourceMap), context)
+        return SourceMapSectionVerifier(delegate?.visitSourceMapSection(sourceMapUrl), context)
     }
 
     override fun visitExternalDebugSection(externalDebugUrl: String): ExternalDebugSectionVisitor {

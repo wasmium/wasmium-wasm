@@ -36,7 +36,7 @@ public open class ModuleAdapter(protected val delegate: ModuleVisitor? = null) :
 
     override fun visitDataCountSection(dataCount: UInt): DataCountSectionVisitor = DataCountSectionAdapter(delegate?.visitDataCountSection(dataCount))
 
-    override fun visitSourceMapSection(sourceMap: String): SourceMapSectionVisitor = SourceMapSectionAdapter(delegate?.visitSourceMapSection(sourceMap))
+    override fun visitSourceMapSection(sourceMapUrl: String): SourceMapSectionVisitor = SourceMapSectionAdapter(delegate?.visitSourceMapSection(sourceMapUrl))
 
     override fun visitExternalDebugSection(externalDebugUrl: String): ExternalDebugSectionVisitor = ExternalDebugSectionAdapter(delegate?.visitExternalDebugSection(externalDebugUrl))
 
