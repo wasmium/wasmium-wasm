@@ -1,6 +1,7 @@
 package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.tree.FunctionType
+import org.wasmium.wasm.binary.tree.SectionKind
 
 public class ReaderContext(
     public val options: ReaderOptions,
@@ -59,4 +60,6 @@ public class ReaderContext(
     public val functionTypes: MutableList<FunctionType> = mutableListOf()
 
     public val messages: MutableList<String> = mutableListOf()
+
+    public var lastSection: SectionKind? = null
 }

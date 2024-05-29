@@ -43,7 +43,7 @@ public class ModuleReader(
         readHeader(source, visitor)
 
         var numberOfSections = 0u
-        var lastSection: SectionKind? = null
+
         while (!source.exhausted()) {
             if (numberOfSections > WasmBinary.MAX_SECTIONS) {
                 throw ParserException("Sections size of $numberOfSections exceed the maximum of ${WasmBinary.MAX_SECTIONS}")
@@ -53,13 +53,13 @@ public class ModuleReader(
             val section = source.readSectionKind()
             if (section != CUSTOM) {
                 // not consider CUSTOM section for ordering
-                if (lastSection != null) {
-                    if (section.ordinal < lastSection.ordinal) {
-                        throw ParserException("Invalid section order of ${lastSection.name} followed by ${section.name}")
+                if (context.lastSection != null) {
+                    if (section.ordinal < context.lastSection!!.ordinal) {
+                        throw ParserException("Invalid section order of ${context.lastSection!!.name} followed by ${section.name}")
                     }
                 }
 
-                lastSection = section
+                context.lastSection = section
             }
 
             val payloadSize = source.readVarUInt32()

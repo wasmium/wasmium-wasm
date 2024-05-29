@@ -340,6 +340,10 @@ public class CustomSectionReader(
 
         val sectionKind = source.readSectionKind()
 
+        if(context.lastSection != null && context.lastSection!! != sectionKind){
+            throw ParserException("Custom relocation section must be sequenced after the section $sectionKind and is after ${context.lastSection}")
+        }
+
         var sectionName: String? = null
         if (sectionKind == SectionKind.CUSTOM) {
             sectionName = source.readString()
