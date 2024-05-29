@@ -38,6 +38,8 @@ public open class ModuleAdapter(protected val delegate: ModuleVisitor? = null) :
 
     override fun visitSourceMapSection(sourceMap: String): SourceMapSectionVisitor = SourceMapSectionAdapter(delegate?.visitSourceMapSection(sourceMap))
 
+    override fun visitExternalDebugSection(externalDebugUrl: String): ExternalDebugSectionVisitor = ExternalDebugSectionAdapter(delegate?.visitExternalDebugSection(externalDebugUrl))
+
     override fun visitTagSection(): TagSectionVisitor = TagSectionAdapter(delegate?.visitTagSection())
 
     override fun visitEnd(): Unit = delegate?.visitEnd() ?: Unit

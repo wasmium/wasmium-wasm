@@ -24,6 +24,7 @@ import org.wasmium.wasm.binary.tree.sections.DataCountSectionNode
 import org.wasmium.wasm.binary.tree.sections.DataSectionNode
 import org.wasmium.wasm.binary.tree.sections.ElementSectionNode
 import org.wasmium.wasm.binary.tree.sections.ExportSectionNode
+import org.wasmium.wasm.binary.tree.sections.ExternalDebugSectionNode
 import org.wasmium.wasm.binary.tree.sections.FunctionSectionNode
 import org.wasmium.wasm.binary.tree.sections.GlobalSectionNode
 import org.wasmium.wasm.binary.tree.sections.ImportSectionNode
@@ -43,6 +44,7 @@ import org.wasmium.wasm.binary.visitors.DataCountSectionVisitor
 import org.wasmium.wasm.binary.visitors.DataSectionVisitor
 import org.wasmium.wasm.binary.visitors.ElementSectionVisitor
 import org.wasmium.wasm.binary.visitors.ExportSectionVisitor
+import org.wasmium.wasm.binary.visitors.ExternalDebugSectionVisitor
 import org.wasmium.wasm.binary.visitors.FunctionSectionVisitor
 import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
@@ -352,6 +354,14 @@ public class ModuleNode : ModuleVisitor {
         sections.add(sourceMapSection)
 
         return sourceMapSection
+    }
+
+    public override fun visitExternalDebugSection(externalDebugUrl: String): ExternalDebugSectionVisitor {
+        val externalDebugSection = ExternalDebugSectionNode(externalDebugUrl)
+
+        sections.add(externalDebugSection)
+
+        return externalDebugSection
     }
 
     public override fun visitEnd() {

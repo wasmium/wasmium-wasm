@@ -7,6 +7,7 @@ import org.wasmium.wasm.binary.visitors.DataCountSectionVisitor
 import org.wasmium.wasm.binary.visitors.DataSectionVisitor
 import org.wasmium.wasm.binary.visitors.ElementSectionVisitor
 import org.wasmium.wasm.binary.visitors.ExportSectionVisitor
+import org.wasmium.wasm.binary.visitors.ExternalDebugSectionVisitor
 import org.wasmium.wasm.binary.visitors.FunctionSectionVisitor
 import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
@@ -97,6 +98,10 @@ public class ModuleWriter(
 
     public override fun visitSourceMapSection(sourceMap: String): SourceMapSectionVisitor {
         return SourceMapSectionWriter(context, sourceMap)
+    }
+
+    public override fun visitExternalDebugSection(externalDebugUrl: String): ExternalDebugSectionVisitor {
+        return ExternalDebugSectionWriter(context, externalDebugUrl)
     }
 
     override fun visitTagSection(): TagSectionVisitor {

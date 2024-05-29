@@ -6,6 +6,7 @@ import org.wasmium.wasm.binary.visitors.DataCountSectionVisitor
 import org.wasmium.wasm.binary.visitors.DataSectionVisitor
 import org.wasmium.wasm.binary.visitors.ElementSectionVisitor
 import org.wasmium.wasm.binary.visitors.ExportSectionVisitor
+import org.wasmium.wasm.binary.visitors.ExternalDebugSectionVisitor
 import org.wasmium.wasm.binary.visitors.FunctionSectionVisitor
 import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
 import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
@@ -186,6 +187,15 @@ public class ModuleVerifier(private val delegate: ModuleVisitor? = null, private
         numberOfSections++
 
         return SourceMapSectionVerifier(delegate?.visitSourceMapSection(sourceMap), context)
+    }
+
+    override fun visitExternalDebugSection(externalDebugUrl: String): ExternalDebugSectionVisitor {
+        checkStarted()
+        checkEnd()
+
+        numberOfSections++
+
+        return ExternalDebugSectionVerifier(delegate?.visitExternalDebugSection(externalDebugUrl), context)
     }
 
     override fun visitTagSection(): TagSectionVisitor {

@@ -37,6 +37,8 @@ public interface ModuleVisitor {
 
     public fun visitSourceMapSection(sourceMap: String): SourceMapSectionVisitor
 
+    public fun visitExternalDebugSection(externalDebugUrl: String): ExternalDebugSectionVisitor
+
     public fun visitTagSection(): TagSectionVisitor
 
     public fun visitEnd(): Unit

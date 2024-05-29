@@ -77,6 +77,10 @@ public class CustomSectionReader(
                 readSourceMapSection(source, visitor)
             }
 
+            sectionName == SectionName.EXTERNAL_DEBUG_INFO.sectionName -> {
+                readExternalDebugSection(source, visitor)
+            }
+
             else -> {
                 readUnknownSection(source, visitor, sectionName, startPosition, sectionPayloadSize)
             }
@@ -92,9 +96,15 @@ public class CustomSectionReader(
     }
 
     private fun readSourceMapSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
-        val sourceMapURL = source.readString()
+        val sourceMapUrl = source.readString()
 
-        visitor.visitSourceMapSection(sourceMapURL)
+        visitor.visitSourceMapSection(sourceMapUrl)
+    }
+
+    private fun readExternalDebugSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
+        val debugInfoUrl = source.readString()
+
+        visitor.visitExternalDebugSection(debugInfoUrl)
     }
 
     private fun readNamesSection(source: WasmBinaryReader, startIndex: UInt, sectionPayloadSize: UInt, visitor: ModuleVisitor) {
