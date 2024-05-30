@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalUnsignedTypes::class)
-
 package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.ParserException
@@ -69,9 +67,8 @@ import org.wasmium.wasm.binary.visitors.ExpressionVisitor
 import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
-public class ModuleReader(
-    private val options: ReaderOptions,
-) {
+@OptIn(ExperimentalUnsignedTypes::class)
+public class ModuleReader(private val options: ReaderOptions) {
     private val context = ReaderContext(options)
 
     public fun readModule(source: WasmBinaryReader, visitor: ModuleVisitor): ReaderResult {
@@ -175,7 +172,7 @@ public class ModuleReader(
         context.numberOfTypes = source.readVarUInt32()
 
         val typeVisitor = visitor.visitTypeSection()
-        for (typeIndex in 0u until context.numberOfTypes) {
+        (0u until context.numberOfTypes).forEach { _ ->
             val functionType = source.readFunctionType()
 
             context.functionTypes.add(functionType)
@@ -194,7 +191,7 @@ public class ModuleReader(
         val numberOfTagTypes = source.readVarUInt32()
 
         val tagSectionVisitor = visitor.visitTagSection()
-        for (index in 0u until numberOfTagTypes) {
+        (0u until numberOfTagTypes).forEach { _ ->
             val tagType = source.readTagType()
 
             tagSectionVisitor.visitTag(tagType)
@@ -206,7 +203,7 @@ public class ModuleReader(
         context.numberOfTables = source.readVarUInt32()
 
         val tableVisitor = visitor.visitTableSection()
-        for (index in 0u until context.numberOfTables) {
+        (0u until context.numberOfTables).forEach { _ ->
             val tableType = source.readTableType()
 
             tableVisitor.visitTable(tableType)
@@ -227,7 +224,7 @@ public class ModuleReader(
 
         if (context.numberOfMemories > 0u) {
             val memoryVisitor = visitor.visitMemorySection()
-            for (index in 0u until context.numberOfMemories) {
+            (0u until context.numberOfMemories).forEach { _ ->
                 val memoryType = source.readMemoryType()
 
                 memoryVisitor.visitMemory(memoryType)
@@ -241,7 +238,7 @@ public class ModuleReader(
         context.numberOfImports = source.readVarUInt32()
 
         val importVisitor = visitor.visitImportSection()
-        for (importIndex in 0u until context.numberOfImports) {
+        (0u until context.numberOfImports).forEach { _ ->
             val moduleName = source.readString()
             val fieldName = source.readString()
 
@@ -310,7 +307,7 @@ public class ModuleReader(
         context.numberOfGlobals = source.readVarUInt32()
 
         val globalVisitor = visitor.visitGlobalSection()
-        for (index in 0u until context.numberOfGlobals) {
+        (0u until context.numberOfGlobals).forEach { _ ->
             readGlobalVariable(source, globalVisitor)
         }
 
@@ -321,7 +318,7 @@ public class ModuleReader(
         context.numberOfFunctions = source.readVarUInt32()
 
         val functionVisitor = visitor.visitFunctionSection()
-        for (index in 0u until context.numberOfFunctions) {
+        (0u until context.numberOfFunctions).forEach { _ ->
             val typeIndex = source.readIndex()
 
             val functionType = context.functionTypes.getOrElse(typeIndex.toInt()) {
@@ -339,7 +336,7 @@ public class ModuleReader(
 
         val exportVisitor = visitor.visitExportSection()
         val names = mutableSetOf<String>()
-        for (exportIndex in 0u until context.numberOfExports) {
+        (0u until context.numberOfExports).forEach { _ ->
             val name = source.readString()
             if (!names.add(name)) {
                 throw ParserException("Duplicate export name $name")
@@ -418,7 +415,7 @@ public class ModuleReader(
 
             val numberOfFunctionIndexes = source.readVarUInt32()
             val elementIndices = mutableListOf<UInt>()
-            for (segmentFunctionIndex in 0u until numberOfFunctionIndexes) {
+            (0u until numberOfFunctionIndexes).forEach { _ ->
                 elementIndices.add(source.readIndex())
             }
             elementSegmentVisitor.visitElementIndices(elementIndices)
@@ -439,7 +436,7 @@ public class ModuleReader(
         }
 
         val elementVisitor = visitor.visitElementSection()
-        for (index in 0u until numberOfElementSegments) {
+        (0u until numberOfElementSegments).forEach { _ ->
             readElementSegment(source, elementVisitor)
         }
         elementVisitor.visitEnd()
@@ -474,7 +471,7 @@ public class ModuleReader(
         val dataSegmentCount = source.readVarUInt32()
 
         val dataVisitor = visitor.visitDataSection()
-        for (segment in 0u until dataSegmentCount) {
+        (0u until dataSegmentCount).forEach { _ ->
             readDataSegment(source, dataVisitor)
         }
 
@@ -691,7 +688,7 @@ public class ModuleReader(
                 LinkingKind.SYMBOL_TABLE -> {
                     val symbolCount = source.readVarUInt32()
 
-                    for (symbolIndex in 0u until symbolCount) {
+                    (0u until symbolCount).forEach { _ ->
                         val symbolType = source.readLinkingSymbolType()
                         val flags = source.readUInt32()
 
@@ -740,7 +737,7 @@ public class ModuleReader(
                 LinkingKind.SEGMENT_INFO -> {
                     val segmentCount = source.readVarUInt32()
 
-                    for (index in 0u until segmentCount) {
+                    (0u until segmentCount).forEach { _ ->
                         val name = source.readString()
                         val alignment = source.readVarUInt32()
                         val flags = source.readUInt32()
@@ -779,10 +776,8 @@ public class ModuleReader(
 
         val relocationVisitor = visitor.visitRelocationSection()
         val relocationTypes = mutableListOf<RelocationType>()
-        for (relocationIndex in 0u until numberOfRelocations) {
-            val relocationKind = source.readRelocationKind()
-
-            when (relocationKind) {
+        (0u until numberOfRelocations).forEach { _ ->
+            when (val relocationKind = source.readRelocationKind()) {
                 FUNCTION_INDEX_LEB,
                 TABLE_INDEX_SLEB,
                 TABLE_INDEX_I32,
@@ -830,7 +825,7 @@ public class ModuleReader(
 
         val codeVisitor = visitor.visitCodeSection()
 
-        for (index in 0u until numberOfCodes) {
+        (0u until numberOfCodes).forEach { _ ->
             val bodySize = source.readVarUInt32()
             if (bodySize == 0u) {
                 throw ParserException("Empty function size")
@@ -845,7 +840,7 @@ public class ModuleReader(
             val locals = mutableListOf<LocalVariable>()
             val numberOfLocals = source.readVarUInt32()
 
-            for (localIndex in 0u until numberOfLocals) {
+            (0u until numberOfLocals).forEach { _ ->
                 val numberOfLocalTypes = source.readVarUInt32()
 
                 val localType = source.readType()
@@ -967,7 +962,7 @@ public class ModuleReader(
                     val numberTargets = source.readVarUInt32()
                     val targets = mutableListOf<UInt>()
 
-                    for (targetIndex in 0u until numberTargets) {
+                    (0u until numberTargets).forEach { _ ->
                         val depth = source.readIndex()
 
                         targets.add(depth)
@@ -1910,7 +1905,7 @@ public class ModuleReader(
                     val numberOfCatches = source.readVarUInt32()
 
                     val handlers = mutableListOf<TryCatchArgument>()
-                    for (handler in 0u until numberOfCatches) {
+                    (0u until numberOfCatches).forEach { _ ->
                         when (source.readUInt8()) {
                             TryCatchKind.CATCH.kindId -> {
                                 val tagIndex = source.readVarUInt32()
