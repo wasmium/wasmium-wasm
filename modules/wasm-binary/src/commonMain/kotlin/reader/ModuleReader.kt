@@ -68,7 +68,7 @@ import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
 import org.wasmium.wasm.binary.visitors.ModuleVisitor
 
 @OptIn(ExperimentalUnsignedTypes::class)
-public class ModuleReader(private val options: ReaderOptions) {
+public class ModuleReader(options: ReaderOptions) {
     private val context = ReaderContext(options)
 
     public fun readModule(source: WasmBinaryReader, visitor: ModuleVisitor): ReaderResult {
@@ -168,7 +168,7 @@ public class ModuleReader(private val options: ReaderOptions) {
         visitor.visitHeader(version)
     }
 
-    public fun readTypeSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
+    private fun readTypeSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         context.numberOfTypes = source.readVarUInt32()
 
         val typeVisitor = visitor.visitTypeSection()
@@ -183,7 +183,7 @@ public class ModuleReader(private val options: ReaderOptions) {
         typeVisitor.visitEnd()
     }
 
-    public fun readTagSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
+    private fun readTagSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         if (context.options.features.isExceptionHandlingEnabled) {
             throw ParserException("Tag section is not enabled")
         }
@@ -199,7 +199,7 @@ public class ModuleReader(private val options: ReaderOptions) {
         tagSectionVisitor.visitEnd()
     }
 
-    public fun readTableSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
+    private fun readTableSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         context.numberOfTables = source.readVarUInt32()
 
         val tableVisitor = visitor.visitTableSection()
@@ -212,14 +212,14 @@ public class ModuleReader(private val options: ReaderOptions) {
         tableVisitor.visitEnd()
     }
 
-    public fun readStartSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
+    private fun readStartSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         val functionIndex = source.readIndex()
 
         val startSection = visitor.visitStartSection(functionIndex)
         startSection.visitEnd()
     }
 
-    public fun readMemorySection(source: WasmBinaryReader, visitor: ModuleVisitor) {
+    private fun readMemorySection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         context.numberOfMemories = source.readVarUInt32()
 
         if (context.numberOfMemories > 0u) {
@@ -234,7 +234,7 @@ public class ModuleReader(private val options: ReaderOptions) {
         }
     }
 
-    public fun readImportSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
+    private fun readImportSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         context.numberOfImports = source.readVarUInt32()
 
         val importVisitor = visitor.visitImportSection()
@@ -295,7 +295,7 @@ public class ModuleReader(private val options: ReaderOptions) {
         importVisitor.visitEnd()
     }
 
-    public fun readGlobalVariable(source: WasmBinaryReader, globalVisitor: GlobalSectionVisitor) {
+    private fun readGlobalVariable(source: WasmBinaryReader, globalVisitor: GlobalSectionVisitor) {
         val globalType = source.readGlobalType()
         val expressionVisitor = globalVisitor.visitGlobalVariable(globalType)
 
@@ -303,7 +303,7 @@ public class ModuleReader(private val options: ReaderOptions) {
         expressionVisitor.visitEnd()
     }
 
-    public fun readGlobalSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
+    private fun readGlobalSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         context.numberOfGlobals = source.readVarUInt32()
 
         val globalVisitor = visitor.visitGlobalSection()
@@ -314,7 +314,7 @@ public class ModuleReader(private val options: ReaderOptions) {
         globalVisitor.visitEnd()
     }
 
-    public fun readFunctionSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
+    private fun readFunctionSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         context.numberOfFunctions = source.readVarUInt32()
 
         val functionVisitor = visitor.visitFunctionSection()
@@ -331,7 +331,7 @@ public class ModuleReader(private val options: ReaderOptions) {
         functionVisitor.visitEnd()
     }
 
-    public fun readExportSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
+    private fun readExportSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         context.numberOfExports = source.readVarUInt32()
 
         val exportVisitor = visitor.visitExportSection()
@@ -369,7 +369,7 @@ public class ModuleReader(private val options: ReaderOptions) {
         exportVisitor.visitEnd()
     }
 
-    public fun readElementSegment(source: WasmBinaryReader, elementVisitor: ElementSectionVisitor) {
+    private fun readElementSegment(source: WasmBinaryReader, elementVisitor: ElementSectionVisitor) {
         val startIndex = source.position
 
         val elementSegmentVisitor = elementVisitor.visitElementSegment()
@@ -428,7 +428,7 @@ public class ModuleReader(private val options: ReaderOptions) {
         elementSegmentVisitor.visitEnd()
     }
 
-    public fun readElementSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
+    private fun readElementSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         val numberOfElementSegments = source.readVarUInt32()
 
         if (numberOfElementSegments != 0u && context.numberOfTotalTables <= 0u) {
@@ -442,7 +442,7 @@ public class ModuleReader(private val options: ReaderOptions) {
         elementVisitor.visitEnd()
     }
 
-    public fun readDataSegment(source: WasmBinaryReader, dataVisitor: DataSectionVisitor) {
+    private fun readDataSegment(source: WasmBinaryReader, dataVisitor: DataSectionVisitor) {
         val startIndex = source.position
 
         val dataSegmentVisitor = dataVisitor.visitDataSegment()
@@ -467,7 +467,7 @@ public class ModuleReader(private val options: ReaderOptions) {
         dataSegmentVisitor.visitEnd()
     }
 
-    public fun readDataSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
+    private fun readDataSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         val dataSegmentCount = source.readVarUInt32()
 
         val dataVisitor = visitor.visitDataSection()
@@ -478,14 +478,14 @@ public class ModuleReader(private val options: ReaderOptions) {
         dataVisitor.visitEnd()
     }
 
-    public fun readDataCountSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
+    private fun readDataCountSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         val dataCount = source.readVarUInt32()
 
         val dataCountSectionVisitor = visitor.visitDataCountSection(dataCount)
         dataCountSectionVisitor.visitEnd()
     }
 
-    public fun readCustomSection(source: WasmBinaryReader, payloadSize: UInt, visitor: ModuleVisitor) {
+    private fun readCustomSection(source: WasmBinaryReader, payloadSize: UInt, visitor: ModuleVisitor) {
         val startPosition = source.position
 
         val sectionName = source.readString()
@@ -820,7 +820,7 @@ public class ModuleReader(private val options: ReaderOptions) {
         relocationVisitor.visitEnd()
     }
 
-    public fun readCodeSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
+    private fun readCodeSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
         val numberOfCodes = source.readVarUInt32()
 
         val codeVisitor = visitor.visitCodeSection()
@@ -863,20 +863,11 @@ public class ModuleReader(private val options: ReaderOptions) {
         codeVisitor.visitEnd()
     }
 
-    private enum class DataUse {
-        NO_USE,
-        USES_DATA,
-        ;
-
-        fun or(other: DataUse): DataUse = if (this == USES_DATA) this else other
-    }
-
-    public fun readExpression(source: WasmBinaryReader, expressionVisitor: ExpressionVisitor) {
+    private fun readExpression(source: WasmBinaryReader, expressionVisitor: ExpressionVisitor) {
         var blockDepth = 1u
 
         while (true) {
-            val opcode = source.readOpcode()
-            when (opcode) {
+            when (val opcode = source.readOpcode()) {
                 UNREACHABLE -> {
                     expressionVisitor.visitUnreachableInstruction()
                 }
