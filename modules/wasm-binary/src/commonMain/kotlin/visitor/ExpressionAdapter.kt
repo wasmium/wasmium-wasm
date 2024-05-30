@@ -166,7 +166,7 @@ public open class ExpressionAdapter(protected val delegate: ExpressionVisitor? =
         delegate?.visitCallInstruction(functionIndex)
     }
 
-    override fun visitCallIndirectInstruction(typeIndex: UInt, reserved: Boolean) {
+    override fun visitCallIndirectInstruction(typeIndex: UInt, reserved: UInt) {
         delegate?.visitCallIndirectInstruction(typeIndex, reserved)
     }
 
@@ -198,11 +198,11 @@ public open class ExpressionAdapter(protected val delegate: ExpressionVisitor? =
         delegate?.visitSetGlobalInstruction(globalIndex)
     }
 
-    override fun visitMemorySizeInstruction(reserved: Boolean) {
+    override fun visitMemorySizeInstruction(reserved: UInt) {
         delegate?.visitMemorySizeInstruction(reserved)
     }
 
-    override fun visitMemoryGrowInstruction(reserved: Boolean) {
+    override fun visitMemoryGrowInstruction(reserved: UInt) {
         delegate?.visitMemoryGrowInstruction(reserved)
     }
 
@@ -510,7 +510,7 @@ public open class ExpressionAdapter(protected val delegate: ExpressionVisitor? =
         delegate?.visitElementDropInstruction(segmentIndex)
     }
 
-    override fun visitAtomicFenceInstruction(reserved: Boolean) {
+    override fun visitAtomicFenceInstruction(reserved: UInt) {
         delegate?.visitAtomicFenceInstruction(reserved)
     }
 

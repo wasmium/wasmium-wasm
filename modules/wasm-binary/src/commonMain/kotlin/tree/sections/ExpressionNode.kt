@@ -178,7 +178,7 @@ public class ExpressionNode : ExpressionVisitor {
         instructions.add(CallInstruction(functionIndex))
     }
 
-    public override fun visitCallIndirectInstruction(typeIndex: UInt, reserved: Boolean) {
+    public override fun visitCallIndirectInstruction(typeIndex: UInt, reserved: UInt) {
         instructions.add(CallIndirectInstruction(typeIndex, reserved))
     }
 
@@ -210,11 +210,11 @@ public class ExpressionNode : ExpressionVisitor {
         instructions.add(SetGlobalInstruction(globalIndex))
     }
 
-    public override fun visitMemorySizeInstruction(reserved: Boolean) {
+    public override fun visitMemorySizeInstruction(reserved: UInt) {
         instructions.add(CurrentMemoryInstruction(reserved))
     }
 
-    public override fun visitMemoryGrowInstruction(reserved: Boolean) {
+    public override fun visitMemoryGrowInstruction(reserved: UInt) {
         instructions.add(GrowMemoryInstruction(reserved))
     }
 
@@ -518,7 +518,7 @@ public class ExpressionNode : ExpressionVisitor {
         instructions.add(ElementDropInstruction(segmentIndex))
     }
 
-    override fun visitAtomicFenceInstruction(reserved: Boolean) {
+    override fun visitAtomicFenceInstruction(reserved: UInt) {
         instructions.add(AtomicFenceInstruction(reserved))
     }
 

@@ -638,7 +638,7 @@ public class ExpressionValidator(
         delegate?.visitCallInstruction(functionIndex)
     }
 
-    override fun visitCallIndirectInstruction(typeIndex: UInt, reserved: Boolean) {
+    override fun visitCallIndirectInstruction(typeIndex: UInt, reserved: UInt) {
         val tableType = context.tables.getOrElse(0){
             throw ValidatorException("Invalid table index: 0")
         }
@@ -730,13 +730,13 @@ public class ExpressionValidator(
         delegate?.visitGetLocalInstruction(localIndex)
     }
 
-    override fun visitMemorySizeInstruction(reserved: Boolean) {
+    override fun visitMemorySizeInstruction(reserved: UInt) {
         pushValue(I32)
 
         delegate?.visitMemorySizeInstruction(reserved)
     }
 
-    override fun visitMemoryGrowInstruction(reserved: Boolean) {
+    override fun visitMemoryGrowInstruction(reserved: UInt) {
         popValue(I32)
         pushValue(I32)
 
@@ -1740,7 +1740,7 @@ public class ExpressionValidator(
         delegate?.visitElementDropInstruction(segmentIndex)
     }
 
-    override fun visitAtomicFenceInstruction(reserved: Boolean) {
+    override fun visitAtomicFenceInstruction(reserved: UInt) {
         TODO()
         delegate?.visitAtomicFenceInstruction(reserved)
     }

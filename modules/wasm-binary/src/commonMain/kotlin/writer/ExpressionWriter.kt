@@ -242,10 +242,10 @@ public class ExpressionWriter(
         writeIndex(functionIndex)
     }
 
-    override fun visitCallIndirectInstruction(typeIndex: UInt, reserved: Boolean): Unit = writer.run {
+    override fun visitCallIndirectInstruction(typeIndex: UInt, reserved: UInt): Unit = writer.run {
         writeOpcode(Opcode.CALL_INDIRECT)
         writeIndex(typeIndex)
-        writeVarUInt32(0u)
+        writeVarUInt32(reserved)
     }
 
     override fun visitDropInstruction() {
@@ -281,14 +281,14 @@ public class ExpressionWriter(
         writeIndex(globalIndex)
     }
 
-    override fun visitMemorySizeInstruction(reserved: Boolean): Unit = writer.run {
+    override fun visitMemorySizeInstruction(reserved: UInt): Unit = writer.run {
         writeOpcode(Opcode.MEMORY_SIZE)
-        writeVarUInt1(0u)
+        writeVarUInt1(reserved)
     }
 
-    override fun visitMemoryGrowInstruction(reserved: Boolean): Unit = writer.run {
+    override fun visitMemoryGrowInstruction(reserved: UInt): Unit = writer.run {
         writeOpcode(Opcode.MEMORY_GROW)
-        writeVarUInt1(0u)
+        writeVarUInt1(reserved)
     }
 
     override fun visitEqualZeroInstruction(opcode: Opcode) {
@@ -628,9 +628,9 @@ public class ExpressionWriter(
         writeVarUInt32(segmentIndex)
     }
 
-    override fun visitAtomicFenceInstruction(reserved: Boolean): Unit = writer.run {
+    override fun visitAtomicFenceInstruction(reserved: UInt): Unit = writer.run {
         writeOpcode(Opcode.ATOMIC_FENCE)
-        writeVarUInt32(0u)
+        writeVarUInt32(reserved)
     }
 
     override fun visitReferenceEqualInstruction() {

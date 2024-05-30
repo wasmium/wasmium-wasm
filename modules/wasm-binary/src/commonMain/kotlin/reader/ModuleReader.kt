@@ -976,13 +976,9 @@ public class ModuleReader(options: ReaderOptions) {
 
                 CALL_INDIRECT -> {
                     val typeIndex = source.readIndex()
-
                     val reserved = source.readVarUInt32()
-                    if (reserved != 0u) {
-                        throw ParserException("Call_indirect reserved value must be 0")
-                    }
 
-                    expressionVisitor.visitCallIndirectInstruction(typeIndex, reserved = false)
+                    expressionVisitor.visitCallIndirectInstruction(typeIndex, reserved)
                 }
 
                 DROP -> {
@@ -1060,20 +1056,14 @@ public class ModuleReader(options: ReaderOptions) {
 
                 MEMORY_SIZE -> {
                     val reserved = source.readVarUInt1()
-                    if (reserved != 0u) {
-                        throw ParserException("$opcode reserved value must be 0")
-                    }
 
-                    expressionVisitor.visitMemorySizeInstruction(reserved = false)
+                    expressionVisitor.visitMemorySizeInstruction(reserved)
                 }
 
                 MEMORY_GROW -> {
                     val reserved = source.readVarUInt1()
-                    if (reserved != 0u) {
-                        throw ParserException("$opcode reserved value must be 0")
-                    }
 
-                    expressionVisitor.visitMemoryGrowInstruction(reserved = false)
+                    expressionVisitor.visitMemoryGrowInstruction(reserved)
                 }
 
                 I32_CONST -> {
@@ -1971,11 +1961,8 @@ public class ModuleReader(options: ReaderOptions) {
 
                 ATOMIC_FENCE -> {
                     val reserved = source.readVarUInt32()
-                    if (reserved != 0u) {
-                        throw ParserException("$opcode reserved value must be 0")
-                    }
 
-                    expressionVisitor.visitAtomicFenceInstruction(reserved = false)
+                    expressionVisitor.visitAtomicFenceInstruction(reserved)
                 }
             }
         }

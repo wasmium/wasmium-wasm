@@ -88,7 +88,7 @@ public interface ExpressionVisitor {
 
     public fun visitCallInstruction(functionIndex: UInt)
 
-    public fun visitCallIndirectInstruction(typeIndex: UInt, reserved: Boolean)
+    public fun visitCallIndirectInstruction(typeIndex: UInt, reserved: UInt)
 
     public fun visitDropInstruction()
 
@@ -104,9 +104,9 @@ public interface ExpressionVisitor {
 
     public fun visitSetGlobalInstruction(globalIndex: UInt)
 
-    public fun visitMemorySizeInstruction(reserved: Boolean)
+    public fun visitMemorySizeInstruction(reserved: UInt)
 
-    public fun visitMemoryGrowInstruction(reserved: Boolean)
+    public fun visitMemoryGrowInstruction(reserved: UInt)
 
     public fun visitEqualZeroInstruction(opcode: Opcode)
 
@@ -260,7 +260,7 @@ public interface ExpressionVisitor {
 
     public fun visitElementDropInstruction(segmentIndex: UInt)
 
-    public fun visitAtomicFenceInstruction(reserved: Boolean)
+    public fun visitAtomicFenceInstruction(reserved: UInt)
 
     public fun visitReferenceEqualInstruction()
 

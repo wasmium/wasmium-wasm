@@ -614,15 +614,15 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
         delegate?.visitCallInstruction(functionIndex)
     }
 
-    override fun visitCallIndirectInstruction(typeIndex: UInt, reserved: Boolean) {
+    override fun visitCallIndirectInstruction(typeIndex: UInt, reserved: UInt) {
         checkEnd()
 
         if (typeIndex >= context.numberOfTypes) {
             throw ParserException("Invalid call_indirect signature index")
         }
 
-        if (reserved) {
-            throw VerifierException("Invalid reserved value $reserved")
+        if (reserved != 0u) {
+            throw VerifierException("Invalid reserved value of $reserved for call_indirect, expected 0.")
         }
 
         numberOfInstructions++
@@ -694,11 +694,11 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
         delegate?.visitSetGlobalInstruction(globalIndex)
     }
 
-    override fun visitMemorySizeInstruction(reserved: Boolean) {
+    override fun visitMemorySizeInstruction(reserved: UInt) {
         checkEnd()
 
-        if (reserved) {
-            throw VerifierException("Invalid reserved value $reserved")
+        if (reserved != 0u) {
+            throw VerifierException("Invalid reserved value of $reserved, expected 0.")
         }
 
         numberOfInstructions++
@@ -706,11 +706,11 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
         delegate?.visitMemorySizeInstruction(reserved)
     }
 
-    override fun visitMemoryGrowInstruction(reserved: Boolean) {
+    override fun visitMemoryGrowInstruction(reserved: UInt) {
         checkEnd()
 
-        if (reserved) {
-            throw VerifierException("Invalid reserved value $reserved")
+        if (reserved != 0u) {
+            throw VerifierException("Invalid reserved value of $reserved, expected 0.")
         }
 
         numberOfInstructions++
@@ -2379,15 +2379,15 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
         delegate?.visitElementDropInstruction(segmentIndex)
     }
 
-    override fun visitAtomicFenceInstruction(reserved: Boolean) {
+    override fun visitAtomicFenceInstruction(reserved: UInt) {
         checkEnd()
 
         if (!context.options.features.isThreadsEnabled) {
             throw ParserException("Invalid atomic.fence code: threads not enabled.")
         }
 
-        if (reserved) {
-            throw VerifierException("Invalid reserved value $reserved")
+        if (reserved != 0u) {
+            throw VerifierException("Invalid reserved value of $reserved for atomic.fence, expected 0.")
         }
 
         numberOfInstructions++

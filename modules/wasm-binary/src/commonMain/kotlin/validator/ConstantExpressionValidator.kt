@@ -175,7 +175,7 @@ public class ConstantExpressionValidator(private val delegate: ExpressionVisitor
         notConstant()
     }
 
-    override fun visitCallIndirectInstruction(typeIndex: UInt, reserved: Boolean) {
+    override fun visitCallIndirectInstruction(typeIndex: UInt, reserved: UInt) {
         notConstant()
     }
 
@@ -213,11 +213,11 @@ public class ConstantExpressionValidator(private val delegate: ExpressionVisitor
         notConstant()
     }
 
-    override fun visitMemorySizeInstruction(reserved: Boolean) {
+    override fun visitMemorySizeInstruction(reserved: UInt) {
         notConstant()
     }
 
-    override fun visitMemoryGrowInstruction(reserved: Boolean) {
+    override fun visitMemoryGrowInstruction(reserved: UInt) {
         notConstant()
     }
 
@@ -525,7 +525,7 @@ public class ConstantExpressionValidator(private val delegate: ExpressionVisitor
         notConstant()
     }
 
-    override fun visitAtomicFenceInstruction(reserved: Boolean) {
+    override fun visitAtomicFenceInstruction(reserved: UInt) {
         notConstant()
     }
 
