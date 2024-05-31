@@ -646,6 +646,14 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
         delegate?.visitSelectInstruction()
     }
 
+    override fun visitSelectTypedInstruction(types: List<WasmType>) {
+        checkEnd()
+
+        numberOfInstructions++
+
+        delegate?.visitSelectTypedInstruction(types)
+    }
+
     override fun visitGetGlobalInstruction(globalIndex: UInt) {
         checkEnd()
 
@@ -2331,7 +2339,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
         delegate?.visitTableSizeInstruction(tableIndex)
     }
 
-    override fun visitTableGrowInstruction(tableIndex: UInt, value: UInt, delta: UInt) {
+    override fun visitTableGrowInstruction(tableIndex: UInt) {
         checkEnd()
 
         if (!context.options.features.isBulkMemoryEnabled) {
@@ -2340,7 +2348,31 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
 
         numberOfInstructions++
 
-        delegate?.visitTableGrowInstruction(tableIndex, value, delta)
+        delegate?.visitTableGrowInstruction(tableIndex)
+    }
+
+    override fun visitGetTableInstruction(tableIndex: UInt) {
+        checkEnd()
+
+        if (!context.options.features.isBulkMemoryEnabled) {
+            throw ParserException("Invalid table.grow code: bulk memory not enabled.")
+        }
+
+        numberOfInstructions++
+
+        delegate?.visitGetTableInstruction(tableIndex)
+    }
+
+    override fun visitSetTableInstruction(tableIndex: UInt) {
+        checkEnd()
+
+        if (!context.options.features.isBulkMemoryEnabled) {
+            throw ParserException("Invalid table.grow code: bulk memory not enabled.")
+        }
+
+        numberOfInstructions++
+
+        delegate?.visitSetTableInstruction(tableIndex)
     }
 
     override fun visitTableFillInstruction(tableIndex: UInt) {
@@ -2432,6 +2464,18 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
         delegate?.visitReferenceIsNullInstruction()
     }
 
+    override fun visitReferenceAsNonNullInstruction() {
+        checkEnd()
+
+        if (!context.options.features.isReferenceTypesEnabled) {
+            throw ParserException("Invalid ref_as_non_null code: reference types not enabled.")
+        }
+
+        numberOfInstructions++
+
+        delegate?.visitReferenceAsNonNullInstruction()
+    }
+
     override fun visitReferenceNullInstruction(type: WasmType) {
         checkEnd()
 
@@ -2463,6 +2507,38 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
         numberOfInstructions++
 
         delegate?.visitShiftRightInstruction(opcode)
+    }
+
+    override fun visitBrOnNonNullInstruction(labelIndex: UInt) {
+        checkEnd()
+
+        numberOfInstructions++
+
+        delegate?.visitBrOnNonNullInstruction(labelIndex)
+    }
+
+    override fun visitCallRefInstruction(typeIndex: UInt) {
+        checkEnd()
+
+        numberOfInstructions++
+
+        delegate?.visitCallRefInstruction(typeIndex)
+    }
+
+    override fun visitReturnCallRefInstruction(typeIndex: UInt) {
+        checkEnd()
+
+        numberOfInstructions++
+
+        delegate?.visitReturnCallRefInstruction(typeIndex)
+    }
+
+    override fun visitBrOnNullInstruction(labelIndex: UInt) {
+        checkEnd()
+
+        numberOfInstructions++
+
+        delegate?.visitBrOnNullInstruction(labelIndex)
     }
 
     override fun visitEnd() {

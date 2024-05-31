@@ -205,21 +205,21 @@ public class ExpressionValidator(
     }
 
     override fun visitAtomicRmwCompareExchangeInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        TODO()
-
         delegate?.visitAtomicRmwCompareExchangeInstruction(opcode, alignment, offset)
+
+        TODO()
     }
 
     override fun visitAtomicWaitInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        TODO()
-
         delegate?.visitAtomicWaitInstruction(opcode, alignment, offset)
+
+        TODO()
     }
 
     override fun visitAtomicWakeInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        TODO()
-
         delegate?.visitAtomicWakeInstruction(opcode, alignment, offset)
+
+        TODO()
     }
 
     override fun visitBrTableInstruction(targets: List<UInt>, defaultTarget: UInt) {
@@ -305,8 +305,9 @@ public class ExpressionValidator(
     }
 
     override fun visitSimdShuffleInstruction(opcode: Opcode, value: V128Value) {
-        TODO()
         delegate?.visitSimdShuffleInstruction(opcode, value)
+
+        TODO()
     }
 
     override fun visitLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
@@ -348,8 +349,9 @@ public class ExpressionValidator(
     }
 
     override fun visitSimdLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        TODO()
         delegate?.visitSimdLoadInstruction(opcode, alignment, offset)
+
+        TODO()
     }
 
     override fun visitStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
@@ -386,8 +388,9 @@ public class ExpressionValidator(
     }
 
     override fun visitSimdStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        TODO()
         delegate?.visitSimdStoreInstruction(opcode, alignment, offset)
+
+        TODO()
     }
 
     override fun visitWrapInstruction(opcode: Opcode) {
@@ -589,23 +592,27 @@ public class ExpressionValidator(
     }
 
     override fun visitCatchInstruction() {
-        TODO()
         delegate?.visitCatchInstruction()
+
+        TODO()
     }
 
     override fun visitThrowRefInstruction() {
-        TODO()
         delegate?.visitThrowRefInstruction()
+
+        TODO()
     }
 
     override fun visitThrowInstruction(exceptionIndex: UInt) {
-        TODO()
         delegate?.visitThrowInstruction(exceptionIndex)
+
+        TODO()
     }
 
     override fun visitRethrowInstruction() {
-        TODO()
         delegate?.visitRethrowInstruction()
+
+        TODO()
     }
 
     override fun visitBrInstruction(depth: UInt) {
@@ -680,6 +687,14 @@ public class ExpressionValidator(
         pushValue(type1)
 
         delegate?.visitSelectInstruction()
+    }
+
+    override fun visitSelectTypedInstruction(types: List<WasmType>) {
+        popValue(I32)
+        val type = popValue()
+        popValue()
+
+        pushValue(type)
     }
 
     override fun visitGetGlobalInstruction(globalIndex: UInt) {
@@ -1208,8 +1223,9 @@ public class ExpressionValidator(
     }
 
     override fun visitSimdXorInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdXorInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitShiftLeftInstruction(opcode: Opcode) {
@@ -1472,168 +1488,201 @@ public class ExpressionValidator(
     }
 
     override fun visitAtomicRmwAddInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        TODO()
         delegate?.visitAtomicRmwAddInstruction(opcode, alignment, offset)
+
+        TODO()
     }
 
     override fun visitAtomicRmwSubtractInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        TODO()
         delegate?.visitAtomicRmwSubtractInstruction(opcode, alignment, offset)
+
+        TODO()
     }
 
     override fun visitAtomicRmwAndInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        TODO()
         delegate?.visitAtomicRmwAndInstruction(opcode, alignment, offset)
+
+        TODO()
     }
 
     override fun visitAtomicRmwOrInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        TODO()
         delegate?.visitAtomicRmwOrInstruction(opcode, alignment, offset)
+
+        TODO()
     }
 
     override fun visitAtomicRmwXorInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        TODO()
         delegate?.visitAtomicRmwXorInstruction(opcode, alignment, offset)
+
+        TODO()
     }
 
     override fun visitAtomicRmwExchangeInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        TODO()
         delegate?.visitAtomicRmwExchangeInstruction(opcode, alignment, offset)
+
+        TODO()
     }
 
     override fun visitSimdSplatInstruction(opcode: Opcode, value: UInt) {
-        TODO()
         delegate?.visitSimdSplatInstruction(opcode, value)
+
+        TODO()
     }
 
     override fun visitSimdExtractLaneInstruction(opcode: Opcode, index: UInt) {
-        TODO()
         delegate?.visitSimdExtractLaneInstruction(opcode, index)
+
+        TODO()
     }
 
     override fun visitSimdReplaceLaneInstruction(opcode: Opcode, index: UInt) {
-        TODO()
         delegate?.visitSimdReplaceLaneInstruction(opcode, index)
+
+        TODO()
     }
 
     override fun visitSimdAddInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdAddInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdSubtractInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdSubtractInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdMultiplyInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdMultiplyInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdNegativeInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdNegativeInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdAddSaturateInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdAddSaturateInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdSubtractSaturateInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdSubtractSaturateInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdShiftLeftInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdShiftLeftInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdAndInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdAndInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdOrInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdOrInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdNotInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdNotInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdBitSelectInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdBitSelectInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdAllTrueInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdAllTrueInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdEqualInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdEqualInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdNotEqualInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdNotEqualInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdLessThanInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdLessThanInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdLessEqualInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdLessEqualInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdGreaterThanInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdGreaterThanInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdGreaterEqualInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdGreaterEqualInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdMinInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdMinInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdMaxInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdMaxInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdDivideInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdDivideInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdSqrtInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdSqrtInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdConvertInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdConvertInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitSimdTruncateInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdTruncateInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitCopySignInstruction(opcode: Opcode) {
@@ -1677,8 +1726,9 @@ public class ExpressionValidator(
     }
 
     override fun visitSimdAbsInstruction(opcode: Opcode) {
-        TODO()
         delegate?.visitSimdAbsInstruction(opcode)
+
+        TODO()
     }
 
     override fun visitMemoryFillInstruction(memoryIndex: UInt) {
@@ -1706,53 +1756,75 @@ public class ExpressionValidator(
     }
 
     override fun visitTableInitInstruction(segmentIndex: UInt, tableIndex: UInt) {
-        TODO()
         delegate?.visitTableInitInstruction(segmentIndex, tableIndex)
+
+        TODO()
     }
 
     override fun visitDataDropInstruction(segmentIndex: UInt) {
-        TODO()
         delegate?.visitDataDropInstruction(segmentIndex)
+
+        TODO()
     }
 
     override fun visitTableSizeInstruction(tableIndex: UInt) {
-        TODO()
         delegate?.visitTableSizeInstruction(tableIndex)
+
+        TODO()
     }
 
-    override fun visitTableGrowInstruction(tableIndex: UInt, value: UInt, delta: UInt) {
+    override fun visitTableGrowInstruction(tableIndex: UInt) {
+        delegate?.visitTableGrowInstruction(tableIndex)
+
         TODO()
-        delegate?.visitTableGrowInstruction(tableIndex, value, delta)
     }
 
     override fun visitTableFillInstruction(tableIndex: UInt) {
-        TODO()
         delegate?.visitTableFillInstruction(tableIndex)
+
+        TODO()
+    }
+
+    override fun visitGetTableInstruction(tableIndex: UInt) {
+        delegate?.visitGetTableInstruction(tableIndex)
+
+        TODO()
+    }
+
+    override fun visitSetTableInstruction(tableIndex: UInt) {
+        delegate?.visitSetTableInstruction(tableIndex)
+
+        TODO()
     }
 
     override fun visitTableCopyInstruction(targetTableIndex: UInt, sourceTableIndex: UInt) {
-        TODO()
         delegate?.visitTableCopyInstruction(targetTableIndex, sourceTableIndex)
+
+        TODO()
     }
 
     override fun visitElementDropInstruction(segmentIndex: UInt) {
-        TODO()
         delegate?.visitElementDropInstruction(segmentIndex)
+
+        TODO()
     }
 
     override fun visitAtomicFenceInstruction(reserved: UInt) {
-        TODO()
         delegate?.visitAtomicFenceInstruction(reserved)
+
+        TODO()
     }
 
     override fun visitReferenceEqualInstruction() {
-        TODO()
         delegate?.visitReferenceEqualInstruction()
+
+        TODO()
     }
 
     override fun visitReferenceFunctionInstruction(functionIndex: UInt) {
-        TODO()
         delegate?.visitReferenceFunctionInstruction(functionIndex)
+
+        TODO()
     }
 
     override fun visitReferenceIsNullInstruction() {
@@ -1764,6 +1836,17 @@ public class ExpressionValidator(
         pushValue(I32)
 
         delegate?.visitReferenceIsNullInstruction()
+    }
+
+    override fun visitReferenceAsNonNullInstruction() {
+        val value = popValue()
+        if (!value.isReferenceType()) {
+            throw ValidatorException("Expected reference type, found $value")
+        }
+
+        pushValue(value)
+
+        delegate?.visitReferenceAsNonNullInstruction()
     }
 
     override fun visitReferenceNullInstruction(type: WasmType) {
@@ -1792,5 +1875,21 @@ public class ExpressionValidator(
         }
 
         delegate?.visitShiftRightInstruction(opcode)
+    }
+
+    override fun visitCallRefInstruction(typeIndex: UInt) {
+        TODO("Not yet implemented")
+    }
+
+    override fun visitBrOnNonNullInstruction(labelIndex: UInt) {
+        TODO("Not yet implemented")
+    }
+
+    override fun visitBrOnNullInstruction(labelIndex: UInt) {
+        TODO("Not yet implemented")
+    }
+
+    override fun visitReturnCallRefInstruction(typeIndex: UInt) {
+        TODO("Not yet implemented")
     }
 }

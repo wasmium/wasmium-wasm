@@ -94,6 +94,8 @@ public interface ExpressionVisitor {
 
     public fun visitSelectInstruction()
 
+    public fun visitSelectTypedInstruction(types: List<WasmType>)
+
     public fun visitGetGlobalInstruction(globalIndex: UInt)
 
     public fun visitSetLocalInstruction(localIndex: UInt)
@@ -252,9 +254,13 @@ public interface ExpressionVisitor {
 
     public fun visitTableSizeInstruction(tableIndex: UInt)
 
-    public fun visitTableGrowInstruction(tableIndex: UInt, value: UInt, delta: UInt)
+    public fun visitTableGrowInstruction(tableIndex: UInt)
 
     public fun visitTableFillInstruction(tableIndex: UInt)
+
+    public fun visitGetTableInstruction(tableIndex: UInt)
+
+    public fun visitSetTableInstruction(tableIndex: UInt)
 
     public fun visitTableCopyInstruction(targetTableIndex: UInt, sourceTableIndex: UInt)
 
@@ -271,4 +277,15 @@ public interface ExpressionVisitor {
     public fun visitReferenceNullInstruction(type: WasmType)
 
     public fun visitShiftRightInstruction(opcode: Opcode)
+
+    public fun visitReferenceAsNonNullInstruction()
+
+    public fun visitCallRefInstruction(typeIndex: UInt)
+
+    public fun visitReturnCallRefInstruction(typeIndex: UInt)
+
+    public fun visitBrOnNullInstruction(labelIndex: UInt)
+
+    public fun visitBrOnNonNullInstruction(labelIndex: UInt)
+
 }

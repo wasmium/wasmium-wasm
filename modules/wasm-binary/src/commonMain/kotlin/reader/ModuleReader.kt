@@ -1773,10 +1773,8 @@ public class ModuleReader(options: ReaderOptions) {
 
                 TABLE_GROW -> {
                     val tableIndex = source.readVarUInt32()
-                    val value = source.readVarUInt32()
-                    val delta = source.readVarUInt32()
 
-                    expressionVisitor.visitTableGrowInstruction(tableIndex, value, delta)
+                    expressionVisitor.visitTableGrowInstruction(tableIndex)
                 }
 
                 TABLE_FILL -> {
@@ -1797,7 +1795,9 @@ public class ModuleReader(options: ReaderOptions) {
                         throw ParserException("Invalid call_ref code: reference types not enabled.")
                     }
 
-                    TODO()
+                    val typeIndex = source.readIndex()
+
+                    expressionVisitor.visitCallRefInstruction(typeIndex)
                 }
 
                 RETURN_CALL_REF -> {
@@ -1805,7 +1805,9 @@ public class ModuleReader(options: ReaderOptions) {
                         throw ParserException("Invalid return_call_ref code: reference types not enabled.")
                     }
 
-                    TODO()
+                    val typeIndex = source.readIndex()
+
+                    expressionVisitor.visitReturnCallRefInstruction(typeIndex)
                 }
 
                 REF_AS_NON_NULL -> {
@@ -1813,7 +1815,7 @@ public class ModuleReader(options: ReaderOptions) {
                         throw ParserException("Invalid ref_as_non_null code: reference types not enabled.")
                     }
 
-                    TODO()
+                    expressionVisitor.visitReferenceAsNonNullInstruction()
                 }
 
                 BR_ON_NULL -> {
@@ -1821,7 +1823,9 @@ public class ModuleReader(options: ReaderOptions) {
                         throw ParserException("Invalid br_on_null code: reference types not enabled.")
                     }
 
-                    TODO()
+                    val labelIndex = source.readIndex()
+
+                    expressionVisitor.visitBrOnNullInstruction(labelIndex)
                 }
 
                 BR_ON_NON_NULL -> {
@@ -1829,7 +1833,9 @@ public class ModuleReader(options: ReaderOptions) {
                         throw ParserException("Invalid br_on_non_null code: reference types not enabled.")
                     }
 
-                    TODO()
+                    val labelIndex = source.readIndex()
+
+                    expressionVisitor.visitBrOnNonNullInstruction(labelIndex)
                 }
 
                 RETURN_CALL -> {
@@ -1869,7 +1875,9 @@ public class ModuleReader(options: ReaderOptions) {
                         throw ParserException("Invalid select_t code: reference types not enabled.")
                     }
 
-                    TODO()
+                    val valueTypes = source.readValueTypes()
+
+                    expressionVisitor.visitSelectTypedInstruction(valueTypes)
                 }
 
                 TRY_TABLE -> {
@@ -1923,7 +1931,9 @@ public class ModuleReader(options: ReaderOptions) {
                         throw ParserException("Invalid table.get code: reference types not enabled.")
                     }
 
-                    TODO()
+                    val tableIndex = source.readIndex()
+
+                    expressionVisitor.visitGetTableInstruction(tableIndex)
                 }
 
                 SET_TABLE -> {
@@ -1931,7 +1941,9 @@ public class ModuleReader(options: ReaderOptions) {
                         throw ParserException("Invalid table.set code: reference types not enabled.")
                     }
 
-                    TODO()
+                    val tableIndex = source.readIndex()
+
+                    expressionVisitor.visitSetTableInstruction(tableIndex)
                 }
 
                 REF_NULL -> {

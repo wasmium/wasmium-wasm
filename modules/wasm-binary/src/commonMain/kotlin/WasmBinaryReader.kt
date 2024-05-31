@@ -362,7 +362,7 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         return FunctionType(parameters, resultTypes)
     }
 
-    private fun readValueTypes(): List<WasmType> {
+    public fun readValueTypes(): List<WasmType> {
         val count = readVarUInt32()
 
         val resultType = mutableListOf<WasmType>()

@@ -256,6 +256,14 @@ public class ExpressionWriter(
         writer.writeOpcode(Opcode.SELECT)
     }
 
+    override fun visitSelectTypedInstruction(types: List<WasmType>) {
+        writer.writeVarUInt32(types.size.toUInt())
+
+        for (type in types) {
+            writer.writeType(type)
+        }
+    }
+
     override fun visitGetGlobalInstruction(globalIndex: UInt): Unit = writer.run {
         writeOpcode(Opcode.GET_GLOBAL)
         writeIndex(globalIndex)
@@ -599,11 +607,19 @@ public class ExpressionWriter(
         writeVarUInt32(tableIndex)
     }
 
-    override fun visitTableGrowInstruction(tableIndex: UInt, value: UInt, delta: UInt): Unit = writer.run {
+    override fun visitTableGrowInstruction(tableIndex: UInt): Unit = writer.run {
         writeOpcode(Opcode.TABLE_GROW)
         writeVarUInt32(tableIndex)
-        writeVarUInt32(value)
-        writeVarUInt32(delta)
+    }
+
+    override fun visitGetTableInstruction(tableIndex: UInt): Unit = writer.run {
+        writeOpcode(Opcode.GET_TABLE)
+        writeVarUInt32(tableIndex)
+    }
+
+    override fun visitSetTableInstruction(tableIndex: UInt): Unit = writer.run {
+        writeOpcode(Opcode.SET_TABLE)
+        writeVarUInt32(tableIndex)
     }
 
     override fun visitTableFillInstruction(tableIndex: UInt): Unit = writer.run {
@@ -646,6 +662,10 @@ public class ExpressionWriter(
         writer.writeOpcode(Opcode.REF_NULL)
     }
 
+    override fun visitReferenceAsNonNullInstruction() {
+        writer.writeOpcode(Opcode.REF_AS_NON_NULL)
+    }
+
     override fun visitReferenceNullInstruction(type: WasmType): Unit = writer.run {
         writeOpcode(Opcode.REF_NULL)
         writeType(type)
@@ -653,5 +673,25 @@ public class ExpressionWriter(
 
     override fun visitShiftRightInstruction(opcode: Opcode) {
         writer.writeOpcode(opcode)
+    }
+
+    override fun visitBrOnNonNullInstruction(labelIndex: UInt): Unit = writer.run {
+        writeOpcode(Opcode.REF_NULL)
+        writeIndex(labelIndex)
+    }
+
+    override fun visitCallRefInstruction(typeIndex: UInt): Unit = writer.run {
+        writeOpcode(Opcode.REF_NULL)
+        writeIndex(typeIndex)
+    }
+
+    override fun visitReturnCallRefInstruction(typeIndex: UInt): Unit = writer.run {
+        writeOpcode(Opcode.REF_NULL)
+        writeIndex(typeIndex)
+    }
+
+    override fun visitBrOnNullInstruction(labelIndex: UInt): Unit = writer.run {
+        writeOpcode(Opcode.REF_NULL)
+        writeIndex(labelIndex)
     }
 }

@@ -187,6 +187,10 @@ public class ConstantExpressionValidator(private val delegate: ExpressionVisitor
         notConstant()
     }
 
+    override fun visitSelectTypedInstruction(types: List<WasmType>) {
+        notConstant()
+    }
+
     override fun visitGetGlobalInstruction(globalIndex: UInt) {
         val globalType = context.globals[globalIndex.toInt()]
 
@@ -509,7 +513,15 @@ public class ConstantExpressionValidator(private val delegate: ExpressionVisitor
         notConstant()
     }
 
-    override fun visitTableGrowInstruction(tableIndex: UInt, value: UInt, delta: UInt) {
+    override fun visitGetTableInstruction(tableIndex: UInt) {
+        notConstant()
+    }
+
+    override fun visitSetTableInstruction(tableIndex: UInt) {
+        notConstant()
+    }
+
+    override fun visitTableGrowInstruction(tableIndex: UInt) {
         notConstant()
     }
 
@@ -541,11 +553,31 @@ public class ConstantExpressionValidator(private val delegate: ExpressionVisitor
         notConstant()
     }
 
+    override fun visitReferenceAsNonNullInstruction() {
+        notConstant()
+    }
+
     override fun visitReferenceNullInstruction(type: WasmType) {
         delegate?.visitReferenceNullInstruction(type)
     }
 
     override fun visitShiftRightInstruction(opcode: Opcode) {
+        notConstant()
+    }
+
+    override fun visitCallRefInstruction(typeIndex: UInt) {
+        notConstant()
+    }
+
+    override fun visitBrOnNonNullInstruction(labelIndex: UInt) {
+        notConstant()
+    }
+
+    override fun visitBrOnNullInstruction(labelIndex: UInt) {
+        notConstant()
+    }
+
+    override fun visitReturnCallRefInstruction(typeIndex: UInt) {
         notConstant()
     }
 }

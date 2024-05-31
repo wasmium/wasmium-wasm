@@ -190,6 +190,10 @@ public class ExpressionNode : ExpressionVisitor {
         instructions.add(SelectInstruction())
     }
 
+    public override fun visitSelectTypedInstruction(types: List<WasmType>){
+        instructions.add(SelectTypedInstruction(types))
+    }
+
     public override fun visitGetGlobalInstruction(globalIndex: UInt) {
         instructions.add(GetGlobalInstruction(globalIndex))
     }
@@ -502,8 +506,16 @@ public class ExpressionNode : ExpressionVisitor {
         instructions.add(TableSizeInstruction(tableIndex))
     }
 
-    override fun visitTableGrowInstruction(tableIndex: UInt, value: UInt, delta: UInt) {
-        instructions.add(TableGrowInstruction(tableIndex, value, delta))
+    override fun visitTableGrowInstruction(tableIndex: UInt) {
+        instructions.add(TableGrowInstruction(tableIndex))
+    }
+
+    override fun visitGetTableInstruction(tableIndex: UInt) {
+        instructions.add(TableGetTableInstruction(tableIndex))
+    }
+
+    override fun visitSetTableInstruction(tableIndex: UInt) {
+        instructions.add(TableSetTableInstruction(tableIndex))
     }
 
     override fun visitTableFillInstruction(tableIndex: UInt) {
@@ -534,6 +546,10 @@ public class ExpressionNode : ExpressionVisitor {
         instructions.add(ReferenceIsNullInstruction())
     }
 
+    override fun visitReferenceAsNonNullInstruction() {
+        instructions.add(ReferenceAsNonNullInstruction())
+    }
+
     override fun visitReferenceNullInstruction(type: WasmType) {
         instructions.add(ReferenceNullInstruction(type))
     }
@@ -544,5 +560,21 @@ public class ExpressionNode : ExpressionVisitor {
 
     override fun visitTableInitInstruction(segmentIndex: UInt, tableIndex: UInt) {
         instructions.add(TableInitInstruction(segmentIndex, tableIndex))
+    }
+
+    override fun visitBrOnNullInstruction(labelIndex: UInt) {
+        TODO("Not yet implemented")
+    }
+
+    override fun visitCallRefInstruction(typeIndex: UInt) {
+        TODO("Not yet implemented")
+    }
+
+    override fun visitReturnCallRefInstruction(typeIndex: UInt) {
+        TODO("Not yet implemented")
+    }
+
+    override fun visitBrOnNonNullInstruction(labelIndex: UInt) {
+        TODO("Not yet implemented")
     }
 }

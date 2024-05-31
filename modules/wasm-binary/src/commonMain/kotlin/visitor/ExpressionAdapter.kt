@@ -178,6 +178,10 @@ public open class ExpressionAdapter(protected val delegate: ExpressionVisitor? =
         delegate?.visitSelectInstruction()
     }
 
+    override fun visitSelectTypedInstruction(types: List<WasmType>) {
+        delegate?.visitSelectTypedInstruction(types)
+    }
+
     override fun visitGetGlobalInstruction(globalIndex: UInt) {
         delegate?.visitGetGlobalInstruction(globalIndex)
     }
@@ -490,8 +494,16 @@ public open class ExpressionAdapter(protected val delegate: ExpressionVisitor? =
         delegate?.visitTableSizeInstruction(tableIndex)
     }
 
-    override fun visitTableGrowInstruction(tableIndex: UInt, value: UInt, delta: UInt) {
-        delegate?.visitTableGrowInstruction(tableIndex, value, delta)
+    override fun visitTableGrowInstruction(tableIndex: UInt) {
+        delegate?.visitTableGrowInstruction(tableIndex)
+    }
+
+    override fun visitGetTableInstruction(tableIndex: UInt) {
+        delegate?.visitGetTableInstruction(tableIndex)
+    }
+
+    override fun visitSetTableInstruction(tableIndex: UInt) {
+        delegate?.visitSetTableInstruction(tableIndex)
     }
 
     override fun visitTableFillInstruction(tableIndex: UInt) {
@@ -532,5 +544,25 @@ public open class ExpressionAdapter(protected val delegate: ExpressionVisitor? =
 
     override fun visitShiftRightInstruction(opcode: Opcode) {
         delegate?.visitShiftRightInstruction(opcode)
+    }
+
+    override fun visitReferenceAsNonNullInstruction() {
+        delegate?.visitReferenceAsNonNullInstruction()
+    }
+
+    override fun visitBrOnNonNullInstruction(labelIndex: UInt) {
+        delegate?.visitBrOnNonNullInstruction(labelIndex)
+    }
+
+    override fun visitBrOnNullInstruction(labelIndex: UInt) {
+        delegate?.visitBrOnNullInstruction(labelIndex)
+    }
+
+    override fun visitCallRefInstruction(typeIndex: UInt) {
+        delegate?.visitCallRefInstruction(typeIndex)
+    }
+
+    override fun visitReturnCallRefInstruction(typeIndex: UInt) {
+        delegate?.visitReturnCallRefInstruction(typeIndex)
     }
 }
