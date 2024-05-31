@@ -352,41 +352,34 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
             throw ParserException("Invalid signature form with type: $form")
         }
 
-        val parameterCount = readVarUInt32()
+        val parameters = readValueTypes()
 
-        val parameters = mutableListOf<WasmType>()
-        for (paramIndex in 0u until parameterCount) {
+        val resultTypes = readValueTypes()
+        if (resultTypes.isNotEmpty() && resultTypes.size != 1) {
+            throw ParserException("Result size must be 0 or 1 but got: ${resultTypes.size}")
+        }
+
+        return FunctionType(parameters, resultTypes)
+    }
+
+    private fun readValueTypes(): List<WasmType> {
+        val count = readVarUInt32()
+
+        val resultType = mutableListOf<WasmType>()
+        (0 until count.toInt()).forEach { _ ->
             val type = readType()
 
             if (!type.isValueType()) {
-                throw ParserException("Expected valid param type but got: ${type.name}")
+                throw ParserException("Expected valid param value type but got: ${type.name}")
             }
 
-            parameters.add(type)
+            resultType.add(type)
         }
 
-        val resultCount = readVarUInt1()
-        if (resultCount != 0u && resultCount != 1u) {
-            throw ParserException("Result size must be 0 or 1 but got: $resultCount")
-        }
-
-        val resultType = mutableListOf<WasmType>()
-        if (resultCount != 0u) {
-            for (index in 0 until resultCount.toInt()) {
-                val type = readType()
-
-                if (!type.isValueType()) {
-                    throw ParserException("Expected valid param value type but got: ${type.name}")
-                }
-
-                resultType.add(type)
-            }
-        }
-
-        return FunctionType(parameters, resultType)
+        return resultType
     }
 
-    public fun readMutability(): Mutability = if (readVarUInt1() == 0u) Mutability.IMMUTABLE else Mutability.MUTABLE
+    public fun readMutability(): Mutability = if (readVarUInt1() == 0u) IMMUTABLE else MUTABLE
 }
 
 public fun Int.reverseBytes(): Int {
