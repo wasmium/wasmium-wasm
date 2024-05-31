@@ -72,7 +72,18 @@ public class ModuleReader(options: ReaderOptions) {
     private val context = ReaderContext(options)
 
     public fun readModule(source: WasmBinaryReader, visitor: ModuleVisitor): ReaderResult {
-        readHeader(source, visitor)
+        // minimum allowed module size
+        val minSize = 8u
+        if (!source.request(minSize)) {
+            throw ParserException("Expecting module size of at least: $minSize")
+        }
+
+        checkMagicNumber(source.readUInt32())
+
+        val version = source.readUInt32()
+        checkVersion(version)
+
+        visitor.visitHeader(version)
 
         var numberOfSections = 0u
 
@@ -146,26 +157,16 @@ public class ModuleReader(options: ReaderOptions) {
         return ReaderResult.Success(context.messages)
     }
 
-    private fun readHeader(source: WasmBinaryReader, visitor: ModuleVisitor) {
-        // minimum allowed module size
-        val minSize = 8u
-        if (!source.request(minSize)) {
-            throw ParserException("Expecting module size of at least: $minSize")
-        }
-
-        // read magic
-        val magic = source.readUInt32()
-        if (magic != WasmBinary.Meta.MAGIC_NUMBER) {
-            throw ParserException("Module does not start with: $magic")
-        }
-
-        // read version
-        val version = source.readUInt32()
+    private fun checkVersion(version: UInt) {
         if (version != WasmBinary.Meta.VERSION_1 && version != WasmBinary.Meta.VERSION_2) {
             throw ParserException("Unsupported version number: $version")
         }
+    }
 
-        visitor.visitHeader(version)
+    private fun checkMagicNumber(magic: UInt) {
+        if (magic != WasmBinary.Meta.MAGIC_NUMBER) {
+            throw ParserException("Module does not start with: $magic")
+        }
     }
 
     private fun readTypeSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
@@ -242,8 +243,7 @@ public class ModuleReader(options: ReaderOptions) {
             val moduleName = source.readString()
             val fieldName = source.readString()
 
-            val externalKind = source.readExternalKind()
-            when (externalKind) {
+            when (source.readExternalKind()) {
                 ExternalKind.FUNCTION -> {
                     val typeIndex = source.readIndex()
 
@@ -335,15 +335,10 @@ public class ModuleReader(options: ReaderOptions) {
         context.numberOfExports = source.readVarUInt32()
 
         val exportVisitor = visitor.visitExportSection()
-        val names = mutableSetOf<String>()
         (0u until context.numberOfExports).forEach { _ ->
             val name = source.readString()
-            if (!names.add(name)) {
-                throw ParserException("Duplicate export name $name")
-            }
 
             val externalKind = source.readExternalKind()
-
             when (externalKind) {
                 ExternalKind.FUNCTION -> {
                     if (!context.options.features.isExceptionHandlingEnabled) {
@@ -682,7 +677,7 @@ public class ModuleReader(options: ReaderOptions) {
                 throw ParserException("Linking subsection greater then input")
             }
 
-            val startIndex: UInt = source.position
+            val startIndex = source.position
 
             when (linkingKind) {
                 LinkingKind.SYMBOL_TABLE -> {
@@ -1530,8 +1525,8 @@ public class ModuleReader(options: ReaderOptions) {
                 V8X16_SHUFFLE -> {
                     val lanesIndex = UIntArray(16) { 0u }
 
-                    for (i in 0u until 16u) {
-                        lanesIndex[i.toInt()] = source.readVarUInt32()
+                    for (index in 0u until 16u) {
+                        lanesIndex[index.toInt()] = source.readVarUInt32()
                     }
 
                     expressionVisitor.visitSimdShuffleInstruction(opcode, V128Value(lanesIndex))

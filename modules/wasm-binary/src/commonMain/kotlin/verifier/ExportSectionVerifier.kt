@@ -13,9 +13,14 @@ import org.wasmium.wasm.binary.visitors.ExportSectionVisitor
 public class ExportSectionVerifier(private val delegate: ExportSectionVisitor? = null, private val context: VerifierContext) : ExportSectionVisitor {
     private var done: Boolean = false
     private var numberOfExports = 0u
+    private val names = mutableSetOf<String>()
 
     override fun visitExport(name: String, externalKind: ExternalKind, itemIndex: UInt) {
         checkEnd()
+
+        if (!names.add(name)) {
+            throw ParserException("Duplicate export name $name")
+        }
 
         when (externalKind) {
             FUNCTION -> {
