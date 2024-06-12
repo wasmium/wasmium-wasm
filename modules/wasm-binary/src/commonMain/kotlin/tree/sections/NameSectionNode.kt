@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.IndexName
 import org.wasmium.wasm.binary.tree.SectionName
-import org.wasmium.wasm.binary.visitors.NameSectionVisitor
+import org.wasmium.wasm.binary.visitor.NameSectionVisitor
 
 public class NameSectionNode : CustomSectionNode(SectionName.NAME.sectionName), NameSectionVisitor {
     public var module: ModuleNameNode? = null

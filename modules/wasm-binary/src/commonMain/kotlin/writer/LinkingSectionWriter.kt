@@ -5,7 +5,7 @@ import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.LinkingSymbolType
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.SectionName
-import org.wasmium.wasm.binary.visitors.LinkingSectionVisitor
+import org.wasmium.wasm.binary.visitor.LinkingSectionVisitor
 
 public class LinkingSectionWriter(private val context: WriterContext) : LinkingSectionVisitor {
     private var numberOfLinks = 0u

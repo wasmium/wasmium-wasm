@@ -1,7 +1,7 @@
 package org.wasmium.wasm.binary.verifier
 
 import org.wasmium.wasm.binary.ParserException
-import org.wasmium.wasm.binary.visitors.StartSectionVisitor
+import org.wasmium.wasm.binary.visitor.StartSectionVisitor
 
 public class StartSectionVerifier(
     private val delegate: StartSectionVisitor? = null,

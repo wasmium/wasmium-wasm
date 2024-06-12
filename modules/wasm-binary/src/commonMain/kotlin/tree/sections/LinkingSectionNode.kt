@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.LinkingSymbolType
 import org.wasmium.wasm.binary.tree.SectionName
-import org.wasmium.wasm.binary.visitors.LinkingSectionVisitor
+import org.wasmium.wasm.binary.visitor.LinkingSectionVisitor
 
 public class LinkingSectionNode : CustomSectionNode(SectionName.LINKING.sectionName), LinkingSectionVisitor {
     public val symbolInfos: MutableList<SymbolTableLinkingNode> = mutableListOf()

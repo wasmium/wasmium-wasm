@@ -1,4 +1,4 @@
-package org.wasmium.wasm.binary.visitors
+package org.wasmium.wasm.binary.visitor
 
 public open class UnknownSectionAdapter(private val delegate: UnknownSectionVisitor? = null) : UnknownSectionVisitor {
 

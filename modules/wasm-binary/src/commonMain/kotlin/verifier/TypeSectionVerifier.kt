@@ -3,7 +3,7 @@ package org.wasmium.wasm.binary.verifier
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.tree.FunctionType
-import org.wasmium.wasm.binary.visitors.TypeSectionVisitor
+import org.wasmium.wasm.binary.visitor.TypeSectionVisitor
 
 public class TypeSectionVerifier(private val delegate: TypeSectionVisitor? = null, private val context: VerifierContext) : TypeSectionVisitor {
     private var done: Boolean = false

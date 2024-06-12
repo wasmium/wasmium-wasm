@@ -1,4 +1,4 @@
-package org.wasmium.wasm.binary.visitors
+package org.wasmium.wasm.binary.visitor
 
 import org.wasmium.wasm.binary.tree.FunctionType
 

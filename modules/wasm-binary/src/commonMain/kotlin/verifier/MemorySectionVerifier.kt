@@ -3,7 +3,7 @@ package org.wasmium.wasm.binary.verifier
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.tree.MemoryType
-import org.wasmium.wasm.binary.visitors.MemorySectionVisitor
+import org.wasmium.wasm.binary.visitor.MemorySectionVisitor
 
 public class MemorySectionVerifier(private val delegate: MemorySectionVisitor? = null, private val context: VerifierContext) : MemorySectionVisitor {
     private var done: Boolean = false

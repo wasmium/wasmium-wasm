@@ -1,4 +1,4 @@
-package org.wasmium.wasm.binary.visitors
+package org.wasmium.wasm.binary.visitor
 
 public open class ElementSectionAdapter(protected val delegate: ElementSectionVisitor? = null) : ElementSectionVisitor {
 

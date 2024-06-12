@@ -1,7 +1,7 @@
 package org.wasmium.wasm.binary.validator
 
 import org.wasmium.wasm.binary.tree.IndexName
-import org.wasmium.wasm.binary.visitors.NameSectionVisitor
+import org.wasmium.wasm.binary.visitor.NameSectionVisitor
 
 public class NameSectionValidator(private val delegate: NameSectionVisitor? = null, private val context: ValidatorContext) : NameSectionVisitor {
     override fun visitModuleName(name: String) {

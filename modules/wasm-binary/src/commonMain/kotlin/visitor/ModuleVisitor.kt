@@ -1,4 +1,4 @@
-package org.wasmium.wasm.binary.visitors
+package org.wasmium.wasm.binary.visitor
 
 public interface ModuleVisitor {
     public fun visitHeader(version: UInt): Unit

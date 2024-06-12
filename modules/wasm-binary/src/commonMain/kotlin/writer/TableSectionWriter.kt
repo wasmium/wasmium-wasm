@@ -4,7 +4,7 @@ import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.TableType
-import org.wasmium.wasm.binary.visitors.TableSectionVisitor
+import org.wasmium.wasm.binary.visitor.TableSectionVisitor
 
 public class TableSectionWriter(private val context: WriterContext) : TableSectionVisitor {
     private var numberOfTables: UInt = 0u

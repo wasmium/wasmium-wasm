@@ -4,8 +4,8 @@ import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.GlobalType
 import org.wasmium.wasm.binary.tree.SectionKind
-import org.wasmium.wasm.binary.visitors.ExpressionVisitor
-import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
+import org.wasmium.wasm.binary.visitor.ExpressionVisitor
+import org.wasmium.wasm.binary.visitor.GlobalSectionVisitor
 
 public class GlobalSectionWriter(private val context: WriterContext) : GlobalSectionVisitor {
     private var numberOfGlobalVariables: UInt = 0u

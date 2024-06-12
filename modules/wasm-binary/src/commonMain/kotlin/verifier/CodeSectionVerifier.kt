@@ -2,8 +2,8 @@ package org.wasmium.wasm.binary.verifier
 
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.tree.LocalVariable
-import org.wasmium.wasm.binary.visitors.CodeSectionVisitor
-import org.wasmium.wasm.binary.visitors.ExpressionVisitor
+import org.wasmium.wasm.binary.visitor.CodeSectionVisitor
+import org.wasmium.wasm.binary.visitor.ExpressionVisitor
 
 public class CodeSectionVerifier(private val delegate: CodeSectionVisitor? = null, private val context: VerifierContext) : CodeSectionVisitor {
     private var done: Boolean = false

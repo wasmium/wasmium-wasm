@@ -1,8 +1,8 @@
 package org.wasmium.wasm.binary.validator
 
 import org.wasmium.wasm.binary.tree.GlobalType
-import org.wasmium.wasm.binary.visitors.ExpressionVisitor
-import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
+import org.wasmium.wasm.binary.visitor.ExpressionVisitor
+import org.wasmium.wasm.binary.visitor.GlobalSectionVisitor
 
 public class GlobalSectionValidator(private val delegate: GlobalSectionVisitor? = null, private val context: ValidatorContext) : GlobalSectionVisitor {
     override fun visitGlobalVariable(globalType: GlobalType): ExpressionVisitor {

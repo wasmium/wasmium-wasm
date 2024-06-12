@@ -1,7 +1,7 @@
 package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.SectionName
-import org.wasmium.wasm.binary.visitors.ExternalDebugSectionVisitor
+import org.wasmium.wasm.binary.visitor.ExternalDebugSectionVisitor
 
 public class ExternalDebugSectionNode(
     public val url: String,

@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.verifier
 
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.tree.IndexName
-import org.wasmium.wasm.binary.visitors.NameSectionVisitor
+import org.wasmium.wasm.binary.visitor.NameSectionVisitor
 
 public class NameSectionVerifier(private val delegate: NameSectionVisitor? = null, private val context: VerifierContext) : NameSectionVisitor {
     private var done: Boolean = false

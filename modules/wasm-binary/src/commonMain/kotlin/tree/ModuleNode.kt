@@ -39,26 +39,26 @@ import org.wasmium.wasm.binary.tree.sections.TableSectionNode
 import org.wasmium.wasm.binary.tree.sections.TagSectionNode
 import org.wasmium.wasm.binary.tree.sections.TypeSectionNode
 import org.wasmium.wasm.binary.tree.sections.UnknownSectionNode
-import org.wasmium.wasm.binary.visitors.CodeSectionVisitor
-import org.wasmium.wasm.binary.visitors.DataCountSectionVisitor
-import org.wasmium.wasm.binary.visitors.DataSectionVisitor
-import org.wasmium.wasm.binary.visitors.ElementSectionVisitor
-import org.wasmium.wasm.binary.visitors.ExportSectionVisitor
-import org.wasmium.wasm.binary.visitors.ExternalDebugSectionVisitor
-import org.wasmium.wasm.binary.visitors.FunctionSectionVisitor
-import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
-import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
-import org.wasmium.wasm.binary.visitors.LinkingSectionVisitor
-import org.wasmium.wasm.binary.visitors.MemorySectionVisitor
-import org.wasmium.wasm.binary.visitors.ModuleVisitor
-import org.wasmium.wasm.binary.visitors.NameSectionVisitor
-import org.wasmium.wasm.binary.visitors.RelocationSectionVisitor
-import org.wasmium.wasm.binary.visitors.SourceMapSectionVisitor
-import org.wasmium.wasm.binary.visitors.StartSectionVisitor
-import org.wasmium.wasm.binary.visitors.TableSectionVisitor
-import org.wasmium.wasm.binary.visitors.TagSectionVisitor
-import org.wasmium.wasm.binary.visitors.TypeSectionVisitor
-import org.wasmium.wasm.binary.visitors.UnknownSectionVisitor
+import org.wasmium.wasm.binary.visitor.CodeSectionVisitor
+import org.wasmium.wasm.binary.visitor.DataCountSectionVisitor
+import org.wasmium.wasm.binary.visitor.DataSectionVisitor
+import org.wasmium.wasm.binary.visitor.ElementSectionVisitor
+import org.wasmium.wasm.binary.visitor.ExportSectionVisitor
+import org.wasmium.wasm.binary.visitor.ExternalDebugSectionVisitor
+import org.wasmium.wasm.binary.visitor.FunctionSectionVisitor
+import org.wasmium.wasm.binary.visitor.GlobalSectionVisitor
+import org.wasmium.wasm.binary.visitor.ImportSectionVisitor
+import org.wasmium.wasm.binary.visitor.LinkingSectionVisitor
+import org.wasmium.wasm.binary.visitor.MemorySectionVisitor
+import org.wasmium.wasm.binary.visitor.ModuleVisitor
+import org.wasmium.wasm.binary.visitor.NameSectionVisitor
+import org.wasmium.wasm.binary.visitor.RelocationSectionVisitor
+import org.wasmium.wasm.binary.visitor.SourceMapSectionVisitor
+import org.wasmium.wasm.binary.visitor.StartSectionVisitor
+import org.wasmium.wasm.binary.visitor.TableSectionVisitor
+import org.wasmium.wasm.binary.visitor.TagSectionVisitor
+import org.wasmium.wasm.binary.visitor.TypeSectionVisitor
+import org.wasmium.wasm.binary.visitor.UnknownSectionVisitor
 
 public class ModuleNode : ModuleVisitor {
     public var version: UInt? = null

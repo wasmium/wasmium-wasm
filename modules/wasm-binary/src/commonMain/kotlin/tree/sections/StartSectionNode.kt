@@ -1,7 +1,7 @@
 package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.SectionKind
-import org.wasmium.wasm.binary.visitors.StartSectionVisitor
+import org.wasmium.wasm.binary.visitor.StartSectionVisitor
 
 public class StartSectionNode(
     public val functionIndex: UInt

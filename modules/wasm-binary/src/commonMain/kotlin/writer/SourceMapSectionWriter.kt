@@ -4,7 +4,7 @@ import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.SectionName
-import org.wasmium.wasm.binary.visitors.SourceMapSectionVisitor
+import org.wasmium.wasm.binary.visitor.SourceMapSectionVisitor
 
 public class SourceMapSectionWriter(
     private val context: WriterContext,

@@ -1,8 +1,8 @@
 package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.SectionKind
-import org.wasmium.wasm.binary.visitors.DataSectionVisitor
-import org.wasmium.wasm.binary.visitors.DataSegmentVisitor
+import org.wasmium.wasm.binary.visitor.DataSectionVisitor
+import org.wasmium.wasm.binary.visitor.DataSegmentVisitor
 
 public class DataSectionNode : SectionNode(SectionKind.DATA), DataSectionVisitor {
     public val segments: MutableList<DataSegmentNode> = mutableListOf()

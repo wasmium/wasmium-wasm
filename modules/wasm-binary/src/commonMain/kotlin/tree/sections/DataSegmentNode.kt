@@ -1,7 +1,7 @@
 package org.wasmium.wasm.binary.tree.sections
 
-import org.wasmium.wasm.binary.visitors.DataSegmentVisitor
-import org.wasmium.wasm.binary.visitors.ExpressionVisitor
+import org.wasmium.wasm.binary.visitor.DataSegmentVisitor
+import org.wasmium.wasm.binary.visitor.ExpressionVisitor
 
 public class DataSegmentNode : DataSegmentVisitor {
     public var memoryIndex: UInt? = null

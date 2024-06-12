@@ -1,6 +1,6 @@
 package org.wasmium.wasm.binary.tree.sections
 
-import org.wasmium.wasm.binary.visitors.UnknownSectionVisitor
+import org.wasmium.wasm.binary.visitor.UnknownSectionVisitor
 
 public open class UnknownSectionNode(
     public override var name: String,

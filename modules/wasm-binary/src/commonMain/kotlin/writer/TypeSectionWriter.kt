@@ -4,7 +4,7 @@ import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.FunctionType
 import org.wasmium.wasm.binary.tree.SectionKind
-import org.wasmium.wasm.binary.visitors.TypeSectionVisitor
+import org.wasmium.wasm.binary.visitor.TypeSectionVisitor
 
 public class TypeSectionWriter(private val context: WriterContext) : TypeSectionVisitor {
     private var numberOfTypes: UInt = 0u
@@ -15,7 +15,7 @@ public class TypeSectionWriter(private val context: WriterContext) : TypeSection
         writer.writeFunctionType(functionType)
 
         context.functionTypes.add(functionType)
-        
+
         numberOfTypes++
     }
 

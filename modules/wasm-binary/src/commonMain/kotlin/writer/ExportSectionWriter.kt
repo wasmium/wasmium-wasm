@@ -4,7 +4,7 @@ import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.ExternalKind
 import org.wasmium.wasm.binary.tree.SectionKind
-import org.wasmium.wasm.binary.visitors.ExportSectionVisitor
+import org.wasmium.wasm.binary.visitor.ExportSectionVisitor
 
 public class ExportSectionWriter(private val context: WriterContext) : ExportSectionVisitor {
     private var numberOfExports = 0u

@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.validator
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.tree.ExternalKind
-import org.wasmium.wasm.binary.visitors.ExportSectionVisitor
+import org.wasmium.wasm.binary.visitor.ExportSectionVisitor
 
 public class ExportSectionValidator(private val delegate: ExportSectionVisitor? = null, private val context: ValidatorContext) : ExportSectionVisitor {
     private val names = mutableSetOf<String>()

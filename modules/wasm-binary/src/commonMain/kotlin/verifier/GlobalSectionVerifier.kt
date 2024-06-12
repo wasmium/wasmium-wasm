@@ -2,8 +2,8 @@ package org.wasmium.wasm.binary.verifier
 
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.tree.GlobalType
-import org.wasmium.wasm.binary.visitors.ExpressionVisitor
-import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
+import org.wasmium.wasm.binary.visitor.ExpressionVisitor
+import org.wasmium.wasm.binary.visitor.GlobalSectionVisitor
 
 public class GlobalSectionVerifier(private val delegate: GlobalSectionVisitor? = null, private val context: VerifierContext) : GlobalSectionVisitor {
     private var done: Boolean = false

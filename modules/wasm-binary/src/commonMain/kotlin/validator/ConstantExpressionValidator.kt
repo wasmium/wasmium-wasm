@@ -7,7 +7,7 @@ import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.instructions.TryCatchArgument
 import org.wasmium.wasm.binary.tree.GlobalType.*
 import org.wasmium.wasm.binary.verifier.VerifierException
-import org.wasmium.wasm.binary.visitors.ExpressionVisitor
+import org.wasmium.wasm.binary.visitor.ExpressionVisitor
 
 public class ConstantExpressionValidator(private val delegate: ExpressionVisitor? = null, private val context: ValidatorContext) : ExpressionVisitor {
 

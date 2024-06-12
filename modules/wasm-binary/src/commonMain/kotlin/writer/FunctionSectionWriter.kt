@@ -4,7 +4,7 @@ import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.FunctionType
 import org.wasmium.wasm.binary.tree.SectionKind
-import org.wasmium.wasm.binary.visitors.FunctionSectionVisitor
+import org.wasmium.wasm.binary.visitor.FunctionSectionVisitor
 
 public class FunctionSectionWriter(private val context: WriterContext) : FunctionSectionVisitor {
     private var numberOfFunctions = 0u

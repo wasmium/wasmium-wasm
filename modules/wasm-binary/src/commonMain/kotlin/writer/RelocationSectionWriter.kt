@@ -27,7 +27,7 @@ import org.wasmium.wasm.binary.tree.RelocationKind.TYPE_INDEX_LEB
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.SectionName
 import org.wasmium.wasm.binary.tree.sections.RelocationType
-import org.wasmium.wasm.binary.visitors.RelocationSectionVisitor
+import org.wasmium.wasm.binary.visitor.RelocationSectionVisitor
 
 public class RelocationSectionWriter(private val context: WriterContext) : RelocationSectionVisitor {
     private var numberOfRelocations = 0u

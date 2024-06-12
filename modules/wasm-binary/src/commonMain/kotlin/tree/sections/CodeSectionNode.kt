@@ -2,8 +2,8 @@ package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.LocalVariable
 import org.wasmium.wasm.binary.tree.SectionKind
-import org.wasmium.wasm.binary.visitors.CodeSectionVisitor
-import org.wasmium.wasm.binary.visitors.ExpressionVisitor
+import org.wasmium.wasm.binary.visitor.CodeSectionVisitor
+import org.wasmium.wasm.binary.visitor.ExpressionVisitor
 
 public class CodeSectionNode : SectionNode(SectionKind.CODE), CodeSectionVisitor {
     public val codes: MutableList<CodeType> = mutableListOf()

@@ -1,8 +1,8 @@
 package org.wasmium.wasm.binary.verifier
 
 import org.wasmium.wasm.binary.WasmBinary
-import org.wasmium.wasm.binary.visitors.ElementSectionVisitor
-import org.wasmium.wasm.binary.visitors.ElementSegmentVisitor
+import org.wasmium.wasm.binary.visitor.ElementSectionVisitor
+import org.wasmium.wasm.binary.visitor.ElementSegmentVisitor
 
 public class ElementSectionVerifier(private val delegate: ElementSectionVisitor? = null, private val context: VerifierContext) : ElementSectionVisitor {
     private var done: Boolean = false

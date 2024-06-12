@@ -5,7 +5,7 @@ import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.instructions.*
-import org.wasmium.wasm.binary.visitors.ExpressionVisitor
+import org.wasmium.wasm.binary.visitor.ExpressionVisitor
 
 public class ExpressionNode : ExpressionVisitor {
     public val instructions: MutableList<Instruction> = mutableListOf()

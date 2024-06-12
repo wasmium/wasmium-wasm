@@ -1,7 +1,7 @@
 package org.wasmium.wasm.binary.validator
 
 import org.wasmium.wasm.binary.tree.LinkingSymbolType
-import org.wasmium.wasm.binary.visitors.LinkingSectionVisitor
+import org.wasmium.wasm.binary.visitor.LinkingSectionVisitor
 
 public class LinkingSectionValidator(private val delegate: LinkingSectionVisitor? = null, private val context: ValidatorContext) : LinkingSectionVisitor {
     override fun visitSegment(name: String, alignment: UInt, flags: UInt) {

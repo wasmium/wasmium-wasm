@@ -4,7 +4,7 @@ import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.SectionName
-import org.wasmium.wasm.binary.visitors.ExternalDebugSectionVisitor
+import org.wasmium.wasm.binary.visitor.ExternalDebugSectionVisitor
 
 public class ExternalDebugSectionWriter(
     private val context: WriterContext,

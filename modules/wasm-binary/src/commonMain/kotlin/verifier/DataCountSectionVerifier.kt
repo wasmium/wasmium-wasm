@@ -1,7 +1,7 @@
 package org.wasmium.wasm.binary.verifier
 
 import org.wasmium.wasm.binary.WasmBinary
-import org.wasmium.wasm.binary.visitors.DataCountSectionVisitor
+import org.wasmium.wasm.binary.visitor.DataCountSectionVisitor
 
 public class DataCountSectionVerifier(
     private val delegate: DataCountSectionVisitor? = null,

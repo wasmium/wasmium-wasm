@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.MemoryType
 import org.wasmium.wasm.binary.tree.SectionKind
-import org.wasmium.wasm.binary.visitors.MemorySectionVisitor
+import org.wasmium.wasm.binary.visitor.MemorySectionVisitor
 
 public class MemorySectionNode : SectionNode(SectionKind.MEMORY), MemorySectionVisitor {
     public val memoryTypes: MutableList<MemoryType> = mutableListOf()

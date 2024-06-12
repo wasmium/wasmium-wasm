@@ -4,7 +4,7 @@ import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.MemoryType
-import org.wasmium.wasm.binary.visitors.MemorySectionVisitor
+import org.wasmium.wasm.binary.visitor.MemorySectionVisitor
 
 public class MemorySectionWriter(private val context: WriterContext) : MemorySectionVisitor {
     private var numberOfMemories = 0u

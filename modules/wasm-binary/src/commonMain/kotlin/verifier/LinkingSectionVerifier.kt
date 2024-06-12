@@ -1,7 +1,7 @@
 package org.wasmium.wasm.binary.verifier
 
 import org.wasmium.wasm.binary.tree.LinkingSymbolType
-import org.wasmium.wasm.binary.visitors.LinkingSectionVisitor
+import org.wasmium.wasm.binary.visitor.LinkingSectionVisitor
 
 public class LinkingSectionVerifier(private val delegate: LinkingSectionVisitor? = null, private val context: VerifierContext) : LinkingSectionVisitor {
     private var done: Boolean = false

@@ -1,6 +1,6 @@
 package org.wasmium.wasm.binary.tree.sections
 
-import org.wasmium.wasm.binary.visitors.FunctionNameVisitor
+import org.wasmium.wasm.binary.visitor.FunctionNameVisitor
 
 public class FunctionNameNode(
     public var functionIndex: UInt,

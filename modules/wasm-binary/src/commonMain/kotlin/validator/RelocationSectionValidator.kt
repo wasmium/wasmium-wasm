@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.validator
 
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.sections.RelocationType
-import org.wasmium.wasm.binary.visitors.RelocationSectionVisitor
+import org.wasmium.wasm.binary.visitor.RelocationSectionVisitor
 
 public class RelocationSectionValidator(private val delegate: RelocationSectionVisitor? = null, private val context: ValidatorContext) : RelocationSectionVisitor {
     override fun visitRelocation(sectionKind: SectionKind, sectionName: String?, relocationTypes: List<RelocationType>) {

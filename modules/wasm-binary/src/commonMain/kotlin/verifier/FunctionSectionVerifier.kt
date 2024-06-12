@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.verifier
 
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.tree.FunctionType
-import org.wasmium.wasm.binary.visitors.FunctionSectionVisitor
+import org.wasmium.wasm.binary.visitor.FunctionSectionVisitor
 
 public class FunctionSectionVerifier(private val delegate: FunctionSectionVisitor? = null, private val context: VerifierContext) : FunctionSectionVisitor {
     private var done: Boolean = false

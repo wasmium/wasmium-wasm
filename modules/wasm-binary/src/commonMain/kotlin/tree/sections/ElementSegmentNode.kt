@@ -1,8 +1,8 @@
 package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.WasmType
-import org.wasmium.wasm.binary.visitors.ElementSegmentVisitor
-import org.wasmium.wasm.binary.visitors.ExpressionVisitor
+import org.wasmium.wasm.binary.visitor.ElementSegmentVisitor
+import org.wasmium.wasm.binary.visitor.ExpressionVisitor
 
 public class ElementSegmentNode : ElementSegmentVisitor {
     public var initializers: MutableList<ExpressionNode> = mutableListOf()

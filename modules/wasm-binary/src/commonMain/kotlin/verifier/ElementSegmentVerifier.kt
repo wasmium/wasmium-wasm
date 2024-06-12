@@ -3,8 +3,8 @@ package org.wasmium.wasm.binary.verifier
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary.MAX_ELEMENT_SEGMENT_FUNCTION_INDEXES
 import org.wasmium.wasm.binary.tree.WasmType
-import org.wasmium.wasm.binary.visitors.ElementSegmentVisitor
-import org.wasmium.wasm.binary.visitors.ExpressionVisitor
+import org.wasmium.wasm.binary.visitor.ElementSegmentVisitor
+import org.wasmium.wasm.binary.visitor.ExpressionVisitor
 
 public class ElementSegmentVerifier(private val delegate: ElementSegmentVisitor? = null, private val context: VerifierContext) : ElementSegmentVisitor {
     private var done: Boolean = false

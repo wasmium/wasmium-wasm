@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.validator
 
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.verifier.VerifierException
-import org.wasmium.wasm.binary.visitors.StartSectionVisitor
+import org.wasmium.wasm.binary.visitor.StartSectionVisitor
 
 public class StartSectionValidator(private val delegate: StartSectionVisitor? = null, private val context: ValidatorContext, private val functionIndex: UInt) :
     StartSectionVisitor {

@@ -1,8 +1,8 @@
 package org.wasmium.wasm.binary.verifier
 
 import org.wasmium.wasm.binary.ParserException
-import org.wasmium.wasm.binary.visitors.DataSegmentVisitor
-import org.wasmium.wasm.binary.visitors.ExpressionVisitor
+import org.wasmium.wasm.binary.visitor.DataSegmentVisitor
+import org.wasmium.wasm.binary.visitor.ExpressionVisitor
 
 public class DataSegmentVerifier(private val delegate: DataSegmentVisitor? = null, private val context: VerifierContext) : DataSegmentVisitor {
     private var done: Boolean = false

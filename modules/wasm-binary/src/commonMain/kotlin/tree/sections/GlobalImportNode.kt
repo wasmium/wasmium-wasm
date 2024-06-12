@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.ExternalKind
 import org.wasmium.wasm.binary.tree.GlobalType
-import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
+import org.wasmium.wasm.binary.visitor.ImportSectionVisitor
 
 public class GlobalImportNode(
     public override val module: String,

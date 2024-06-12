@@ -5,7 +5,7 @@ import org.wasmium.wasm.binary.tree.GlobalType
 import org.wasmium.wasm.binary.tree.MemoryType
 import org.wasmium.wasm.binary.tree.TableType
 import org.wasmium.wasm.binary.tree.TagType
-import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
+import org.wasmium.wasm.binary.visitor.ImportSectionVisitor
 
 public class ImportSectionValidator(private val delegate: ImportSectionVisitor? = null, private val context: ValidatorContext) : ImportSectionVisitor {
     override fun visitFunction(moduleName: String, fieldName: String, functionType: FunctionType) {

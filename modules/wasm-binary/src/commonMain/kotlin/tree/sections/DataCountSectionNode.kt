@@ -1,7 +1,7 @@
 package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.SectionKind
-import org.wasmium.wasm.binary.visitors.DataCountSectionVisitor
+import org.wasmium.wasm.binary.visitor.DataCountSectionVisitor
 
 public class DataCountSectionNode(
     public val dataCount: UInt

@@ -3,8 +3,8 @@ package org.wasmium.wasm.binary.writer
 import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.WasmBinaryWriter
-import org.wasmium.wasm.binary.visitors.DataSegmentVisitor
-import org.wasmium.wasm.binary.visitors.ExpressionVisitor
+import org.wasmium.wasm.binary.visitor.DataSegmentVisitor
+import org.wasmium.wasm.binary.visitor.ExpressionVisitor
 
 public class DataSegmentWriter(
     private val context: WriterContext,

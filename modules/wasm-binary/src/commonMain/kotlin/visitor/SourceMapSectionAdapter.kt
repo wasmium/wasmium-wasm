@@ -1,4 +1,4 @@
-package org.wasmium.wasm.binary.visitors
+package org.wasmium.wasm.binary.visitor
 
 public open class SourceMapSectionAdapter(protected val delegate: SourceMapSectionVisitor? = null) : SourceMapSectionVisitor {
 

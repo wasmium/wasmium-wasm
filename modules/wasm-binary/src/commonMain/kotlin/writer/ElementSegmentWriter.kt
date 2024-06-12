@@ -7,8 +7,8 @@ import org.wasmium.wasm.binary.WasmBinary.ELEMENT_TABLE_INDEX
 import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.ElementKind
 import org.wasmium.wasm.binary.tree.WasmType
-import org.wasmium.wasm.binary.visitors.ElementSegmentVisitor
-import org.wasmium.wasm.binary.visitors.ExpressionVisitor
+import org.wasmium.wasm.binary.visitor.ElementSegmentVisitor
+import org.wasmium.wasm.binary.visitor.ExpressionVisitor
 
 public class ElementSegmentWriter(
     private val context: WriterContext,

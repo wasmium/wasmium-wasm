@@ -1,6 +1,6 @@
 package org.wasmium.wasm.binary.verifier
 
-import org.wasmium.wasm.binary.visitors.ExternalDebugSectionVisitor
+import org.wasmium.wasm.binary.visitor.ExternalDebugSectionVisitor
 
 public class ExternalDebugSectionVerifier(
     private val delegate: ExternalDebugSectionVisitor? = null,

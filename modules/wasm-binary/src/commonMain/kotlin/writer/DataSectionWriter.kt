@@ -3,8 +3,8 @@ package org.wasmium.wasm.binary.writer
 import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.SectionKind
-import org.wasmium.wasm.binary.visitors.DataSectionVisitor
-import org.wasmium.wasm.binary.visitors.DataSegmentVisitor
+import org.wasmium.wasm.binary.visitor.DataSectionVisitor
+import org.wasmium.wasm.binary.visitor.DataSegmentVisitor
 
 public class DataSectionWriter(private val context: WriterContext) : DataSectionVisitor {
     private var numberOfSegments = 0u

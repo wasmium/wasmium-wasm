@@ -3,7 +3,7 @@ package org.wasmium.wasm.binary.verifier
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
 import org.wasmium.wasm.binary.tree.TagType
-import org.wasmium.wasm.binary.visitors.TagSectionVisitor
+import org.wasmium.wasm.binary.visitor.TagSectionVisitor
 
 public class TagSectionVerifier(private val delegate: TagSectionVisitor? = null, private val context: VerifierContext) : TagSectionVisitor {
     private var done: Boolean = false

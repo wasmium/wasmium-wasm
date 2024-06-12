@@ -3,7 +3,7 @@ package org.wasmium.wasm.binary.writer
 import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.SectionKind
-import org.wasmium.wasm.binary.visitors.StartSectionVisitor
+import org.wasmium.wasm.binary.visitor.StartSectionVisitor
 
 public class StartSectionWriter(
     private val context: WriterContext,

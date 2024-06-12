@@ -8,7 +8,7 @@ import org.wasmium.wasm.binary.tree.ExternalKind.GLOBAL
 import org.wasmium.wasm.binary.tree.ExternalKind.MEMORY
 import org.wasmium.wasm.binary.tree.ExternalKind.TABLE
 import org.wasmium.wasm.binary.tree.ExternalKind.TAG
-import org.wasmium.wasm.binary.visitors.ExportSectionVisitor
+import org.wasmium.wasm.binary.visitor.ExportSectionVisitor
 
 public class ExportSectionVerifier(private val delegate: ExportSectionVisitor? = null, private val context: VerifierContext) : ExportSectionVisitor {
     private var done: Boolean = false

@@ -61,11 +61,11 @@ import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.instructions.TryCatchArgument
 import org.wasmium.wasm.binary.tree.instructions.TryCatchArgument.TryCatchKind
 import org.wasmium.wasm.binary.tree.sections.RelocationType
-import org.wasmium.wasm.binary.visitors.DataSectionVisitor
-import org.wasmium.wasm.binary.visitors.ElementSectionVisitor
-import org.wasmium.wasm.binary.visitors.ExpressionVisitor
-import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
-import org.wasmium.wasm.binary.visitors.ModuleVisitor
+import org.wasmium.wasm.binary.visitor.DataSectionVisitor
+import org.wasmium.wasm.binary.visitor.ElementSectionVisitor
+import org.wasmium.wasm.binary.visitor.ExpressionVisitor
+import org.wasmium.wasm.binary.visitor.GlobalSectionVisitor
+import org.wasmium.wasm.binary.visitor.ModuleVisitor
 
 @OptIn(ExperimentalUnsignedTypes::class)
 public class ModuleReader(options: ReaderOptions) {

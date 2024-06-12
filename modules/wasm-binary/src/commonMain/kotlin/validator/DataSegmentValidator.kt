@@ -1,8 +1,8 @@
 package org.wasmium.wasm.binary.validator
 
 import org.wasmium.wasm.binary.tree.WasmType
-import org.wasmium.wasm.binary.visitors.DataSegmentVisitor
-import org.wasmium.wasm.binary.visitors.ExpressionVisitor
+import org.wasmium.wasm.binary.visitor.DataSegmentVisitor
+import org.wasmium.wasm.binary.visitor.ExpressionVisitor
 
 public class DataSegmentValidator(private val delegate: DataSegmentVisitor? = null, private val context: ValidatorContext) : DataSegmentVisitor {
     override fun visitActive(memoryIndex: UInt): ExpressionVisitor {

@@ -8,7 +8,7 @@ import org.wasmium.wasm.binary.tree.Opcode.*
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.instructions.TryCatchArgument
-import org.wasmium.wasm.binary.visitors.ExpressionVisitor
+import org.wasmium.wasm.binary.visitor.ExpressionVisitor
 
 public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = null, private val context: VerifierContext) : ExpressionVisitor {
     private var done: Boolean = false

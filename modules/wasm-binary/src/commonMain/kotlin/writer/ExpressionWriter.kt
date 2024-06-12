@@ -7,7 +7,7 @@ import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.instructions.TryCatchArgument
-import org.wasmium.wasm.binary.visitors.ExpressionVisitor
+import org.wasmium.wasm.binary.visitor.ExpressionVisitor
 
 @OptIn(ExperimentalUnsignedTypes::class)
 public class ExpressionWriter(

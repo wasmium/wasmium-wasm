@@ -25,7 +25,7 @@ import org.wasmium.wasm.binary.tree.RelocationKind.TABLE_NUMBER_LEB
 import org.wasmium.wasm.binary.tree.RelocationKind.TYPE_INDEX_LEB
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.sections.RelocationType
-import org.wasmium.wasm.binary.visitors.RelocationSectionVisitor
+import org.wasmium.wasm.binary.visitor.RelocationSectionVisitor
 
 public class RelocationSectionVerifier(private val delegate: RelocationSectionVisitor? = null, private val context: VerifierContext) : RelocationSectionVisitor {
     private var done: Boolean = false

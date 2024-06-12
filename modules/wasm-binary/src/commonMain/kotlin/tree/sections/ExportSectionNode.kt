@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.ExternalKind
 import org.wasmium.wasm.binary.tree.SectionKind
-import org.wasmium.wasm.binary.visitors.ExportSectionVisitor
+import org.wasmium.wasm.binary.visitor.ExportSectionVisitor
 
 public class ExportSectionNode : SectionNode(SectionKind.EXPORT), ExportSectionVisitor {
     public val exports: MutableList<ExportType> = mutableListOf()

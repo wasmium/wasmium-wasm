@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.TagType
-import org.wasmium.wasm.binary.visitors.TagSectionVisitor
+import org.wasmium.wasm.binary.visitor.TagSectionVisitor
 
 public class TagSectionNode : SectionNode(SectionKind.TAG), TagSectionVisitor {
     public val tagTypes: MutableList<TagType> = mutableListOf()

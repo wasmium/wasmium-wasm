@@ -9,7 +9,7 @@ import org.wasmium.wasm.binary.tree.MemoryType
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.TableType
 import org.wasmium.wasm.binary.tree.TagType
-import org.wasmium.wasm.binary.visitors.ImportSectionVisitor
+import org.wasmium.wasm.binary.visitor.ImportSectionVisitor
 
 public class ImportSectionWriter(private val context: WriterContext) : ImportSectionVisitor {
     private var numberOfImports = 0u

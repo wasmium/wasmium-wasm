@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.SectionName
-import org.wasmium.wasm.binary.visitors.RelocationSectionVisitor
+import org.wasmium.wasm.binary.visitor.RelocationSectionVisitor
 
 public class RelocationSectionNode : CustomSectionNode(SectionName.RELOCATION.sectionName), RelocationSectionVisitor {
     public var kind: SectionKind? = null

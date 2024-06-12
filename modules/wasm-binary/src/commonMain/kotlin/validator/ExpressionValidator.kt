@@ -17,7 +17,7 @@ import org.wasmium.wasm.binary.tree.WasmType.NONE
 import org.wasmium.wasm.binary.tree.WasmType.V128
 import org.wasmium.wasm.binary.tree.instructions.TryCatchArgument
 import org.wasmium.wasm.binary.tree.FunctionType
-import org.wasmium.wasm.binary.visitors.ExpressionVisitor
+import org.wasmium.wasm.binary.visitor.ExpressionVisitor
 
 private class ControlFrame(
     var opcode: Opcode,

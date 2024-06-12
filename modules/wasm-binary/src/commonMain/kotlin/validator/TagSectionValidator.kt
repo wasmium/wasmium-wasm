@@ -1,7 +1,7 @@
 package org.wasmium.wasm.binary.validator
 
 import org.wasmium.wasm.binary.tree.TagType
-import org.wasmium.wasm.binary.visitors.TagSectionVisitor
+import org.wasmium.wasm.binary.visitor.TagSectionVisitor
 
 public class TagSectionValidator(private val delegate: TagSectionVisitor? = null, private val context: ValidatorContext) : TagSectionVisitor {
     override fun visitTag(tagType: TagType) {

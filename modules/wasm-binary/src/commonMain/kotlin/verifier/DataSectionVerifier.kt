@@ -1,8 +1,8 @@
 package org.wasmium.wasm.binary.verifier
 
 import org.wasmium.wasm.binary.WasmBinary
-import org.wasmium.wasm.binary.visitors.DataSectionVisitor
-import org.wasmium.wasm.binary.visitors.DataSegmentVisitor
+import org.wasmium.wasm.binary.visitor.DataSectionVisitor
+import org.wasmium.wasm.binary.visitor.DataSegmentVisitor
 
 public class DataSectionVerifier(private val delegate: DataSectionVisitor? = null, private val context: VerifierContext) : DataSectionVisitor {
     private var done: Boolean = false

@@ -1,9 +1,9 @@
 package org.wasmium.wasm.binary.validator
 
 import org.wasmium.wasm.binary.tree.WasmType
-import org.wasmium.wasm.binary.visitors.ElementSegmentVisitor
-import org.wasmium.wasm.binary.visitors.ExpressionAdapter
-import org.wasmium.wasm.binary.visitors.ExpressionVisitor
+import org.wasmium.wasm.binary.visitor.ElementSegmentVisitor
+import org.wasmium.wasm.binary.visitor.ExpressionAdapter
+import org.wasmium.wasm.binary.visitor.ExpressionVisitor
 
 public class ElementSegmentValidator(private val delegate: ElementSegmentVisitor? = null, private val context: ValidatorContext) : ElementSegmentVisitor {
     override fun visitElementIndices(elementIndices: List<UInt>) {

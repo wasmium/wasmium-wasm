@@ -4,8 +4,8 @@ import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.LocalVariable
 import org.wasmium.wasm.binary.tree.SectionKind
-import org.wasmium.wasm.binary.visitors.CodeSectionVisitor
-import org.wasmium.wasm.binary.visitors.ExpressionVisitor
+import org.wasmium.wasm.binary.visitor.CodeSectionVisitor
+import org.wasmium.wasm.binary.visitor.ExpressionVisitor
 
 public class CodeSectionWriter(private val context: WriterContext) : CodeSectionVisitor {
     private var numberOfCodes = 0u

@@ -6,7 +6,7 @@ import org.wasmium.wasm.binary.tree.IndexName
 import org.wasmium.wasm.binary.tree.NameKind
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.SectionName
-import org.wasmium.wasm.binary.visitors.NameSectionVisitor
+import org.wasmium.wasm.binary.visitor.NameSectionVisitor
 
 public class NameSectionWriter(
     private val context: WriterContext

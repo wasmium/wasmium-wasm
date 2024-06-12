@@ -1,6 +1,6 @@
 package org.wasmium.wasm.binary.verifier
 
-import org.wasmium.wasm.binary.visitors.SourceMapSectionVisitor
+import org.wasmium.wasm.binary.visitor.SourceMapSectionVisitor
 
 public class SourceMapSectionVerifier(
     private val delegate: SourceMapSectionVisitor? = null,

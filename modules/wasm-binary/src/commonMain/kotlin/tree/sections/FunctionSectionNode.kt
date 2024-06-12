@@ -2,7 +2,7 @@ package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.FunctionType
 import org.wasmium.wasm.binary.tree.SectionKind
-import org.wasmium.wasm.binary.visitors.FunctionSectionVisitor
+import org.wasmium.wasm.binary.visitor.FunctionSectionVisitor
 
 public class FunctionSectionNode : SectionNode(SectionKind.FUNCTION), FunctionSectionVisitor {
     public val functionTypes: MutableList<FunctionType> = mutableListOf()

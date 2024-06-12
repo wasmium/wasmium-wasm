@@ -2,8 +2,8 @@ package org.wasmium.wasm.binary.tree.sections
 
 import org.wasmium.wasm.binary.tree.GlobalType
 import org.wasmium.wasm.binary.tree.SectionKind
-import org.wasmium.wasm.binary.visitors.ExpressionVisitor
-import org.wasmium.wasm.binary.visitors.GlobalSectionVisitor
+import org.wasmium.wasm.binary.visitor.ExpressionVisitor
+import org.wasmium.wasm.binary.visitor.GlobalSectionVisitor
 
 public class GlobalSectionNode : SectionNode(SectionKind.GLOBAL), GlobalSectionVisitor {
     public val globals: MutableList<GlobalVariableNode> = mutableListOf()

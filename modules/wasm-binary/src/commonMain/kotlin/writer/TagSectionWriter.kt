@@ -4,7 +4,7 @@ import org.wasmium.wasm.binary.ByteBuffer
 import org.wasmium.wasm.binary.WasmBinaryWriter
 import org.wasmium.wasm.binary.tree.SectionKind
 import org.wasmium.wasm.binary.tree.TagType
-import org.wasmium.wasm.binary.visitors.TagSectionVisitor
+import org.wasmium.wasm.binary.visitor.TagSectionVisitor
 
 public class TagSectionWriter(private val context: WriterContext) : TagSectionVisitor {
     private var numberOfTags = 0u

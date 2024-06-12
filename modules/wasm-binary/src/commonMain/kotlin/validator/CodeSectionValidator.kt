@@ -2,8 +2,8 @@ package org.wasmium.wasm.binary.validator
 
 import org.wasmium.wasm.binary.tree.LocalVariable
 import org.wasmium.wasm.binary.tree.WasmType
-import org.wasmium.wasm.binary.visitors.CodeSectionVisitor
-import org.wasmium.wasm.binary.visitors.ExpressionVisitor
+import org.wasmium.wasm.binary.visitor.CodeSectionVisitor
+import org.wasmium.wasm.binary.visitor.ExpressionVisitor
 
 public class CodeSectionValidator(private val delegate: CodeSectionVisitor? = null, private val context: ValidatorContext) : CodeSectionVisitor {
     private var numberOfCodes: UInt = 0u
