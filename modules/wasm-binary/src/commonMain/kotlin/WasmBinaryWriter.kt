@@ -258,7 +258,7 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
     public fun writeMemoryType(memoryType: MemoryType): Unit = writeMemoryLimits(memoryType.limits)
 
     public fun writeFunctionType(functionType: FunctionType) {
-        writeType(WasmType.FUNC)
+        writeType(functionType.form)
 
         writeVarUInt32(functionType.parameters.size.toUInt())
         for (parameter in functionType.parameters) {

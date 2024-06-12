@@ -359,7 +359,7 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
             throw ParserException("Result size must be 0 or 1 but got: ${resultTypes.size}")
         }
 
-        return FunctionType(parameters, resultTypes)
+        return FunctionType(form, parameters, resultTypes)
     }
 
     public fun readValueTypes(): List<WasmType> {

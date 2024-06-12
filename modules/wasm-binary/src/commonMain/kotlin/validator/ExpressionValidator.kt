@@ -531,7 +531,7 @@ public class ExpressionValidator(
             }
         }
 
-        return FunctionType(inputs, outputs)
+        return FunctionType(NONE, inputs, outputs)
     }
 
     override fun visitIfInstruction(blockType: BlockType) {
