@@ -17,6 +17,8 @@ public enum class SectionName(public val sectionName: String) {
     SOURCE_MAPPING_URL("sourceMappingURL"),
 
     EXTERNAL_DEBUG_INFO("external_debug_info"),
+
+    PRODUCERS("producers"),
     ;
 
     public companion object {

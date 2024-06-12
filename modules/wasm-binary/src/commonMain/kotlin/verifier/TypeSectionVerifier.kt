@@ -11,12 +11,16 @@ public class TypeSectionVerifier(private val delegate: TypeSectionVisitor? = nul
     override fun visitType(functionType: FunctionType) {
         checkEnd()
 
-        if (functionType.parameters.size.toUInt() > WasmBinary.MAX_FUNCTION_PARAMS) {
-            throw ParserException("Number of function parameters ${functionType.parameters.size.toUInt()} exceed the maximum of ${WasmBinary.MAX_FUNCTION_PARAMS}")
+        if (functionType.parameters.size.toUInt() > WasmBinary.MAX_FUNCTION_PARAMETERS) {
+            throw ParserException("Number of function parameters ${functionType.parameters.size.toUInt()} exceed the maximum of ${WasmBinary.MAX_FUNCTION_PARAMETERS}")
         }
 
         if (functionType.results.size.toUInt() > WasmBinary.MAX_FUNCTION_RESULTS) {
             throw ParserException("Number of function results ${functionType.results.size.toUInt()} exceed the maximum of ${WasmBinary.MAX_FUNCTION_RESULTS}")
+        }
+
+        if (!context.options.features.isMultiValueEnabled && functionType.results.size > 1) {
+            throw ParserException("Result size must be 0 or 1 but got ${functionType.results.size}")
         }
 
         context.numberOfTypes++

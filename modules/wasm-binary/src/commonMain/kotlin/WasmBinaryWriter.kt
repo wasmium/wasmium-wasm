@@ -6,7 +6,7 @@ import org.wasmium.wasm.binary.tree.BlockType
 import org.wasmium.wasm.binary.tree.ExternalKind
 import org.wasmium.wasm.binary.tree.FunctionType
 import org.wasmium.wasm.binary.tree.GlobalType
-import org.wasmium.wasm.binary.tree.GlobalType.Mutability
+import org.wasmium.wasm.binary.tree.GlobalType.Mutable
 import org.wasmium.wasm.binary.tree.LinkingKind
 import org.wasmium.wasm.binary.tree.MemoryLimits
 import org.wasmium.wasm.binary.tree.NameKind
@@ -148,7 +148,7 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
 
     public fun writeGlobalType(globalType: GlobalType) {
         writeType(globalType.contentType)
-        writeMutability(globalType.mutability)
+        writeMutability(globalType.mutable)
     }
 
     public fun writeTableType(tableType: TableType) {
@@ -253,7 +253,7 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
         writeByteArray(data, 0, data.size)
     }
 
-    public fun writeMutability(mutability: Mutability): Unit = writeVarUInt1(if (mutability == Mutability.IMMUTABLE) 0u else 1u)
+    public fun writeMutability(mutable: Mutable): Unit = writeVarUInt1(if (mutable == Mutable.IMMUTABLE) 0u else 1u)
 
     public fun writeMemoryType(memoryType: MemoryType): Unit = writeMemoryLimits(memoryType.limits)
 

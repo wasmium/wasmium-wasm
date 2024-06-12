@@ -194,7 +194,7 @@ public class ConstantExpressionValidator(private val delegate: ExpressionVisitor
     override fun visitGetGlobalInstruction(globalIndex: UInt) {
         val globalType = context.globals[globalIndex.toInt()]
 
-        if (globalType.mutability == Mutability.MUTABLE) {
+        if (globalType.mutable == Mutable.MUTABLE) {
             notConstant()
         }
 

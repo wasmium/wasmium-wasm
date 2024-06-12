@@ -61,7 +61,7 @@ public object WasmBinary {
     public const val MAX_MODULE_SIZE: UInt = 1073741824u
 
     /** Maximum number of function parameters. */
-    public const val MAX_FUNCTION_PARAMS: UInt = 1_000u
+    public const val MAX_FUNCTION_PARAMETERS: UInt = 1_000u
 
     /** Maximum number of function results. */
     public const val MAX_FUNCTION_RESULTS: UInt = 100u
@@ -112,4 +112,10 @@ public object WasmBinary {
     public const val LINKING_SYMBOL_FLAG_UNDEFINED: UInt = 0x10u
     public const val LINKING_SYMBOL_MASK_VISIBILITY: UInt = 0x4u
     public const val LINKING_SYMBOL_MASK_BINDING: UInt = 0x3u
+
+    /** Maximum number of select_t parameters. */
+    public const val MAX_SELECT_TYPE_PARAMETERS: UInt = 1_000u
+
+    /** Maximum number of br_table targets 128 * 1024 */
+    public const val MAX_BR_TABLE_TARGETS: UInt = 131072u
 }

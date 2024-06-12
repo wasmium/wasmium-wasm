@@ -55,7 +55,7 @@ public class ReaderContext(
 
     public val numberOfTotalExceptions: UInt get() = numberOfTagImports + numberOfExceptions
 
-    public var nameOfSectionConsumed: Boolean = false
+    public var customSectionNameConsumed: Boolean = false
 
     public val functionTypes: MutableList<FunctionType> = mutableListOf()
 

@@ -78,10 +78,15 @@ public class ModuleReader(options: ReaderOptions) {
             throw ParserException("Expecting module size of at least: $minSize")
         }
 
-        checkMagicNumber(source.readUInt32())
+        val magic = source.readUInt32()
+        if (magic != WasmBinary.Meta.MAGIC_NUMBER) {
+            throw ParserException("Module does not start with: $magic")
+        }
 
         val version = source.readUInt32()
-        checkVersion(version)
+        if (version != WasmBinary.Meta.VERSION_1 && version != WasmBinary.Meta.VERSION_2) {
+            throw ParserException("Unsupported version number: $version")
+        }
 
         visitor.visitHeader(version)
 
@@ -141,7 +146,7 @@ public class ModuleReader(options: ReaderOptions) {
                 throw ParserException("Invalid size of section id $section, expected $payloadSize, actual ${source.position - startPosition}")
             }
 
-            if (context.nameOfSectionConsumed && section != CUSTOM) {
+            if (context.customSectionNameConsumed && section != CUSTOM) {
                 throw ParserException("${section.name} section can not occur after Name section")
             }
 
@@ -155,18 +160,6 @@ public class ModuleReader(options: ReaderOptions) {
         }
 
         return ReaderResult.Success(context.messages)
-    }
-
-    private fun checkVersion(version: UInt) {
-        if (version != WasmBinary.Meta.VERSION_1 && version != WasmBinary.Meta.VERSION_2) {
-            throw ParserException("Unsupported version number: $version")
-        }
-    }
-
-    private fun checkMagicNumber(magic: UInt) {
-        if (magic != WasmBinary.Meta.MAGIC_NUMBER) {
-            throw ParserException("Module does not start with: $magic")
-        }
     }
 
     private fun readTypeSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
@@ -221,11 +214,11 @@ public class ModuleReader(options: ReaderOptions) {
     }
 
     private fun readMemorySection(source: WasmBinaryReader, visitor: ModuleVisitor) {
-        context.numberOfMemories = source.readVarUInt32()
+        val numberOfMemories = source.readVarUInt32()
 
-        if (context.numberOfMemories > 0u) {
+        if (numberOfMemories > 0u) {
             val memoryVisitor = visitor.visitMemorySection()
-            (0u until context.numberOfMemories).forEach { _ ->
+            (0u until numberOfMemories).forEach { _ ->
                 val memoryType = source.readMemoryType()
 
                 memoryVisitor.visitMemory(memoryType)
@@ -233,6 +226,8 @@ public class ModuleReader(options: ReaderOptions) {
 
             memoryVisitor.visitEnd()
         }
+
+        context.numberOfMemories = numberOfMemories
     }
 
     private fun readImportSection(source: WasmBinaryReader, visitor: ModuleVisitor) {
@@ -488,7 +483,7 @@ public class ModuleReader(options: ReaderOptions) {
 
         when {
             sectionName == SectionName.NAME.sectionName -> {
-                context.nameOfSectionConsumed = true
+                context.customSectionNameConsumed = true
                 if (context.options.debugNames) {
                     readNamesSection(source, source.position, sectionPayloadSize, visitor)
                 } else {
@@ -510,6 +505,11 @@ public class ModuleReader(options: ReaderOptions) {
 
             sectionName == SectionName.EXTERNAL_DEBUG_INFO.sectionName -> {
                 readExternalDebugSection(source, visitor)
+            }
+
+            sectionName == SectionName.PRODUCERS.sectionName -> {
+                // TODO: implement custom producers section
+                readUnknownSection(source, visitor, sectionName, sectionPayloadSize)
             }
 
             else -> {
@@ -945,10 +945,13 @@ public class ModuleReader(options: ReaderOptions) {
                 }
 
                 BR_TABLE -> {
-                    val numberTargets = source.readVarUInt32()
-                    val targets = mutableListOf<UInt>()
+                    val numberOfBrTableTargets = source.readVarUInt32()
+                    if(numberOfBrTableTargets > WasmBinary.MAX_BR_TABLE_TARGETS) {
+                        throw ParserException("Number of br_table targets $numberOfBrTableTargets exceed the maximum of ${WasmBinary.MAX_BR_TABLE_TARGETS}")
+                    }
 
-                    (0u until numberTargets).forEach { _ ->
+                    val targets = mutableListOf<UInt>()
+                    (0u until numberOfBrTableTargets).forEach { _ ->
                         val depth = source.readIndex()
 
                         targets.add(depth)
@@ -1875,9 +1878,23 @@ public class ModuleReader(options: ReaderOptions) {
                         throw ParserException("Invalid select_t code: reference types not enabled.")
                     }
 
-                    val valueTypes = source.readValueTypes()
+                    val numberOfSelectTypes = source.readVarUInt32()
+                    if (numberOfSelectTypes > WasmBinary.MAX_SELECT_TYPE_PARAMETERS) {
+                        throw ParserException("Number of select_t parameters exceed the supported of ${WasmBinary.MAX_SELECT_TYPE_PARAMETERS}")
+                    }
 
-                    expressionVisitor.visitSelectTypedInstruction(valueTypes)
+                    val parameters = mutableListOf<WasmType>()
+                    (0 until numberOfSelectTypes.toInt()).forEach { _ ->
+                        val type = source.readType()
+
+                        if (!type.isValueType()) {
+                            throw ParserException("Expected select_t parameter value type but got ${type.name}")
+                        }
+
+                        parameters.add(type)
+                    }
+
+                    expressionVisitor.visitSelectTypedInstruction(parameters)
                 }
 
                 TRY_TABLE -> {

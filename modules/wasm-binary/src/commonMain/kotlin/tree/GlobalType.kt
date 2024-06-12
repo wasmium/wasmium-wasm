@@ -7,9 +7,9 @@ public class GlobalType(
     /** Type of the variable. */
     public val contentType: WasmType,
     /** Whether the variable is mutable. */
-    public val mutability: Mutability,
+    public val mutable: Mutable,
 ) {
-    public enum class Mutability {
+    public enum class Mutable {
         IMMUTABLE,
         MUTABLE
     }

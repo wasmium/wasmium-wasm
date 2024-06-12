@@ -6,22 +6,22 @@ import org.wasmium.wasm.binary.tree.BlockType
 import org.wasmium.wasm.binary.tree.ExternalKind
 import org.wasmium.wasm.binary.tree.FunctionType
 import org.wasmium.wasm.binary.tree.GlobalType
-import org.wasmium.wasm.binary.tree.GlobalType.Mutability
-import org.wasmium.wasm.binary.tree.GlobalType.Mutability.IMMUTABLE
-import org.wasmium.wasm.binary.tree.GlobalType.Mutability.MUTABLE
+import org.wasmium.wasm.binary.tree.GlobalType.Mutable
+import org.wasmium.wasm.binary.tree.GlobalType.Mutable.IMMUTABLE
+import org.wasmium.wasm.binary.tree.GlobalType.Mutable.MUTABLE
 import org.wasmium.wasm.binary.tree.LimitFlags
 import org.wasmium.wasm.binary.tree.LinkingKind
 import org.wasmium.wasm.binary.tree.LinkingSymbolType
 import org.wasmium.wasm.binary.tree.MemoryLimits
+import org.wasmium.wasm.binary.tree.MemoryType
 import org.wasmium.wasm.binary.tree.NameKind
 import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.RelocationKind
 import org.wasmium.wasm.binary.tree.SectionKind
+import org.wasmium.wasm.binary.tree.TableType
 import org.wasmium.wasm.binary.tree.TagType
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
-import org.wasmium.wasm.binary.tree.MemoryType
-import org.wasmium.wasm.binary.tree.TableType
 import kotlin.experimental.and
 
 private const val LOW_7_BITS: Byte = 0x7F
@@ -54,6 +54,8 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
     public fun readUInt8(): UInt = (reader.readByte().toInt() and 0xFF).toUInt().also { consume(1u) }
 
     public fun readUInt32(): UInt {
+        reader.request(4u)
+
         var result = 0.toUInt()
         for (i in 0..3) {
             result = result or ((reader.readByte().toUInt() and 0xFFu) shl (8 * i))
@@ -63,6 +65,8 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
     }
 
     public fun readUInt64(): ULong {
+        reader.request(8u)
+
         var result = 0.toULong()
         for (i in 0..7) {
             result = result or ((reader.readByte().toULong() and 0xFFu) shl (8 * i))
@@ -71,9 +75,25 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         return result.also { consume(8u) }
     }
 
-    public fun readVarUInt1(): UInt = (reader.readByte() and 0b1).toUInt().also { consume(1u) }
+    public fun readVarUInt1(): UInt {
+        val byte = reader.readByte()
 
-    public fun readVarUInt7(): UInt = (reader.readByte() and LOW_7_BITS).toUInt().also { consume(1u) }
+        if (byte and 0xFE.toByte() != 0.toByte()) {
+            throw ParserException("Invalid VarUInt1 value")
+        }
+
+        return (byte and 0b1).toUInt().also { consume(1u) }
+    }
+
+    public fun readVarUInt7(): UInt {
+        val byte = reader.readByte()
+
+        if (byte and 0x80.toByte() != 0.toByte()) {
+            throw ParserException("Invalid VarUInt7 value")
+        }
+
+        return (byte and LOW_7_BITS).toUInt().also { consume(1u) }
+    }
 
     public fun readVarUInt32(): UInt = readVarUIntX(5)
 
@@ -211,6 +231,11 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
 
     public fun readMemoryLimits(): MemoryLimits {
         val flags = readVarUInt32()
+
+        if (flags and 0xFFFFFFFCu != 0u) {
+            throw ParserException("Invalid flags for memory limits")
+        }
+
         val initialPages = readVarUInt32()
 
         val hasMaximum = (flags and LimitFlags.HAS_MAX.flag) != 0u
@@ -239,7 +264,6 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
 
     public fun readString(): String {
         val length = readVarUInt32()
-
         if (length > WasmBinary.MAX_STRING_SIZE) {
             throw ParserException("Size of string $length exceed the maximum of ${WasmBinary.MAX_STRING_SIZE}")
         }
@@ -352,34 +376,42 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
             throw ParserException("Invalid signature form with type: $form")
         }
 
-        val parameters = readValueTypes()
-
-        val resultTypes = readValueTypes()
-        if (resultTypes.isNotEmpty() && resultTypes.size != 1) {
-            throw ParserException("Result size must be 0 or 1 but got: ${resultTypes.size}")
+        val numberOfParameters = readVarUInt32()
+        if (numberOfParameters > WasmBinary.MAX_FUNCTION_PARAMETERS) {
+            throw ParserException("Number of function parameters exceed the supported of ${WasmBinary.MAX_FUNCTION_PARAMETERS}")
         }
 
-        return FunctionType(form, parameters, resultTypes)
-    }
-
-    public fun readValueTypes(): List<WasmType> {
-        val count = readVarUInt32()
-
-        val resultType = mutableListOf<WasmType>()
-        (0 until count.toInt()).forEach { _ ->
+        val parameters = mutableListOf<WasmType>()
+        (0 until numberOfParameters.toInt()).forEach { _ ->
             val type = readType()
 
             if (!type.isValueType()) {
                 throw ParserException("Expected valid param value type but got: ${type.name}")
             }
 
-            resultType.add(type)
+            parameters.add(type)
         }
 
-        return resultType
+        val numberOfResults = readVarUInt32()
+        if (numberOfResults > WasmBinary.MAX_FUNCTION_RESULTS) {
+            throw ParserException("Number of function results exceed the supported of ${WasmBinary.MAX_FUNCTION_RESULTS}")
+        }
+
+        val results = mutableListOf<WasmType>()
+        (0 until numberOfResults.toInt()).forEach { _ ->
+            val type = readType()
+
+            if (!type.isValueType()) {
+                throw ParserException("Expected valid result value type but got: ${type.name}")
+            }
+
+            results.add(type)
+        }
+
+        return FunctionType(form, parameters, results)
     }
 
-    public fun readMutability(): Mutability = if (readVarUInt1() == 0u) IMMUTABLE else MUTABLE
+    public fun readMutability(): Mutable = if (readVarUInt1() == 0u) IMMUTABLE else MUTABLE
 }
 
 public fun Int.reverseBytes(): Int {
