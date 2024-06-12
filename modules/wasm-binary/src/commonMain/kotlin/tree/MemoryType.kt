@@ -1,3 +1,3 @@
 package org.wasmium.wasm.binary.tree
 
-public class MemoryType(public val limits: MemoryLimits)
+public class MemoryType(public val limits: Limits)

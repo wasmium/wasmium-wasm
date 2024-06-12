@@ -12,7 +12,7 @@ import org.wasmium.wasm.binary.tree.GlobalType.Mutable.MUTABLE
 import org.wasmium.wasm.binary.tree.LimitFlags
 import org.wasmium.wasm.binary.tree.LinkingKind
 import org.wasmium.wasm.binary.tree.LinkingSymbolType
-import org.wasmium.wasm.binary.tree.MemoryLimits
+import org.wasmium.wasm.binary.tree.Limits
 import org.wasmium.wasm.binary.tree.MemoryType
 import org.wasmium.wasm.binary.tree.NameKind
 import org.wasmium.wasm.binary.tree.Opcode
@@ -213,38 +213,46 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
 
     public fun readIndex(): UInt = readVarUInt32()
 
+    public fun readTableType(): TableType {
+        val elementType = readType()
+
+        if (!elementType.isReferenceType()) {
+            throw ParserException("Imported table type is not a reference type.")
+        }
+
+        val limits = readLimits()
+        if (limits.isShared()) {
+            throw ParserException("Tables may not be shared")
+        }
+
+        return TableType(elementType, limits)
+    }
+
     public fun readMemoryType(): MemoryType {
-        val limits = readMemoryLimits()
+        val limits = readLimits()
 
         if (limits.isShared() && (limits.maximum == null)) {
             throw ParserException("Shared memory must have a max size")
         }
 
-        if (limits.maximum != null) {
-            if (limits.initial > limits.maximum) {
-                throw ParserException("Initial memory size greater than maximum")
-            }
+        if (limits.maximum != null && limits.initial > limits.maximum) {
+            throw ParserException("Initial memory size greater than maximum")
         }
 
         return MemoryType(limits)
     }
 
-    public fun readMemoryLimits(): MemoryLimits {
+    public fun readLimits(): Limits {
         val flags = readVarUInt32()
-
-        if (flags and 0xFFFFFFFCu != 0u) {
-            throw ParserException("Invalid flags for memory limits")
-        }
-
         val initialPages = readVarUInt32()
 
         val hasMaximum = (flags and LimitFlags.HAS_MAX.flag) != 0u
         return if (hasMaximum) {
             val maximum = readVarUInt32()
 
-            MemoryLimits(initial = initialPages, maximum = maximum, flags = flags)
+            Limits(initial = initialPages, maximum = maximum, flags = flags)
         } else {
-            MemoryLimits(initial = initialPages, flags = flags)
+            Limits(initial = initialPages, flags = flags)
         }
     }
 
@@ -353,21 +361,6 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         val mutable = if (readVarUInt1() == 0u) IMMUTABLE else MUTABLE
 
         return GlobalType(type, mutable)
-    }
-
-    public fun readTableType(): TableType {
-        val elementType = readType()
-
-        if (!elementType.isReferenceType()) {
-            throw ParserException("Imported table type is not a reference type.")
-        }
-
-        val limits = readMemoryLimits()
-        if (limits.isShared()) {
-            throw ParserException("Tables may not be shared")
-        }
-
-        return TableType(elementType, limits)
     }
 
     public fun readFunctionType(): FunctionType {

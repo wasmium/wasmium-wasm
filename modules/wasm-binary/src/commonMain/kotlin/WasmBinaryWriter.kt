@@ -8,7 +8,7 @@ import org.wasmium.wasm.binary.tree.FunctionType
 import org.wasmium.wasm.binary.tree.GlobalType
 import org.wasmium.wasm.binary.tree.GlobalType.Mutable
 import org.wasmium.wasm.binary.tree.LinkingKind
-import org.wasmium.wasm.binary.tree.MemoryLimits
+import org.wasmium.wasm.binary.tree.Limits
 import org.wasmium.wasm.binary.tree.NameKind
 import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.RelocationKind
@@ -164,7 +164,7 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
         writeVarUInt32(index)
     }
 
-    public fun writeMemoryLimits(limits: MemoryLimits) {
+    public fun writeMemoryLimits(limits: Limits) {
         writeVarUInt32(limits.flags)
         writeVarUInt32(limits.initial)
 

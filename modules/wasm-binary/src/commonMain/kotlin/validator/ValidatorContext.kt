@@ -3,7 +3,7 @@ package org.wasmium.wasm.binary.validator
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.tree.FunctionType
 import org.wasmium.wasm.binary.tree.GlobalType
-import org.wasmium.wasm.binary.tree.MemoryLimits
+import org.wasmium.wasm.binary.tree.Limits
 import org.wasmium.wasm.binary.tree.MemoryType
 import org.wasmium.wasm.binary.tree.TableType
 import org.wasmium.wasm.binary.tree.TagType
@@ -32,7 +32,7 @@ public class ValidatorContext(
 
     public var numberOfImportFunctions: UInt = 0u
 
-    private fun checkMemoryLimits(limits: MemoryLimits, max: UInt, message: String) {
+    private fun checkMemoryLimits(limits: Limits, max: UInt, message: String) {
         if (limits.initial > max) {
             throw ValidatorException("Initial value must not exceed value of $max")
         }
