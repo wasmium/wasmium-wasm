@@ -1955,7 +1955,7 @@ public class ModuleReader(options: ReaderOptions) {
 
                 SET_TABLE -> {
                     if (!context.options.features.isReferenceTypesEnabled) {
-                        throw ParserException("Invalid table.set code: reference types not enabled.")
+                        throw ParserException("Invalid table.set code reference types not enabled.")
                     }
 
                     val tableIndex = source.readIndex()
@@ -1964,22 +1964,38 @@ public class ModuleReader(options: ReaderOptions) {
                 }
 
                 REF_NULL -> {
+                    if (!context.options.features.isReferenceTypesEnabled) {
+                        throw ParserException("Invalid ref.null code reference types not enabled.")
+                    }
+
                     val type = source.readType()
 
                     expressionVisitor.visitReferenceNullInstruction(type)
                 }
 
                 REF_IS_NULL -> {
+                    if (!context.options.features.isReferenceTypesEnabled) {
+                        throw ParserException("Invalid ref.is_null code reference types not enabled.")
+                    }
+
                     expressionVisitor.visitReferenceIsNullInstruction()
                 }
 
                 REF_FUNC -> {
+                    if (!context.options.features.isReferenceTypesEnabled) {
+                        throw ParserException("Invalid ref.func code reference types not enabled.")
+                    }
+
                     val functionIndex = source.readIndex()
 
                     expressionVisitor.visitReferenceFunctionInstruction(functionIndex)
                 }
 
                 REF_EQ -> {
+                    if (!context.options.features.isReferenceTypesEnabled) {
+                        throw ParserException("Invalid ref.eq code reference types not enabled.")
+                    }
+
                     expressionVisitor.visitReferenceEqualInstruction()
                 }
 

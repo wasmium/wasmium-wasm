@@ -76,7 +76,7 @@ public class NameSectionVerifier(private val delegate: NameSectionVisitor? = nul
         checkEnd()
 
         for ((memoryIndex, _) in names) {
-            if (memoryIndex >= context.numberTotalMemories) {
+            if (memoryIndex >= context.numberOfTotalMemories) {
                 context.messages.add("warning: Memory index out of bounds in name section, memory subsection at index %$memoryIndex")
             }
         }

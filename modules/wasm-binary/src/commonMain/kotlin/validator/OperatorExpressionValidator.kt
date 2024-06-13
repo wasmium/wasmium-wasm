@@ -3,6 +3,8 @@ package org.wasmium.wasm.binary.validator
 import org.wasmium.wasm.binary.tree.BlockType
 import org.wasmium.wasm.binary.tree.BlockType.BlockTypeKind.FUNCTION_TYPE
 import org.wasmium.wasm.binary.tree.BlockType.BlockTypeKind.VALUE_TYPE
+import org.wasmium.wasm.binary.tree.FunctionType
+import org.wasmium.wasm.binary.tree.MemoryType
 import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.Opcode.*
 import org.wasmium.wasm.binary.tree.V128Value
@@ -16,7 +18,6 @@ import org.wasmium.wasm.binary.tree.WasmType.I64
 import org.wasmium.wasm.binary.tree.WasmType.NONE
 import org.wasmium.wasm.binary.tree.WasmType.V128
 import org.wasmium.wasm.binary.tree.instructions.TryCatchArgument
-import org.wasmium.wasm.binary.tree.FunctionType
 import org.wasmium.wasm.binary.visitor.ExpressionVisitor
 
 private class ControlFrame(
@@ -27,7 +28,7 @@ private class ControlFrame(
     var unreachable: Boolean = false,
 )
 
-public class ExpressionValidator(
+public class OperatorExpressionValidator(
     private val delegate: ExpressionVisitor? = null,
     private val context: LocalContext,
     private val resultTypes: List<WasmType>,
@@ -45,7 +46,7 @@ public class ExpressionValidator(
     }
 
     private fun popValue(): WasmType {
-        val frame = getControlReference(0u)
+        val frame = getControlFrame(0u)
 
         if (valueStack.size == frame.height) {
             if (frame.unreachable) {
@@ -81,7 +82,7 @@ public class ExpressionValidator(
         types.forEach { pushValue(it) }
     }
 
-    private fun getControlReference(depth: UInt): ControlFrame {
+    private fun getControlFrame(depth: UInt): ControlFrame {
         if (depth >= controlStack.size.toUInt()) {
             throw ValidatorException("Invalid control frame depth: $depth")
         }
@@ -107,7 +108,7 @@ public class ExpressionValidator(
             throw ValidatorException("Attempted to pop empty control stack")
         }
 
-        val frame = getControlReference(0u)
+        val frame = getControlFrame(0u)
         popValues(frame.endTypes)
 
         if (valueStack.size != frame.height) {
@@ -124,7 +125,7 @@ public class ExpressionValidator(
     }
 
     private fun unreachable() {
-        val frame = getControlReference(0u)
+        val frame = getControlFrame(0u)
         while (valueStack.size > frame.height) {
             valueStack.removeLast()
         }
@@ -159,6 +160,12 @@ public class ExpressionValidator(
     }
 
     override fun visitAtomicLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
+        checkSharedMemoryAlignment(alignment)
+
         when (opcode) {
             I32_ATOMIC_LOAD,
             I32_ATOMIC_LOAD8_U,
@@ -182,6 +189,12 @@ public class ExpressionValidator(
     }
 
     override fun visitAtomicStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
+        checkSharedMemoryAlignment(alignment)
+
         when (opcode) {
             I32_ATOMIC_STORE,
             I32_ATOMIC_STORE8,
@@ -205,18 +218,36 @@ public class ExpressionValidator(
     }
 
     override fun visitAtomicRmwCompareExchangeInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
+        checkSharedMemoryAlignment(alignment)
+
         delegate?.visitAtomicRmwCompareExchangeInstruction(opcode, alignment, offset)
 
         TODO()
     }
 
     override fun visitAtomicWaitInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
+        checkSharedMemoryAlignment(alignment)
+
         delegate?.visitAtomicWaitInstruction(opcode, alignment, offset)
 
         TODO()
     }
 
     override fun visitAtomicWakeInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
+        checkSharedMemoryAlignment(alignment)
+
         delegate?.visitAtomicWakeInstruction(opcode, alignment, offset)
 
         TODO()
@@ -225,10 +256,10 @@ public class ExpressionValidator(
     override fun visitBrTableInstruction(targets: List<UInt>, defaultTarget: UInt) {
         popValue(I32)
 
-        val defaultLabelTypes = labelTypes(getControlReference(defaultTarget))
+        val defaultLabelTypes = labelTypes(getControlFrame(defaultTarget))
 
         for (target in targets) {
-            val labelTypes = labelTypes(getControlReference(target))
+            val labelTypes = labelTypes(getControlFrame(target))
             if (labelTypes.size != defaultLabelTypes.size) {
                 throw ValidatorException("Mismatched label types in br_table")
             }
@@ -299,12 +330,20 @@ public class ExpressionValidator(
     }
 
     override fun visitSimdConstInstruction(value: V128Value) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         pushValue(V128)
 
         delegate?.visitSimdConstInstruction(value)
     }
 
     override fun visitSimdShuffleInstruction(opcode: Opcode, value: V128Value) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdShuffleInstruction(opcode, value)
 
         TODO()
@@ -349,6 +388,10 @@ public class ExpressionValidator(
     }
 
     override fun visitSimdLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdLoadInstruction(opcode, alignment, offset)
 
         TODO()
@@ -388,6 +431,10 @@ public class ExpressionValidator(
     }
 
     override fun visitSimdStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdStoreInstruction(opcode, alignment, offset)
 
         TODO()
@@ -522,7 +569,7 @@ public class ExpressionValidator(
             }
 
             FUNCTION_TYPE -> {
-                val functionType = context.types.getOrElse(blockType.value){
+                val functionType = context.types.getOrElse(blockType.value) {
                     throw ValidatorException("Invalid type index: ${blockType.value}")
                 }
 
@@ -616,7 +663,7 @@ public class ExpressionValidator(
     }
 
     override fun visitBrInstruction(depth: UInt) {
-        val labels = labelTypes(getControlReference(depth))
+        val labels = labelTypes(getControlFrame(depth))
 
         popValues(labels)
         unreachable()
@@ -625,7 +672,7 @@ public class ExpressionValidator(
     }
 
     override fun visitBrIfInstruction(depth: UInt) {
-        val labels = labelTypes(getControlReference(depth))
+        val labels = labelTypes(getControlFrame(depth))
 
         popValue(I32)
         popValues(labels)
@@ -635,7 +682,7 @@ public class ExpressionValidator(
     }
 
     override fun visitCallInstruction(functionIndex: UInt) {
-        val functionType = context.functions.getOrElse(functionIndex.toInt()){
+        val functionType = context.functions.getOrElse(functionIndex.toInt()) {
             throw ValidatorException("Invalid function index: $functionIndex")
         }
 
@@ -646,7 +693,7 @@ public class ExpressionValidator(
     }
 
     override fun visitCallIndirectInstruction(typeIndex: UInt, reserved: UInt) {
-        val tableType = context.tables.getOrElse(0){
+        val tableType = context.tables.getOrElse(0) {
             throw ValidatorException("Invalid table index: 0")
         }
 
@@ -654,7 +701,7 @@ public class ExpressionValidator(
             throw ValidatorException("Invalid table element type: ${tableType.elementType}")
         }
 
-        val functionType = context.types.getOrElse(typeIndex.toInt()){
+        val functionType = context.types.getOrElse(typeIndex.toInt()) {
             throw ValidatorException("Invalid type index: $typeIndex")
         }
 
@@ -698,7 +745,7 @@ public class ExpressionValidator(
     }
 
     override fun visitGetGlobalInstruction(globalIndex: UInt) {
-        val globalType = context.globals.getOrElse(globalIndex.toInt()){
+        val globalType = context.globals.getOrElse(globalIndex.toInt()) {
             throw ValidatorException("Invalid global index: $globalIndex")
         }
 
@@ -708,7 +755,7 @@ public class ExpressionValidator(
     }
 
     override fun visitSetGlobalInstruction(globalIndex: UInt) {
-        val globalType = context.globals.getOrElse(globalIndex.toInt()){
+        val globalType = context.globals.getOrElse(globalIndex.toInt()) {
             throw ValidatorException("Invalid global index: $globalIndex")
         }
         popValue(globalType.contentType)
@@ -717,7 +764,7 @@ public class ExpressionValidator(
     }
 
     override fun visitSetLocalInstruction(localIndex: UInt) {
-        val localType = context.locals.getOrElse(localIndex.toInt()){
+        val localType = context.locals.getOrElse(localIndex.toInt()) {
             throw ValidatorException("Invalid local index: $localIndex")
         }
         popValue(localType)
@@ -736,7 +783,7 @@ public class ExpressionValidator(
     }
 
     override fun visitGetLocalInstruction(localIndex: UInt) {
-        val localType = context.locals.getOrElse(localIndex.toInt()){
+        val localType = context.locals.getOrElse(localIndex.toInt()) {
             throw ValidatorException("Invalid local index: $localIndex")
         }
 
@@ -1223,6 +1270,10 @@ public class ExpressionValidator(
     }
 
     override fun visitSimdXorInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdXorInstruction(opcode)
 
         TODO()
@@ -1488,198 +1539,404 @@ public class ExpressionValidator(
     }
 
     override fun visitAtomicRmwAddInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
+        checkSharedMemoryAlignment(alignment)
+
         delegate?.visitAtomicRmwAddInstruction(opcode, alignment, offset)
 
         TODO()
     }
 
     override fun visitAtomicRmwSubtractInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
+        checkSharedMemoryAlignment(alignment)
+
         delegate?.visitAtomicRmwSubtractInstruction(opcode, alignment, offset)
 
         TODO()
     }
 
     override fun visitAtomicRmwAndInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
+        checkSharedMemoryAlignment(alignment)
+
         delegate?.visitAtomicRmwAndInstruction(opcode, alignment, offset)
 
         TODO()
     }
 
     override fun visitAtomicRmwOrInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
+        checkSharedMemoryAlignment(alignment)
+
         delegate?.visitAtomicRmwOrInstruction(opcode, alignment, offset)
 
         TODO()
     }
 
     override fun visitAtomicRmwXorInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
+        checkSharedMemoryAlignment(alignment)
+
         delegate?.visitAtomicRmwXorInstruction(opcode, alignment, offset)
 
         TODO()
     }
 
     override fun visitAtomicRmwExchangeInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
+        checkSharedMemoryAlignment(alignment)
+
         delegate?.visitAtomicRmwExchangeInstruction(opcode, alignment, offset)
 
         TODO()
     }
 
     override fun visitSimdSplatInstruction(opcode: Opcode, value: UInt) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdSplatInstruction(opcode, value)
 
         TODO()
     }
 
     override fun visitSimdExtractLaneInstruction(opcode: Opcode, index: UInt) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
+        when (opcode) {
+            I8X16_EXTRACT_LANE_S,
+            I8X16_EXTRACT_LANE_U -> {
+                if (index >= 16u) {
+                    throw ValidatorException("Invalid index for lane instruction: $index")
+                }
+            }
+
+            I16X8_EXTRACT_LANE_S,
+            I16X8_EXTRACT_LANE_U -> {
+                if (index >= 8u) {
+                    throw ValidatorException("Invalid index for lane instruction: $index")
+                }
+            }
+
+            F32X4_EXTRACT_LANE,
+            I32X4_EXTRACT_LANE -> {
+                if (index >= 4u) {
+                    throw ValidatorException("Invalid index for lane instruction: $index")
+                }
+            }
+
+            F64X2_EXTRACT_LANE,
+            I64X2_EXTRACT_LANE -> {
+                if (index >= 2u) {
+                    throw ValidatorException("Invalid index for lane instruction: $index")
+                }
+            }
+
+            else -> throw ValidatorException("Invalid opcode for extract lane instruction: $opcode")
+        }
+
         delegate?.visitSimdExtractLaneInstruction(opcode, index)
 
         TODO()
     }
 
     override fun visitSimdReplaceLaneInstruction(opcode: Opcode, index: UInt) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
+        when (opcode) {
+            I8X16_REPLACE_LANE -> {
+                if (index >= 16u) {
+                    throw ValidatorException("Invalid index for lane instruction: $index")
+                }
+            }
+
+            I16X8_REPLACE_LANE -> {
+                if (index >= 8u) {
+                    throw ValidatorException("Invalid index for lane instruction: $index")
+                }
+            }
+
+            I32X4_REPLACE_LANE,
+            F32X4_REPLACE_LANE -> {
+                if (index >= 4u) {
+                    throw ValidatorException("Invalid index for lane instruction: $index")
+                }
+            }
+
+            I64X2_REPLACE_LANE,
+            F64X2_REPLACE_LANE -> {
+                if (index >= 2u) {
+                    throw ValidatorException("Invalid index for lane instruction: $index")
+                }
+            }
+
+            else -> throw ValidatorException("Invalid opcode for replace lane instruction: $opcode")
+        }
+
         delegate?.visitSimdReplaceLaneInstruction(opcode, index)
 
         TODO()
     }
 
     override fun visitSimdAddInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdAddInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdSubtractInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdSubtractInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdMultiplyInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdMultiplyInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdNegativeInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdNegativeInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdAddSaturateInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdAddSaturateInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdSubtractSaturateInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdSubtractSaturateInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdShiftLeftInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdShiftLeftInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdAndInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdAndInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdOrInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdOrInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdNotInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdNotInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdBitSelectInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdBitSelectInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdAllTrueInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdAllTrueInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdEqualInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdEqualInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdNotEqualInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdNotEqualInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdLessThanInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdLessThanInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdLessEqualInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdLessEqualInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdGreaterThanInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdGreaterThanInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdGreaterEqualInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdGreaterEqualInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdMinInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdMinInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdMaxInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdMaxInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdDivideInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdDivideInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdSqrtInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdSqrtInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdConvertInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdConvertInstruction(opcode)
 
         TODO()
     }
 
     override fun visitSimdTruncateInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdTruncateInstruction(opcode)
 
         TODO()
@@ -1726,12 +1983,24 @@ public class ExpressionValidator(
     }
 
     override fun visitSimdAbsInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw ValidatorException("SIMD support is not active")
+        }
+
         delegate?.visitSimdAbsInstruction(opcode)
 
         TODO()
     }
 
     override fun visitMemoryFillInstruction(memoryIndex: UInt) {
+        if (!context.options.features.isBulkMemoryEnabled) {
+            throw ValidatorException("Bulk memory support is not active")
+        }
+
+        checkSharedMemoryIndex(0u)
+
+        // TODO check segmentIndex >= context.dataSegments.size)
+
         popValue(I32)
         popValue(I32)
         popValue(I32)
@@ -1740,6 +2009,14 @@ public class ExpressionValidator(
     }
 
     override fun visitMemoryCopyInstruction(targetIndex: UInt, sourceIndex: UInt) {
+        if (!context.options.features.isBulkMemoryEnabled) {
+            throw ValidatorException("Bulk memory support is not active")
+        }
+
+        checkSharedMemoryIndex(0u)
+
+        // TODO check segmentIndex >= context.dataSegments.size)
+
         popValue(I32)
         popValue(I32)
         popValue(I32)
@@ -1748,6 +2025,14 @@ public class ExpressionValidator(
     }
 
     override fun visitMemoryInitInstruction(memoryIndex: UInt, segmentIndex: UInt) {
+        if (!context.options.features.isBulkMemoryEnabled) {
+            throw ValidatorException("Bulk memory support is not active")
+        }
+
+        checkSharedMemoryIndex(memoryIndex)
+
+        // TODO check segmentIndex >= context.dataSegments.size)
+
         popValue(I32)
         popValue(I32)
         popValue(I32)
@@ -1756,78 +2041,142 @@ public class ExpressionValidator(
     }
 
     override fun visitTableInitInstruction(segmentIndex: UInt, tableIndex: UInt) {
+        if (!context.options.features.isBulkMemoryEnabled) {
+            throw ValidatorException("Bulk memory support is not active")
+        }
+
         delegate?.visitTableInitInstruction(segmentIndex, tableIndex)
 
         TODO()
     }
 
     override fun visitDataDropInstruction(segmentIndex: UInt) {
+        if (!context.options.features.isBulkMemoryEnabled) {
+            throw ValidatorException("Bulk memory support is not active")
+        }
+
+        checkSharedMemoryIndex(0u)
+
+        // TODO check segmentIndex >= context.dataSegments.size)
+
         delegate?.visitDataDropInstruction(segmentIndex)
 
         TODO()
     }
 
     override fun visitTableSizeInstruction(tableIndex: UInt) {
+        if (!context.options.features.isBulkMemoryEnabled) {
+            throw ValidatorException("Bulk memory support is not active")
+        }
+
         delegate?.visitTableSizeInstruction(tableIndex)
 
         TODO()
     }
 
     override fun visitTableGrowInstruction(tableIndex: UInt) {
+        if (!context.options.features.isBulkMemoryEnabled) {
+            throw ValidatorException("Bulk memory support is not active")
+        }
+
         delegate?.visitTableGrowInstruction(tableIndex)
 
         TODO()
     }
 
     override fun visitTableFillInstruction(tableIndex: UInt) {
+        if (!context.options.features.isBulkMemoryEnabled) {
+            throw ValidatorException("Bulk memory support is not active")
+        }
+
         delegate?.visitTableFillInstruction(tableIndex)
 
         TODO()
     }
 
     override fun visitGetTableInstruction(tableIndex: UInt) {
+        if (!context.options.features.isBulkMemoryEnabled) {
+            throw ValidatorException("Bulk memory support is not active")
+        }
+
         delegate?.visitGetTableInstruction(tableIndex)
 
         TODO()
     }
 
     override fun visitSetTableInstruction(tableIndex: UInt) {
+        if (!context.options.features.isBulkMemoryEnabled) {
+            throw ValidatorException("Bulk memory support is not active")
+        }
+
         delegate?.visitSetTableInstruction(tableIndex)
 
         TODO()
     }
 
     override fun visitTableCopyInstruction(targetTableIndex: UInt, sourceTableIndex: UInt) {
+        if (!context.options.features.isBulkMemoryEnabled) {
+            throw ValidatorException("Bulk memory support is not active")
+        }
+
         delegate?.visitTableCopyInstruction(targetTableIndex, sourceTableIndex)
 
         TODO()
     }
 
     override fun visitElementDropInstruction(segmentIndex: UInt) {
+        if (!context.options.features.isBulkMemoryEnabled) {
+            throw ValidatorException("Bulk memory support is not active")
+        }
+
         delegate?.visitElementDropInstruction(segmentIndex)
 
         TODO()
     }
 
     override fun visitAtomicFenceInstruction(reserved: UInt) {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
+        if (reserved != 0u) {
+            throw ValidatorException("Non-zero reserved value for atomic fence instruction not supported")
+        }
+
         delegate?.visitAtomicFenceInstruction(reserved)
 
         TODO()
     }
 
     override fun visitReferenceEqualInstruction() {
+        if (!context.options.features.isReferenceTypesEnabled) {
+            throw ValidatorException("Reference types support is not active")
+        }
+
         delegate?.visitReferenceEqualInstruction()
 
         TODO()
     }
 
     override fun visitReferenceFunctionInstruction(functionIndex: UInt) {
+        if (!context.options.features.isReferenceTypesEnabled) {
+            throw ValidatorException("Reference types support is not active")
+        }
+
+        val functionType = context.types.getOrElse(functionIndex.toInt()) {
+            throw ValidatorException("Invalid function index $functionIndex")
+        }
+
         delegate?.visitReferenceFunctionInstruction(functionIndex)
 
         TODO()
     }
 
     override fun visitReferenceIsNullInstruction() {
+        if (!context.options.features.isReferenceTypesEnabled) {
+            throw ValidatorException("Reference types support is not active")
+        }
+
         val value = popValue()
         if (!value.isReferenceType()) {
             throw ValidatorException("Expected reference type, found $value")
@@ -1839,6 +2188,10 @@ public class ExpressionValidator(
     }
 
     override fun visitReferenceAsNonNullInstruction() {
+        if (!context.options.features.isReferenceTypesEnabled) {
+            throw ValidatorException("Reference types support is not active")
+        }
+
         val value = popValue()
         if (!value.isReferenceType()) {
             throw ValidatorException("Expected reference type, found $value")
@@ -1850,6 +2203,10 @@ public class ExpressionValidator(
     }
 
     override fun visitReferenceNullInstruction(type: WasmType) {
+        if (!context.options.features.isReferenceTypesEnabled) {
+            throw ValidatorException("Reference types support is not active")
+        }
+
         pushValue(type)
 
         delegate?.visitReferenceNullInstruction(type)
@@ -1891,5 +2248,19 @@ public class ExpressionValidator(
 
     override fun visitReturnCallRefInstruction(typeIndex: UInt) {
         TODO("Not yet implemented")
+    }
+
+    private fun checkSharedMemoryAlignment(alignment: UInt) {
+        val memoryType = checkSharedMemoryIndex(alignment)
+
+        if (!memoryType.limits.isShared()) {
+            throw ValidatorException("Atomic accesses require shared memory")
+        }
+    }
+
+    private fun checkSharedMemoryIndex(memoryIndex: UInt): MemoryType {
+        return context.memories.getOrElse(memoryIndex.toInt()) {
+            throw ValidatorException("No linear memory is present for index $memoryIndex")
+        }
     }
 }

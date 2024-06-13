@@ -26,7 +26,7 @@ public class CodeSectionValidator(private val delegate: CodeSectionVisitor? = nu
         numberOfCodes++
 
         // TODO parameter functionType.results is already in the context
-        return ExpressionValidator(delegate?.visitCode(locals), localContext, functionType.results)
+        return OperatorExpressionValidator(delegate?.visitCode(locals), localContext, functionType.results)
     }
 
     override fun visitEnd() {

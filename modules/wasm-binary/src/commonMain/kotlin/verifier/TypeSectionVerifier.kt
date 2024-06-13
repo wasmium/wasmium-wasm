@@ -19,10 +19,6 @@ public class TypeSectionVerifier(private val delegate: TypeSectionVisitor? = nul
             throw ParserException("Number of function results ${functionType.results.size.toUInt()} exceed the maximum of ${WasmBinary.MAX_FUNCTION_RESULTS}")
         }
 
-        if (!context.options.features.isMultiValueEnabled && functionType.results.size > 1) {
-            throw ParserException("Result size must be 0 or 1 but got ${functionType.results.size}")
-        }
-
         context.numberOfTypes++
 
         delegate?.visitType(functionType)

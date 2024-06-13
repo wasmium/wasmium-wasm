@@ -56,11 +56,11 @@ public class VerifierContext(
 
     public val numberOfTotalTables: UInt get() = numberOfTableImports + numberOfTables
 
-    public val numberTotalMemories: UInt get() = numberOfMemoryImports + numberOfMemories
+    public val numberOfTotalMemories: UInt get() = numberOfMemoryImports + numberOfMemories
 
     public val numberOfTotalGlobals: UInt get() = numberOfGlobalImports + numberOfGlobals
 
-    public val numberOfTotalExceptions: UInt get() = numberOfTagImports + this.numberOfTags
+    public val numberOfTotalTags: UInt get() = numberOfTagImports + this.numberOfTags
 
     public val messages: MutableList<String> = mutableListOf()
 }

@@ -1,11 +1,11 @@
 package org.wasmium.wasm.binary.validator
 
 import org.wasmium.wasm.binary.tree.BlockType
+import org.wasmium.wasm.binary.tree.GlobalType.Mutable
 import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.instructions.TryCatchArgument
-import org.wasmium.wasm.binary.tree.GlobalType.*
 import org.wasmium.wasm.binary.verifier.VerifierException
 import org.wasmium.wasm.binary.visitor.ExpressionVisitor
 
@@ -67,27 +67,11 @@ public class ConstantExpressionValidator(private val delegate: ExpressionVisitor
         delegate?.visitConstInt64Instruction(value)
     }
 
-    override fun visitSimdConstInstruction(value: V128Value) {
-        delegate?.visitSimdConstInstruction(value)
-    }
-
-    override fun visitSimdShuffleInstruction(opcode: Opcode, value: V128Value) {
-        notConstant()
-    }
-
     override fun visitLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
         notConstant()
     }
 
-    override fun visitSimdLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        notConstant()
-    }
-
     override fun visitStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
-        notConstant()
-    }
-
-    override fun visitSimdStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
         notConstant()
     }
 
@@ -192,7 +176,9 @@ public class ConstantExpressionValidator(private val delegate: ExpressionVisitor
     }
 
     override fun visitGetGlobalInstruction(globalIndex: UInt) {
-        val globalType = context.globals[globalIndex.toInt()]
+        val globalType = context.globals.getOrElse(globalIndex.toInt()) {
+            throw VerifierException("Global $globalIndex not found")
+        }
 
         if (globalType.mutable == Mutable.MUTABLE) {
             notConstant()
@@ -293,10 +279,6 @@ public class ConstantExpressionValidator(private val delegate: ExpressionVisitor
         notConstant()
     }
 
-    override fun visitSimdXorInstruction(opcode: Opcode) {
-        notConstant()
-    }
-
     override fun visitShiftLeftInstruction(opcode: Opcode) {
         notConstant()
     }
@@ -369,111 +351,267 @@ public class ConstantExpressionValidator(private val delegate: ExpressionVisitor
         notConstant()
     }
 
+    override fun visitSimdConstInstruction(value: V128Value) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
+        delegate?.visitSimdConstInstruction(value)
+    }
+
+    override fun visitSimdShuffleInstruction(opcode: Opcode, value: V128Value) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
+        notConstant()
+    }
+
+    override fun visitSimdLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
+        notConstant()
+    }
+
+    override fun visitSimdStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
+        notConstant()
+    }
+
+    override fun visitSimdXorInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
+        notConstant()
+    }
+
     override fun visitSimdSplatInstruction(opcode: Opcode, value: UInt) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdExtractLaneInstruction(opcode: Opcode, index: UInt) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdReplaceLaneInstruction(opcode: Opcode, index: UInt) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdAddInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdSubtractInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdMultiplyInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdNegativeInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdAddSaturateInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdSubtractSaturateInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdShiftLeftInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdAndInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdOrInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdNotInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdBitSelectInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdAllTrueInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdEqualInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdNotEqualInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdLessThanInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdLessEqualInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdGreaterThanInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdGreaterEqualInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdMinInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdMaxInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdDivideInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdSqrtInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdConvertInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitSimdTruncateInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
+        notConstant()
+    }
+
+    override fun visitSimdAbsInstruction(opcode: Opcode) {
+        if (!context.options.features.isSIMDEnabled) {
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         notConstant()
     }
 
@@ -482,10 +620,6 @@ public class ConstantExpressionValidator(private val delegate: ExpressionVisitor
     }
 
     override fun visitXorInstruction(opcode: Opcode) {
-        notConstant()
-    }
-
-    override fun visitSimdAbsInstruction(opcode: Opcode) {
         notConstant()
     }
 
@@ -542,22 +676,46 @@ public class ConstantExpressionValidator(private val delegate: ExpressionVisitor
     }
 
     override fun visitReferenceEqualInstruction() {
+        if (!context.options.features.isReferenceTypesEnabled) {
+            throw VerifierException("Reference types support are not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitReferenceFunctionInstruction(functionIndex: UInt) {
+        if (!context.options.features.isReferenceTypesEnabled) {
+            throw VerifierException("Reference types support are not enabled")
+        }
+
+        if (functionIndex >= context.functions.size.toUInt()) {
+            throw VerifierException("Function $functionIndex not found")
+        }
+
         delegate?.visitReferenceFunctionInstruction(functionIndex)
     }
 
     override fun visitReferenceIsNullInstruction() {
+        if (!context.options.features.isReferenceTypesEnabled) {
+            throw VerifierException("Reference types support are not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitReferenceAsNonNullInstruction() {
+        if (!context.options.features.isReferenceTypesEnabled) {
+            throw VerifierException("Reference types support are not enabled")
+        }
+
         notConstant()
     }
 
     override fun visitReferenceNullInstruction(type: WasmType) {
+        if (!context.options.features.isReferenceTypesEnabled) {
+            throw VerifierException("Reference types support are not enabled")
+        }
+
         delegate?.visitReferenceNullInstruction(type)
     }
 

@@ -7,6 +7,8 @@ import org.wasmium.wasm.binary.tree.Opcode
 import org.wasmium.wasm.binary.tree.V128Value
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.tree.instructions.TryCatchArgument
+import org.wasmium.wasm.binary.validator.ValidatorException
+import org.wasmium.wasm.binary.verifier.VerifierException
 import org.wasmium.wasm.binary.visitor.ExpressionVisitor
 
 @OptIn(ExperimentalUnsignedTypes::class)
@@ -28,12 +30,20 @@ public class ExpressionWriter(
     }
 
     override fun visitAtomicLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt): Unit = writer.run {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
         writeOpcode(opcode)
         writeVarUInt32(alignment)
         writeVarUInt32(offset)
     }
 
     override fun visitAtomicStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt): Unit = writer.run {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
         writeOpcode(opcode)
         writeVarUInt32(alignment)
         writeVarUInt32(offset)
@@ -41,6 +51,10 @@ public class ExpressionWriter(
 
 
     override fun visitAtomicRmwCompareExchangeInstruction(opcode: Opcode, alignment: UInt, offset: UInt): Unit = writer.run {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
         writeOpcode(opcode)
         writeVarUInt32(alignment)
         writeVarUInt32(offset)
@@ -48,6 +62,10 @@ public class ExpressionWriter(
 
 
     override fun visitAtomicWaitInstruction(opcode: Opcode, alignment: UInt, offset: UInt): Unit = writer.run {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
         writeOpcode(opcode)
         writeVarUInt32(alignment)
         writeVarUInt32(offset)
@@ -55,6 +73,10 @@ public class ExpressionWriter(
 
 
     override fun visitAtomicWakeInstruction(opcode: Opcode, alignment: UInt, offset: UInt): Unit = writer.run {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
         writeOpcode(opcode)
         writeVarUInt32(alignment)
         writeVarUInt32(offset)
@@ -101,11 +123,19 @@ public class ExpressionWriter(
     }
 
     override fun visitSimdConstInstruction(value: V128Value): Unit = writer.run {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writeOpcode(Opcode.V128_CONST)
         writeV128(value)
     }
 
     override fun visitSimdShuffleInstruction(opcode: Opcode, value: V128Value): Unit = writer.run {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writeOpcode(opcode)
 
         for (index in value.value) {
@@ -120,6 +150,10 @@ public class ExpressionWriter(
     }
 
     override fun visitSimdLoadInstruction(opcode: Opcode, alignment: UInt, offset: UInt): Unit = writer.run {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writeOpcode(opcode)
         writeVarUInt32(alignment)
         writeVarUInt32(offset)
@@ -132,6 +166,10 @@ public class ExpressionWriter(
     }
 
     override fun visitSimdStoreInstruction(opcode: Opcode, alignment: UInt, offset: UInt): Unit = writer.run {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writeOpcode(opcode)
         writeVarUInt32(alignment)
         writeVarUInt32(offset)
@@ -368,6 +406,10 @@ public class ExpressionWriter(
     }
 
     override fun visitSimdXorInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
@@ -420,47 +462,79 @@ public class ExpressionWriter(
     }
 
     override fun visitAtomicRmwAddInstruction(opcode: Opcode, alignment: UInt, offset: UInt): Unit = writer.run {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
         writeOpcode(opcode)
         writeVarUInt32(alignment)
         writeVarUInt32(offset)
     }
 
     override fun visitAtomicRmwSubtractInstruction(opcode: Opcode, alignment: UInt, offset: UInt): Unit = writer.run {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
         writeOpcode(opcode)
         writeVarUInt32(alignment)
         writeVarUInt32(offset)
     }
 
     override fun visitAtomicRmwAndInstruction(opcode: Opcode, alignment: UInt, offset: UInt): Unit = writer.run {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
         writeOpcode(opcode)
         writeVarUInt32(alignment)
         writeVarUInt32(offset)
     }
 
     override fun visitAtomicRmwOrInstruction(opcode: Opcode, alignment: UInt, offset: UInt): Unit = writer.run {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
         writeOpcode(opcode)
         writeVarUInt32(alignment)
         writeVarUInt32(offset)
     }
 
     override fun visitAtomicRmwXorInstruction(opcode: Opcode, alignment: UInt, offset: UInt): Unit = writer.run {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
         writeOpcode(opcode)
         writeVarUInt32(alignment)
         writeVarUInt32(offset)
     }
 
     override fun visitAtomicRmwExchangeInstruction(opcode: Opcode, alignment: UInt, offset: UInt): Unit = writer.run {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
         writeOpcode(opcode)
         writeVarUInt32(alignment)
         writeVarUInt32(offset)
     }
 
     override fun visitSimdSplatInstruction(opcode: Opcode, value: UInt): Unit = writer.run {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writeOpcode(opcode)
         writeVarUInt32(value)
     }
 
     override fun visitSimdExtractLaneInstruction(opcode: Opcode, index: UInt) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.apply {
             writeOpcode(opcode)
             writeIndex(index)
@@ -468,103 +542,203 @@ public class ExpressionWriter(
     }
 
     override fun visitSimdReplaceLaneInstruction(opcode: Opcode, index: UInt): Unit = writer.run {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writeOpcode(opcode)
         writeIndex(index)
     }
 
     override fun visitSimdAddInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdSubtractInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdMultiplyInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdNegativeInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdAddSaturateInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdSubtractSaturateInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdShiftLeftInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdAndInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdOrInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdNotInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdBitSelectInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdAllTrueInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdEqualInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdNotEqualInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdLessThanInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdLessEqualInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdGreaterThanInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdGreaterEqualInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdMinInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdMaxInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdDivideInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdSqrtInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdConvertInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
     override fun visitSimdTruncateInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
@@ -577,6 +751,10 @@ public class ExpressionWriter(
     }
 
     override fun visitSimdAbsInstruction(opcode: Opcode) {
+        if(!context.options.features.isSIMDEnabled){
+            throw VerifierException("SIMD support is not enabled")
+        }
+
         writer.writeOpcode(opcode)
     }
 
@@ -645,28 +823,56 @@ public class ExpressionWriter(
     }
 
     override fun visitAtomicFenceInstruction(reserved: UInt): Unit = writer.run {
+        if (!context.options.features.isThreadsEnabled) {
+            throw ValidatorException("Thread support is not active")
+        }
+
+        if (reserved != 0u) {
+            throw ValidatorException("Non-zero reserved value for atomic fence instruction not supported")
+        }
+
         writeOpcode(Opcode.ATOMIC_FENCE)
         writeVarUInt32(reserved)
     }
 
     override fun visitReferenceEqualInstruction() {
+        if (!context.options.features.isReferenceTypesEnabled) {
+            throw VerifierException("Reference types support are not enabled")
+        }
+
         writer.writeOpcode(Opcode.REF_EQ)
     }
 
     override fun visitReferenceFunctionInstruction(functionIndex: UInt): Unit = writer.run {
+        if (!context.options.features.isReferenceTypesEnabled) {
+            throw VerifierException("Reference types support are not enabled")
+        }
+
         writeOpcode(Opcode.REF_FUNC)
         writeIndex(functionIndex)
     }
 
     override fun visitReferenceIsNullInstruction() {
+        if (!context.options.features.isReferenceTypesEnabled) {
+            throw VerifierException("Reference types support are not enabled")
+        }
+
         writer.writeOpcode(Opcode.REF_NULL)
     }
 
     override fun visitReferenceAsNonNullInstruction() {
+        if (!context.options.features.isReferenceTypesEnabled) {
+            throw VerifierException("Reference types support are not enabled")
+        }
+
         writer.writeOpcode(Opcode.REF_AS_NON_NULL)
     }
 
     override fun visitReferenceNullInstruction(type: WasmType): Unit = writer.run {
+        if (!context.options.features.isReferenceTypesEnabled) {
+            throw VerifierException("Reference types support are not enabled")
+        }
+
         writeOpcode(Opcode.REF_NULL)
         writeType(type)
     }

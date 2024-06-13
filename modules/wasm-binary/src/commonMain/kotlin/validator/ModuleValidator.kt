@@ -64,7 +64,8 @@ public class ModuleValidator(private val delegate: ModuleVisitor? = null, privat
 
     override fun visitSourceMapSection(sourceMapUrl: String): SourceMapSectionVisitor = SourceMapSectionValidator(delegate?.visitSourceMapSection(sourceMapUrl), context)
 
-    override fun visitExternalDebugSection(externalDebugUrl: String): ExternalDebugSectionVisitor = ExternalDebugSectionValidator(delegate?.visitExternalDebugSection(externalDebugUrl), context)
+    override fun visitExternalDebugSection(externalDebugUrl: String): ExternalDebugSectionVisitor =
+        ExternalDebugSectionValidator(delegate?.visitExternalDebugSection(externalDebugUrl), context)
 
     override fun visitEnd() {
         delegate?.visitEnd()

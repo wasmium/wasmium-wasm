@@ -32,7 +32,7 @@ public class ValidatorContext(
 
     public var numberOfImportFunctions: UInt = 0u
 
-    private fun checkMemoryLimits(limits: Limits, max: UInt, message: String) {
+    private fun checkLimits(limits: Limits, max: UInt, message: String) {
         if (limits.initial > max) {
             throw ValidatorException("Initial value must not exceed value of $max")
         }
@@ -57,11 +57,11 @@ public class ValidatorContext(
             throw ParserException("Tables may not be shared.")
         }
 
-        checkMemoryLimits(tableType.limits, UInt.MAX_VALUE - 1u, "Table size must be at most 2^32 - 1")
+        checkLimits(tableType.limits, UInt.MAX_VALUE - 1u, "Table size must be at most 2^32 - 1")
     }
 
     public fun checkMemoryType(memoryType: MemoryType) {
-        checkMemoryLimits(memoryType.limits, 1u shl 16, "Memory size must not exceed 65536 pages (4GiB)")
+        checkLimits(memoryType.limits, 1u shl 16, "Memory size must not exceed 65536 pages (4GiB)")
     }
 
     public fun checkGlobalType(globalType: GlobalType) {
@@ -90,6 +90,7 @@ public class ValidatorContext(
     }
 
     public fun createLocalContext(locals: List<WasmType>, returns: List<WasmType>): LocalContext = LocalContext(
+        options = options,
         types = types,
         functions = functions,
         globals = globals,
@@ -103,6 +104,7 @@ public class ValidatorContext(
 }
 
 public class LocalContext(
+    public val options: ValidatorOptions,
     public val types: List<FunctionType>,
     public val functions: List<FunctionType>,
     public val globals: List<GlobalType>,

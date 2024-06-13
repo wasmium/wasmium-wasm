@@ -557,7 +557,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
             throw ParserException("Invalid throw code: exceptions not enabled.")
         }
 
-        if (exceptionIndex >= context.numberOfTotalExceptions) {
+        if (exceptionIndex >= context.numberOfTotalTags) {
             throw ParserException("invalid call exception index: %$exceptionIndex")
         }
 

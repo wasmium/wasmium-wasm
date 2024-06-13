@@ -18,6 +18,10 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor? =
         numberOfImports++
         context.numberOfFunctionImports++
 
+        if (context.numberOfTotalFunctions > WasmBinary.MAX_FUNCTIONS) {
+            throw VerifierException("Number of tag imports ${context.numberOfTotalFunctions} exceed the maximum of ${WasmBinary.MAX_FUNCTIONS}")
+        }
+
         delegate?.visitFunction(moduleName, fieldName, functionType)
     }
 
@@ -26,6 +30,10 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor? =
 
         numberOfImports++
         context.numberOfGlobalImports++
+
+        if (context.numberOfTotalGlobals > WasmBinary.MAX_GLOBALS) {
+            throw VerifierException("Number of tag imports ${context.numberOfTotalGlobals} exceed the maximum of ${WasmBinary.MAX_GLOBALS}")
+        }
 
         delegate?.visitGlobal(moduleName, fieldName, globalType)
     }
@@ -36,6 +44,14 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor? =
         numberOfImports++
         context.numberOfTableImports++
 
+        if (!context.options.features.isReferenceTypesEnabled && context.numberOfTableImports > 1u) {
+            throw VerifierException("Multiple table imports is not allowed")
+        }
+
+        if (context.options.features.isReferenceTypesEnabled && context.numberOfTotalTables > WasmBinary.MAX_TABLES) {
+            throw VerifierException("Number of table imports ${context.numberOfTotalTables} exceed the maximum of ${WasmBinary.MAX_TABLES}")
+        }
+
         delegate?.visitTable(moduleName, fieldName, tableType)
     }
 
@@ -45,6 +61,14 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor? =
         numberOfImports++
         context.numberOfMemoryImports++
 
+        if (!context.options.features.isReferenceTypesEnabled && context.numberOfMemoryImports > 1u) {
+            throw VerifierException("Multiple memory imports is not allowed")
+        }
+
+        if (context.options.features.isReferenceTypesEnabled && context.numberOfTotalMemories > WasmBinary.MAX_MEMORIES) {
+            throw VerifierException("Number of memory imports ${context.numberOfTotalMemories} exceed the maximum of ${WasmBinary.MAX_MEMORIES}")
+        }
+
         delegate?.visitMemory(moduleName, fieldName, memoryType)
     }
 
@@ -53,6 +77,10 @@ public class ImportSectionVerifier(private val delegate: ImportSectionVisitor? =
 
         numberOfImports++
         context.numberOfTagImports++
+
+        if (context.options.features.isThreadsEnabled && context.numberOfTotalTags > WasmBinary.MAX_TAGS) {
+            throw VerifierException("Number of tag imports ${context.numberOfTotalTags} exceed the maximum of ${WasmBinary.MAX_TAGS}")
+        }
 
         delegate?.visitTag(moduleName, fieldName, tagType)
     }

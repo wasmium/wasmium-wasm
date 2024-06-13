@@ -44,7 +44,7 @@ public class ExportSectionVerifier(private val delegate: ExportSectionVisitor? =
             }
 
             MEMORY -> {
-                if (context.numberTotalMemories == 0u) {
+                if (context.numberOfTotalMemories == 0u) {
                     throw ParserException("Cannot index non existing memory")
                 }
 
@@ -52,7 +52,7 @@ public class ExportSectionVerifier(private val delegate: ExportSectionVisitor? =
                     throw ParserException("Only memory index 0 is supported, but using index $itemIndex")
                 }
 
-                if (itemIndex > context.numberTotalMemories) {
+                if (itemIndex > context.numberOfTotalMemories) {
                     throw ParserException("Invalid export memories index: %$itemIndex")
                 }
             }

@@ -7,7 +7,9 @@ import org.wasmium.wasm.binary.visitor.StartSectionVisitor
 public class StartSectionValidator(private val delegate: StartSectionVisitor? = null, private val context: ValidatorContext, private val functionIndex: UInt) :
     StartSectionVisitor {
     override fun visitEnd() {
-        val type = context.functions[functionIndex.toInt()]
+        val type = context.functions.getOrElse(functionIndex.toInt()) {
+            throw VerifierException("Invalid start function index $functionIndex")
+        }
 
         if (type.parameters.isNotEmpty()) {
             throw VerifierException("Start function can't have arguments")
