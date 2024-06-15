@@ -22,3 +22,4 @@ plugins {
 rootProject.name = "wasmium-wasm-binary"
 
 includeModule("wasm-binary")
+includeModule("wasm-wir")
