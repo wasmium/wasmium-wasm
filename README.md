@@ -1,11 +1,11 @@
-<h1 style="text-align: center;">wasmium-wasm-binary</h1>
+<h1 style="text-align: center;">wasmium-wasm</h1>
 
 <p style="text-align: center;">
     <a href="https://kotlinlang.org">
         <img alt="Kotlin Version" src="https://img.shields.io/badge/kotlin-2.0.0-blue.svg?logo=kotlin">
     </a>
-    <a href="https://github.com/wasmium/wasmium-wasm-binary/blob/main/LICENSE">
-        <img alt="License" src="https://img.shields.io/github/license/wasmium/wasmium-wasm-binary" />
+    <a href="https://github.com/wasmium/wasmium-wasm/blob/main/LICENSE">
+        <img alt="License" src="https://img.shields.io/github/license/wasmium/wasmium-wasm" />
     </a>
 </p>
 
@@ -14,7 +14,7 @@
 WASM binary reader and writer.
 
 > [!WARNING]
-> wasmium-wasm-binary is under development.
+> wasmium-wasm is under development.
 >
 > Report any issue or bug <a href="/issues">in the GitHub repository.</a>
 > 

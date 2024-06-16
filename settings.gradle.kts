@@ -19,7 +19,7 @@ plugins {
     id("build-settings-default")
 }
 
-rootProject.name = "wasmium-wasm-binary"
+rootProject.name = "wasmium-wasm"
 
 includeModule("wasm-binary")
 includeModule("wasm-wir")

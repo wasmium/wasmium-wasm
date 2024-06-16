@@ -42,7 +42,7 @@ kotlin {
     }
 
     wasmJs {
-        moduleName = "wasmium-wasm-binary"
+        moduleName = "wasmium-wasm"
 
         browser {
             testTask {
