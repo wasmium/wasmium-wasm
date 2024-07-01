@@ -21,13 +21,11 @@ dependencies {
     implementation(buildCatalog.build.gradle.plugin)
 }
 
+kotlin {
+    explicitApi()
+}
+
 gradlePlugin {
-    plugins {
-        register("ProjectWrapperPlugin") {
-            id = "build-project-wrapper"
-            implementationClass = "build.gradle.plugins.build.ProjectWrapperPlugin"
-        }
-    }
     plugins {
         register("ProjectDefaultPlugin") {
             id = "build-project-default"

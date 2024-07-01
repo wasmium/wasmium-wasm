@@ -10,6 +10,7 @@ plugins {
     alias(buildCatalog.plugins.detekt)
     alias(buildCatalog.plugins.kotlin.dokka)
     alias(buildCatalog.plugins.kotlinx.bcv)
+
     id("build-project-default")
 }
 

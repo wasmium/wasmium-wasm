@@ -5,6 +5,6 @@ import org.gradle.api.Project
 
 public class ProjectDefaultPlugin : Plugin<Project> {
     override fun apply(project: Project): Unit = project.run {
-        // emtpy
+        // empty
     }
 }

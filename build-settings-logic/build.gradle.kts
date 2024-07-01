@@ -23,6 +23,10 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${getKotlinPluginVersion()}")
 }
 
+kotlin {
+    explicitApi()
+}
+
 gradlePlugin {
     plugins {
         register("SettingsDefaultPlugin") {
