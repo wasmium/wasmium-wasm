@@ -10,9 +10,9 @@ import org.wasmium.wasm.binary.tree.GlobalType.Mutable
 import org.wasmium.wasm.binary.tree.GlobalType.Mutable.IMMUTABLE
 import org.wasmium.wasm.binary.tree.GlobalType.Mutable.MUTABLE
 import org.wasmium.wasm.binary.tree.LimitFlags
+import org.wasmium.wasm.binary.tree.Limits
 import org.wasmium.wasm.binary.tree.LinkingKind
 import org.wasmium.wasm.binary.tree.LinkingSymbolType
-import org.wasmium.wasm.binary.tree.Limits
 import org.wasmium.wasm.binary.tree.MemoryType
 import org.wasmium.wasm.binary.tree.NameKind
 import org.wasmium.wasm.binary.tree.Opcode
@@ -57,8 +57,8 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         reader.request(4u)
 
         var result = 0.toUInt()
-        for (i in 0..3) {
-            result = result or ((reader.readByte().toUInt() and 0xFFu) shl (8 * i))
+        repeat(4) {
+            result = result or ((reader.readByte().toUInt() and 0xFFu) shl (8 * it))
         }
 
         return result.also { consume(4u) }
@@ -68,8 +68,8 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         reader.request(8u)
 
         var result = 0.toULong()
-        for (i in 0..7) {
-            result = result or ((reader.readByte().toULong() and 0xFFu) shl (8 * i))
+        repeat(8) {
+            result = result or ((reader.readByte().toULong() and 0xFFu) shl (8 * it))
         }
 
         return result.also { consume(8u) }
@@ -320,8 +320,8 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
     public fun readV128(): V128Value {
         val value = uintArrayOf(0u, 0u, 0u, 0u)
 
-        for (i in 0..3) {
-            value[i] = readUInt32()
+        repeat(4) {
+            value[it] = readUInt32()
         }
 
         return V128Value(value)
@@ -375,7 +375,7 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         }
 
         val parameters = mutableListOf<WasmType>()
-        (0 until numberOfParameters.toInt()).forEach { _ ->
+        repeatUInt(numberOfParameters) {
             val type = readType()
 
             if (!type.isValueType()) {
@@ -391,7 +391,7 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         }
 
         val results = mutableListOf<WasmType>()
-        (0 until numberOfResults.toInt()).forEach { _ ->
+        repeatUInt(numberOfResults) {
             val type = readType()
 
             if (!type.isValueType()) {

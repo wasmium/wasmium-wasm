@@ -6,6 +6,7 @@ import org.wasmium.wasm.binary.WasmBinary.ELEMENT_EXPRESSIONS
 import org.wasmium.wasm.binary.WasmBinary.ELEMENT_PASSIVE_OR_DECLARATIVE
 import org.wasmium.wasm.binary.WasmBinary.ELEMENT_TABLE_INDEX
 import org.wasmium.wasm.binary.WasmBinaryReader
+import org.wasmium.wasm.binary.repeatUInt
 import org.wasmium.wasm.binary.tree.ElementKind
 import org.wasmium.wasm.binary.tree.ElementKind.FUNCTION_REF
 import org.wasmium.wasm.binary.tree.ExternalKind
@@ -166,7 +167,7 @@ public class ModuleReader(options: ReaderOptions) {
         context.numberOfTypes = source.readVarUInt32()
 
         val typeVisitor = visitor.visitTypeSection()
-        (0u until context.numberOfTypes).forEach { _ ->
+        repeatUInt(context.numberOfTypes) {
             val functionType = source.readFunctionType()
 
             context.functionTypes.add(functionType)
@@ -185,7 +186,7 @@ public class ModuleReader(options: ReaderOptions) {
         val numberOfTagTypes = source.readVarUInt32()
 
         val tagSectionVisitor = visitor.visitTagSection()
-        (0u until numberOfTagTypes).forEach { _ ->
+        repeatUInt(numberOfTagTypes) {
             val tagType = source.readTagType()
 
             tagSectionVisitor.visitTag(tagType)
@@ -197,7 +198,7 @@ public class ModuleReader(options: ReaderOptions) {
         context.numberOfTables = source.readVarUInt32()
 
         val tableVisitor = visitor.visitTableSection()
-        (0u until context.numberOfTables).forEach { _ ->
+        repeatUInt(context.numberOfTables) {
             val tableType = source.readTableType()
 
             tableVisitor.visitTable(tableType)
@@ -218,7 +219,7 @@ public class ModuleReader(options: ReaderOptions) {
 
         if (numberOfMemories > 0u) {
             val memoryVisitor = visitor.visitMemorySection()
-            (0u until numberOfMemories).forEach { _ ->
+            repeatUInt(numberOfMemories) {
                 val memoryType = source.readMemoryType()
 
                 memoryVisitor.visitMemory(memoryType)
@@ -234,7 +235,7 @@ public class ModuleReader(options: ReaderOptions) {
         context.numberOfImports = source.readVarUInt32()
 
         val importVisitor = visitor.visitImportSection()
-        (0u until context.numberOfImports).forEach { _ ->
+        repeatUInt(context.numberOfImports) {
             val moduleName = source.readString()
             val fieldName = source.readString()
 
@@ -302,7 +303,7 @@ public class ModuleReader(options: ReaderOptions) {
         context.numberOfGlobals = source.readVarUInt32()
 
         val globalVisitor = visitor.visitGlobalSection()
-        (0u until context.numberOfGlobals).forEach { _ ->
+        repeatUInt(context.numberOfGlobals) {
             readGlobalVariable(source, globalVisitor)
         }
 
@@ -313,7 +314,7 @@ public class ModuleReader(options: ReaderOptions) {
         context.numberOfFunctions = source.readVarUInt32()
 
         val functionVisitor = visitor.visitFunctionSection()
-        (0u until context.numberOfFunctions).forEach { _ ->
+        repeatUInt(context.numberOfFunctions) {
             val typeIndex = source.readIndex()
 
             val functionType = context.functionTypes.getOrElse(typeIndex.toInt()) {
@@ -330,7 +331,7 @@ public class ModuleReader(options: ReaderOptions) {
         context.numberOfExports = source.readVarUInt32()
 
         val exportVisitor = visitor.visitExportSection()
-        (0u until context.numberOfExports).forEach { _ ->
+        repeatUInt(context.numberOfExports) {
             val name = source.readString()
 
             val externalKind = source.readExternalKind()
@@ -387,7 +388,7 @@ public class ModuleReader(options: ReaderOptions) {
             }
 
             val initLength = source.readVarUInt32()
-            (0u until initLength).forEach { _ ->
+            repeatUInt( initLength) {
                 val expressionVisitor = elementSegmentVisitor.visitExpression()
                 readExpression(source, expressionVisitor)
                 expressionVisitor.visitEnd()
@@ -405,7 +406,7 @@ public class ModuleReader(options: ReaderOptions) {
 
             val numberOfFunctionIndexes = source.readVarUInt32()
             val elementIndices = mutableListOf<UInt>()
-            (0u until numberOfFunctionIndexes).forEach { _ ->
+            repeatUInt( numberOfFunctionIndexes) {
                 elementIndices.add(source.readIndex())
             }
             elementSegmentVisitor.visitElementIndices(elementIndices)
@@ -426,7 +427,7 @@ public class ModuleReader(options: ReaderOptions) {
         }
 
         val elementVisitor = visitor.visitElementSection()
-        (0u until numberOfElementSegments).forEach { _ ->
+        repeatUInt(numberOfElementSegments) {
             readElementSegment(source, elementVisitor)
         }
         elementVisitor.visitEnd()
@@ -461,7 +462,7 @@ public class ModuleReader(options: ReaderOptions) {
         val dataSegmentCount = source.readVarUInt32()
 
         val dataVisitor = visitor.visitDataSection()
-        (0u until dataSegmentCount).forEach { _ ->
+        repeatUInt(dataSegmentCount) {
             readDataSegment(source, dataVisitor)
         }
 
@@ -683,7 +684,7 @@ public class ModuleReader(options: ReaderOptions) {
                 LinkingKind.SYMBOL_TABLE -> {
                     val symbolCount = source.readVarUInt32()
 
-                    (0u until symbolCount).forEach { _ ->
+                    repeatUInt(symbolCount) {
                         val symbolType = source.readLinkingSymbolType()
                         val flags = source.readUInt32()
 
@@ -732,7 +733,7 @@ public class ModuleReader(options: ReaderOptions) {
                 LinkingKind.SEGMENT_INFO -> {
                     val segmentCount = source.readVarUInt32()
 
-                    (0u until segmentCount).forEach { _ ->
+                    repeatUInt( segmentCount)  {
                         val name = source.readString()
                         val alignment = source.readVarUInt32()
                         val flags = source.readUInt32()
@@ -771,7 +772,7 @@ public class ModuleReader(options: ReaderOptions) {
 
         val relocationVisitor = visitor.visitRelocationSection()
         val relocationTypes = mutableListOf<RelocationType>()
-        (0u until numberOfRelocations).forEach { _ ->
+        repeatUInt(numberOfRelocations) {
             when (val relocationKind = source.readRelocationKind()) {
                 FUNCTION_INDEX_LEB,
                 TABLE_INDEX_SLEB,
@@ -820,7 +821,7 @@ public class ModuleReader(options: ReaderOptions) {
 
         val codeVisitor = visitor.visitCodeSection()
 
-        (0u until numberOfCodes).forEach { _ ->
+        repeatUInt( numberOfCodes) {
             val bodySize = source.readVarUInt32()
             if (bodySize == 0u) {
                 throw ParserException("Empty function size")
@@ -835,7 +836,7 @@ public class ModuleReader(options: ReaderOptions) {
             val locals = mutableListOf<LocalVariable>()
             val numberOfLocals = source.readVarUInt32()
 
-            (0u until numberOfLocals).forEach { _ ->
+            repeatUInt(numberOfLocals) {
                 val numberOfLocalTypes = source.readVarUInt32()
 
                 val localType = source.readType()
@@ -946,12 +947,12 @@ public class ModuleReader(options: ReaderOptions) {
 
                 BR_TABLE -> {
                     val numberOfBrTableTargets = source.readVarUInt32()
-                    if(numberOfBrTableTargets > WasmBinary.MAX_BR_TABLE_TARGETS) {
+                    if (numberOfBrTableTargets > WasmBinary.MAX_BR_TABLE_TARGETS) {
                         throw ParserException("Number of br_table targets $numberOfBrTableTargets exceed the maximum of ${WasmBinary.MAX_BR_TABLE_TARGETS}")
                     }
 
                     val targets = mutableListOf<UInt>()
-                    (0u until numberOfBrTableTargets).forEach { _ ->
+                    repeatUInt(numberOfBrTableTargets) {
                         val depth = source.readIndex()
 
                         targets.add(depth)
@@ -1884,7 +1885,7 @@ public class ModuleReader(options: ReaderOptions) {
                     }
 
                     val parameters = mutableListOf<WasmType>()
-                    (0 until numberOfSelectTypes.toInt()).forEach { _ ->
+                    repeatUInt(numberOfSelectTypes) {
                         val type = source.readType()
 
                         if (!type.isValueType()) {
@@ -1906,7 +1907,7 @@ public class ModuleReader(options: ReaderOptions) {
                     val numberOfCatches = source.readVarUInt32()
 
                     val handlers = mutableListOf<TryCatchArgument>()
-                    (0u until numberOfCatches).forEach { _ ->
+                    repeatUInt( numberOfCatches)  {
                         when (source.readUInt8()) {
                             TryCatchKind.CATCH.kindId -> {
                                 val tagIndex = source.readVarUInt32()

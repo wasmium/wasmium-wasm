@@ -1,5 +1,6 @@
 package org.wasmium.wasm.binary.validator
 
+import org.wasmium.wasm.binary.repeatUInt
 import org.wasmium.wasm.binary.tree.LocalVariable
 import org.wasmium.wasm.binary.tree.WasmType
 import org.wasmium.wasm.binary.visitor.CodeSectionVisitor
@@ -16,7 +17,7 @@ public class CodeSectionValidator(private val delegate: CodeSectionVisitor? = nu
         val localInitials = mutableListOf<WasmType>()
         localInitials.addAll(functionType.parameters)
         for (local in locals) {
-            for (i in 0u until local.count) {
+            repeatUInt(local.count){
                 localInitials.add(local.type)
             }
         }

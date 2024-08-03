@@ -29,14 +29,14 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
     public fun writeUInt8(value: UInt): Unit = writer.writeByte(value.toByte())
 
     public fun writeUInt32(value: UInt) {
-        for (i in 0..3) {
-            writer.writeByte((value shr (8 * i)).toByte())
+        repeat(4) {
+            writer.writeByte((value shr (8 * it)).toByte())
         }
     }
 
     public fun writeUInt64(value: ULong) {
-        for (i in 0..7) {
-            writer.writeByte((value shr (8 * i) and 0xFFu).toByte())
+        repeat(8) {
+            writer.writeByte((value shr (8 * it) and 0xFFu).toByte())
         }
     }
 
@@ -212,8 +212,8 @@ public class WasmBinaryWriter(public val writer: BinaryWriter) {
     }
 
     public fun writeV128(value: V128Value) {
-        for (i in 0..3) {
-            writeUInt32(value.value[i])
+        repeat(4){
+            writeUInt32(value.value[it])
         }
     }
 
