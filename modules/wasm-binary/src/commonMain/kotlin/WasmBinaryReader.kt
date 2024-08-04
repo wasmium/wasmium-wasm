@@ -215,7 +215,6 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
 
     public fun readTableType(): TableType {
         val elementType = readType()
-
         if (!elementType.isReferenceType()) {
             throw ParserException("Imported table type is not a reference type.")
         }
@@ -335,11 +334,11 @@ public class WasmBinaryReader(protected val reader: BinaryReader) {
         val valueType = WasmType.fromWasmTypeId(value)
 
         return if (valueType != null) {
-            return BlockType(BlockType.BlockTypeKind.VALUE_TYPE, value.toInt())
+            BlockType(BlockType.BlockTypeKind.VALUE_TYPE, value.toInt())
         } else {
             val index = readVarInt32(value.toLong())
 
-            return BlockType(BlockType.BlockTypeKind.FUNCTION_TYPE, index)
+            BlockType(BlockType.BlockTypeKind.FUNCTION_TYPE, index)
         }
     }
 

@@ -236,7 +236,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
         }
 
         when (opcode) {
-            V8X16_SHUFFLE -> {
+            I8X16_SHUFFLE -> {
                 // valid
             }
 
@@ -1651,9 +1651,9 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
         }
 
         when (opcode) {
-            I8X16_MUL,
             I16X8_MUL,
             I32X4_MUL,
+            I64X2_MUL,
             F32X4_MUL,
             F64X2_MUL -> {
                 // valid
@@ -1761,11 +1761,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
             I8X16_SHL_S,
             I8X16_SHL_U,
             I16X8_SHL_S,
-            I16X8_SHL_U,
-            I32X4_SHL_S,
-            I32X4_SHL_U,
-            I64X2_SHL_S,
-            I64X2_SHL_U -> {
+            I16X8_SHL_U -> {
                 // valid
             }
 
@@ -1875,10 +1871,6 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
         }
 
         when (opcode) {
-            I8X16_ANY_TRUE,
-            I16X8_ANY_TRUE,
-            I32X4_ANY_TRUE,
-            I64X2_ANY_TRUE,
             I8X16_ALL_TRUE,
             I16X8_ALL_TRUE,
             I32X4_ALL_TRUE,
@@ -1907,6 +1899,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
             I8X16_EQ,
             I16X8_EQ,
             I32X4_EQ,
+            I64X2_EQ,
             F32X4_EQ,
             F64X2_EQ -> {
                 // valid
@@ -1933,6 +1926,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
             I8X16_NE,
             I16X8_NE,
             I32X4_NE,
+            I64X2_NE,
             F32X4_NE,
             F64X2_NE -> {
                 // valid
@@ -2072,6 +2066,12 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
         }
 
         when (opcode) {
+            I8X16_MIN_S,
+            I8X16_MIN_U,
+            I16X8_MIN_S,
+            I16X8_MIN_U,
+            I32X4_MIN_S,
+            I32X4_MIN_U,
             F32X4_MIN,
             F64X2_MIN -> {
                 // valid
@@ -2095,6 +2095,12 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
         }
 
         when (opcode) {
+            I8X16_MAX_S,
+            I8X16_MAX_U,
+            I16X8_MAX_S,
+            I16X8_MAX_U,
+            I32X4_MAX_S,
+            I32X4_MAX_U,
             F32X4_MAX,
             F64X2_MAX -> {
                 // valid
@@ -2164,10 +2170,10 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
         }
 
         when (opcode) {
-            F32X4_CONVERT_S_I32X4,
-            F32X4_CONVERT_U_I32X4,
-            F64X2_CONVERT_S_I64X2,
-            F64X2_CONVERT_U_I64X2 -> {
+            F32X4_CONVERT_I32X4_S,
+            F32X4_CONVERT_I32X4_U,
+            F64X2_CONVERT_LOW_I32X4_S,
+            F64X2_CONVERT_LOW_I32X4_U -> {
                 // valid
             }
 
@@ -2189,10 +2195,10 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
         }
 
         when (opcode) {
-            I32X4_TRUNC_S_F32X4_SAT,
-            I32X4_TRUNC_U_F32X4_SAT,
-            I64X2_TRUNC_S_F64X2_SAT,
-            I64X2_TRUNC_U_F64X2_SAT -> {
+            I32X4_TRUNC_SAT_F32X4_S,
+            I32X4_TRUNC_SAT_F32X4_U,
+            I32X4_TRUNC_SAT_F64X2_S_ZERO,
+            I32X4_TRUNC_SAT_F64X2_U_ZERO -> {
                 // valid
             }
 
@@ -2252,6 +2258,10 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
         }
 
         when (opcode) {
+            I816_ABS,
+            I16X8_ABS,
+            I32X4_ABS,
+            I64X2_ABS,
             F32X4_ABS,
             F64X2_ABS -> {
                 // valid
@@ -2298,6 +2308,10 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
             throw ParserException("Invalid memory.init code: bulk memory not enabled.")
         }
 
+        if (segmentIndex > context.dataSegmentCount) {
+            throw ParserException("Invalid data.drop code: segment index out of bounds.")
+        }
+
         numberOfInstructions++
 
         delegate?.visitMemoryInitInstruction(memoryIndex, segmentIndex)
@@ -2320,6 +2334,10 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
 
         if (!context.options.features.isBulkMemoryEnabled) {
             throw ParserException("Invalid data.drop code: bulk memory not enabled.")
+        }
+
+        if (segmentIndex > context.dataSegmentCount) {
+            throw ParserException("Invalid data.drop code: segment index out of bounds.")
         }
 
         numberOfInstructions++

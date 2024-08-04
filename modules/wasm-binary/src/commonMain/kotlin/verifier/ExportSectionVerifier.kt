@@ -24,6 +24,10 @@ public class ExportSectionVerifier(private val delegate: ExportSectionVisitor? =
 
         when (externalKind) {
             FUNCTION -> {
+                if (!context.options.features.isExceptionHandlingEnabled) {
+                    throw ParserException("Invalid export exception kind: exceptions not enabled.")
+                }
+
                 if (itemIndex >= context.numberOfTotalFunctions) {
                     throw ParserException("Invalid export function index: %$itemIndex")
                 }
@@ -64,6 +68,10 @@ public class ExportSectionVerifier(private val delegate: ExportSectionVisitor? =
             }
 
             TAG -> {
+                if (!context.options.features.isExceptionHandlingEnabled) {
+                    throw ParserException("Invalid export exception kind: exceptions not enabled.")
+                }
+
                 context.exportIndexes.add(itemIndex)
             }
         }

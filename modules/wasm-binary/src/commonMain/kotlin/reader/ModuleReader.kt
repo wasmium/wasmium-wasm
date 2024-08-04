@@ -262,6 +262,7 @@ public class ModuleReader(options: ReaderOptions) {
 
                 ExternalKind.MEMORY -> {
                     val memoryType = source.readMemoryType()
+
                     importVisitor.visitMemory(moduleName, fieldName, memoryType)
 
                     context.numberOfMemoryImports++
@@ -388,7 +389,7 @@ public class ModuleReader(options: ReaderOptions) {
             }
 
             val initLength = source.readVarUInt32()
-            repeatUInt( initLength) {
+            repeatUInt(initLength) {
                 val expressionVisitor = elementSegmentVisitor.visitExpression()
                 readExpression(source, expressionVisitor)
                 expressionVisitor.visitEnd()
@@ -406,7 +407,7 @@ public class ModuleReader(options: ReaderOptions) {
 
             val numberOfFunctionIndexes = source.readVarUInt32()
             val elementIndices = mutableListOf<UInt>()
-            repeatUInt( numberOfFunctionIndexes) {
+            repeatUInt(numberOfFunctionIndexes) {
                 elementIndices.add(source.readIndex())
             }
             elementSegmentVisitor.visitElementIndices(elementIndices)
@@ -733,7 +734,7 @@ public class ModuleReader(options: ReaderOptions) {
                 LinkingKind.SEGMENT_INFO -> {
                     val segmentCount = source.readVarUInt32()
 
-                    repeatUInt( segmentCount)  {
+                    repeatUInt(segmentCount) {
                         val name = source.readString()
                         val alignment = source.readVarUInt32()
                         val flags = source.readUInt32()
@@ -821,7 +822,7 @@ public class ModuleReader(options: ReaderOptions) {
 
         val codeVisitor = visitor.visitCodeSection()
 
-        repeatUInt( numberOfCodes) {
+        repeatUInt(numberOfCodes) {
             val bodySize = source.readVarUInt32()
             if (bodySize == 0u) {
                 throw ParserException("Empty function size")
@@ -1472,7 +1473,7 @@ public class ModuleReader(options: ReaderOptions) {
                 }
 
                 V128_CONST -> {
-                    val value: V128Value = source.readV128()
+                    val value = source.readV128()
 
                     expressionVisitor.visitSimdConstInstruction(value)
                 }
@@ -1497,9 +1498,9 @@ public class ModuleReader(options: ReaderOptions) {
                 I64X2_SPLAT,
                 F32X4_SPLAT,
                 F64X2_SPLAT -> {
-                    val value = source.readVarUInt32()
+                    val laneIndex = source.readVarUInt32()
 
-                    expressionVisitor.visitSimdSplatInstruction(opcode, value)
+                    expressionVisitor.visitSimdSplatInstruction(opcode, laneIndex)
                 }
 
                 I8X16_EXTRACT_LANE_S,
@@ -1510,9 +1511,9 @@ public class ModuleReader(options: ReaderOptions) {
                 I64X2_EXTRACT_LANE,
                 F32X4_EXTRACT_LANE,
                 F64X2_EXTRACT_LANE -> {
-                    val index = source.readIndex()
+                    val laneIndex = source.readIndex()
 
-                    expressionVisitor.visitSimdExtractLaneInstruction(opcode, index)
+                    expressionVisitor.visitSimdExtractLaneInstruction(opcode, laneIndex)
                 }
 
                 I8X16_REPLACE_LANE,
@@ -1521,12 +1522,12 @@ public class ModuleReader(options: ReaderOptions) {
                 I64X2_REPLACE_LANE,
                 F32X4_REPLACE_LANE,
                 F64X2_REPLACE_LANE -> {
-                    val index = source.readIndex()
+                    val laneIndex = source.readIndex()
 
-                    expressionVisitor.visitSimdReplaceLaneInstruction(opcode, index)
+                    expressionVisitor.visitSimdReplaceLaneInstruction(opcode, laneIndex)
                 }
 
-                V8X16_SHUFFLE -> {
+                I8X16_SHUFFLE -> {
                     val lanesIndex = UIntArray(16) { 0u }
 
                     for (index in 0u until 16u) {
@@ -1557,11 +1558,7 @@ public class ModuleReader(options: ReaderOptions) {
                 I8X16_SHL_S,
                 I8X16_SHL_U,
                 I16X8_SHL_S,
-                I16X8_SHL_U,
-                I32X4_SHL_S,
-                I32X4_SHL_U,
-                I64X2_SHL_S,
-                I64X2_SHL_U -> {
+                I16X8_SHL_U -> {
                     expressionVisitor.visitSimdShiftLeftInstruction(opcode)
                 }
 
@@ -1585,10 +1582,6 @@ public class ModuleReader(options: ReaderOptions) {
                     expressionVisitor.visitSimdBitSelectInstruction(opcode)
                 }
 
-                I8X16_ANY_TRUE,
-                I16X8_ANY_TRUE,
-                I32X4_ANY_TRUE,
-                I64X2_ANY_TRUE,
                 I8X16_ALL_TRUE,
                 I16X8_ALL_TRUE,
                 I32X4_ALL_TRUE,
@@ -1599,6 +1592,7 @@ public class ModuleReader(options: ReaderOptions) {
                 I8X16_EQ,
                 I16X8_EQ,
                 I32X4_EQ,
+                I64X2_EQ,
                 F32X4_EQ,
                 F64X2_EQ -> {
                     expressionVisitor.visitSimdEqualInstruction(opcode)
@@ -1607,6 +1601,7 @@ public class ModuleReader(options: ReaderOptions) {
                 I8X16_NE,
                 I16X8_NE,
                 I32X4_NE,
+                I64X2_NE,
                 F32X4_NE,
                 F64X2_NE -> {
                     expressionVisitor.visitSimdNotEqualInstruction(opcode)
@@ -1665,16 +1660,32 @@ public class ModuleReader(options: ReaderOptions) {
                     expressionVisitor.visitSimdNegativeInstruction(opcode)
                 }
 
+                I816_ABS,
+                I16X8_ABS,
+                I32X4_ABS,
+                I64X2_ABS,
                 F32X4_ABS,
                 F64X2_ABS -> {
                     expressionVisitor.visitSimdAbsInstruction(opcode)
                 }
 
+                I8X16_MIN_S,
+                I8X16_MIN_U,
+                I16X8_MIN_S,
+                I16X8_MIN_U,
+                I32X4_MIN_S,
+                I32X4_MIN_U,
                 F32X4_MIN,
                 F64X2_MIN -> {
                     expressionVisitor.visitSimdMinInstruction(opcode)
                 }
 
+                I8X16_MAX_S,
+                I8X16_MAX_U,
+                I16X8_MAX_S,
+                I16X8_MAX_U,
+                I32X4_MAX_S,
+                I32X4_MAX_U,
                 F32X4_MAX,
                 F64X2_MAX -> {
                     expressionVisitor.visitSimdMaxInstruction(opcode)
@@ -1703,9 +1714,9 @@ public class ModuleReader(options: ReaderOptions) {
                     expressionVisitor.visitSimdDivideInstruction(opcode)
                 }
 
-                I8X16_MUL,
                 I16X8_MUL,
                 I32X4_MUL,
+                I64X2_MUL,
                 F32X4_MUL,
                 F64X2_MUL -> {
                     expressionVisitor.visitSimdMultiplyInstruction(opcode)
@@ -1716,17 +1727,17 @@ public class ModuleReader(options: ReaderOptions) {
                     expressionVisitor.visitSimdSqrtInstruction(opcode)
                 }
 
-                F32X4_CONVERT_S_I32X4,
-                F32X4_CONVERT_U_I32X4,
-                F64X2_CONVERT_S_I64X2,
-                F64X2_CONVERT_U_I64X2 -> {
+                F32X4_CONVERT_I32X4_S,
+                F32X4_CONVERT_I32X4_U,
+                F64X2_CONVERT_LOW_I32X4_S,
+                F64X2_CONVERT_LOW_I32X4_U -> {
                     expressionVisitor.visitSimdConvertInstruction(opcode)
                 }
 
-                I32X4_TRUNC_S_F32X4_SAT,
-                I32X4_TRUNC_U_F32X4_SAT,
-                I64X2_TRUNC_S_F64X2_SAT,
-                I64X2_TRUNC_U_F64X2_SAT -> {
+                I32X4_TRUNC_SAT_F32X4_S,
+                I32X4_TRUNC_SAT_F32X4_U,
+                I32X4_TRUNC_SAT_F64X2_S_ZERO,
+                I32X4_TRUNC_SAT_F64X2_U_ZERO -> {
                     expressionVisitor.visitSimdTruncateInstruction(opcode)
                 }
 
@@ -1751,10 +1762,10 @@ public class ModuleReader(options: ReaderOptions) {
                 }
 
                 TABLE_INIT -> {
-                    val segmentIndex = source.readVarUInt32()
+                    val elementIndex = source.readVarUInt32()
                     val tableIndex = source.readVarUInt32()
 
-                    expressionVisitor.visitTableInitInstruction(segmentIndex, tableIndex)
+                    expressionVisitor.visitTableInitInstruction(elementIndex, tableIndex)
                 }
 
                 DATA_DROP -> {
@@ -1764,9 +1775,9 @@ public class ModuleReader(options: ReaderOptions) {
                 }
 
                 ELEMENT_DROP -> {
-                    val segmentIndex = source.readVarUInt32()
+                    val elementIndex = source.readVarUInt32()
 
-                    expressionVisitor.visitElementDropInstruction(segmentIndex)
+                    expressionVisitor.visitElementDropInstruction(elementIndex)
                 }
 
                 TABLE_SIZE -> {
@@ -1884,7 +1895,7 @@ public class ModuleReader(options: ReaderOptions) {
                         throw ParserException("Number of select_t parameters exceed the supported of ${WasmBinary.MAX_SELECT_TYPE_PARAMETERS}")
                     }
 
-                    val parameters = mutableListOf<WasmType>()
+                    val types = mutableListOf<WasmType>()
                     repeatUInt(numberOfSelectTypes) {
                         val type = source.readType()
 
@@ -1892,10 +1903,10 @@ public class ModuleReader(options: ReaderOptions) {
                             throw ParserException("Expected select_t parameter value type but got ${type.name}")
                         }
 
-                        parameters.add(type)
+                        types.add(type)
                     }
 
-                    expressionVisitor.visitSelectTypedInstruction(parameters)
+                    expressionVisitor.visitSelectTypedInstruction(types)
                 }
 
                 TRY_TABLE -> {
@@ -1907,7 +1918,7 @@ public class ModuleReader(options: ReaderOptions) {
                     val numberOfCatches = source.readVarUInt32()
 
                     val handlers = mutableListOf<TryCatchArgument>()
-                    repeatUInt( numberOfCatches)  {
+                    repeatUInt(numberOfCatches) {
                         when (source.readUInt8()) {
                             TryCatchKind.CATCH.kindId -> {
                                 val tagIndex = source.readVarUInt32()
@@ -1970,6 +1981,9 @@ public class ModuleReader(options: ReaderOptions) {
                     }
 
                     val type = source.readType()
+                    if (!type.isReferenceType()) {
+                        throw ParserException("Invalid ref.null type: $type")
+                    }
 
                     expressionVisitor.visitReferenceNullInstruction(type)
                 }
@@ -2005,6 +2019,116 @@ public class ModuleReader(options: ReaderOptions) {
 
                     expressionVisitor.visitAtomicFenceInstruction(reserved)
                 }
+
+                STRUCT_NEW_CANON -> TODO()
+                STRUCT_NEW_CANON_DEFAULT -> TODO()
+                STRUCT_GET -> TODO()
+                STRUCT_GET_S -> TODO()
+                STRUCT_GET_U -> TODO()
+                STRUCT_SET -> TODO()
+                ARRAY_NEW_CANON -> TODO()
+                ARRAY_NEW_CANON_DEFAULT -> TODO()
+                ARRAY_GET -> TODO()
+                ARRAY_GET_S -> TODO()
+                ARRAY_GET_U -> TODO()
+                ARRAY_SET -> TODO()
+                ARRAY_LEN -> TODO()
+                ARRAY_NEW_CANON_FIXED -> TODO()
+                ARRAY_NEW_CANON_DATA -> TODO()
+                ARRAY_NEW_CANON_ELEMENT -> TODO()
+                I31_NEW -> TODO()
+                I31_GET_S -> TODO()
+                I31_GET_U -> TODO()
+                REF_TEST -> TODO()
+                REF_CAST -> TODO()
+                EXTERN_INTERNALIZE -> TODO()
+                EXTERN_EXTERNALIZE -> TODO()
+                V128_LOAD_8X8_S -> TODO()
+                V128_LOAD_8X8_U -> TODO()
+                V128_LOAD_16X4_S -> TODO()
+                V128_LOAD_16X4_U -> TODO()
+                V128_LOAD_32X2_S -> TODO()
+                V128_LOAD_32X2_U -> TODO()
+                V128_LOAD_8_SPLAT -> TODO()
+                V128_LOAD_16_SPLAT -> TODO()
+                V128_LOAD_32_SPLAT -> TODO()
+                V128_LOAD_64_SPLAT -> TODO()
+                I8X16_SWIZZLE -> TODO()
+                V128_ANDNOT -> TODO()
+                V128_ANY_TRUE -> TODO()
+                V128_LOAD8_LANE -> TODO()
+                V128_LOAD16_LANE -> TODO()
+                V128_LOAD32_LANE -> TODO()
+                V128_LOAD64_LANE -> TODO()
+                V128_STORE8_LANE -> TODO()
+                V128_STORE16_LANE -> TODO()
+                V128_STORE32_LANE -> TODO()
+                V128_STORE64_LANE -> TODO()
+                V128_LOAD32_ZERO -> TODO()
+                V128_LOAD64_ZERO -> TODO()
+                F32X4_DEMOTE_F64X2_ZERO -> TODO()
+                F64X2_PROMOTE_LOW_F32X4 -> TODO()
+                I8X16_POPCNT -> TODO()
+                I8X16_BITMASK -> TODO()
+                I8X16_NARROW_I16X8_S -> TODO()
+                I8X16_NARROW_I16X8_U -> TODO()
+                F32X4_CEIL -> TODO()
+                F32X4_FLOOR -> TODO()
+                F32X4_TRUNC -> TODO()
+                F32X4_NEAREST -> TODO()
+                F64X2_CEIL -> TODO()
+                F64X2_FLOOR -> TODO()
+                F64X2_TRUNC -> TODO()
+                I8X16_AVGR_U -> TODO()
+                I16X8_EXTADD_PAIRWISE_I8X16_S -> TODO()
+                I16X8_EXTADD_PAIRWISE_I8X16_U -> TODO()
+                I32X4_EXTADD_PAIRWISE_I16X8_S -> TODO()
+                I32X4_EXTADD_PAIRWISE_I16X8_U -> TODO()
+                I16X8_Q15MULR_SAT_S -> TODO()
+                I16X8_BITMASK -> TODO()
+                I16X8_NARROW_I32X4_S -> TODO()
+                I16X8_NARROW_I32X4_U -> TODO()
+                I16X8_EXTEND_LOW_I8X16_S -> TODO()
+                I16X8_EXTEND_HIGH_I8X16_S -> TODO()
+                I16X8_EXTEND_LOW_I8X16_U -> TODO()
+                I16X8_EXTEND_HIGH_I8X16_U -> TODO()
+                F64X2_NEAREST -> TODO()
+                I16X8_AVGR_U -> TODO()
+                I16X8_EXTMUL_LOW_I8X16_S -> TODO()
+                I16X8_EXTMUL_HIGH_I8X16_S -> TODO()
+                I16X8_EXTMUL_LOW_I8X16_U -> TODO()
+                I16X8_EXTMUL_HIGH_I8X16_U -> TODO()
+                I32X4_BITMASK -> TODO()
+                I32X4_EXTEND_LOW_I16X8_S -> TODO()
+                I32X4_EXTEND_HIGH_I16X8_S -> TODO()
+                I32X4_EXTEND_LOW_I16X8_U -> TODO()
+                I32X4_EXTEND_HIGH_I16X8_U -> TODO()
+                I32X4_SHR_S -> TODO()
+                I32X4_SHR_U -> TODO()
+                I32X4_DOT_I16X8_S -> TODO()
+                I32X4_EXTMUL_LOW_I16X8_S -> TODO()
+                I32X4_EXTMUL_HIGH_I16X8_S -> TODO()
+                I32X4_EXTMUL_LOW_I16X8_U -> TODO()
+                I32X4_EXTMUL_HIGH_I16X8_U -> TODO()
+                I64X2_BITMASK -> TODO()
+                I64X2_EXTEND_LOW_I32X4_S -> TODO()
+                I64X2_EXTEND_HIGH_I32X4_S -> TODO()
+                I64X2_EXTEND_LOW_I32X4_U -> TODO()
+                I64X2_EXTEND_HIGH_I32X4_U -> TODO()
+                I64X2_SHR_S -> TODO()
+                I64X2_SHR_U -> TODO()
+                I64X2_LT_S -> TODO()
+                I64X2_GT_S -> TODO()
+                I64X2_LE_S -> TODO()
+                I64X2_GE_S -> TODO()
+                I64X2_EXTMUL_LOW_I32X4_S -> TODO()
+                I64X2_EXTMUL_HIGH_I32X4_S -> TODO()
+                I64X2_EXTMUL_LOW_I32X4_U -> TODO()
+                I64X2_EXTMUL_HIGH_I32X4_U -> TODO()
+                F32X4_PMIN -> TODO()
+                F32X4_PMAX -> TODO()
+                F64X2_PMIN -> TODO()
+                F64X2_PMAX -> TODO()
             }
         }
     }
