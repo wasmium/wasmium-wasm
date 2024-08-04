@@ -1,5 +1,3 @@
-@file:Suppress("PackageDirectoryMismatch")
-
 package build.gradle.dsl
 
 public class KotlinCommonCompilerOptionsBuilder {

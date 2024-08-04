@@ -2,21 +2,32 @@
 
 pluginManagement {
     repositories {
-        gradlePluginPortal()
+        gradlePluginPortal {
+            content {
+                includeGroupAndSubgroups("com.gradle")
+                includeGroupAndSubgroups("org.gradle")
+            }
+        }
         mavenCentral()
     }
 }
 
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositoriesMode = RepositoriesMode.PREFER_SETTINGS
+
     repositories {
+        gradlePluginPortal {
+            content {
+                includeGroupAndSubgroups("com.gradle")
+                includeGroupAndSubgroups("org.gradle")
+            }
+        }
         mavenCentral()
-        gradlePluginPortal()
     }
 
     versionCatalogs {
-        create("buildCatalog") {
-            from(files("../gradle/catalogs/buildCatalog.versions.toml"))
+        create("catalog") {
+            from(layout.rootDirectory.files("../gradle/catalogs/catalog.versions.toml"))
         }
     }
 }

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.getKotlinPluginVersion
+
 plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
@@ -9,6 +11,10 @@ configurations.all {
     }
 }
 
+dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${getKotlinPluginVersion()}")
+}
+
 sourceSets {
     main {
         kotlin {
@@ -17,12 +23,20 @@ sourceSets {
     }
 }
 
-dependencies {
-    implementation(buildCatalog.build.gradle.plugin)
-}
-
 kotlin {
     explicitApi()
+
+    compilerOptions {
+        freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
+    }
+
+    sourceSets {
+        main {
+            kotlin {
+                srcDirs("src/main/kotlinX")
+            }
+        }
+    }
 }
 
 gradlePlugin {
@@ -34,7 +48,9 @@ gradlePlugin {
     }
 }
 
-tasks.withType<ValidatePlugins>().configureEach {
-    failOnWarning.set(true)
-    enableStricterValidation.set(true)
+tasks {
+    withType<ValidatePlugins>().configureEach {
+        failOnWarning.set(true)
+        enableStricterValidation.set(true)
+    }
 }

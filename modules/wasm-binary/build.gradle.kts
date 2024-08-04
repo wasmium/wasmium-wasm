@@ -4,11 +4,15 @@ import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 import build.gradle.dsl.withCompilerArguments
+import org.jetbrains.dokka.DokkaConfiguration.Visibility
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
 
 plugins {
-    id("org.jetbrains.kotlin.multiplatform")
-    id("org.jetbrains.dokka")
-    id("org.jetbrains.kotlinx.kover")
+    id(catalog.plugins.kotlin.multiplatform.get().pluginId)
+
+    alias(catalog.plugins.kotlin.dokka)
+    alias(catalog.plugins.kotlinx.kover)
+
     id("build-project-default")
 }
 
@@ -80,7 +84,7 @@ kotlin {
     sourceSets {
         all {
             languageSettings.apply {
-                apiVersion = ApiVersion.KOTLIN_1_6.toString()
+                apiVersion = ApiVersion.KOTLIN_2_0.toString()
                 languageVersion = LanguageVersion.KOTLIN_2_0.toString()
                 progressiveMode = true
 
@@ -94,7 +98,7 @@ kotlin {
                 srcDirs("src/commonMain/kotlinX")
             }
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.3.1")
+                implementation(catalog.bundles.kotlinx.io)
             }
         }
 
@@ -104,6 +108,14 @@ kotlin {
             }
         }
     }
+}
 
-    withSourcesJar()
+tasks {
+    withType<DokkaTaskPartial>().configureEach {
+        dokkaSourceSets.configureEach {
+            documentedVisibilities.set(Visibility.values().toSet())
+        }
+        failOnWarning.set(true)
+        offlineMode.set(true)
+    }
 }

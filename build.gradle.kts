@@ -1,15 +1,13 @@
 import io.gitlab.arturbosch.detekt.Detekt
-import org.jetbrains.dokka.DokkaConfiguration.Visibility
-import org.jetbrains.dokka.gradle.DokkaTaskPartial
+import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
 import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnLockMismatchReport
-import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnRootExtension
+import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin
+import org.jetbrains.kotlin.gradle.targets.js.yarn.yarn
 
 plugins {
-    id(buildCatalog.plugins.kotlin.multiplatform.get().pluginId) apply false
-    alias(buildCatalog.plugins.kotlinx.kover) apply false
-    alias(buildCatalog.plugins.detekt)
-    alias(buildCatalog.plugins.kotlin.dokka)
-    alias(buildCatalog.plugins.kotlinx.bcv)
+    alias(catalog.plugins.detekt)
+    alias(catalog.plugins.kotlin.dokka)
+    alias(catalog.plugins.kotlinx.bcv)
 
     id("build-project-default")
 }
@@ -24,13 +22,12 @@ allprojects {
     }
 }
 
-subprojects {
-    tasks.withType<DokkaTaskPartial>().configureEach {
-        dokkaSourceSets.configureEach {
-            documentedVisibilities.set(Visibility.values().toSet())
-        }
-        failOnWarning.set(true)
-        offlineMode.set(true)
+plugins.withType<YarnPlugin> {
+    yarn.apply {
+        lockFileDirectory = rootDir.resolve("gradle/js")
+        yarnLockMismatchReport = YarnLockMismatchReport.FAIL
+        yarnLockAutoReplace = true
+        reportNewYarnLock = true
     }
 }
 
@@ -50,10 +47,13 @@ tasks {
         include("**/*.kts")
         exclude("**/resources/**", "**/build/**", "**/build.gradle.kts/**", "**/settings.gradle.kts/**")
     }
-}
 
-extensions.findByType<YarnRootExtension>()?.run {
-    yarnLockMismatchReport = YarnLockMismatchReport.WARNING
-    reportNewYarnLock = true
-    yarnLockAutoReplace = false
+    named<Wrapper>("wrapper") {
+        gradleVersion = catalog.versions.gradle.asProvider().get()
+        distributionType = DistributionType.ALL
+
+        doLast {
+            println("Gradle wrapper version: $gradleVersion")
+        }
+    }
 }

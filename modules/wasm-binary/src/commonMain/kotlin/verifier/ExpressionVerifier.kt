@@ -1985,6 +1985,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
             I16X8_LE_U,
             I32X4_LE_S,
             I32X4_LE_U,
+            I64X2_LE_S,
             F32X4_LE,
             F64X2_LE -> {
                 // valid
@@ -2043,6 +2044,7 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
             I16X8_GE_U,
             I32X4_GE_S,
             I32X4_GE_U,
+            I64X2_GE_S,
             F32X4_GE,
             F64X2_GE -> {
                 // valid
@@ -2073,7 +2075,9 @@ public open class ExpressionVerifier(private val delegate: ExpressionVisitor? = 
             I32X4_MIN_S,
             I32X4_MIN_U,
             F32X4_MIN,
-            F64X2_MIN -> {
+            F64X2_MIN,
+            F32X4_PMIN,
+            F64X2_PMIN -> {
                 // valid
             }
 

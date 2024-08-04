@@ -1626,6 +1626,7 @@ public class ModuleReader(options: ReaderOptions) {
                 I16X8_LE_U,
                 I32X4_LE_S,
                 I32X4_LE_U,
+                I64X2_LE_S,
                 F32X4_LE,
                 F64X2_LE -> {
                     expressionVisitor.visitSimdLessEqualInstruction(opcode)
@@ -1648,6 +1649,7 @@ public class ModuleReader(options: ReaderOptions) {
                 I16X8_GE_U,
                 I32X4_GE_S,
                 I32X4_GE_U,
+                I64X2_GE_S,
                 F32X4_GE,
                 F64X2_GE -> {
                     expressionVisitor.visitSimdGreaterEqualInstruction(opcode)
@@ -1678,7 +1680,9 @@ public class ModuleReader(options: ReaderOptions) {
                 I32X4_MIN_S,
                 I32X4_MIN_U,
                 F32X4_MIN,
-                F64X2_MIN -> {
+                F64X2_MIN,
+                F32X4_PMIN,
+                F64X2_PMIN -> {
                     expressionVisitor.visitSimdMinInstruction(opcode)
                 }
 
@@ -1689,7 +1693,9 @@ public class ModuleReader(options: ReaderOptions) {
                 I32X4_MAX_S,
                 I32X4_MAX_U,
                 F32X4_MAX,
-                F64X2_MAX -> {
+                F64X2_MAX,
+                F32X4_PMAX,
+                F64X2_PMAX -> {
                     expressionVisitor.visitSimdMaxInstruction(opcode)
                 }
 
@@ -2121,16 +2127,10 @@ public class ModuleReader(options: ReaderOptions) {
                 I64X2_SHR_U -> TODO()
                 I64X2_LT_S -> TODO()
                 I64X2_GT_S -> TODO()
-                I64X2_LE_S -> TODO()
-                I64X2_GE_S -> TODO()
                 I64X2_EXTMUL_LOW_I32X4_S -> TODO()
                 I64X2_EXTMUL_HIGH_I32X4_S -> TODO()
                 I64X2_EXTMUL_LOW_I32X4_U -> TODO()
                 I64X2_EXTMUL_HIGH_I32X4_U -> TODO()
-                F32X4_PMIN -> TODO()
-                F32X4_PMAX -> TODO()
-                F64X2_PMIN -> TODO()
-                F64X2_PMAX -> TODO()
             }
         }
     }

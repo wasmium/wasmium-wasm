@@ -7,14 +7,6 @@ pluginManagement {
     includeBuild("build-logic")
 }
 
-dependencyResolutionManagement {
-    versionCatalogs {
-        create("buildCatalog") {
-            from(files("./gradle/catalogs/buildCatalog.versions.toml"))
-        }
-    }
-}
-
 plugins {
     id("build-settings-default")
 }
