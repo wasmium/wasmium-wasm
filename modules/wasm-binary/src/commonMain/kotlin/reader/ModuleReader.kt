@@ -2,6 +2,8 @@ package org.wasmium.wasm.binary.reader
 
 import org.wasmium.wasm.binary.ParserException
 import org.wasmium.wasm.binary.WasmBinary
+import org.wasmium.wasm.binary.WasmBinary.DATA_ACTIVE
+import org.wasmium.wasm.binary.WasmBinary.DATA_EXPLICIT
 import org.wasmium.wasm.binary.WasmBinary.ELEMENT_EXPRESSIONS
 import org.wasmium.wasm.binary.WasmBinary.ELEMENT_PASSIVE_OR_DECLARATIVE
 import org.wasmium.wasm.binary.WasmBinary.ELEMENT_TABLE_INDEX
@@ -439,9 +441,9 @@ public class ModuleReader(options: ReaderOptions) {
 
         val dataSegmentVisitor = dataVisitor.visitDataSegment()
 
-        val dataType = source.readVarUInt32()
-        if (dataType and WasmBinary.DATA_PASSIVE.toUInt() == 0u) {
-            val memoryIndex = if ((dataType and WasmBinary.DATA_EXPLICIT.toUInt()) == 0u) 0u else source.readVarUInt32()
+        val mode = source.readVarUInt32()
+        if (mode == DATA_ACTIVE || mode == DATA_EXPLICIT) {
+            val memoryIndex = if (mode == DATA_ACTIVE) 0u else source.readVarUInt32()
 
             val expressionVisitor = dataSegmentVisitor.visitActive(memoryIndex)
             readExpression(source, expressionVisitor)
