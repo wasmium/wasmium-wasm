@@ -26,8 +26,8 @@ dependencyResolutionManagement {
     }
 
     versionCatalogs {
-        create("buildLibraries") {
-            from(layout.rootDirectory.files("../gradle/catalogs/libraries.build.versions.toml"))
+        create("libraries") {
+            from(layout.rootDirectory.files("../gradle/catalogs/libraries.versions.toml"))
         }
     }
 }

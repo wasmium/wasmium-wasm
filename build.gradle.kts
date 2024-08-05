@@ -3,9 +3,9 @@ import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
 import org.jetbrains.dokka.DokkaDefaults.moduleName
 
 plugins {
-    alias(buildLibraries.plugins.detekt)
-    alias(buildLibraries.plugins.kotlin.dokka)
-    alias(buildLibraries.plugins.kotlinx.bcv)
+    alias(libraries.plugins.detekt)
+    alias(libraries.plugins.kotlin.dokka)
+    alias(libraries.plugins.kotlinx.bcv)
 
     id("build-project-default")
 }
@@ -38,7 +38,7 @@ tasks {
     }
 
     named<Wrapper>("wrapper") {
-        gradleVersion = buildLibraries.versions.gradle.asProvider().get()
+        gradleVersion = libraries.versions.gradle.asProvider().get()
         distributionType = DistributionType.ALL
 
         doLast {

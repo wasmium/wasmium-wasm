@@ -11,10 +11,10 @@ import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin
 import org.jetbrains.kotlin.gradle.targets.js.yarn.yarn
 
 plugins {
-    id(buildLibraries.plugins.kotlin.multiplatform.get().pluginId)
+    id(libraries.plugins.kotlin.multiplatform.get().pluginId)
 
-    alias(buildLibraries.plugins.kotlin.dokka)
-    alias(buildLibraries.plugins.kotlinx.kover)
+    alias(libraries.plugins.kotlin.dokka)
+    alias(libraries.plugins.kotlinx.kover)
 
     id("build-project-default")
 }
