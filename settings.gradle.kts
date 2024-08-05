@@ -15,3 +15,5 @@ rootProject.name = "wasmium-wasm"
 
 includeModule("wasm-binary")
 includeModule("wasm-wir")
+includeModule("wasm-bom")
+includeModule("wasm-version-catalog")

@@ -1,33 +1,22 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
-import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnLockMismatchReport
-import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin
-import org.jetbrains.kotlin.gradle.targets.js.yarn.yarn
+import org.jetbrains.dokka.DokkaDefaults.moduleName
 
 plugins {
-    alias(catalog.plugins.detekt)
-    alias(catalog.plugins.kotlin.dokka)
-    alias(catalog.plugins.kotlinx.bcv)
+    alias(buildLibraries.plugins.detekt)
+    alias(buildLibraries.plugins.kotlin.dokka)
+    alias(buildLibraries.plugins.kotlinx.bcv)
 
     id("build-project-default")
 }
 
 allprojects {
-    group = "org.wasmium.wasm.binary"
+    group = "org.wasmium.wasm"
 
     configurations.all {
         resolutionStrategy {
             failOnNonReproducibleResolution()
         }
-    }
-}
-
-plugins.withType<YarnPlugin> {
-    yarn.apply {
-        lockFileDirectory = rootDir.resolve("gradle/js")
-        yarnLockMismatchReport = YarnLockMismatchReport.FAIL
-        yarnLockAutoReplace = true
-        reportNewYarnLock = true
     }
 }
 
@@ -49,7 +38,7 @@ tasks {
     }
 
     named<Wrapper>("wrapper") {
-        gradleVersion = catalog.versions.gradle.asProvider().get()
+        gradleVersion = buildLibraries.versions.gradle.asProvider().get()
         distributionType = DistributionType.ALL
 
         doLast {

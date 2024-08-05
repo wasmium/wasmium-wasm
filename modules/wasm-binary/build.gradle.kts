@@ -1,17 +1,20 @@
 @file:OptIn(ExperimentalWasmDsl::class)
 
-import org.jetbrains.kotlin.config.ApiVersion
-import org.jetbrains.kotlin.config.LanguageVersion
-import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 import build.gradle.dsl.withCompilerArguments
 import org.jetbrains.dokka.DokkaConfiguration.Visibility
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
+import org.jetbrains.kotlin.config.ApiVersion
+import org.jetbrains.kotlin.config.LanguageVersion
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnLockMismatchReport
+import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin
+import org.jetbrains.kotlin.gradle.targets.js.yarn.yarn
 
 plugins {
-    id(catalog.plugins.kotlin.multiplatform.get().pluginId)
+    id(buildLibraries.plugins.kotlin.multiplatform.get().pluginId)
 
-    alias(catalog.plugins.kotlin.dokka)
-    alias(catalog.plugins.kotlinx.kover)
+    alias(buildLibraries.plugins.kotlin.dokka)
+    alias(buildLibraries.plugins.kotlinx.kover)
 
     id("build-project-default")
 }
@@ -98,7 +101,7 @@ kotlin {
                 srcDirs("src/commonMain/kotlinX")
             }
             dependencies {
-                implementation(catalog.bundles.kotlinx.io)
+                implementation(libraries.bundles.kotlinx.io)
             }
         }
 
@@ -107,6 +110,15 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
+    }
+}
+
+plugins.withType<YarnPlugin> {
+    yarn.apply {
+        lockFileDirectory = rootDir.resolve("gradle/js")
+        yarnLockMismatchReport = YarnLockMismatchReport.FAIL
+        yarnLockAutoReplace = true
+        reportNewYarnLock = true
     }
 }
 

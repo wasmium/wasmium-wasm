@@ -43,8 +43,14 @@ public class SettingsDefaultPlugin : Plugin<Settings> {
             }
 
             versionCatalogs {
-                create("catalog") {
-                    from(layout.rootDirectory.files("gradle/catalogs/catalog.versions.toml"))
+                create("libraries") {
+                    from(layout.rootDirectory.files("gradle/catalogs/libraries.versions.toml"))
+                }
+                create("buildLibraries") {
+                    from(layout.rootDirectory.files("gradle/catalogs/libraries.build.versions.toml"))
+                }
+                create("testLibraries") {
+                    from(layout.rootDirectory.files("gradle/catalogs/libraries.test.versions.toml"))
                 }
             }
         }

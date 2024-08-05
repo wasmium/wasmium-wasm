@@ -8,10 +8,10 @@ import org.jetbrains.dokka.DokkaConfiguration.Visibility
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
 
 plugins {
-    id(catalog.plugins.kotlin.multiplatform.get().pluginId)
+    id(buildLibraries.plugins.kotlin.multiplatform.get().pluginId)
 
-    alias(catalog.plugins.kotlin.dokka)
-    alias(catalog.plugins.kotlinx.kover)
+    alias(buildLibraries.plugins.kotlin.dokka)
+    alias(buildLibraries.plugins.kotlinx.kover)
 
     id("build-project-default")
 }
@@ -98,7 +98,7 @@ kotlin {
                 srcDirs("src/commonMain/kotlinX")
             }
             dependencies {
-                implementation(catalog.bundles.kotlinx.io)
+                implementation(libraries.bundles.kotlinx.io)
             }
         }
 
