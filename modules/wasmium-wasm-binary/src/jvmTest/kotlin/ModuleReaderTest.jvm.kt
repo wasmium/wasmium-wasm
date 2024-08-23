@@ -15,8 +15,7 @@ class ModuleReaderTest {
 
     @Test
     fun validWasmReadSuccess() {
-//        val file = "src/jvmTest/resources/hello.wasm"
-        val file = "../../repository/bots.wasm"
+        val file = "src/jvmTest/resources/hello.wasm"
 
         println(File(".").absolutePath)
         val module = ModuleNode()

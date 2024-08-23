@@ -4,8 +4,8 @@ plugins {
 }
 
 val modulesToIncludeInBom = setOf(
-    "wasm-binary",
-    "wasm-wir",
+    "wasmium-wasm-binary",
+    "wasmium-wasm-wir",
 )
 
 val librariesToIncludeInBom = setOf(
@@ -22,22 +22,13 @@ val librariesToIncludeInBom = setOf(
     "kotlinx-serialization-json",
 ).map { it.replace("-", ".") }
 
-val bundlesToIncludeInBom = setOf(
-    "kotlinx-coroutines",
-    "kotlinx-coroutines-test",
-    "kotlinx-io",
-    "kotlinx-serialization",
-).map { it.replace("-", ".") }
-
 catalog {
     versionCatalog {
-        val catalog = versionCatalogs.named("libraries")
+        version("kotlin", libraries.versions.kotlin.asProvider().get())
 
+        val catalog = versionCatalogs.named("libraries")
         for (alias in catalog.libraryAliases.filter { it in librariesToIncludeInBom }) {
             library(alias, catalog.findLibrary(alias).get().get().toString())
-        }
-        for (bundle in catalog.bundleAliases.filter { it in bundlesToIncludeInBom }) {
-            bundle(bundle, catalog.findBundle(bundle).get().get().map(MinimalExternalModuleDependency::getName).toList())
         }
 
         val modules = mutableListOf<String>()
@@ -48,14 +39,40 @@ catalog {
             }
         }
 
-        bundle("wasmium-all", modules)
+        bundle("wasmium-wasm-all", modules)
     }
 }
 
 publishing {
     publications {
         create<MavenPublication>("maven") {
+            groupId = group.toString()
+            artifactId = project.name
+            version = project.version.toString()
+
             from(components["versionCatalog"])
+
+            pom {
+                name.set(artifactId)
+                description.set(project.description)
+                url.set("https://github.com/wasmium/wasmium-wasm")
+                inceptionYear.set("2024")
+
+                licenses {
+                    license {
+                        name.set("Apache License 2.0")
+                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+                    }
+                }
+
+                scm {
+                    val base = "github.com/wasmium/wasmium-wasm"
+
+                    url.set("https://$base")
+                    connection.set("scm:git:git://$base.git")
+                    developerConnection.set("scm:git:ssh://git@$base.git")
+                }
+            }
         }
     }
 }

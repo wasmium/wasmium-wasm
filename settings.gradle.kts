@@ -1,5 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
 import build.gradle.api.includeModule
 
 pluginManagement {
@@ -13,7 +11,7 @@ plugins {
 
 rootProject.name = "wasmium-wasm"
 
-includeModule("wasm-binary")
-includeModule("wasm-wir")
-includeModule("wasm-bom")
-includeModule("wasm-version-catalog")
+includeModule("wasmium-wasm-binary")
+includeModule("wasmium-wasm-wir")
+includeModule("wasmium-wasm-bom")
+includeModule("wasmium-wasm-version-catalog")

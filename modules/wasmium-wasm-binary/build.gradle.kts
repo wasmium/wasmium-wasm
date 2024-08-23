@@ -1,11 +1,14 @@
 @file:OptIn(ExperimentalWasmDsl::class)
 
-import org.jetbrains.kotlin.config.ApiVersion
-import org.jetbrains.kotlin.config.LanguageVersion
-import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 import build.gradle.dsl.withCompilerArguments
 import org.jetbrains.dokka.DokkaConfiguration.Visibility
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
+import org.jetbrains.kotlin.config.ApiVersion
+import org.jetbrains.kotlin.config.LanguageVersion
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnLockMismatchReport
+import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin
+import org.jetbrains.kotlin.gradle.targets.js.yarn.yarn
 
 plugins {
     id(libraries.plugins.kotlin.multiplatform.get().pluginId)
@@ -46,7 +49,7 @@ kotlin {
     }
 
     wasmJs {
-        moduleName = "wasmium-wasm-wir"
+        moduleName = "wasmium-wasm"
 
         browser {
             testTask {
@@ -98,7 +101,7 @@ kotlin {
                 srcDirs("src/commonMain/kotlinX")
             }
             dependencies {
-                implementation(libraries.bundles.kotlinx.io)
+                implementation(libraries.kotlinx.io.core)
             }
         }
 
@@ -108,8 +111,15 @@ kotlin {
             }
         }
     }
+}
 
-    withSourcesJar()
+plugins.withType<YarnPlugin> {
+    yarn.apply {
+        lockFileDirectory = rootDir.resolve("gradle/js")
+        yarnLockMismatchReport = YarnLockMismatchReport.FAIL
+        yarnLockAutoReplace = true
+        reportNewYarnLock = true
+    }
 }
 
 tasks {
