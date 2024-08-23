@@ -5,8 +5,9 @@ on:
 
 jobs:
     analyze:
+        continue-on-error: false
         strategy:
-            fail-fast: false
+            fail-fast: true
             matrix:
                 include:
                     -   language: java-kotlin
