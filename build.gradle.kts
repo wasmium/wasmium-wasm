@@ -4,7 +4,7 @@ import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
 
 plugins {
     alias(libraries.plugins.detekt)
-    alias(libraries.plugins.kotlin.dokka)
+    alias(libraries.plugins.dokka.gradle.plugin)
     alias(libraries.plugins.kotlinx.bcv)
 
     id("build-project-default")
@@ -14,7 +14,6 @@ description = "Root Project"
 
 allprojects {
     group = "org.wasmium.wasm"
-    version = "0.1.0"
 
     configurations.all {
         resolutionStrategy {

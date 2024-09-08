@@ -1,20 +1,27 @@
 plugins {
-    `java-platform`
-    `maven-publish`
+    id("java-platform")
+
+    id("build-publishing")
 }
 
-description = "Bill of Materials"
+description = "BOM"
 
-val modulesToIncludeInBom = setOf(
-    "wasmium-wasm-binary",
-    "wasmium-wasm-wir",
-)
+val me = project
+rootProject.subprojects {
+    if (name != me.name) {
+        me.evaluationDependsOn(path)
+    }
+}
 
 dependencies {
     constraints {
-        for (subproject in project.rootProject.subprojects) {
-            if (subproject.name in modulesToIncludeInBom) {
-                api(subproject)
+        rootProject.subprojects.forEach { subproject ->
+            if (subproject.plugins.hasPlugin("maven-publish") && subproject.name != name) {
+                subproject.publishing.publications.withType<MavenPublication>().configureEach {
+                    if (!artifactId.endsWith("-metadata") && !artifactId.endsWith("-kotlinMultiplatform")) {
+                        api("$groupId:$artifactId:$version")
+                    }
+                }
             }
         }
     }
@@ -22,34 +29,8 @@ dependencies {
 
 publishing {
     publications {
-        create<MavenPublication>("bom") {
-            groupId = group.toString()
-            artifactId = project.name
-            version = project.version.toString()
-
+        register<MavenPublication>("bom") {
             from(components["javaPlatform"])
-
-            pom {
-                name.set(artifactId)
-                description.set(project.description)
-                url.set("https://github.com/wasmium/wasmium-wasm")
-                inceptionYear.set("2024")
-
-                licenses {
-                    license {
-                        name.set("Apache License 2.0")
-                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-
-                scm {
-                    val base = "github.com/wasmium/wasmium-wasm"
-
-                    url.set("https://$base")
-                    connection.set("scm:git:git://$base.git")
-                    developerConnection.set("scm:git:ssh://git@$base.git")
-                }
-            }
         }
     }
 }

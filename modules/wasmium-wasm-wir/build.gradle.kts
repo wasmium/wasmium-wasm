@@ -10,10 +10,11 @@ import org.jetbrains.dokka.gradle.DokkaTaskPartial
 plugins {
     id(libraries.plugins.kotlin.multiplatform.get().pluginId)
 
-    alias(libraries.plugins.kotlin.dokka)
+    alias(libraries.plugins.dokka.gradle.plugin)
     alias(libraries.plugins.kotlinx.kover)
 
     id("build-project-default")
+    id("build-publishing")
 }
 
 kotlin {

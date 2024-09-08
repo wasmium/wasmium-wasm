@@ -3,15 +3,16 @@ detekt = "1.23.6"
 gradle = "8.10"
 gradle-foojay = "0.8.0"
 kotlin = "2.0.20"
-kotlin-dokka = "1.9.20"
 kotlinx-bcv = "0.16.3"
 kotlinx-coroutines = "1.8.1"
-kotlinx-datetime = "0.6.0"
-kotlinx-io = "0.5.1"
+kotlinx-datetime = "0.6.1"
+kotlinx-io = "0.5.3"
 kotlinx-kover = "0.8.3"
 kotlinx-serialization = "1.6.3"
+dokka-gradle-plugin = "1.9.20"
 
 [libraries]
+dokka-gradle-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka-gradle-plugin" }
 foojay-resolver = { module = "org.gradle.toolchains:foojay-resolver", version.ref = "gradle-foojay" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -51,7 +52,7 @@ kotlinx-serialization-json-wasm-js = { module = "org.jetbrains.kotlinx:kotlinx-s
 
 [plugins]
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-kotlin-dokka = { id = "org.jetbrains.dokka", version.ref = "kotlin-dokka" }
+dokka-gradle-plugin = { id = "org.jetbrains.dokka", version.ref = "dokka-gradle-plugin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinx-bcv = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "kotlinx-bcv" }
