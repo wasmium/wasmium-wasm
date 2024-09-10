@@ -11,7 +11,7 @@ plugins {
 
 rootProject.name = "wasmium-wasm"
 
-includeModule("wasmium-wasm-binary")
-includeModule("wasmium-wasm-wir")
-includeModule("wasmium-wasm-bom")
-includeModule("wasmium-wasm-version-catalog")
+includeModule("binary")
+includeModule("wir")
+includeModule("bom")
+includeModule("version-catalog")

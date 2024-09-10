@@ -27,8 +27,8 @@ apiValidation {
 
     ignoredProjects.addAll(
         listOf(
-            "wasmium-wasm-bom",
-            "wasmium-wasm-version-catalog",
+            "bom",
+            "version-catalog",
         )
     )
 }
