@@ -160,6 +160,10 @@ public final class org/wasmium/wasm/binary/SourceBinaryReader : org/wasmium/wasm
 	public fun skip-WZ4Q5Ns (I)V
 }
 
+public final class org/wasmium/wasm/binary/StandardKt {
+	public static final fun repeatUInt-qim9Vi0 (ILkotlin/jvm/functions/Function1;)V
+}
+
 public final class org/wasmium/wasm/binary/WasmBinary {
 	public static final field DATA_ACTIVE I
 	public static final field DATA_EXPLICIT I
@@ -397,6 +401,7 @@ public final class org/wasmium/wasm/binary/tree/BlockType {
 public final class org/wasmium/wasm/binary/tree/BlockType$BlockTypeKind : java/lang/Enum {
 	public static final field FUNCTION_TYPE Lorg/wasmium/wasm/binary/tree/BlockType$BlockTypeKind;
 	public static final field VALUE_TYPE Lorg/wasmium/wasm/binary/tree/BlockType$BlockTypeKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/BlockType$BlockTypeKind;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/BlockType$BlockTypeKind;
 }
@@ -405,6 +410,7 @@ public final class org/wasmium/wasm/binary/tree/ElementKind : java/lang/Enum {
 	public static final field Companion Lorg/wasmium/wasm/binary/tree/ElementKind$Companion;
 	public static final field FUNCTION_REF Lorg/wasmium/wasm/binary/tree/ElementKind;
 	public final fun getElementKindId-pVg5ArA ()I
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/ElementKind;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/ElementKind;
 }
@@ -425,6 +431,7 @@ public final class org/wasmium/wasm/binary/tree/ExternalKind : java/lang/Enum {
 	public static final field MEMORY Lorg/wasmium/wasm/binary/tree/ExternalKind;
 	public static final field TABLE Lorg/wasmium/wasm/binary/tree/ExternalKind;
 	public static final field TAG Lorg/wasmium/wasm/binary/tree/ExternalKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getExternalKindId-pVg5ArA ()I
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/ExternalKind;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/ExternalKind;
@@ -461,6 +468,7 @@ public final class org/wasmium/wasm/binary/tree/GlobalType {
 public final class org/wasmium/wasm/binary/tree/GlobalType$Mutable : java/lang/Enum {
 	public static final field IMMUTABLE Lorg/wasmium/wasm/binary/tree/GlobalType$Mutable;
 	public static final field MUTABLE Lorg/wasmium/wasm/binary/tree/GlobalType$Mutable;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/GlobalType$Mutable;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/GlobalType$Mutable;
 }
@@ -485,6 +493,7 @@ public final class org/wasmium/wasm/binary/tree/LimitFlags : java/lang/Enum {
 	public static final field HAS_MAX Lorg/wasmium/wasm/binary/tree/LimitFlags;
 	public static final field IS_SHARED Lorg/wasmium/wasm/binary/tree/LimitFlags;
 	public static final field NONE Lorg/wasmium/wasm/binary/tree/LimitFlags;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getFlag-pVg5ArA ()I
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/LimitFlags;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/LimitFlags;
@@ -509,6 +518,7 @@ public final class org/wasmium/wasm/binary/tree/LinkingKind : java/lang/Enum {
 	public static final field INIT_FUNCS Lorg/wasmium/wasm/binary/tree/LinkingKind;
 	public static final field SEGMENT_INFO Lorg/wasmium/wasm/binary/tree/LinkingKind;
 	public static final field SYMBOL_TABLE Lorg/wasmium/wasm/binary/tree/LinkingKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getLinkingKindId-pVg5ArA ()I
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/LinkingKind;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/LinkingKind;
@@ -524,6 +534,7 @@ public final class org/wasmium/wasm/binary/tree/LinkingSymbolType : java/lang/En
 	public static final field FUNCTION Lorg/wasmium/wasm/binary/tree/LinkingSymbolType;
 	public static final field GLOBAL Lorg/wasmium/wasm/binary/tree/LinkingSymbolType;
 	public static final field SECTION Lorg/wasmium/wasm/binary/tree/LinkingSymbolType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getLinkingSymbolTypeId-pVg5ArA ()I
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/LinkingSymbolType;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/LinkingSymbolType;
@@ -587,6 +598,7 @@ public final class org/wasmium/wasm/binary/tree/NameKind : java/lang/Enum {
 	public static final field TABLE Lorg/wasmium/wasm/binary/tree/NameKind;
 	public static final field TAG Lorg/wasmium/wasm/binary/tree/NameKind;
 	public static final field TYPE Lorg/wasmium/wasm/binary/tree/NameKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getNameKindId-pVg5ArA ()I
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/NameKind;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/NameKind;
@@ -597,6 +609,16 @@ public final class org/wasmium/wasm/binary/tree/NameKind$Companion {
 }
 
 public final class org/wasmium/wasm/binary/tree/Opcode : java/lang/Enum {
+	public static final field ARRAY_GET Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field ARRAY_GET_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field ARRAY_GET_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field ARRAY_LEN Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field ARRAY_NEW_CANON Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field ARRAY_NEW_CANON_DATA Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field ARRAY_NEW_CANON_DEFAULT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field ARRAY_NEW_CANON_ELEMENT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field ARRAY_NEW_CANON_FIXED Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field ARRAY_SET Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field ATOMIC_FENCE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field BLOCK Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field BR Lorg/wasmium/wasm/binary/tree/Opcode;
@@ -616,13 +638,18 @@ public final class org/wasmium/wasm/binary/tree/Opcode : java/lang/Enum {
 	public static final field ELEMENT_DROP Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field ELSE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field END Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field EXTERN_EXTERNALIZE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field EXTERN_INTERNALIZE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F32X4_ABS Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F32X4_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
-	public static final field F32X4_CONVERT_S_I32X4 Lorg/wasmium/wasm/binary/tree/Opcode;
-	public static final field F32X4_CONVERT_U_I32X4 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_CEIL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_CONVERT_I32X4_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_CONVERT_I32X4_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_DEMOTE_F64X2_ZERO Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F32X4_DIV Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F32X4_EQ Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F32X4_EXTRACT_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_FLOOR Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F32X4_GE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F32X4_GT Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F32X4_LE Lorg/wasmium/wasm/binary/tree/Opcode;
@@ -631,11 +658,15 @@ public final class org/wasmium/wasm/binary/tree/Opcode : java/lang/Enum {
 	public static final field F32X4_MIN Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F32X4_MUL Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F32X4_NE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_NEAREST Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F32X4_NEG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_PMAX Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_PMIN Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F32X4_REPLACE_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F32X4_SPLAT Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F32X4_SQRT Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F32X4_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F32X4_TRUNC Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F32_ABS Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F32_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F32_CEIL Lorg/wasmium/wasm/binary/tree/Opcode;
@@ -667,11 +698,13 @@ public final class org/wasmium/wasm/binary/tree/Opcode : java/lang/Enum {
 	public static final field F32_TRUNC Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F64X2_ABS Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F64X2_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
-	public static final field F64X2_CONVERT_S_I64X2 Lorg/wasmium/wasm/binary/tree/Opcode;
-	public static final field F64X2_CONVERT_U_I64X2 Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_CEIL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_CONVERT_LOW_I32X4_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_CONVERT_LOW_I32X4_U Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F64X2_DIV Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F64X2_EQ Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F64X2_EXTRACT_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_FLOOR Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F64X2_GE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F64X2_GT Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F64X2_LE Lorg/wasmium/wasm/binary/tree/Opcode;
@@ -680,11 +713,16 @@ public final class org/wasmium/wasm/binary/tree/Opcode : java/lang/Enum {
 	public static final field F64X2_MIN Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F64X2_MUL Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F64X2_NE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_NEAREST Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F64X2_NEG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_PMAX Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_PMIN Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_PROMOTE_LOW_F32X4 Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F64X2_REPLACE_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F64X2_SPLAT Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F64X2_SQRT Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F64X2_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field F64X2_TRUNC Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F64_ABS Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F64_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field F64_CEIL Lorg/wasmium/wasm/binary/tree/Opcode;
@@ -717,12 +755,24 @@ public final class org/wasmium/wasm/binary/tree/Opcode : java/lang/Enum {
 	public static final field GET_GLOBAL Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field GET_LOCAL Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field GET_TABLE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_ABS Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I16X8_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I16X8_ADD_SATURATE_S Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I16X8_ADD_SATURATE_U Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I16X8_ALL_TRUE Lorg/wasmium/wasm/binary/tree/Opcode;
-	public static final field I16X8_ANY_TRUE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_AVGR_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_BITMASK Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I16X8_EQ Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_EXTADD_PAIRWISE_I8X16_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_EXTADD_PAIRWISE_I8X16_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_EXTEND_HIGH_I8X16_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_EXTEND_HIGH_I8X16_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_EXTEND_LOW_I8X16_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_EXTEND_LOW_I8X16_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_EXTMUL_HIGH_I8X16_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_EXTMUL_HIGH_I8X16_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_EXTMUL_LOW_I8X16_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_EXTMUL_LOW_I8X16_U Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I16X8_EXTRACT_LANE_S Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I16X8_EXTRACT_LANE_U Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I16X8_GE_S Lorg/wasmium/wasm/binary/tree/Opcode;
@@ -733,9 +783,16 @@ public final class org/wasmium/wasm/binary/tree/Opcode : java/lang/Enum {
 	public static final field I16X8_LE_U Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I16X8_LT_S Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I16X8_LT_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_MAX_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_MAX_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_MIN_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_MIN_U Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I16X8_MUL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_NARROW_I32X4_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_NARROW_I32X4_U Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I16X8_NE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I16X8_NEG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I16X8_Q15MULR_SAT_S Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I16X8_REPLACE_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I16X8_SHL Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I16X8_SHL_S Lorg/wasmium/wasm/binary/tree/Opcode;
@@ -744,10 +801,25 @@ public final class org/wasmium/wasm/binary/tree/Opcode : java/lang/Enum {
 	public static final field I16X8_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I16X8_SUB_SATURATE_S Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I16X8_SUB_SATURATE_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I31_GET_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I31_GET_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I31_NEW Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_ABS Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I32X4_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I32X4_ALL_TRUE Lorg/wasmium/wasm/binary/tree/Opcode;
-	public static final field I32X4_ANY_TRUE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_BITMASK Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_DOT_I16X8_S Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I32X4_EQ Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_EXTADD_PAIRWISE_I16X8_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_EXTADD_PAIRWISE_I16X8_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_EXTEND_HIGH_I16X8_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_EXTEND_HIGH_I16X8_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_EXTEND_LOW_I16X8_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_EXTEND_LOW_I16X8_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_EXTMUL_HIGH_I16X8_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_EXTMUL_HIGH_I16X8_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_EXTMUL_LOW_I16X8_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_EXTMUL_LOW_I16X8_U Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I32X4_EXTRACT_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I32X4_GE_S Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I32X4_GE_U Lorg/wasmium/wasm/binary/tree/Opcode;
@@ -757,17 +829,23 @@ public final class org/wasmium/wasm/binary/tree/Opcode : java/lang/Enum {
 	public static final field I32X4_LE_U Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I32X4_LT_S Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I32X4_LT_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_MAX_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_MAX_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_MIN_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_MIN_U Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I32X4_MUL Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I32X4_NE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I32X4_NEG Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I32X4_REPLACE_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I32X4_SHL Lorg/wasmium/wasm/binary/tree/Opcode;
-	public static final field I32X4_SHL_S Lorg/wasmium/wasm/binary/tree/Opcode;
-	public static final field I32X4_SHL_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_SHR_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_SHR_U Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I32X4_SPLAT Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I32X4_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
-	public static final field I32X4_TRUNC_S_F32X4_SAT Lorg/wasmium/wasm/binary/tree/Opcode;
-	public static final field I32X4_TRUNC_U_F32X4_SAT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_TRUNC_SAT_F32X4_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_TRUNC_SAT_F32X4_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_TRUNC_SAT_F64X2_S_ZERO Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I32X4_TRUNC_SAT_F64X2_U_ZERO Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I32_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I32_AND Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I32_ATOMIC_LOAD Lorg/wasmium/wasm/binary/tree/Opcode;
@@ -845,19 +923,33 @@ public final class org/wasmium/wasm/binary/tree/Opcode : java/lang/Enum {
 	public static final field I32_TRUNC_U_SAT_F64 Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I32_WRAP_I64 Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I32_XOR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_ABS Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I64X2_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I64X2_ALL_TRUE Lorg/wasmium/wasm/binary/tree/Opcode;
-	public static final field I64X2_ANY_TRUE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_BITMASK Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_EQ Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_EXTEND_HIGH_I32X4_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_EXTEND_HIGH_I32X4_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_EXTEND_LOW_I32X4_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_EXTEND_LOW_I32X4_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_EXTMUL_HIGH_I32X4_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_EXTMUL_HIGH_I32X4_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_EXTMUL_LOW_I32X4_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_EXTMUL_LOW_I32X4_U Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I64X2_EXTRACT_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_GE_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_GT_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_LE_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_LT_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_MUL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_NE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I64X2_NEG Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I64X2_REPLACE_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I64X2_SHL Lorg/wasmium/wasm/binary/tree/Opcode;
-	public static final field I64X2_SHL_S Lorg/wasmium/wasm/binary/tree/Opcode;
-	public static final field I64X2_SHL_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_SHR_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I64X2_SHR_U Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I64X2_SPLAT Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I64X2_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
-	public static final field I64X2_TRUNC_S_F64X2_SAT Lorg/wasmium/wasm/binary/tree/Opcode;
-	public static final field I64X2_TRUNC_U_F64X2_SAT Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I64_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I64_AND Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I64_ATOMIC_LOAD Lorg/wasmium/wasm/binary/tree/Opcode;
@@ -949,11 +1041,13 @@ public final class org/wasmium/wasm/binary/tree/Opcode : java/lang/Enum {
 	public static final field I64_TRUNC_U_SAT_F32 Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I64_TRUNC_U_SAT_F64 Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I64_XOR Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I816_ABS Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I8X16_ADD Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I8X16_ADD_SATURATE_S Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I8X16_ADD_SATURATE_U Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I8X16_ALL_TRUE Lorg/wasmium/wasm/binary/tree/Opcode;
-	public static final field I8X16_ANY_TRUE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_AVGR_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_BITMASK Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I8X16_EQ Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I8X16_EXTRACT_LANE_S Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I8X16_EXTRACT_LANE_U Lorg/wasmium/wasm/binary/tree/Opcode;
@@ -965,17 +1059,25 @@ public final class org/wasmium/wasm/binary/tree/Opcode : java/lang/Enum {
 	public static final field I8X16_LE_U Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I8X16_LT_S Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I8X16_LT_U Lorg/wasmium/wasm/binary/tree/Opcode;
-	public static final field I8X16_MUL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_MAX_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_MAX_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_MIN_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_MIN_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_NARROW_I16X8_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_NARROW_I16X8_U Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I8X16_NE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I8X16_NEG Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_POPCNT Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I8X16_REPLACE_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I8X16_SHL Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I8X16_SHL_S Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I8X16_SHL_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_SHUFFLE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I8X16_SPLAT Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I8X16_SUB Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I8X16_SUB_SATURATE_S Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field I8X16_SUB_SATURATE_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field I8X16_SWIZZLE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field IF Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field LOOP Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field MEMORY_ATOMIC_NOTIFY Lorg/wasmium/wasm/binary/tree/Opcode;
@@ -988,10 +1090,12 @@ public final class org/wasmium/wasm/binary/tree/Opcode : java/lang/Enum {
 	public static final field MEMORY_SIZE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field NOP Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field REF_AS_NON_NULL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field REF_CAST Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field REF_EQ Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field REF_FUNC Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field REF_IS_NULL Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field REF_NULL Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field REF_TEST Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field RETHROW Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field RETURN Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field RETURN_CALL Lorg/wasmium/wasm/binary/tree/Opcode;
@@ -1002,6 +1106,12 @@ public final class org/wasmium/wasm/binary/tree/Opcode : java/lang/Enum {
 	public static final field SET_GLOBAL Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field SET_LOCAL Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field SET_TABLE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field STRUCT_GET Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field STRUCT_GET_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field STRUCT_GET_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field STRUCT_NEW_CANON Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field STRUCT_NEW_CANON_DEFAULT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field STRUCT_SET Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field TABLE_COPY Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field TABLE_FILL Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field TABLE_GROW Lorg/wasmium/wasm/binary/tree/Opcode;
@@ -1014,16 +1124,38 @@ public final class org/wasmium/wasm/binary/tree/Opcode : java/lang/Enum {
 	public static final field TRY_TABLE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field UNREACHABLE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field V128_AND Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_ANDNOT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_ANY_TRUE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field V128_BITSELECT Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field V128_CONST Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field V128_LOAD Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_LOAD16_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_LOAD32_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_LOAD32_ZERO Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_LOAD64_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_LOAD64_ZERO Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_LOAD8_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_LOAD_16X4_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_LOAD_16X4_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_LOAD_16_SPLAT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_LOAD_32X2_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_LOAD_32X2_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_LOAD_32_SPLAT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_LOAD_64_SPLAT Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_LOAD_8X8_S Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_LOAD_8X8_U Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_LOAD_8_SPLAT Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field V128_NOT Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field V128_OR Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field V128_STORE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_STORE16_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_STORE32_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_STORE64_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
+	public static final field V128_STORE8_LANE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public static final field V128_XOR Lorg/wasmium/wasm/binary/tree/Opcode;
-	public static final field V8X16_SHUFFLE Lorg/wasmium/wasm/binary/tree/Opcode;
 	public final fun getCode ()Ljava/lang/String;
 	public final fun getCodeId ()I
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getLength ()I
 	public final fun getOpcode ()I
 	public final fun getPrefix ()I
@@ -1063,6 +1195,7 @@ public final class org/wasmium/wasm/binary/tree/RelocationKind : java/lang/Enum 
 	public static final field TABLE_INDEX_SLEB64 Lorg/wasmium/wasm/binary/tree/RelocationKind;
 	public static final field TABLE_NUMBER_LEB Lorg/wasmium/wasm/binary/tree/RelocationKind;
 	public static final field TYPE_INDEX_LEB Lorg/wasmium/wasm/binary/tree/RelocationKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getRelocationKindId-pVg5ArA ()I
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/RelocationKind;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/RelocationKind;
@@ -1088,6 +1221,7 @@ public final class org/wasmium/wasm/binary/tree/SectionKind : java/lang/Enum {
 	public static final field TABLE Lorg/wasmium/wasm/binary/tree/SectionKind;
 	public static final field TAG Lorg/wasmium/wasm/binary/tree/SectionKind;
 	public static final field TYPE Lorg/wasmium/wasm/binary/tree/SectionKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getSectionKindId-pVg5ArA ()I
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/SectionKind;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/SectionKind;
@@ -1105,6 +1239,7 @@ public final class org/wasmium/wasm/binary/tree/SectionName : java/lang/Enum {
 	public static final field PRODUCERS Lorg/wasmium/wasm/binary/tree/SectionName;
 	public static final field RELOCATION Lorg/wasmium/wasm/binary/tree/SectionName;
 	public static final field SOURCE_MAPPING_URL Lorg/wasmium/wasm/binary/tree/SectionName;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getSectionName ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/SectionName;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/SectionName;
@@ -1130,6 +1265,7 @@ public final class org/wasmium/wasm/binary/tree/TagType$TagAttribute : java/lang
 	public static final field Companion Lorg/wasmium/wasm/binary/tree/TagType$TagAttribute$Companion;
 	public static final field EXCEPTION Lorg/wasmium/wasm/binary/tree/TagType$TagAttribute;
 	public final fun getAttributeId-pVg5ArA ()I
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/TagType$TagAttribute;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/TagType$TagAttribute;
 }
@@ -1178,6 +1314,7 @@ public final class org/wasmium/wasm/binary/tree/WasmType : java/lang/Enum {
 	public static final field SUB Lorg/wasmium/wasm/binary/tree/WasmType;
 	public static final field SUB_FINAL Lorg/wasmium/wasm/binary/tree/WasmType;
 	public static final field V128 Lorg/wasmium/wasm/binary/tree/WasmType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getWasmTypeId-pVg5ArA ()I
 	public final fun isNumberType ()Z
 	public final fun isReferenceType ()Z
@@ -1194,6 +1331,7 @@ public final class org/wasmium/wasm/binary/tree/WasmType$Companion {
 public final class org/wasmium/wasm/binary/tree/WasmVersion : java/lang/Enum {
 	public static final field V1 Lorg/wasmium/wasm/binary/tree/WasmVersion;
 	public static final field V2 Lorg/wasmium/wasm/binary/tree/WasmVersion;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getVersion-pVg5ArA ()I
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/WasmVersion;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/WasmVersion;
@@ -2068,6 +2206,7 @@ public final class org/wasmium/wasm/binary/tree/instructions/TryCatchArgument$Tr
 	public static final field CATCH_ALL Lorg/wasmium/wasm/binary/tree/instructions/TryCatchArgument$TryCatchKind;
 	public static final field CATCH_ALL_REF Lorg/wasmium/wasm/binary/tree/instructions/TryCatchArgument$TryCatchKind;
 	public static final field CATCH_REF Lorg/wasmium/wasm/binary/tree/instructions/TryCatchArgument$TryCatchKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getKindId-pVg5ArA ()I
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/instructions/TryCatchArgument$TryCatchKind;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/instructions/TryCatchArgument$TryCatchKind;
@@ -2490,6 +2629,7 @@ public final class org/wasmium/wasm/binary/tree/sections/NameNodeKind : java/lan
 	public static final field LOCAL Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind;
 	public static final field MODULE Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind;
 	public static final field NONE Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getNameNodeKindId ()I
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind;

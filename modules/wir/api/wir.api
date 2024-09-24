@@ -1,0 +1,668 @@
+public final class org/wasmium/wir/ast/WirData : org/wasmium/wir/ast/WirNode {
+	public fun <init> (Lorg/wasmium/wir/ast/expressions/WirExpression;[B)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getData ()[B
+	public final fun getInitializer ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+}
+
+public final class org/wasmium/wir/ast/WirElement : org/wasmium/wir/ast/WirNode {
+	public fun <init> (Ljava/util/List;Lorg/wasmium/wir/ast/expressions/WirExpression;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+}
+
+public final class org/wasmium/wir/ast/WirElementType : java/lang/Enum {
+	public static final field ANYFUNC Lorg/wasmium/wir/ast/WirElementType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/WirElementType;
+	public static fun values ()[Lorg/wasmium/wir/ast/WirElementType;
+}
+
+public final class org/wasmium/wir/ast/WirFunction : org/wasmium/wir/ast/WirObject {
+	public fun <init> (Ljava/util/List;Ljava/util/List;Lorg/wasmium/wir/ast/WirFunctionSignature;Z)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getBody ()Ljava/util/List;
+	public final fun getLocals ()Ljava/util/List;
+	public final fun getSignature ()Lorg/wasmium/wir/ast/WirFunctionSignature;
+	public final fun isStart ()Z
+}
+
+public final class org/wasmium/wir/ast/WirFunctionSignature {
+	public fun <init> (Ljava/util/List;Ljava/util/List;)V
+	public final fun getParameters ()Ljava/util/List;
+	public final fun getResults ()Ljava/util/List;
+}
+
+public final class org/wasmium/wir/ast/WirGlobal : org/wasmium/wir/ast/WirObject {
+	public fun <init> (Lorg/wasmium/wir/ast/WirGlobalSignature;Lorg/wasmium/wir/ast/expressions/WirExpression;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getInitializer ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+	public final fun getSignature ()Lorg/wasmium/wir/ast/WirGlobalSignature;
+}
+
+public final class org/wasmium/wir/ast/WirGlobalSignature {
+	public fun <init> (Lorg/wasmium/wir/ast/type/WirValueType;Z)V
+	public final fun getMutable ()Z
+	public final fun getValueType ()Lorg/wasmium/wir/ast/type/WirValueType;
+}
+
+public final class org/wasmium/wir/ast/WirLimits {
+	public synthetic fun <init> (IIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getFlags-pVg5ArA ()I
+	public final fun getMaximum-pVg5ArA ()I
+	public final fun getMinimum-pVg5ArA ()I
+}
+
+public final class org/wasmium/wir/ast/WirLocal : org/wasmium/wir/ast/WirNode {
+	public fun <init> (Lorg/wasmium/wir/ast/WirFunction;Ljava/lang/String;Lorg/wasmium/wir/ast/type/WirValueType;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getFunction ()Lorg/wasmium/wir/ast/WirFunction;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getType ()Lorg/wasmium/wir/ast/type/WirValueType;
+}
+
+public final class org/wasmium/wir/ast/WirMemory : org/wasmium/wir/ast/WirObject {
+	public fun <init> (Lorg/wasmium/wir/ast/WirMemorySignature;Ljava/util/List;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getSegments ()Ljava/util/List;
+	public final fun getSignature ()Lorg/wasmium/wir/ast/WirMemorySignature;
+}
+
+public final class org/wasmium/wir/ast/WirMemorySignature {
+	public fun <init> (Lorg/wasmium/wir/ast/WirLimits;)V
+	public final fun getLimits ()Lorg/wasmium/wir/ast/WirLimits;
+}
+
+public final class org/wasmium/wir/ast/WirModule : org/wasmium/wir/ast/WirNode {
+	public fun <init> (Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/lang/String;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getName ()Ljava/lang/String;
+	public final fun setName (Ljava/lang/String;)V
+}
+
+public abstract class org/wasmium/wir/ast/WirNode : org/wasmium/wir/ast/visitor/WirVisitable {
+	public fun <init> (Lorg/wasmium/wir/ast/WirNodeKind;)V
+	public fun getKind ()Lorg/wasmium/wir/ast/WirNodeKind;
+}
+
+public final class org/wasmium/wir/ast/WirNodeKind : java/lang/Enum {
+	public static final field BLOCK Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field BRANCH Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field BRANCH_TABLE Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field CALL Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field CALL_INDIRECT Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field CONST_FLOAT32 Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field CONST_FLOAT64 Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field CONST_INT32 Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field CONST_INT64 Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field CONVERT Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field DATA Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field DEMOTE Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field DROP Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field ELEMENT Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field FLOAT_BINARY Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field FLOAT_UNARY Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field FUNCTION Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field GET_GLOBAL Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field GET_LOCAL Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field GLOBAL Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field IF Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field IF_EXCEPT Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field LABEL Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field LOAD_FLOAT Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field LOAD_INT Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field LOCAL Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field MEMORY Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field MODULE Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field NONE Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field NOP Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field PROMOTE Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field REINTERPRET Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field RETURN Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field SELECT Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field SET_GLOBAL Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field SET_LOCAL Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field STORE_FLOAT Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field STORE_INT Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field TABLE Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field TRUNCATE Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field TRY Lorg/wasmium/wir/ast/WirNodeKind;
+	public static final field UNREACHABLE Lorg/wasmium/wir/ast/WirNodeKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/WirNodeKind;
+	public static fun values ()[Lorg/wasmium/wir/ast/WirNodeKind;
+}
+
+public abstract class org/wasmium/wir/ast/WirObject : org/wasmium/wir/ast/WirNode {
+	public fun <init> (Lorg/wasmium/wir/ast/WirNodeKind;)V
+	public final fun getExportName ()Ljava/lang/String;
+	public final fun getImportName ()Ljava/lang/String;
+	public fun getKind ()Lorg/wasmium/wir/ast/WirNodeKind;
+	public final fun getModule ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public final fun isExported ()Z
+	public final fun isImported ()Z
+	public final fun setExportName (Ljava/lang/String;)V
+	public final fun setExported (Z)V
+	public final fun setImportName (Ljava/lang/String;)V
+	public final fun setImported (Z)V
+	public final fun setModule (Ljava/lang/String;)V
+	public final fun setName (Ljava/lang/String;)V
+}
+
+public final class org/wasmium/wir/ast/WirSignature {
+	public fun <init> (Ljava/util/List;Ljava/util/List;)V
+	public final fun getParameters ()Ljava/util/List;
+	public final fun getResults ()Ljava/util/List;
+}
+
+public final class org/wasmium/wir/ast/WirTable : org/wasmium/wir/ast/WirObject {
+	public fun <init> (Lorg/wasmium/wir/ast/WirTableSignature;Ljava/util/List;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+}
+
+public final class org/wasmium/wir/ast/WirTableSignature {
+	public fun <init> (Lorg/wasmium/wir/ast/WirElementType;Lorg/wasmium/wir/ast/WirLimits;)V
+	public final fun getElementType ()Lorg/wasmium/wir/ast/WirElementType;
+	public final fun getLimits ()Lorg/wasmium/wir/ast/WirLimits;
+}
+
+public final class org/wasmium/wir/ast/expressions/BlockExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Ljava/util/List;Lorg/wasmium/wir/ast/type/WirValueType;Z)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getBody ()Ljava/util/List;
+	public final fun getType ()Lorg/wasmium/wir/ast/type/WirValueType;
+	public final fun isLoop ()Z
+}
+
+public final class org/wasmium/wir/ast/expressions/BranchExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Lorg/wasmium/wir/ast/expressions/WirExpression;Lorg/wasmium/wir/ast/expressions/BlockExpression;Lorg/wasmium/wir/ast/expressions/WirExpression;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getCondition ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+	public final fun getResult ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+	public final fun getTarget ()Lorg/wasmium/wir/ast/expressions/BlockExpression;
+}
+
+public final class org/wasmium/wir/ast/expressions/BranchTableExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Ljava/util/List;Lorg/wasmium/wir/ast/expressions/BlockExpression;Lorg/wasmium/wir/ast/expressions/WirExpression;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getDefaultTarget ()Lorg/wasmium/wir/ast/expressions/BlockExpression;
+	public final fun getIndex ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+	public final fun getTargets ()Ljava/util/List;
+}
+
+public final class org/wasmium/wir/ast/expressions/CallExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Ljava/util/List;Ljava/lang/String;Z)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getArguments ()Ljava/util/List;
+	public final fun getFunctionName ()Ljava/lang/String;
+	public final fun isImported ()Z
+}
+
+public final class org/wasmium/wir/ast/expressions/CallIndirectExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Ljava/util/List;Ljava/util/List;Lorg/wasmium/wir/ast/expressions/WirExpression;Ljava/util/List;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getArguments ()Ljava/util/List;
+	public final fun getParameterTypes ()Ljava/util/List;
+	public final fun getReturnTypes ()Ljava/util/List;
+	public final fun getSelector ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+}
+
+public final class org/wasmium/wir/ast/expressions/ConditionalExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Lorg/wasmium/wir/ast/expressions/WirExpression;Lorg/wasmium/wir/ast/expressions/BlockExpression;Lorg/wasmium/wir/ast/expressions/BlockExpression;Lorg/wasmium/wir/ast/type/WirValueType;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getCondition ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+	public final fun getElseBlock ()Lorg/wasmium/wir/ast/expressions/BlockExpression;
+	public final fun getThenBlock ()Lorg/wasmium/wir/ast/expressions/BlockExpression;
+	public final fun getType ()Lorg/wasmium/wir/ast/type/WirValueType;
+}
+
+public final class org/wasmium/wir/ast/expressions/ConstantFloat32Expression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (F)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+}
+
+public final class org/wasmium/wir/ast/expressions/ConstantFloat64Expression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (D)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+}
+
+public final class org/wasmium/wir/ast/expressions/ConstantInt32Expression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (I)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+}
+
+public final class org/wasmium/wir/ast/expressions/ConstantInt64Expression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (J)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+}
+
+public final class org/wasmium/wir/ast/expressions/ConvertExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Lorg/wasmium/wir/ast/type/WirValueType;Lorg/wasmium/wir/ast/type/WirValueType;Z)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getSourceType ()Lorg/wasmium/wir/ast/type/WirValueType;
+	public final fun getTargetType ()Lorg/wasmium/wir/ast/type/WirValueType;
+	public final fun isSigned ()Z
+}
+
+public final class org/wasmium/wir/ast/expressions/DemoteExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Lorg/wasmium/wir/ast/type/WirValueType;Lorg/wasmium/wir/ast/type/WirValueType;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getSourceType ()Lorg/wasmium/wir/ast/type/WirValueType;
+	public final fun getTargetType ()Lorg/wasmium/wir/ast/type/WirValueType;
+}
+
+public final class org/wasmium/wir/ast/expressions/DropExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Lorg/wasmium/wir/ast/expressions/WirExpression;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getOperand ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+}
+
+public final class org/wasmium/wir/ast/expressions/FloatBinaryExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Lorg/wasmium/wir/ast/type/WirFloatType;Lorg/wasmium/wir/ast/expressions/FloatBinaryOperation;Lorg/wasmium/wir/ast/expressions/WirExpression;Lorg/wasmium/wir/ast/expressions/WirExpression;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getFirst ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+	public final fun getOperation ()Lorg/wasmium/wir/ast/expressions/FloatBinaryOperation;
+	public final fun getSecond ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+	public final fun getType ()Lorg/wasmium/wir/ast/type/WirFloatType;
+}
+
+public final class org/wasmium/wir/ast/expressions/FloatBinaryOperation : java/lang/Enum {
+	public static final field ADD Lorg/wasmium/wir/ast/expressions/FloatBinaryOperation;
+	public static final field DIV Lorg/wasmium/wir/ast/expressions/FloatBinaryOperation;
+	public static final field EQ Lorg/wasmium/wir/ast/expressions/FloatBinaryOperation;
+	public static final field GE Lorg/wasmium/wir/ast/expressions/FloatBinaryOperation;
+	public static final field GT Lorg/wasmium/wir/ast/expressions/FloatBinaryOperation;
+	public static final field LE Lorg/wasmium/wir/ast/expressions/FloatBinaryOperation;
+	public static final field LT Lorg/wasmium/wir/ast/expressions/FloatBinaryOperation;
+	public static final field MAX Lorg/wasmium/wir/ast/expressions/FloatBinaryOperation;
+	public static final field MIN Lorg/wasmium/wir/ast/expressions/FloatBinaryOperation;
+	public static final field MUL Lorg/wasmium/wir/ast/expressions/FloatBinaryOperation;
+	public static final field NE Lorg/wasmium/wir/ast/expressions/FloatBinaryOperation;
+	public static final field SUB Lorg/wasmium/wir/ast/expressions/FloatBinaryOperation;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/expressions/FloatBinaryOperation;
+	public static fun values ()[Lorg/wasmium/wir/ast/expressions/FloatBinaryOperation;
+}
+
+public final class org/wasmium/wir/ast/expressions/FloatUnaryExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Lorg/wasmium/wir/ast/type/WirFloatType;Lorg/wasmium/wir/ast/expressions/FloatUnaryOperation;Lorg/wasmium/wir/ast/expressions/WirExpression;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getOperand ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+	public final fun getOperation ()Lorg/wasmium/wir/ast/expressions/FloatUnaryOperation;
+	public final fun getType ()Lorg/wasmium/wir/ast/type/WirFloatType;
+}
+
+public final class org/wasmium/wir/ast/expressions/FloatUnaryOperation : java/lang/Enum {
+	public static final field ABS Lorg/wasmium/wir/ast/expressions/FloatUnaryOperation;
+	public static final field CEIL Lorg/wasmium/wir/ast/expressions/FloatUnaryOperation;
+	public static final field COPYSIGN Lorg/wasmium/wir/ast/expressions/FloatUnaryOperation;
+	public static final field FLOOR Lorg/wasmium/wir/ast/expressions/FloatUnaryOperation;
+	public static final field NEAREST Lorg/wasmium/wir/ast/expressions/FloatUnaryOperation;
+	public static final field NEG Lorg/wasmium/wir/ast/expressions/FloatUnaryOperation;
+	public static final field SQRT Lorg/wasmium/wir/ast/expressions/FloatUnaryOperation;
+	public static final field TRUNC Lorg/wasmium/wir/ast/expressions/FloatUnaryOperation;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/expressions/FloatUnaryOperation;
+	public static fun values ()[Lorg/wasmium/wir/ast/expressions/FloatUnaryOperation;
+}
+
+public final class org/wasmium/wir/ast/expressions/GetGlobalExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Lorg/wasmium/wir/ast/WirGlobal;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getGlobal ()Lorg/wasmium/wir/ast/WirGlobal;
+}
+
+public final class org/wasmium/wir/ast/expressions/GetLocalExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Lorg/wasmium/wir/ast/WirLocal;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getLocal ()Lorg/wasmium/wir/ast/WirLocal;
+}
+
+public final class org/wasmium/wir/ast/expressions/IfExceptionExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Lorg/wasmium/wir/ast/expressions/BlockExpression;Ljava/util/List;Lorg/wasmium/wir/ast/type/WirValueType;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+}
+
+public final class org/wasmium/wir/ast/expressions/IntBinaryExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Lorg/wasmium/wir/ast/type/WirIntType;Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;Lorg/wasmium/wir/ast/expressions/WirExpression;Lorg/wasmium/wir/ast/expressions/WirExpression;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getFirst ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+	public final fun getOperation ()Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public final fun getSecond ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+	public final fun getType ()Lorg/wasmium/wir/ast/type/WirIntType;
+}
+
+public final class org/wasmium/wir/ast/expressions/IntBinaryOperation : java/lang/Enum {
+	public static final field ADD Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field AND Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field DIV_SIGNED Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field DIV_UNSIGNED Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field EQ Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field GE_SIGNED Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field GE_UNSIGNED Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field GT_SIGNED Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field GT_UNSIGNED Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field LE_SIGNED Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field LE_UNSIGNED Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field LT_SIGNED Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field LT_UNSIGNED Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field MUL Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field NE Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field OR Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field REM_SIGNED Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field REM_UNSIGNED Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field ROTL Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field ROTR Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field SHL Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field SHR_SIGNED Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field SHR_UNSIGNED Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field SUB Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static final field XOR Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+	public static fun values ()[Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
+}
+
+public final class org/wasmium/wir/ast/expressions/IntUnaryExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Lorg/wasmium/wir/ast/type/WirIntType;Lorg/wasmium/wir/ast/expressions/IntUnaryOperation;Lorg/wasmium/wir/ast/expressions/WirExpression;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getOperand ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+	public final fun getOperation ()Lorg/wasmium/wir/ast/expressions/IntUnaryOperation;
+	public final fun getType ()Lorg/wasmium/wir/ast/type/WirIntType;
+}
+
+public final class org/wasmium/wir/ast/expressions/IntUnaryOperation : java/lang/Enum {
+	public static final field CLZ Lorg/wasmium/wir/ast/expressions/IntUnaryOperation;
+	public static final field CTZ Lorg/wasmium/wir/ast/expressions/IntUnaryOperation;
+	public static final field POPCNT Lorg/wasmium/wir/ast/expressions/IntUnaryOperation;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/expressions/IntUnaryOperation;
+	public static fun values ()[Lorg/wasmium/wir/ast/expressions/IntUnaryOperation;
+}
+
+public final class org/wasmium/wir/ast/expressions/LabelExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Lorg/wasmium/wir/ast/expressions/LabelType;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getType ()Lorg/wasmium/wir/ast/expressions/LabelType;
+}
+
+public final class org/wasmium/wir/ast/expressions/LabelType : java/lang/Enum {
+	public static final field BLOCK Lorg/wasmium/wir/ast/expressions/LabelType;
+	public static final field CATCH Lorg/wasmium/wir/ast/expressions/LabelType;
+	public static final field ELSE Lorg/wasmium/wir/ast/expressions/LabelType;
+	public static final field FUNC Lorg/wasmium/wir/ast/expressions/LabelType;
+	public static final field IF Lorg/wasmium/wir/ast/expressions/LabelType;
+	public static final field LOOP Lorg/wasmium/wir/ast/expressions/LabelType;
+	public static final field TRY Lorg/wasmium/wir/ast/expressions/LabelType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/expressions/LabelType;
+	public static fun values ()[Lorg/wasmium/wir/ast/expressions/LabelType;
+}
+
+public final class org/wasmium/wir/ast/expressions/LoadFloatExpression : org/wasmium/wir/ast/expressions/WirExpression, org/wasmium/wir/ast/expressions/MemoryAccess {
+	public fun <init> (ILorg/wasmium/wir/ast/expressions/WirExpression;ILorg/wasmium/wir/ast/type/WirFloatType;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getAlignment ()I
+	public fun getIndex ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+	public fun getOffset ()I
+	public final fun getType ()Lorg/wasmium/wir/ast/type/WirFloatType;
+}
+
+public final class org/wasmium/wir/ast/expressions/LoadIntExpression : org/wasmium/wir/ast/expressions/WirExpression, org/wasmium/wir/ast/expressions/MemoryAccess {
+	public fun <init> (ILorg/wasmium/wir/ast/expressions/WirExpression;Lorg/wasmium/wir/ast/type/WirInt32Subtype;I)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getAlignment ()I
+	public final fun getConvertFrom ()Lorg/wasmium/wir/ast/type/WirInt32Subtype;
+	public fun getIndex ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+	public fun getOffset ()I
+}
+
+public abstract interface class org/wasmium/wir/ast/expressions/MemoryAccess {
+	public abstract fun getIndex ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+	public abstract fun getOffset ()I
+}
+
+public final class org/wasmium/wir/ast/expressions/NopExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> ()V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+}
+
+public final class org/wasmium/wir/ast/expressions/PromoteExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Lorg/wasmium/wir/ast/type/WirValueType;Lorg/wasmium/wir/ast/type/WirValueType;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getSourceType ()Lorg/wasmium/wir/ast/type/WirValueType;
+	public final fun getTargetType ()Lorg/wasmium/wir/ast/type/WirValueType;
+}
+
+public final class org/wasmium/wir/ast/expressions/ReinterpretExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Lorg/wasmium/wir/ast/type/WirValueType;Lorg/wasmium/wir/ast/type/WirValueType;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getSourceType ()Lorg/wasmium/wir/ast/type/WirValueType;
+	public final fun getTargetType ()Lorg/wasmium/wir/ast/type/WirValueType;
+}
+
+public final class org/wasmium/wir/ast/expressions/RethrowExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Lorg/wasmium/wir/ast/expressions/WirExpression;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getValue ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+}
+
+public final class org/wasmium/wir/ast/expressions/ReturnExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Lorg/wasmium/wir/ast/expressions/WirExpression;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getValue ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+}
+
+public final class org/wasmium/wir/ast/expressions/SelectExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Lorg/wasmium/wir/ast/expressions/WirExpression;Lorg/wasmium/wir/ast/expressions/WirExpression;Lorg/wasmium/wir/ast/expressions/WirExpression;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getCondition ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+	public final fun getIfFalse ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+	public final fun getIfTrue ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+}
+
+public final class org/wasmium/wir/ast/expressions/SetGlobalExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Lorg/wasmium/wir/ast/WirGlobal;Lorg/wasmium/wir/ast/expressions/WirExpression;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getGlobal ()Lorg/wasmium/wir/ast/WirGlobal;
+	public final fun getValue ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+}
+
+public final class org/wasmium/wir/ast/expressions/SetLocalExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Lorg/wasmium/wir/ast/WirLocal;Lorg/wasmium/wir/ast/expressions/WirExpression;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getLocal ()Lorg/wasmium/wir/ast/WirLocal;
+	public final fun getValue ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+}
+
+public final class org/wasmium/wir/ast/expressions/StoreFloatExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (ILorg/wasmium/wir/ast/expressions/WirExpression;Lorg/wasmium/wir/ast/expressions/WirExpression;I)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getAlignment ()I
+	public final fun getIndex ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+	public final fun getOffset ()I
+	public final fun getValue ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+}
+
+public final class org/wasmium/wir/ast/expressions/StoreIntExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (ILorg/wasmium/wir/ast/expressions/WirExpression;Lorg/wasmium/wir/ast/expressions/WirExpression;Lorg/wasmium/wir/ast/type/WirInt32Subtype;I)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getAlignment ()I
+	public final fun getConvertTo ()Lorg/wasmium/wir/ast/type/WirInt32Subtype;
+	public final fun getIndex ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+	public final fun getOffset ()I
+	public final fun getValue ()Lorg/wasmium/wir/ast/expressions/WirExpression;
+}
+
+public final class org/wasmium/wir/ast/expressions/TruncateExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Lorg/wasmium/wir/ast/type/WirValueType;Lorg/wasmium/wir/ast/type/WirValueType;ZZ)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+	public final fun getSourceType ()Lorg/wasmium/wir/ast/type/WirValueType;
+	public final fun getTargetType ()Lorg/wasmium/wir/ast/type/WirValueType;
+	public final fun isSaturate ()Z
+	public final fun isSigned ()Z
+}
+
+public final class org/wasmium/wir/ast/expressions/TryExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> (Lorg/wasmium/wir/ast/expressions/BlockExpression;Ljava/util/List;Lorg/wasmium/wir/ast/type/WirValueType;)V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+}
+
+public final class org/wasmium/wir/ast/expressions/UnreachableExpression : org/wasmium/wir/ast/expressions/WirExpression {
+	public fun <init> ()V
+	public fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+}
+
+public abstract class org/wasmium/wir/ast/expressions/WirExpression : org/wasmium/wir/ast/WirNode, org/wasmium/wir/ast/visitor/WirVisitable {
+	public fun <init> (Lorg/wasmium/wir/ast/WirNodeKind;)V
+}
+
+public final class org/wasmium/wir/ast/type/WirFloatType : java/lang/Enum {
+	public static final field FLOAT32 Lorg/wasmium/wir/ast/type/WirFloatType;
+	public static final field FLOAT64 Lorg/wasmium/wir/ast/type/WirFloatType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/type/WirFloatType;
+	public static fun values ()[Lorg/wasmium/wir/ast/type/WirFloatType;
+}
+
+public final class org/wasmium/wir/ast/type/WirInt32Subtype : java/lang/Enum {
+	public static final field INT16 Lorg/wasmium/wir/ast/type/WirInt32Subtype;
+	public static final field INT32 Lorg/wasmium/wir/ast/type/WirInt32Subtype;
+	public static final field INT8 Lorg/wasmium/wir/ast/type/WirInt32Subtype;
+	public static final field UINT16 Lorg/wasmium/wir/ast/type/WirInt32Subtype;
+	public static final field UINT8 Lorg/wasmium/wir/ast/type/WirInt32Subtype;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/type/WirInt32Subtype;
+	public static fun values ()[Lorg/wasmium/wir/ast/type/WirInt32Subtype;
+}
+
+public final class org/wasmium/wir/ast/type/WirInt64Subtype : java/lang/Enum {
+	public static final field INT16 Lorg/wasmium/wir/ast/type/WirInt64Subtype;
+	public static final field INT32 Lorg/wasmium/wir/ast/type/WirInt64Subtype;
+	public static final field INT64 Lorg/wasmium/wir/ast/type/WirInt64Subtype;
+	public static final field INT8 Lorg/wasmium/wir/ast/type/WirInt64Subtype;
+	public static final field UINT16 Lorg/wasmium/wir/ast/type/WirInt64Subtype;
+	public static final field UINT32 Lorg/wasmium/wir/ast/type/WirInt64Subtype;
+	public static final field UINT8 Lorg/wasmium/wir/ast/type/WirInt64Subtype;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/type/WirInt64Subtype;
+	public static fun values ()[Lorg/wasmium/wir/ast/type/WirInt64Subtype;
+}
+
+public final class org/wasmium/wir/ast/type/WirIntType : java/lang/Enum {
+	public static final field INT32 Lorg/wasmium/wir/ast/type/WirIntType;
+	public static final field INT64 Lorg/wasmium/wir/ast/type/WirIntType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/type/WirIntType;
+	public static fun values ()[Lorg/wasmium/wir/ast/type/WirIntType;
+}
+
+public final class org/wasmium/wir/ast/type/WirValueType : java/lang/Enum {
+	public static final field FLOAT32 Lorg/wasmium/wir/ast/type/WirValueType;
+	public static final field FLOAT64 Lorg/wasmium/wir/ast/type/WirValueType;
+	public static final field INT32 Lorg/wasmium/wir/ast/type/WirValueType;
+	public static final field INT64 Lorg/wasmium/wir/ast/type/WirValueType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/type/WirValueType;
+	public static fun values ()[Lorg/wasmium/wir/ast/type/WirValueType;
+}
+
+public abstract interface class org/wasmium/wir/ast/visitor/WirVisitable {
+	public abstract fun accept (Lorg/wasmium/wir/ast/visitor/WirVisitorVoid;)V
+}
+
+public abstract interface class org/wasmium/wir/ast/visitor/WirVisitorVoid {
+	public abstract fun visitBlock (Lorg/wasmium/wir/ast/expressions/BlockExpression;)V
+	public abstract fun visitBranch (Lorg/wasmium/wir/ast/expressions/BranchExpression;)V
+	public abstract fun visitBranchTable (Lorg/wasmium/wir/ast/expressions/BranchTableExpression;)V
+	public abstract fun visitCall (Lorg/wasmium/wir/ast/expressions/CallExpression;)V
+	public abstract fun visitCallIndirect (Lorg/wasmium/wir/ast/expressions/CallIndirectExpression;)V
+	public abstract fun visitConditional (Lorg/wasmium/wir/ast/expressions/ConditionalExpression;)V
+	public abstract fun visitConstFloat32 (Lorg/wasmium/wir/ast/expressions/ConstantFloat32Expression;)V
+	public abstract fun visitConstFloat64 (Lorg/wasmium/wir/ast/expressions/ConstantFloat64Expression;)V
+	public abstract fun visitConstInt32 (Lorg/wasmium/wir/ast/expressions/ConstantInt32Expression;)V
+	public abstract fun visitConstInt64 (Lorg/wasmium/wir/ast/expressions/ConstantInt64Expression;)V
+	public abstract fun visitConvert (Lorg/wasmium/wir/ast/expressions/ConvertExpression;)V
+	public abstract fun visitData (Lorg/wasmium/wir/ast/WirData;)V
+	public abstract fun visitDemote (Lorg/wasmium/wir/ast/expressions/DemoteExpression;)V
+	public abstract fun visitDrop (Lorg/wasmium/wir/ast/expressions/DropExpression;)V
+	public abstract fun visitElement (Lorg/wasmium/wir/ast/WirElement;)V
+	public abstract fun visitFloatBinary (Lorg/wasmium/wir/ast/expressions/FloatBinaryExpression;)V
+	public abstract fun visitFloatUnary (Lorg/wasmium/wir/ast/expressions/FloatUnaryExpression;)V
+	public abstract fun visitFunction (Lorg/wasmium/wir/ast/WirFunction;)V
+	public abstract fun visitGetGlobal (Lorg/wasmium/wir/ast/expressions/GetGlobalExpression;)V
+	public abstract fun visitGetLocal (Lorg/wasmium/wir/ast/expressions/GetLocalExpression;)V
+	public abstract fun visitGlobal (Lorg/wasmium/wir/ast/WirGlobal;)V
+	public abstract fun visitIfException (Lorg/wasmium/wir/ast/expressions/IfExceptionExpression;)V
+	public abstract fun visitIntBinary (Lorg/wasmium/wir/ast/expressions/IntBinaryExpression;)V
+	public abstract fun visitIntUnary (Lorg/wasmium/wir/ast/expressions/IntUnaryExpression;)V
+	public abstract fun visitLabel (Lorg/wasmium/wir/ast/expressions/LabelExpression;)V
+	public abstract fun visitLoadFloat (Lorg/wasmium/wir/ast/expressions/LoadFloatExpression;)V
+	public abstract fun visitLoadInt (Lorg/wasmium/wir/ast/expressions/LoadIntExpression;)V
+	public abstract fun visitLocal (Lorg/wasmium/wir/ast/WirLocal;)V
+	public abstract fun visitMemory (Lorg/wasmium/wir/ast/WirMemory;)V
+	public abstract fun visitModule (Lorg/wasmium/wir/ast/WirModule;)V
+	public abstract fun visitNop (Lorg/wasmium/wir/ast/expressions/NopExpression;)V
+	public abstract fun visitPromote (Lorg/wasmium/wir/ast/expressions/PromoteExpression;)V
+	public abstract fun visitReinterpret (Lorg/wasmium/wir/ast/expressions/ReinterpretExpression;)V
+	public abstract fun visitRethrow (Lorg/wasmium/wir/ast/expressions/RethrowExpression;)V
+	public abstract fun visitReturn (Lorg/wasmium/wir/ast/expressions/ReturnExpression;)V
+	public abstract fun visitSelect (Lorg/wasmium/wir/ast/expressions/SelectExpression;)V
+	public abstract fun visitSetGlobal (Lorg/wasmium/wir/ast/expressions/SetGlobalExpression;)V
+	public abstract fun visitSetLocal (Lorg/wasmium/wir/ast/expressions/SetLocalExpression;)V
+	public abstract fun visitStoreFloat32 (Lorg/wasmium/wir/ast/expressions/StoreFloatExpression;)V
+	public abstract fun visitStoreInt32 (Lorg/wasmium/wir/ast/expressions/StoreIntExpression;)V
+	public abstract fun visitTable (Lorg/wasmium/wir/ast/WirTable;)V
+	public abstract fun visitTruncate (Lorg/wasmium/wir/ast/expressions/TruncateExpression;)V
+	public abstract fun visitTry (Lorg/wasmium/wir/ast/expressions/TryExpression;)V
+	public abstract fun visitUnreachable (Lorg/wasmium/wir/ast/expressions/UnreachableExpression;)V
+}
+
+public final class org/wasmium/wir/ast/visitor/WirVisitorVoidAdapter : org/wasmium/wir/ast/visitor/WirVisitorVoid {
+	public fun <init> (Z)V
+	public fun visitBlock (Lorg/wasmium/wir/ast/expressions/BlockExpression;)V
+	public fun visitBranch (Lorg/wasmium/wir/ast/expressions/BranchExpression;)V
+	public fun visitBranchTable (Lorg/wasmium/wir/ast/expressions/BranchTableExpression;)V
+	public fun visitCall (Lorg/wasmium/wir/ast/expressions/CallExpression;)V
+	public fun visitCallIndirect (Lorg/wasmium/wir/ast/expressions/CallIndirectExpression;)V
+	public fun visitConditional (Lorg/wasmium/wir/ast/expressions/ConditionalExpression;)V
+	public fun visitConstFloat32 (Lorg/wasmium/wir/ast/expressions/ConstantFloat32Expression;)V
+	public fun visitConstFloat64 (Lorg/wasmium/wir/ast/expressions/ConstantFloat64Expression;)V
+	public fun visitConstInt32 (Lorg/wasmium/wir/ast/expressions/ConstantInt32Expression;)V
+	public fun visitConstInt64 (Lorg/wasmium/wir/ast/expressions/ConstantInt64Expression;)V
+	public fun visitConvert (Lorg/wasmium/wir/ast/expressions/ConvertExpression;)V
+	public fun visitData (Lorg/wasmium/wir/ast/WirData;)V
+	public fun visitDemote (Lorg/wasmium/wir/ast/expressions/DemoteExpression;)V
+	public fun visitDrop (Lorg/wasmium/wir/ast/expressions/DropExpression;)V
+	public fun visitElement (Lorg/wasmium/wir/ast/WirElement;)V
+	public fun visitFloatBinary (Lorg/wasmium/wir/ast/expressions/FloatBinaryExpression;)V
+	public fun visitFloatUnary (Lorg/wasmium/wir/ast/expressions/FloatUnaryExpression;)V
+	public fun visitFunction (Lorg/wasmium/wir/ast/WirFunction;)V
+	public fun visitGetGlobal (Lorg/wasmium/wir/ast/expressions/GetGlobalExpression;)V
+	public fun visitGetLocal (Lorg/wasmium/wir/ast/expressions/GetLocalExpression;)V
+	public fun visitGlobal (Lorg/wasmium/wir/ast/WirGlobal;)V
+	public fun visitIfException (Lorg/wasmium/wir/ast/expressions/IfExceptionExpression;)V
+	public fun visitIntBinary (Lorg/wasmium/wir/ast/expressions/IntBinaryExpression;)V
+	public fun visitIntUnary (Lorg/wasmium/wir/ast/expressions/IntUnaryExpression;)V
+	public fun visitLabel (Lorg/wasmium/wir/ast/expressions/LabelExpression;)V
+	public fun visitLoadFloat (Lorg/wasmium/wir/ast/expressions/LoadFloatExpression;)V
+	public fun visitLoadInt (Lorg/wasmium/wir/ast/expressions/LoadIntExpression;)V
+	public fun visitLocal (Lorg/wasmium/wir/ast/WirLocal;)V
+	public fun visitMemory (Lorg/wasmium/wir/ast/WirMemory;)V
+	public fun visitModule (Lorg/wasmium/wir/ast/WirModule;)V
+	public fun visitNop (Lorg/wasmium/wir/ast/expressions/NopExpression;)V
+	public fun visitPromote (Lorg/wasmium/wir/ast/expressions/PromoteExpression;)V
+	public fun visitReinterpret (Lorg/wasmium/wir/ast/expressions/ReinterpretExpression;)V
+	public fun visitRethrow (Lorg/wasmium/wir/ast/expressions/RethrowExpression;)V
+	public fun visitReturn (Lorg/wasmium/wir/ast/expressions/ReturnExpression;)V
+	public fun visitSelect (Lorg/wasmium/wir/ast/expressions/SelectExpression;)V
+	public fun visitSetGlobal (Lorg/wasmium/wir/ast/expressions/SetGlobalExpression;)V
+	public fun visitSetLocal (Lorg/wasmium/wir/ast/expressions/SetLocalExpression;)V
+	public fun visitStoreFloat32 (Lorg/wasmium/wir/ast/expressions/StoreFloatExpression;)V
+	public fun visitStoreInt32 (Lorg/wasmium/wir/ast/expressions/StoreIntExpression;)V
+	public fun visitTable (Lorg/wasmium/wir/ast/WirTable;)V
+	public fun visitTruncate (Lorg/wasmium/wir/ast/expressions/TruncateExpression;)V
+	public fun visitTry (Lorg/wasmium/wir/ast/expressions/TryExpression;)V
+	public fun visitUnreachable (Lorg/wasmium/wir/ast/expressions/UnreachableExpression;)V
+}
+
