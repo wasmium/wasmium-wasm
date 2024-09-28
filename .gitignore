@@ -145,6 +145,10 @@ gradle-app.setting
 
 # End of https://www.toptal.com/developers/gitignore/api/gradle,kotlin,intellij+all
 
+!.idea/dictionaries
+.idea/dictionaries/*
+!.idea/dictionaries/ProjectDictionary.xml
+
 .sdkmanrc
 .nvmrc
 TODO

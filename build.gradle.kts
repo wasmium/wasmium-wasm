@@ -1,6 +1,9 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
 import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
+import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnLockMismatchReport
+import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin
+import org.jetbrains.kotlin.gradle.targets.js.yarn.yarn
 
 plugins {
     alias(libraries.plugins.detekt)
@@ -31,6 +34,21 @@ apiValidation {
             "version-catalog",
         )
     )
+}
+
+plugins.withType<YarnPlugin> {
+    yarn.apply {
+        download = false
+        ignoreScripts = false
+        lockFileDirectory = rootDir.resolve("gradle/js")
+        reportNewYarnLock = true
+        yarnLockAutoReplace = true
+        yarnLockMismatchReport = YarnLockMismatchReport.FAIL
+
+        resolution("braces", "3.0.3")
+        resolution("follow-redirects", "1.15.6")
+        resolution("body-parser", "1.20.3")
+    }
 }
 
 tasks {

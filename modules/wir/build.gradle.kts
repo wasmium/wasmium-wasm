@@ -1,96 +1,32 @@
-@file:OptIn(ExperimentalWasmDsl::class)
-
-import org.jetbrains.kotlin.config.ApiVersion
-import org.jetbrains.kotlin.config.LanguageVersion
-import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
-import build.gradle.dsl.withCompilerArguments
 import org.jetbrains.dokka.DokkaConfiguration.Visibility
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
 
 plugins {
-    id(libraries.plugins.kotlin.multiplatform.get().pluginId)
-
+    alias(libraries.plugins.kotlinx.serialization)
     alias(libraries.plugins.dokka.gradle.plugin)
     alias(libraries.plugins.kotlinx.kover)
 
     id("build-project-default")
+    id("build-multiplatform")
     id("build-publishing")
 }
 
 kotlin {
     explicitApi()
 
-    targets.all {
-        compilations.all {
-            compileTaskProvider.configure {
-                compilerOptions {
-                    withCompilerArguments {
-                        requiresOptIn()
-                        suppressExpectActualClasses()
-                        suppressVersionWarnings()
-                    }
-                }
-            }
-        }
-    }
-
-    jvm {
-        compilations.all {
-            compileTaskProvider.configure {
-                compilerOptions {
-                    withCompilerArguments {
-                        requiresJsr305()
-                    }
-                }
-            }
-        }
-    }
-
-    wasmJs {
-        moduleName = "wasmium-wasm-wir"
-
-        browser {
-            testTask {
-                useKarma {
-                    useChromeHeadless()
-                    useConfigDirectory(project.projectDir.resolve("karma.config.d").resolve("wasm"))
-                }
-            }
-        }
-    }
-
-    wasmWasi {
-        nodejs()
-    }
-
-    js {
-        compilations.all {
-            compileTaskProvider.configure {
-                compilerOptions {
-                    sourceMap = true
-                }
-            }
-        }
-
-        browser {
-            testTask {
-                useKarma {
-                    useChromeHeadless()
-                    useConfigDirectory(project.projectDir.resolve("karma.config.d").resolve("js"))
-                }
-            }
-        }
-    }
-
     sourceSets {
         all {
             languageSettings.apply {
-                apiVersion = ApiVersion.KOTLIN_2_0.toString()
-                languageVersion = LanguageVersion.KOTLIN_2_0.toString()
-                progressiveMode = true
-
-                optIn("kotlin.contracts.ExperimentalContracts")
+                optIn("kotlin.ExperimentalStdlibApi")
                 optIn("kotlin.RequiresOptIn")
+                optIn("kotlin.contracts.ExperimentalContracts")
+                optIn("kotlin.time.ExperimentalTime")
+            }
+        }
+
+        matching { it.name.endsWith("Test") }.configureEach {
+            languageSettings.apply {
+                optIn("kotlinx.coroutines.FlowPreview")
             }
         }
 
@@ -105,12 +41,10 @@ kotlin {
 
         val commonTest by getting {
             dependencies {
-                implementation(kotlin("test"))
+                implementation(libraries.kotlin.test)
             }
         }
     }
-
-    withSourcesJar()
 }
 
 tasks {
@@ -120,13 +54,5 @@ tasks {
         }
         failOnWarning.set(true)
         offlineMode.set(true)
-    }
-}
-
-publishing {
-    publications.configureEach {
-        with(this as MavenPublication) {
-            artifactId = "${rootProject.name}-${project.name}-$name"
-        }
     }
 }

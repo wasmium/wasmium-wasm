@@ -2,6 +2,7 @@
 detekt = "1.23.7"
 gradle = "8.10.2"
 gradle-foojay = "0.8.0"
+jvm-toolchain = "17"
 kotlin = "2.0.20"
 kotlinx-bcv = "0.16.3"
 kotlinx-coroutines = "1.8.1"
@@ -14,6 +15,7 @@ dokka-gradle-plugin = "1.9.20"
 [libraries]
 dokka-gradle-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka-gradle-plugin" }
 foojay-resolver = { module = "org.gradle.toolchains:foojay-resolver", version.ref = "gradle-foojay" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-js = { module = "org.jetbrains.kotlin:kotlin-test-js", version.ref = "kotlin" }
