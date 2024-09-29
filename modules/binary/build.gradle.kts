@@ -2,7 +2,6 @@ import org.jetbrains.dokka.DokkaConfiguration.Visibility
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
 
 plugins {
-    alias(libraries.plugins.kotlinx.serialization)
     alias(libraries.plugins.dokka.gradle.plugin)
     alias(libraries.plugins.kotlinx.kover)
 
@@ -23,7 +22,6 @@ kotlin {
                 optIn("kotlin.RequiresOptIn")
                 optIn("kotlin.contracts.ExperimentalContracts")
                 optIn("kotlin.time.ExperimentalTime")
-                optIn("kotlinx.serialization.ExperimentalSerializationApi")
             }
         }
 
