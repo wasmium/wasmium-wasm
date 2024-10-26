@@ -47,12 +47,10 @@ import org.wasmium.wir.ast.expressions.UnreachableExpression
 
 public class WirVisitorVoidAdapter(private val failWhenUnhandled: Boolean) : WirVisitorVoid {
     private fun defaultVisit() {
-        if (failWhenUnhandled) {
-            throw IllegalStateException()
-        }
+        check (!failWhenUnhandled)
     }
 
-    public override fun visitConvert(conversionExpression: ConvertExpression) {
+    public override fun visitConvert(convertExpression: ConvertExpression) {
         defaultVisit()
     }
 
@@ -68,7 +66,7 @@ public class WirVisitorVoidAdapter(private val failWhenUnhandled: Boolean) : Wir
         defaultVisit()
     }
 
-    public override fun visitTruncate(wasmTruncateExpression: TruncateExpression) {
+    public override fun visitTruncate(truncateExpression: TruncateExpression) {
         defaultVisit()
     }
 
@@ -104,7 +102,7 @@ public class WirVisitorVoidAdapter(private val failWhenUnhandled: Boolean) : Wir
         defaultVisit()
     }
 
-    public override fun visitConstFloat32(wasmConstantFloat32Expression: ConstantFloat32Expression) {
+    public override fun visitConstFloat32(constantFloat32Expression: ConstantFloat32Expression) {
         defaultVisit()
     }
 
@@ -184,15 +182,15 @@ public class WirVisitorVoidAdapter(private val failWhenUnhandled: Boolean) : Wir
         defaultVisit()
     }
 
-    public override fun visitRethrow(expression: RethrowExpression) {
+    public override fun visitRethrow(rethrowExpression: RethrowExpression) {
         defaultVisit()
     }
 
-    public override fun visitTry(expression: TryExpression) {
+    public override fun visitTry(tryExpression: TryExpression) {
         defaultVisit()
     }
 
-    public override fun visitIfException(expression: IfExceptionExpression) {
+    public override fun visitIfException(ifExceptionExpression: IfExceptionExpression) {
         defaultVisit()
     }
 

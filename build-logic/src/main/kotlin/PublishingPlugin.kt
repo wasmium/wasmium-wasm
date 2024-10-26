@@ -1,5 +1,6 @@
 package build.gradle.plugins.build
 
+import java.util.*
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.getProperty
@@ -12,7 +13,6 @@ import org.gradle.api.tasks.bundling.Jar
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.register
@@ -20,7 +20,6 @@ import org.gradle.kotlin.dsl.withType
 import org.gradle.plugins.signing.Sign
 import org.gradle.plugins.signing.SigningExtension
 import org.gradle.plugins.signing.SigningPlugin
-import java.util.*
 
 public class PublishingPlugin : Plugin<Project> {
     override fun apply(project: Project) {
@@ -35,7 +34,7 @@ public class PublishingPlugin : Plugin<Project> {
 
             project.configure<PublishingExtension> {
                 publications {
-                    create<MavenPublication>("maven") {
+                    register<MavenPublication>("maven") {
                         // java components have the sourcesJar and the Kotlin artifacts
                         from(project.components["java"])
                     }
@@ -134,7 +133,6 @@ public class PublishingPlugin : Plugin<Project> {
         }
     }
 }
-
 
 // Resolves issues with .asc task output of the sign task of native targets.
 // See: https://github.com/gradle/gradle/issues/26132

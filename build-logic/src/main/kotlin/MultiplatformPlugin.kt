@@ -3,7 +3,7 @@ package build.gradle.plugins.build
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
-import org.gradle.api.getVersion
+import org.gradle.api.stringProperty
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.assign
@@ -26,16 +26,13 @@ public class MultiplatformPlugin : Plugin<Project> {
         project.configureJsTarget()
         project.configureWasmJsTarget()
 
-        project.configureKotlinSourceSets(
-            apiVersion = "1.7",
-            languageVersion = "2.0",
-        )
+        project.configureKotlinSourceSets()
     }
 
     private fun Project.configureJvmToolchain() {
         configure<KotlinMultiplatformExtension> {
             jvmToolchain {
-                languageVersion.set(JavaLanguageVersion.of(project.getVersion("jvm-toolchain")))
+                languageVersion = project.stringProperty("kotlin.javaToolchain.mainJvmCompiler").map(JavaLanguageVersion::of)
             }
         }
     }
@@ -78,13 +75,13 @@ public class MultiplatformPlugin : Plugin<Project> {
         }
     }
 
-    private fun Project.configureKotlinSourceSets(apiVersion: String, languageVersion: String) {
+    private fun Project.configureKotlinSourceSets() {
         configure<KotlinMultiplatformExtension> {
             sourceSets.configureEach {
                 languageSettings.apply {
-                    this.apiVersion = apiVersion
-                    this.languageVersion = languageVersion
-                    progressiveMode = true
+                    this.apiVersion = project.stringProperty("kotlin.sourceSets.languageSettings.apiVersion").get()
+                    this.languageVersion  = project.stringProperty("kotlin.sourceSets.languageSettings.languageVersion").get()
+                    this.progressiveMode = true
                 }
             }
         }

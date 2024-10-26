@@ -46,77 +46,77 @@ import org.wasmium.wir.ast.expressions.TryExpression
 import org.wasmium.wir.ast.expressions.UnreachableExpression
 
 public interface WirVisitorVoid {
-    public fun visitConvert(expression: ConvertExpression)
+    public fun visitConvert(convertExpression: ConvertExpression)
 
-    public fun visitPromote(expression: PromoteExpression)
+    public fun visitPromote(promoteExpression: PromoteExpression)
 
-    public fun visitDemote(expression: DemoteExpression)
+    public fun visitDemote(demoteExpression: DemoteExpression)
 
-    public fun visitReinterpret(expression: ReinterpretExpression)
+    public fun visitReinterpret(reinterpretExpression: ReinterpretExpression)
 
-    public fun visitTruncate(expression: TruncateExpression)
+    public fun visitTruncate(truncateExpression: TruncateExpression)
 
-    public fun visitReturn(expression: ReturnExpression)
+    public fun visitReturn(returnExpression: ReturnExpression)
 
-    public fun visitDrop(expression: DropExpression)
+    public fun visitDrop(dropExpression: DropExpression)
 
-    public fun visitNop(expression: NopExpression)
+    public fun visitNop(nopExpression: NopExpression)
 
-    public fun visitUnreachable(expression: UnreachableExpression)
+    public fun visitUnreachable(unreachableExpression: UnreachableExpression)
 
-    public fun visitFloatUnary(expression: FloatUnaryExpression)
+    public fun visitFloatUnary(floatUnaryExpression: FloatUnaryExpression)
 
-    public fun visitIntUnary(expression: IntUnaryExpression)
+    public fun visitIntUnary(intUnaryExpression: IntUnaryExpression)
 
-    public fun visitFloatBinary(expression: FloatBinaryExpression)
+    public fun visitFloatBinary(floatBinaryExpression: FloatBinaryExpression)
 
-    public fun visitIntBinary(expression: IntBinaryExpression)
+    public fun visitIntBinary(intBinaryExpression: IntBinaryExpression)
 
-    public fun visitConstFloat32(expression: ConstantFloat32Expression)
+    public fun visitConstFloat32(constantFloat32Expression: ConstantFloat32Expression)
 
-    public fun visitConstFloat64(expression: ConstantFloat64Expression)
+    public fun visitConstFloat64(constantFloat64Expression: ConstantFloat64Expression)
 
-    public fun visitConstInt32(expression: ConstantInt32Expression)
+    public fun visitConstInt32(constantInt32Expression: ConstantInt32Expression)
 
-    public fun visitConstInt64(expression: ConstantInt64Expression)
+    public fun visitConstInt64(constantInt64Expression: ConstantInt64Expression)
 
-    public fun visitCall(expression: CallExpression)
+    public fun visitCall(callExpression: CallExpression)
 
-    public fun visitLoadFloat(expression: LoadFloatExpression)
+    public fun visitLoadFloat(loadFloatExpression: LoadFloatExpression)
 
-    public fun visitLoadInt(expression: LoadIntExpression)
+    public fun visitLoadInt(loadIntExpression: LoadIntExpression)
 
-    public fun visitSetGlobal(expression: SetGlobalExpression)
+    public fun visitSetGlobal(setGlobalExpression: SetGlobalExpression)
 
-    public fun visitGetGlobal(expression: GetGlobalExpression)
+    public fun visitGetGlobal(getGlobalExpression: GetGlobalExpression)
 
-    public fun visitGetLocal(expression: GetLocalExpression)
+    public fun visitGetLocal(getLocalExpression: GetLocalExpression)
 
-    public fun visitSetLocal(expression: SetLocalExpression)
+    public fun visitSetLocal(setLocalExpression: SetLocalExpression)
 
-    public fun visitStoreInt32(expression: StoreIntExpression)
+    public fun visitStoreInt32(storeIntExpression: StoreIntExpression)
 
-    public fun visitStoreFloat32(expression: StoreFloatExpression)
+    public fun visitStoreFloat32(storeFloatExpression: StoreFloatExpression)
 
-    public fun visitSelect(expression: SelectExpression)
+    public fun visitSelect(selectExpression: SelectExpression)
 
-    public fun visitBlock(expression: BlockExpression)
+    public fun visitBlock(blockExpression: BlockExpression)
 
-    public fun visitBranchTable(expression: BranchTableExpression)
+    public fun visitBranchTable(branchTableExpression: BranchTableExpression)
 
-    public fun visitBranch(expression: BranchExpression)
+    public fun visitBranch(branchExpression: BranchExpression)
 
-    public fun visitLabel(expression: LabelExpression)
+    public fun visitLabel(labelExpression: LabelExpression)
 
-    public fun visitConditional(expression: ConditionalExpression)
+    public fun visitConditional(conditionalExpression: ConditionalExpression)
 
-    public fun visitCallIndirect(expression: CallIndirectExpression)
+    public fun visitCallIndirect(callIndirectExpression: CallIndirectExpression)
 
-    public fun visitRethrow(expression: RethrowExpression)
+    public fun visitRethrow(rethrowExpression: RethrowExpression)
 
-    public fun visitTry(expression: TryExpression)
+    public fun visitTry(tryExpression: TryExpression)
 
-    public fun visitIfException(expression: IfExceptionExpression)
+    public fun visitIfException(ifExceptionExpression: IfExceptionExpression)
 
     public fun visitTable(node: WirTable)
 

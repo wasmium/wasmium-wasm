@@ -1,8 +1,4 @@
-import org.jetbrains.dokka.DokkaConfiguration.Visibility
-import org.jetbrains.dokka.gradle.DokkaTaskPartial
-
 plugins {
-    alias(libraries.plugins.dokka.gradle.plugin)
     alias(libraries.plugins.kotlinx.kover)
 
     id("build-project-default")
@@ -14,7 +10,7 @@ kotlin {
     explicitApi()
 
     sourceSets {
-        all {
+        configureEach {
             languageSettings.apply {
                 optIn("kotlin.ExperimentalStdlibApi")
                 optIn("kotlin.RequiresOptIn")
@@ -43,15 +39,5 @@ kotlin {
                 implementation(libraries.kotlin.test)
             }
         }
-    }
-}
-
-tasks {
-    withType<DokkaTaskPartial>().configureEach {
-        dokkaSourceSets.configureEach {
-            documentedVisibilities.set(Visibility.values().toSet())
-        }
-        failOnWarning.set(true)
-        offlineMode.set(true)
     }
 }

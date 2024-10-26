@@ -1,10 +1,9 @@
-
 plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
 }
 
-configurations.all {
+configurations.configureEach {
     resolutionStrategy {
         failOnNonReproducibleResolution()
     }
@@ -12,7 +11,6 @@ configurations.all {
 
 dependencies {
     api(libraries.kotlin.gradle.plugin)
-    api(libraries.dokka.gradle.plugin)
 }
 
 sourceSets {
@@ -30,12 +28,8 @@ kotlin {
         freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
     }
 
-    sourceSets {
-        main {
-            kotlin {
-                srcDirs("src/main/kotlinX")
-            }
-        }
+    jvmToolchain {
+        languageVersion = providers.gradleProperty("kotlin.javaToolchain.mainJvmCompiler").map(JavaLanguageVersion::of)
     }
 }
 
@@ -56,6 +50,10 @@ gradlePlugin {
         register("AssemblerPlugin") {
             id = "build-assembler"
             implementationClass = "build.gradle.plugins.build.AssemblerPlugin"
+        }
+        register("DefaultWrapperPlugin") {
+            id = "build-wrapper-default"
+            implementationClass = "build.gradle.plugins.build.DefaultWrapperPlugin"
         }
     }
 }

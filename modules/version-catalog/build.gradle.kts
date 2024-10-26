@@ -3,7 +3,9 @@ plugins {
     id("build-publishing")
 }
 
-description = "Version Catalog"
+run {
+    description = "Version Catalog"
+}
 
 catalog {
     versionCatalog {

@@ -3,7 +3,9 @@ plugins {
     id("build-publishing")
 }
 
-description = "BOM"
+run {
+    description = "Platform BOM"
+}
 
 val me = project
 rootProject.subprojects {

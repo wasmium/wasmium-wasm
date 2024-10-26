@@ -1,6 +1,6 @@
 # wasmium-wasm
 
-![![kotlin](https://kotlinlang.org/)](https://img.shields.io/badge/kotlin--multiplatform-2.0.20-blue.svg?logo=kotlin) ![![License](https://github.com/wasmium/wasmium-wasm/blob/main/LICENSE.md)](https://img.shields.io/github/license/wasmium/wasmium-wasm)
+![![kotlin](https://kotlinlang.org/)](https://img.shields.io/badge/kotlin--multiplatform-2.0.21-blue.svg?logo=kotlin) ![![License](https://github.com/wasmium/wasmium-wasm/blob/main/LICENSE.md)](https://img.shields.io/github/license/wasmium/wasmium-wasm)
 
 ![badge][badge-jvm] ![badge][badge-js] ![badge][badge-nodejs] ![badge][badge-wasm-js] ![badge][badge-wasm]
 
@@ -27,6 +27,14 @@ WASM binary reader and writer.
 >
 > Report any issue or bug <a href="https://github.com/wasmium/wasmium-wasm/issues">in the GitHub repository.</a>
 >
+
+## Supported Platforms
+
+| Target Platform | Target preset                |
+|:---------------:|------------------------------|
+|   Kotlin/JVM    | <ul><li>`jvm`</li></ul>      |
+|  Kotlin/WasmJS  | <ul><li>`wasmJs`</li></ul>   |
+|    Kotlin/JS    | <ul><li>`js`</li></ul>       |
 
 ## Contributions
 

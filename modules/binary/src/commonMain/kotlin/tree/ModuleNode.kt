@@ -77,7 +77,7 @@ public class ModuleNode : ModuleVisitor {
                         RELOCATION.sectionName -> {
                             val relocationSection = customSection as RelocationSectionNode
 
-                            visitor.visitRelocationSection()?.let {
+                            visitor.visitRelocationSection().let {
                                 relocationSection.accept(it)
                             }
                         }
@@ -85,7 +85,7 @@ public class ModuleNode : ModuleVisitor {
                         LINKING.sectionName -> {
                             val linkingSection = customSection as LinkingSectionNode
 
-                            visitor.visitLinkingSection()?.let {
+                            visitor.visitLinkingSection().let {
                                 linkingSection.accept(it)
                             }
                         }
@@ -93,7 +93,7 @@ public class ModuleNode : ModuleVisitor {
                         NAME.sectionName -> {
                             val nameSection = customSection as NameSectionNode
 
-                            visitor.visitNameSection()?.let {
+                            visitor.visitNameSection().let {
                                 nameSection.accept(it)
                             }
                         }
@@ -101,7 +101,7 @@ public class ModuleNode : ModuleVisitor {
                         SOURCE_MAPPING_URL.sectionName -> {
                             val sourceMap = customSection as SourceMapSectionNode
 
-                            visitor.visitSourceMapSection(sourceMap.url)?.let {
+                            visitor.visitSourceMapSection(sourceMap.url).let {
                                 sourceMap.accept(it)
                             }
                         }
@@ -109,7 +109,7 @@ public class ModuleNode : ModuleVisitor {
                         else -> {
                             val unknownSection = customSection as UnknownSectionNode
 
-                            visitor.visitUnknownSection(unknownSection.name, unknownSection.content)?.let {
+                            visitor.visitUnknownSection(unknownSection.name, unknownSection.content).let {
                                 unknownSection.accept(it)
                             }
                         }
@@ -119,7 +119,7 @@ public class ModuleNode : ModuleVisitor {
                 TYPE -> {
                     val typeSection = section as TypeSectionNode
 
-                    visitor.visitTypeSection() ?.let {
+                    visitor.visitTypeSection().let {
                         typeSection.accept(it)
                     }
                 }
@@ -191,7 +191,7 @@ public class ModuleNode : ModuleVisitor {
                 DATA_COUNT -> {
                     val dataCountSection = section as DataCountSectionNode
 
-                    visitor.visitDataCountSection(dataCountSection.dataCount) .let {
+                    visitor.visitDataCountSection(dataCountSection.dataCount).let {
                         dataCountSection.accept(it)
                     }
                 }

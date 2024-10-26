@@ -1,24 +1,24 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
-import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
 import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnLockMismatchReport
 import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin
 import org.jetbrains.kotlin.gradle.targets.js.yarn.yarn
 
 plugins {
     alias(libraries.plugins.detekt)
-    alias(libraries.plugins.dokka.gradle.plugin)
     alias(libraries.plugins.kotlinx.bcv)
 
     id("build-project-default")
 }
 
-description = "Root Project"
+run {
+    description = "Root Project"
+}
 
 allprojects {
     group = "org.wasmium.wasm"
 
-    configurations.all {
+    configurations.configureEach {
         resolutionStrategy {
             failOnNonReproducibleResolution()
         }
@@ -30,7 +30,7 @@ apiValidation {
 
     ignoredProjects.addAll(
         listOf(
-            "bom",
+            "platform",
             "version-catalog",
         )
     )
@@ -52,11 +52,6 @@ plugins.withType<YarnPlugin> {
 }
 
 tasks {
-    val dokkaHtmlMultiModule by getting(DokkaMultiModuleTask::class) {
-        moduleName.set(rootProject.name)
-        moduleVersion.set("${rootProject.version}")
-    }
-
     val detektAll by registering(Detekt::class) {
         description = "Run detekt on whole project"
 

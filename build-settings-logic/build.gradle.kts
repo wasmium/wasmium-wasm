@@ -3,7 +3,7 @@ plugins {
     `java-gradle-plugin`
 }
 
-configurations.all {
+configurations.configureEach {
     resolutionStrategy {
         failOnNonReproducibleResolution()
     }
@@ -11,6 +11,7 @@ configurations.all {
 
 dependencies {
     api(libraries.kotlin.gradle.plugin)
+    api(libraries.foojay.resolver)
 }
 
 sourceSets {
@@ -26,6 +27,10 @@ kotlin {
 
     compilerOptions {
         freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
+    }
+
+    jvmToolchain {
+        languageVersion = providers.gradleProperty("kotlin.javaToolchain.mainJvmCompiler").map(JavaLanguageVersion::of)
     }
 }
 
