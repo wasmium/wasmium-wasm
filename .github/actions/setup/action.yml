@@ -18,7 +18,7 @@ runs:
             uses: actions/setup-java@v4
             with:
                 distribution: 'zulu'
-                java-version: 21
+                java-version: 23
 
         -   uses: gradle/actions/setup-gradle@v4
             with:
@@ -41,7 +41,7 @@ runs:
             id: gradle-yarn-cache
             with:
                 path: |
-                    **/node_modules
+                    build/js/node_modules
                 key: ${{ runner.os }}-yarn-${{ hashFiles('gradle/js/yarn.lock') }}
                 restore-keys: |
                     ${{ runner.os }}-yarn-
@@ -54,7 +54,7 @@ runs:
             shell: "bash"
 
         -   name: Validate Gradle wrapper
-            uses: gradle/actions/wrapper-validation@v3
+            uses: gradle/actions/wrapper-validation@v4
 
         -   if: matrix.os == 'Windows'
             uses: msys2/setup-msys2@v2

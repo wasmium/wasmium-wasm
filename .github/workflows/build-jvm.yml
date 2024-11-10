@@ -1,4 +1,5 @@
-name: Run default tests
+name: Run build Kotlin/Multiplatform for JVM
+
 on:
     workflow_dispatch:
     workflow_call:
@@ -11,18 +12,17 @@ env:
     GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dkotlin.incremental=false"
 
 jobs:
-    tests-default:
+    build-project:
         continue-on-error: false
         strategy:
             fail-fast: true
             matrix:
                 os: [ 'ubuntu-latest' ]
-                target: [ 'jvm', 'js' ]
-
+                jvm: [ '11', '17', '21' ]
         runs-on: ${{ matrix.os }}
-        name: Run tests on ${{ matrix.os }}
+        name: Run build on ${{ matrix.os }}
         concurrency:
-            group: run-${{ github.workflow }}-${{ github.ref }}-${{ matrix.os }}-${{ matrix.target }}
+            group: run-build-jvm-${{ github.workflow }}-${{ github.ref }}-${{ matrix.os }}-${{ matrix.jvm }}
             cancel-in-progress: true
         steps:
             -   name: Checkout code
@@ -31,9 +31,11 @@ jobs:
                     fetch-depth: 0
 
             -   name: Setup environment
-                uses: ./.github/actions/setup-environment
+                uses: ./.github/actions/setup
                 with:
                     cache-read-only: ${{ github.ref_name != 'main' }}
 
-            - name: Run tests
-              run: ./gradlew ${{ matrix.target }}Test --continue
+            -   name: Run Check
+                continue-on-error: false
+                run: |
+                    ./gradlew -Vs checkJvm detekt

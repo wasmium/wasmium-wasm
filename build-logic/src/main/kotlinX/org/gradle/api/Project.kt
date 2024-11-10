@@ -35,20 +35,17 @@ internal val isRunningOnCI: Boolean
 public val Project.isRootProject: Boolean
     get() = this == rootProject
 
-internal fun Project.getProperty(projectKey: String, environmentKey: String): String? {
-    return if (project.hasProperty(projectKey)) {
-        project.property(projectKey) as? String?
-    } else {
-        System.getenv(environmentKey)
-    }
+internal fun Project.getProperty(key: String, environmentKey: String? = null): String? {
+    val projectValue = findProperty(key)?.toString()?.takeIf { value -> value.isNotBlank() }
+    val systemValue = System.getProperty(key)?.takeIf { value -> value.isNotBlank() }
+    val environmentValue = environmentKey?.let { System.getenv(it) } ?.takeIf { value -> value.isNotBlank() }
+
+    return environmentValue ?: systemValue ?: projectValue
 }
 
-public fun Project.stringProperties(prefix: String): Provider<MutableMap<String, String>> {
-    return providers.gradlePropertiesPrefixedBy(prefix)
-}
+public fun Project.gradleStringProperties(prefix: String): Provider<MutableMap<String, String>> = providers.gradlePropertiesPrefixedBy(prefix)
 
-public fun Project.stringProperty(name: String): Provider<String> = providers.gradleProperty(name)
+public fun Project.gradleStringProperty(name: String): Provider<String> = providers.gradleProperty(name)
 
-public fun Project.booleanProperty(name: String, defaultValue: Boolean): Provider<Boolean> {
-    return stringProperty(name).map { it.toBoolean() }.orElse(defaultValue)
-}
+public fun Project.gradleBooleanProperty(name: String): Provider<Boolean> = gradleStringProperty(name).map { it.toBoolean() }.orElse(false)
+
