@@ -41,6 +41,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptionsBuilder.JvmDefaul
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.dsl.withCommonCompilerArguments
+import org.jetbrains.kotlin.gradle.dsl.withWasmJsCompilerArguments
 import org.jetbrains.kotlin.gradle.dsl.withJvmCompilerArguments
 import org.jetbrains.kotlin.gradle.plugin.KotlinMultiplatformPluginWrapper
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsEnvSpec
@@ -278,7 +279,6 @@ public class KotlinMultiplatformBuildPlugin : Plugin<Project> {
                 languageSettings.apply {
                     apiVersion = project.gradleStringProperty("kotlin.compilerOptions.apiVersion").get()
                     languageVersion = project.gradleStringProperty("kotlin.compilerOptions.languageVersion").get()
-                    progressiveMode = true
                 }
             }
         }
@@ -293,6 +293,7 @@ public class KotlinMultiplatformBuildPlugin : Plugin<Project> {
                             apiVersion = providers.gradleProperty("kotlin.compilerOptions.apiVersion").map(KotlinVersion::fromVersion)
                             languageVersion = providers.gradleProperty("kotlin.compilerOptions.languageVersion").map(KotlinVersion::fromVersion)
                             progressiveMode = true
+                            extraWarnings = true
 
                             withCommonCompilerArguments {
                                 requiresOptIn()
@@ -326,7 +327,7 @@ public class KotlinMultiplatformBuildPlugin : Plugin<Project> {
                     browser {
                         testTask {
                             useKarma {
-                                when (karmaBrowserTarget()) {
+                                when (defaultKarmaBrowserTarget()) {
                                     Chrome -> useChrome()
                                     ChromeHeadless -> useChromeHeadless()
                                     ChromeCanary -> useChromeCanary()
@@ -370,10 +371,12 @@ public class KotlinMultiplatformBuildPlugin : Plugin<Project> {
                     yarnLockAutoReplace = true
                     yarnLockMismatchReport = YarnLockMismatchReport.FAIL
 
-                    resolution("braces", "3.0.3")
-                    resolution("follow-redirects", "1.15.6")
-                    resolution("body-parser", "1.20.3")
-                    resolution("http-proxy-middleware", "2.0.7")
+                    resolution("braces", "~3.0.3")
+                    resolution("follow-redirects", "~1.15.9")
+                    resolution("body-parser", "~1.20.3")
+                    resolution("http-proxy-middleware", "~2.0.7")
+                    resolution("cross-spawn", "~7.0.5")
+                    resolution("path-to-regexp", "~0.1.12")
                 }
             }
 
@@ -392,8 +395,8 @@ public class KotlinMultiplatformBuildPlugin : Plugin<Project> {
         }
     }
 
-    private fun Project.karmaBrowserTarget(): KarmaBrowserTarget {
-        val browser = KarmaBrowser.Firefox
+    private fun Project.defaultKarmaBrowserTarget(): KarmaBrowserTarget {
+        val browser = KarmaBrowser.Chrome
         val channel = KarmaBrowserChannel.Release
         val headless = true
 
@@ -500,6 +503,7 @@ public class KotlinMultiplatformBuildPlugin : Plugin<Project> {
                                 withJvmCompilerArguments {
                                     requiresJsr305()
                                     jvmDefault(JvmDefaultOption.ALL_COMPATIBILITY)
+                                    jdkRelease(jvmVersion)
                                 }
                                 this.javaParameters = true
                                 this.jvmTarget = JvmTarget.fromTarget(jvmVersion.majorVersion)
@@ -508,7 +512,7 @@ public class KotlinMultiplatformBuildPlugin : Plugin<Project> {
                     }
 
                     attributes {
-                        attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, JavaVersion.toVersion(jvmVersion).majorVersion.toInt())
+                        attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, jvmVersion.majorVersion.toInt())
                     }
                 }
             }

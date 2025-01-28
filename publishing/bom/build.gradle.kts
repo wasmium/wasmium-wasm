@@ -1,23 +1,26 @@
 plugins {
     `maven-publish`
 
-    id("version-catalog")
+    id("java-platform")
     id("build-maven-publishing-configurer")
 }
 
-run {
-    description = "Version Catalog"
+description = "BOM"
+
+val me = project
+rootProject.subprojects {
+    if (name != me.name) {
+        me.evaluationDependsOn(path)
+    }
 }
 
-catalog {
-    versionCatalog {
-        version("kotlin", libraries.versions.kotlin.get())
-
+dependencies {
+    constraints {
         rootProject.subprojects.forEach { subproject ->
-            if (subproject.plugins.hasPlugin("maven-publish") && subproject.name != name) {
+            if (subproject.plugins.hasPlugin("maven-publish") && !subproject.name.endsWith("version-catalog") && subproject.name != name) {
                 subproject.publishing.publications.withType<MavenPublication>().configureEach {
                     if (!artifactId.endsWith("-metadata") && !artifactId.endsWith("-kotlinMultiplatform")) {
-                        library(artifactId, "$groupId:$artifactId:$version")
+                        api("$groupId:$artifactId:$version")
                     }
                 }
             }
@@ -27,10 +30,10 @@ catalog {
 
 publishing {
     publications {
-        register<MavenPublication>("versionCatalog") {
+        register<MavenPublication>("bom") {
             artifactId = "${rootProject.name}-${project.name}"
 
-            from(components["versionCatalog"])
+            from(components["javaPlatform"])
         }
     }
 }

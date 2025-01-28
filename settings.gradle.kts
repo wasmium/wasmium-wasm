@@ -1,5 +1,3 @@
-import org.gradle.api.initialization.includeModule
-
 pluginManagement {
     includeBuild("build-settings-logic")
     includeBuild("build-logic")
@@ -7,11 +5,13 @@ pluginManagement {
 
 plugins {
     id("build-settings-default")
+    id("build-foojay")
 }
 
 rootProject.name = "wasmium-wasm"
 
-includeModule("binary")
-includeModule("wir")
-includeModule("platform")
-includeModule("version-catalog")
+include("modules:binary")
+include("modules:wir")
+
+include("publishing:bom")
+include("publishing:version-catalog")

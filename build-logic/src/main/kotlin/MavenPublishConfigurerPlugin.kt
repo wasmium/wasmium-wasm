@@ -54,7 +54,7 @@ public class MavenPublishConfigurerPlugin : Plugin<Project> {
             // configureEach reacts on new publications being registered and configures them too
             publications.configureEach {
                 if (this is MavenPublication) {
-                    val base = "github.com/nirmato/nirmato-ollama"
+                    val base = "github.com/wasmium/wasmium-wasm"
 
                     pom {
                         // using providers because the name and description can be set after application of the plugin
@@ -66,13 +66,13 @@ public class MavenPublishConfigurerPlugin : Plugin<Project> {
                         inceptionYear.set("2024")
 
                         organization {
-                            name = "nirmato"
-                            url = "https://github.com/nirmato"
+                            name = "wasmium"
+                            url = "https://github.com/wasmium"
                         }
 
                         developers {
                             developer {
-                                name = "The Nirmato Team"
+                                name = "The Wasmium Team"
                             }
                         }
 

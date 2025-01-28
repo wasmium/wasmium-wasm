@@ -8,9 +8,7 @@ plugins {
     id("build-maven-publishing-configurer")
 }
 
-run {
-    description = "Wasmium Binary"
-}
+description = "Wasmium Binary"
 
 kotlin {
     explicitApi()
@@ -26,8 +24,8 @@ kotlin {
         }
 
         matching { it.name.endsWith("Test") }.configureEach {
-            languageSettings.apply {
-                optIn("kotlinx.coroutines.FlowPreview")
+            compilerOptions {
+                optIn.add("kotlinx.coroutines.FlowPreview")
             }
         }
 
@@ -45,5 +43,7 @@ kotlin {
                 implementation(libraries.kotlin.test)
             }
         }
+
+        val jvmTest by getting
     }
 }

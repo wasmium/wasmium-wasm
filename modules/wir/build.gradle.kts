@@ -8,6 +8,8 @@ plugins {
     id("build-maven-publishing-configurer")
 }
 
+description = "Wasmium Wir"
+
 kotlin {
     explicitApi()
 
@@ -18,12 +20,13 @@ kotlin {
                 optIn("kotlin.RequiresOptIn")
                 optIn("kotlin.contracts.ExperimentalContracts")
                 optIn("kotlin.time.ExperimentalTime")
+                optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
             }
         }
 
         matching { it.name.endsWith("Test") }.configureEach {
-            languageSettings.apply {
-                optIn("kotlinx.coroutines.FlowPreview")
+            compilerOptions {
+                optIn.add("kotlinx.coroutines.FlowPreview")
             }
         }
 
@@ -33,6 +36,7 @@ kotlin {
             }
             dependencies {
                 implementation(libraries.kotlinx.io.core)
+                implementation(libraries.kotlinx.coroutines.core)
             }
         }
 
@@ -41,5 +45,7 @@ kotlin {
                 implementation(libraries.kotlin.test)
             }
         }
+
+        val jvmTest by getting
     }
 }

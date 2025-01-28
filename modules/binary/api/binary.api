@@ -401,7 +401,6 @@ public final class org/wasmium/wasm/binary/tree/BlockType {
 public final class org/wasmium/wasm/binary/tree/BlockType$BlockTypeKind : java/lang/Enum {
 	public static final field FUNCTION_TYPE Lorg/wasmium/wasm/binary/tree/BlockType$BlockTypeKind;
 	public static final field VALUE_TYPE Lorg/wasmium/wasm/binary/tree/BlockType$BlockTypeKind;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/BlockType$BlockTypeKind;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/BlockType$BlockTypeKind;
 }
@@ -410,7 +409,6 @@ public final class org/wasmium/wasm/binary/tree/ElementKind : java/lang/Enum {
 	public static final field Companion Lorg/wasmium/wasm/binary/tree/ElementKind$Companion;
 	public static final field FUNCTION_REF Lorg/wasmium/wasm/binary/tree/ElementKind;
 	public final fun getElementKindId-pVg5ArA ()I
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/ElementKind;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/ElementKind;
 }
@@ -431,7 +429,6 @@ public final class org/wasmium/wasm/binary/tree/ExternalKind : java/lang/Enum {
 	public static final field MEMORY Lorg/wasmium/wasm/binary/tree/ExternalKind;
 	public static final field TABLE Lorg/wasmium/wasm/binary/tree/ExternalKind;
 	public static final field TAG Lorg/wasmium/wasm/binary/tree/ExternalKind;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getExternalKindId-pVg5ArA ()I
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/ExternalKind;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/ExternalKind;
@@ -468,7 +465,6 @@ public final class org/wasmium/wasm/binary/tree/GlobalType {
 public final class org/wasmium/wasm/binary/tree/GlobalType$Mutable : java/lang/Enum {
 	public static final field IMMUTABLE Lorg/wasmium/wasm/binary/tree/GlobalType$Mutable;
 	public static final field MUTABLE Lorg/wasmium/wasm/binary/tree/GlobalType$Mutable;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/GlobalType$Mutable;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/GlobalType$Mutable;
 }
@@ -493,7 +489,6 @@ public final class org/wasmium/wasm/binary/tree/LimitFlags : java/lang/Enum {
 	public static final field HAS_MAX Lorg/wasmium/wasm/binary/tree/LimitFlags;
 	public static final field IS_SHARED Lorg/wasmium/wasm/binary/tree/LimitFlags;
 	public static final field NONE Lorg/wasmium/wasm/binary/tree/LimitFlags;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getFlag-pVg5ArA ()I
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/LimitFlags;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/LimitFlags;
@@ -518,7 +513,6 @@ public final class org/wasmium/wasm/binary/tree/LinkingKind : java/lang/Enum {
 	public static final field INIT_FUNCS Lorg/wasmium/wasm/binary/tree/LinkingKind;
 	public static final field SEGMENT_INFO Lorg/wasmium/wasm/binary/tree/LinkingKind;
 	public static final field SYMBOL_TABLE Lorg/wasmium/wasm/binary/tree/LinkingKind;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getLinkingKindId-pVg5ArA ()I
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/LinkingKind;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/LinkingKind;
@@ -534,7 +528,6 @@ public final class org/wasmium/wasm/binary/tree/LinkingSymbolType : java/lang/En
 	public static final field FUNCTION Lorg/wasmium/wasm/binary/tree/LinkingSymbolType;
 	public static final field GLOBAL Lorg/wasmium/wasm/binary/tree/LinkingSymbolType;
 	public static final field SECTION Lorg/wasmium/wasm/binary/tree/LinkingSymbolType;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getLinkingSymbolTypeId-pVg5ArA ()I
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/LinkingSymbolType;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/LinkingSymbolType;
@@ -598,7 +591,6 @@ public final class org/wasmium/wasm/binary/tree/NameKind : java/lang/Enum {
 	public static final field TABLE Lorg/wasmium/wasm/binary/tree/NameKind;
 	public static final field TAG Lorg/wasmium/wasm/binary/tree/NameKind;
 	public static final field TYPE Lorg/wasmium/wasm/binary/tree/NameKind;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getNameKindId-pVg5ArA ()I
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/NameKind;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/NameKind;
@@ -1155,7 +1147,6 @@ public final class org/wasmium/wasm/binary/tree/Opcode : java/lang/Enum {
 	public static final field V128_XOR Lorg/wasmium/wasm/binary/tree/Opcode;
 	public final fun getCode ()Ljava/lang/String;
 	public final fun getCodeId ()I
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getLength ()I
 	public final fun getOpcode ()I
 	public final fun getPrefix ()I
@@ -1195,7 +1186,6 @@ public final class org/wasmium/wasm/binary/tree/RelocationKind : java/lang/Enum 
 	public static final field TABLE_INDEX_SLEB64 Lorg/wasmium/wasm/binary/tree/RelocationKind;
 	public static final field TABLE_NUMBER_LEB Lorg/wasmium/wasm/binary/tree/RelocationKind;
 	public static final field TYPE_INDEX_LEB Lorg/wasmium/wasm/binary/tree/RelocationKind;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getRelocationKindId-pVg5ArA ()I
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/RelocationKind;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/RelocationKind;
@@ -1221,7 +1211,6 @@ public final class org/wasmium/wasm/binary/tree/SectionKind : java/lang/Enum {
 	public static final field TABLE Lorg/wasmium/wasm/binary/tree/SectionKind;
 	public static final field TAG Lorg/wasmium/wasm/binary/tree/SectionKind;
 	public static final field TYPE Lorg/wasmium/wasm/binary/tree/SectionKind;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getSectionKindId-pVg5ArA ()I
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/SectionKind;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/SectionKind;
@@ -1239,7 +1228,6 @@ public final class org/wasmium/wasm/binary/tree/SectionName : java/lang/Enum {
 	public static final field PRODUCERS Lorg/wasmium/wasm/binary/tree/SectionName;
 	public static final field RELOCATION Lorg/wasmium/wasm/binary/tree/SectionName;
 	public static final field SOURCE_MAPPING_URL Lorg/wasmium/wasm/binary/tree/SectionName;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getSectionName ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/SectionName;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/SectionName;
@@ -1265,7 +1253,6 @@ public final class org/wasmium/wasm/binary/tree/TagType$TagAttribute : java/lang
 	public static final field Companion Lorg/wasmium/wasm/binary/tree/TagType$TagAttribute$Companion;
 	public static final field EXCEPTION Lorg/wasmium/wasm/binary/tree/TagType$TagAttribute;
 	public final fun getAttributeId-pVg5ArA ()I
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/TagType$TagAttribute;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/TagType$TagAttribute;
 }
@@ -1314,7 +1301,6 @@ public final class org/wasmium/wasm/binary/tree/WasmType : java/lang/Enum {
 	public static final field SUB Lorg/wasmium/wasm/binary/tree/WasmType;
 	public static final field SUB_FINAL Lorg/wasmium/wasm/binary/tree/WasmType;
 	public static final field V128 Lorg/wasmium/wasm/binary/tree/WasmType;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getWasmTypeId-pVg5ArA ()I
 	public final fun isNumberType ()Z
 	public final fun isReferenceType ()Z
@@ -1331,7 +1317,6 @@ public final class org/wasmium/wasm/binary/tree/WasmType$Companion {
 public final class org/wasmium/wasm/binary/tree/WasmVersion : java/lang/Enum {
 	public static final field V1 Lorg/wasmium/wasm/binary/tree/WasmVersion;
 	public static final field V2 Lorg/wasmium/wasm/binary/tree/WasmVersion;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getVersion-pVg5ArA ()I
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/WasmVersion;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/WasmVersion;
@@ -2206,7 +2191,6 @@ public final class org/wasmium/wasm/binary/tree/instructions/TryCatchArgument$Tr
 	public static final field CATCH_ALL Lorg/wasmium/wasm/binary/tree/instructions/TryCatchArgument$TryCatchKind;
 	public static final field CATCH_ALL_REF Lorg/wasmium/wasm/binary/tree/instructions/TryCatchArgument$TryCatchKind;
 	public static final field CATCH_REF Lorg/wasmium/wasm/binary/tree/instructions/TryCatchArgument$TryCatchKind;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getKindId-pVg5ArA ()I
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/instructions/TryCatchArgument$TryCatchKind;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/instructions/TryCatchArgument$TryCatchKind;
@@ -2629,7 +2613,6 @@ public final class org/wasmium/wasm/binary/tree/sections/NameNodeKind : java/lan
 	public static final field LOCAL Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind;
 	public static final field MODULE Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind;
 	public static final field NONE Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getNameNodeKindId ()I
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind;
 	public static fun values ()[Lorg/wasmium/wasm/binary/tree/sections/NameNodeKind;

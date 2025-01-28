@@ -12,7 +12,6 @@ public final class org/wasmium/wir/ast/WirElement : org/wasmium/wir/ast/WirNode 
 
 public final class org/wasmium/wir/ast/WirElementType : java/lang/Enum {
 	public static final field ANYFUNC Lorg/wasmium/wir/ast/WirElementType;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/WirElementType;
 	public static fun values ()[Lorg/wasmium/wir/ast/WirElementType;
 }
@@ -127,7 +126,6 @@ public final class org/wasmium/wir/ast/WirNodeKind : java/lang/Enum {
 	public static final field TRUNCATE Lorg/wasmium/wir/ast/WirNodeKind;
 	public static final field TRY Lorg/wasmium/wir/ast/WirNodeKind;
 	public static final field UNREACHABLE Lorg/wasmium/wir/ast/WirNodeKind;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/WirNodeKind;
 	public static fun values ()[Lorg/wasmium/wir/ast/WirNodeKind;
 }
@@ -279,7 +277,6 @@ public final class org/wasmium/wir/ast/expressions/FloatBinaryOperation : java/l
 	public static final field MUL Lorg/wasmium/wir/ast/expressions/FloatBinaryOperation;
 	public static final field NE Lorg/wasmium/wir/ast/expressions/FloatBinaryOperation;
 	public static final field SUB Lorg/wasmium/wir/ast/expressions/FloatBinaryOperation;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/expressions/FloatBinaryOperation;
 	public static fun values ()[Lorg/wasmium/wir/ast/expressions/FloatBinaryOperation;
 }
@@ -301,7 +298,6 @@ public final class org/wasmium/wir/ast/expressions/FloatUnaryOperation : java/la
 	public static final field NEG Lorg/wasmium/wir/ast/expressions/FloatUnaryOperation;
 	public static final field SQRT Lorg/wasmium/wir/ast/expressions/FloatUnaryOperation;
 	public static final field TRUNC Lorg/wasmium/wir/ast/expressions/FloatUnaryOperation;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/expressions/FloatUnaryOperation;
 	public static fun values ()[Lorg/wasmium/wir/ast/expressions/FloatUnaryOperation;
 }
@@ -358,7 +354,6 @@ public final class org/wasmium/wir/ast/expressions/IntBinaryOperation : java/lan
 	public static final field SHR_UNSIGNED Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
 	public static final field SUB Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
 	public static final field XOR Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
 	public static fun values ()[Lorg/wasmium/wir/ast/expressions/IntBinaryOperation;
 }
@@ -375,7 +370,6 @@ public final class org/wasmium/wir/ast/expressions/IntUnaryOperation : java/lang
 	public static final field CLZ Lorg/wasmium/wir/ast/expressions/IntUnaryOperation;
 	public static final field CTZ Lorg/wasmium/wir/ast/expressions/IntUnaryOperation;
 	public static final field POPCNT Lorg/wasmium/wir/ast/expressions/IntUnaryOperation;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/expressions/IntUnaryOperation;
 	public static fun values ()[Lorg/wasmium/wir/ast/expressions/IntUnaryOperation;
 }
@@ -394,7 +388,6 @@ public final class org/wasmium/wir/ast/expressions/LabelType : java/lang/Enum {
 	public static final field IF Lorg/wasmium/wir/ast/expressions/LabelType;
 	public static final field LOOP Lorg/wasmium/wir/ast/expressions/LabelType;
 	public static final field TRY Lorg/wasmium/wir/ast/expressions/LabelType;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/expressions/LabelType;
 	public static fun values ()[Lorg/wasmium/wir/ast/expressions/LabelType;
 }
@@ -520,7 +513,6 @@ public abstract class org/wasmium/wir/ast/expressions/WirExpression : org/wasmiu
 public final class org/wasmium/wir/ast/type/WirFloatType : java/lang/Enum {
 	public static final field FLOAT32 Lorg/wasmium/wir/ast/type/WirFloatType;
 	public static final field FLOAT64 Lorg/wasmium/wir/ast/type/WirFloatType;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/type/WirFloatType;
 	public static fun values ()[Lorg/wasmium/wir/ast/type/WirFloatType;
 }
@@ -531,7 +523,6 @@ public final class org/wasmium/wir/ast/type/WirInt32Subtype : java/lang/Enum {
 	public static final field INT8 Lorg/wasmium/wir/ast/type/WirInt32Subtype;
 	public static final field UINT16 Lorg/wasmium/wir/ast/type/WirInt32Subtype;
 	public static final field UINT8 Lorg/wasmium/wir/ast/type/WirInt32Subtype;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/type/WirInt32Subtype;
 	public static fun values ()[Lorg/wasmium/wir/ast/type/WirInt32Subtype;
 }
@@ -544,7 +535,6 @@ public final class org/wasmium/wir/ast/type/WirInt64Subtype : java/lang/Enum {
 	public static final field UINT16 Lorg/wasmium/wir/ast/type/WirInt64Subtype;
 	public static final field UINT32 Lorg/wasmium/wir/ast/type/WirInt64Subtype;
 	public static final field UINT8 Lorg/wasmium/wir/ast/type/WirInt64Subtype;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/type/WirInt64Subtype;
 	public static fun values ()[Lorg/wasmium/wir/ast/type/WirInt64Subtype;
 }
@@ -552,7 +542,6 @@ public final class org/wasmium/wir/ast/type/WirInt64Subtype : java/lang/Enum {
 public final class org/wasmium/wir/ast/type/WirIntType : java/lang/Enum {
 	public static final field INT32 Lorg/wasmium/wir/ast/type/WirIntType;
 	public static final field INT64 Lorg/wasmium/wir/ast/type/WirIntType;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/type/WirIntType;
 	public static fun values ()[Lorg/wasmium/wir/ast/type/WirIntType;
 }
@@ -562,7 +551,6 @@ public final class org/wasmium/wir/ast/type/WirValueType : java/lang/Enum {
 	public static final field FLOAT64 Lorg/wasmium/wir/ast/type/WirValueType;
 	public static final field INT32 Lorg/wasmium/wir/ast/type/WirValueType;
 	public static final field INT64 Lorg/wasmium/wir/ast/type/WirValueType;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lorg/wasmium/wir/ast/type/WirValueType;
 	public static fun values ()[Lorg/wasmium/wir/ast/type/WirValueType;
 }

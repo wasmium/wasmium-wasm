@@ -1,6 +1,6 @@
 plugins {
-    alias(libraries.plugins.detekt)
     alias(libraries.plugins.kotlinx.bcv)
+    alias(libraries.plugins.detekt)
 
     id("build-project-default")
     id("build-wrapper-configurer")
@@ -26,7 +26,7 @@ apiValidation {
 
     ignoredProjects.addAll(
         listOf(
-            "platform",
+            "bom",
             "version-catalog",
         )
     )
