@@ -7,9 +7,7 @@ plugins {
     id("build-detekt-configurer")
 }
 
-run {
-    description = "Root Project"
-}
+description = "Root Project"
 
 allprojects {
     group = "org.wasmium.wasm"

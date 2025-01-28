@@ -15,7 +15,7 @@ for the components that you want without specifying their individual versions.
 ```kotlin
 dependencies {
     // import the BOM at a particular version
-    implementation(platform("org.wasmium:wasmium-wasm-bom:[version]"))
+    implementation(platform("org.wasmium.wasm:wasmium-wasm-bom:[version]"))
 }
 ```
 

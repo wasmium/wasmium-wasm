@@ -22,7 +22,7 @@ Add the dependency to your project:
 
 ```kotlin
 dependencies {
-    implementation("org.wasmium.wasm:wasmium-wasm:0.1.0")
+    implementation("org.wasmium:wasmium-wasm:0.1.0")
 }
 ```
 
@@ -31,7 +31,7 @@ dependencies {
 ```xml
 <dependencies>
     <dependency>
-        <groupId>org.wasmium.wasm</groupId>
+        <groupId>org.wasmium</groupId>
         <artifactId>wasmium-wasm</artifactId>
         <version>0.1.0</version>
     </dependency>

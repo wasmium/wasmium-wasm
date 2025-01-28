@@ -35,6 +35,7 @@ kotlin {
             }
             dependencies {
                 implementation(libraries.kotlinx.io.core)
+                implementation(libraries.kotlinx.coroutines.core)
             }
         }
 
